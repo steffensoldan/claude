@@ -1,2 +1,2 @@
 # claude
-Alle Projekte mit Claudd
+Alle Projekte mit Claude
