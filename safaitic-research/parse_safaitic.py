@@ -2,566 +2,588 @@
 """
 OCIANA Safaitic Invocation Extractor
 =====================================
-Downloads (or uses local) the OCIANA bulk EpiDoc TEI XML corpus, extracts all
-inscriptions containing invocations via the vocative particle 'h-' and known
-deities (Allāt, Rudā, Shams), clusters results into four categories, and
-exports a styled .xlsx file.
+Parses the OCIANA bulk XML corpus, extracts all Safaitic inscriptions
+containing divine invocations (vocative h + deity name), and exports a
+styled .xlsx file with two classification columns:
+  - Request Type  : the specific English meaning of the request word
+  - Category      : the broader scholarly grouping
 
 Usage:
-    # Use bundled sample data (no download needed):
-    python3 parse_safaitic.py --sample
-
-    # Use a local directory of EpiDoc XML files:
-    python3 parse_safaitic.py --xml-dir /path/to/xml/files
-
-    # Use a local ZIP archive (as downloaded from ORA):
-    python3 parse_safaitic.py --zip /path/to/OCIANA_bulk.zip
-
-    # Attempt download from ORA (works on an unrestricted network):
-    python3 parse_safaitic.py --download
+    python3 parse_safaitic.py --xml ociana_corpus.xml
+    python3 parse_safaitic.py --sample          # bundled test data
 """
 
-import os
-import io
 import re
 import sys
-import time
-import zipfile
 import argparse
-import requests
 from pathlib import Path
-from lxml import etree
+
 import pandas as pd
+from lxml import etree
 from openpyxl import load_workbook
-from openpyxl.styles import (
-    Font, PatternFill, Alignment, Border, Side, GradientFill
-)
+from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
-from openpyxl.worksheet.table import Table, TableStyleInfo
-from openpyxl.worksheet.views import SheetView
 
-# ── EpiDoc TEI namespace ────────────────────────────────────────────────────
-TEI_NS = "http://www.tei-c.org/ns/1.0"
-NS = {"tei": TEI_NS}
+# ── Deity detection ──────────────────────────────────────────────────────────
+# In the OCIANA corpus the vocative particle 'h' is a standalone word followed
+# by the deity name (e.g. 'h lt' = "O Allāt"), not prefixed with a dash.
 
-# ── ORA download URL ────────────────────────────────────────────────────────
-ORA_URL = (
-    "https://ora.ox.ac.uk/objects/uuid:08a60ae8-e61d-486e-9ef1-836ca71d904c"
-    "/download_file?safe_filename=OCIANA_bulk.zip&type_of_work=Dataset"
+DEITIES = {
+    "Allāt":        re.compile(r"\bh\s+(lt|ʾlt|ylt|yʾlt)\b"),
+    "Rudā":         re.compile(r"\bh\s+(rḍw|rḍy|rḍ)\b"),
+    "Baʿalshameen": re.compile(r"\bh\s+(bʿls¹mn|bʿls¹m)\b"),
+    "Yaṯaʿ":        re.compile(r"\bh\s+(yṯʿ|ʾṯʿ)\b"),
+    "Šaʿhaqam":     re.compile(r"\bh\s+(s²ʿhqm|s²ʿqm)\b"),
+    "Dushara":      re.compile(r"\bh\s+(ds²r|ḏs²r)\b"),
+    "Gaddaref":     re.compile(r"\bh\s+gdḍf\b"),
+    "Gadʿawdh":     re.compile(r"\bh\s+gdʿwḏ\b"),
+}
+
+# Matches any deity invocation and captures up to 60 chars of what follows,
+# so _request_info can scan past conjunction/particle words to find the request.
+_ANY_DEITY = re.compile(
+    r"\bh\s+(?:lt|ʾlt|ylt|yʾlt"
+    r"|rḍw|rḍy|rḍ"
+    r"|bʿls¹mn|bʿls¹m"
+    r"|yṯʿ|ʾṯʿ"
+    r"|s²ʿhqm|s²ʿqm"
+    r"|ds²r|ḏs²r"
+    r"|gdḍf|gdʿwḏ)"
+    r"\s+(.{1,80}?)(?=\b(?:w|f)\s+h\s+|\Z)"  # up to next invocation or end
 )
 
-# ── Deity detection patterns ────────────────────────────────────────────────
-# Matches the vocative h- prefix directly attached to deity names in the
-# Safaitic transliteration used by OCIANA.
-DEITY_PATTERNS = {
-    "Allāt": re.compile(
-        r"\bh-All[aā]t\b|\bh-ʾlt\b|\bh-ʾllt\b|\bh-ʾlāt\b",
-        re.IGNORECASE | re.UNICODE,
-    ),
-    "Rudā": re.compile(
-        r"\bh-Rud[aā]\b|\bh-rḍw\b|\bh-rdw\b",
-        re.IGNORECASE | re.UNICODE,
-    ),
-    "Shams": re.compile(
-        r"\bh-Š[mn]s\b|\bh-S¹ms\b|\bh-Šms\b|\bh-šms\b",
-        re.IGNORECASE | re.UNICODE,
-    ),
+# Particles / conjunctions / deity names to skip when scanning for the request
+# word.  Deity names appear here because paired invocations like "h lt w ds²r"
+# would otherwise return "ds²r" as the request.
+_PARTICLES = {
+    "w", "f", "l", "l-", "w-", "f-", "b", "b-", "mn", "ʿl-", "ʿl",
+    "ʾl-", "ʾl", "ḏ-", "ḏ", "m-", "kl", "mr",
+    # Deity name forms
+    "lt", "ʾlt", "ylt", "yʾlt",
+    "rḍw", "rḍy", "rḍ",
+    "bʿls¹mn", "bʿls¹m",
+    "yṯʿ", "ʾṯʿ",
+    "s²ʿhqm", "s²ʿqm",
+    "ds²r", "ḏs²r",
+    "gdḍf", "gdʿwḏ",
 }
 
-# Also catch any h- invocation not tied to a known deity (generic detection)
-GENERIC_H_INVOC = re.compile(r"\bh-[A-ZÀ-öø-ÿʾʿḥṣṭẓḍḏṯṣḳġšṯ]", re.UNICODE)
-
-# ── Category classification keywords ───────────────────────────────────────
-# Keys are checked against both the Safaitic transliteration AND the English
-# translation text.
-
-CATEGORY_RULES = {
-    "Protection & Security": {
-        # `slm` omitted from transliteration: it doubles as a very common personal
-        # name (l-Slm bn …) and the translation pattern reliably catches "peace".
-        # `w-slm` (with conjunction) is safe and included.
-        "transliteration": re.compile(
-            r"\bḥm[yt][-h]?\b|\bḥmyt\b|\bw-slm\b|\bʿwn[-h]?\b|\bns²r[-h]?\b"
-            r"|\bns¹r[-h]?\b|\bḥfẓ\b|\bḥfẓ-h\b",
-            re.IGNORECASE | re.UNICODE,
-        ),
-        "translation": re.compile(
-            r"\b(protect|protection|guard|safety|safe|peace|help|shelter|"
-            r"defend|defense|salvation|save)\b",
-            re.IGNORECASE,
-        ),
-    },
-    "Vengeance & Curse": {
-        "transliteration": re.compile(
-            r"\bnqm[-h]?\b|\blʿn\b|\bṯʾr[-h]?\b|\bṯʾr\b",
-            re.IGNORECASE | re.UNICODE,
-        ),
-        "translation": re.compile(
-            r"\b(vengeance|avenge|curse|retribution|punish|enemy|enemies|"
-            r"wrath|erase|obliterate|harm|evil)\b",
-            re.IGNORECASE,
-        ),
-    },
-    "Pastoral & Logistic Success": {
-        # `ġnm` without the definite article `h-` is also a common personal name
-        # (bn ġnm = "son of Ġnm"), so require `h-ġnm` for the flock/sheep sense.
-        "transliteration": re.compile(
-            r"\bmrʿ\b|\bgyt\b|\bks²b\b|\bwbl\b|\brʿy\b|\bibl\b|\bh-ġnm\b"
-            r"|\btns¹ʿd\b|\btns²ʿd\b",
-            re.IGNORECASE | re.UNICODE,
-        ),
-        "translation": re.compile(
-            r"\b(pasture|grazing|rain|camel|camels|flock|flocks|sheep|cattle|"
-            r"herd|herded|pastured|good fortune|gain|success|harvest)\b",
-            re.IGNORECASE,
-        ),
-    },
+# ── Request-word → English label ─────────────────────────────────────────────
+# Maps the first Safaitic word after the deity name to a human-readable label.
+REQUEST_LABELS = {
+    # Security & Protection
+    "s¹lm":    "Security",
+    "s¹[l]m":  "Security",
+    "s¹{l}m":  "Security",
+    "s¹]lm":   "Security",
+    "s¹(l)m":  "Security",
+    "wqyt":    "Preservation",
+    "flṭ":     "Deliverance",
+    "ġwṯ":     "Succour / Help",
+    "ḥnn":     "Mercy / Grace",
+    "brʾ":     "Healing",
+    "ḥmyt":    "Protection",
+    # Vengeance & Cursing
+    "ṯʾr":     "Vengeance",
+    "nqm":     "Vengeance",
+    "nqmt":    "Retribution",
+    "ʿwr":     "Blindness on enemy",
+    "nqʾt":    "Evil eye on enemy",
+    "lʿn":     "Curse",
+    "ʿyr":     "Shame on enemy",
+    "ʿyrt":    "Shame on enemy",
+    "fṣyt":    "Divine judgment",
+    "ʿqbt":    "Punishment",
+    # Prosperity & Gain
+    "ġnmt":    "Plunder / Spoils",
+    "ġnyt":    "Wealth",
+    "s¹ʿd":    "Happiness / Fortune",
+    "qbll":    "Benevolence",
+    "hb":      "Grant [gift]",
+    "whb":     "Grant [gift]",
+    "ʾws¹":    "Gift",
+    "mgdt":    "Gift",
+    "ġnm":     "Flock / Gain",
+    "ġyr":     "Zealous protection",
+    # Relief & Wellbeing
+    "rwḥ":     "Relief / Ease",
+    "r{w}ḥ":   "Relief / Ease",
+    "r(w)ḥ":   "Relief / Ease",
+    "rw":      "Relief / Ease",          # damaged rwḥ
+    "ġyrt":    "Zealous wellbeing",
+    "mḥlt":    "Respite",
+    # Damaged / variant spellings of security
+    "s¹":      "Security",
+    "s¹l":     "Security",
+    "s¹l(m":   "Security",
+    "s¹)lm":   "Security",
+    "slm":     "Security",
+    # Damaged / variant spellings of prosperity
+    "s¹ʿ":     "Happiness / Fortune",
+    "s¹ʿ(d":   "Happiness / Fortune",
+    "ġny":     "Wealth",
+    "ġrt":     "Zealous protection",
+    "qbl":     "Benevolence",
+    # Verbal / variant forms of vengeance/cursing
+    "yʿwr":    "Blindness on enemy",
+    "wr":      "Blindness on enemy",
+    "ʿw":      "Blindness on enemy",
+    "fṣy":     "Divine judgment",
+    "nqʾ":     "Evil eye on enemy",
+    "qʾt":     "Evil eye on enemy",
+    "qmt":     "Retribution",
+    "qm":      "Vengeance",
 }
 
+# ── Request-word → Category ──────────────────────────────────────────────────
+REQUEST_CATEGORIES = {
+    # Security & Protection
+    "s¹lm":    "Security & Protection",
+    "s¹[l]m":  "Security & Protection",
+    "s¹{l}m":  "Security & Protection",
+    "s¹]lm":   "Security & Protection",
+    "s¹(l)m":  "Security & Protection",
+    "wqyt":    "Security & Protection",
+    "flṭ":     "Security & Protection",
+    "ġwṯ":     "Security & Protection",
+    "ḥnn":     "Security & Protection",
+    "brʾ":     "Security & Protection",
+    "ḥmyt":    "Security & Protection",
+    # Vengeance & Cursing
+    "ṯʾr":     "Vengeance & Cursing",
+    "nqm":     "Vengeance & Cursing",
+    "nqmt":    "Vengeance & Cursing",
+    "ʿwr":     "Vengeance & Cursing",
+    "nqʾt":    "Vengeance & Cursing",
+    "lʿn":     "Vengeance & Cursing",
+    "ʿyr":     "Vengeance & Cursing",
+    "ʿyrt":    "Vengeance & Cursing",
+    "fṣyt":    "Vengeance & Cursing",
+    "ʿqbt":    "Vengeance & Cursing",
+    # Prosperity & Gain
+    "ġnmt":    "Prosperity & Gain",
+    "ġnyt":    "Prosperity & Gain",
+    "s¹ʿd":    "Prosperity & Gain",
+    "qbll":    "Prosperity & Gain",
+    "hb":      "Prosperity & Gain",
+    "whb":     "Prosperity & Gain",
+    "ʾws¹":    "Prosperity & Gain",
+    "mgdt":    "Prosperity & Gain",
+    "ġnm":     "Prosperity & Gain",
+    "ġyr":     "Prosperity & Gain",
+    # Relief & Wellbeing
+    "rwḥ":     "Relief & Wellbeing",
+    "r{w}ḥ":   "Relief & Wellbeing",
+    "r(w)ḥ":   "Relief & Wellbeing",
+    "rw":      "Relief & Wellbeing",
+    "ġyrt":    "Relief & Wellbeing",
+    "mḥlt":    "Relief & Wellbeing",
+    # Damaged security variants
+    "s¹":      "Security & Protection",
+    "s¹l":     "Security & Protection",
+    "s¹l(m":   "Security & Protection",
+    "s¹)lm":   "Security & Protection",
+    "slm":     "Security & Protection",
+    # Damaged prosperity variants
+    "s¹ʿ":     "Prosperity & Gain",
+    "s¹ʿ(d":   "Prosperity & Gain",
+    "ġny":     "Prosperity & Gain",
+    "ġrt":     "Prosperity & Gain",
+    "qbl":     "Prosperity & Gain",
+    # Verbal/damaged vengeance forms
+    "yʿwr":    "Vengeance & Cursing",
+    "wr":      "Vengeance & Cursing",
+    "ʿw":      "Vengeance & Cursing",
+    "fṣy":     "Vengeance & Cursing",
+    "nqʾ":     "Vengeance & Cursing",
+    "qʾt":     "Vengeance & Cursing",
+    "qmt":     "Vengeance & Cursing",
+    "qm":      "Vengeance & Cursing",
+}
 
-# ── XML helpers ─────────────────────────────────────────────────────────────
+_CAT_ORDER = [
+    "Security & Protection",
+    "Vengeance & Cursing",
+    "Prosperity & Gain",
+    "Relief & Wellbeing",
+    "Mixed",
+    "Other",
+]
 
-_INVOC_SPLIT = re.compile(r",?\s+and\s+may\s+", re.IGNORECASE)
+_CAT_COLOURS = {
+    "Security & Protection": "1F497D",   # dark blue
+    "Vengeance & Cursing":   "C0392B",   # deep red
+    "Prosperity & Gain":     "27AE60",   # green
+    "Relief & Wellbeing":    "E67E22",   # orange
+    "Mixed":                 "8E44AD",   # purple
+    "Other":                 "7F8C8D",   # grey
+}
+
+# ── Columns ──────────────────────────────────────────────────────────────────
+COLUMNS = [
+    "Inscription ID",
+    "Location",
+    "Deities Invoked",
+    "Request Type",
+    "Category",
+    "Invocation (English)",
+    "Full Translation",
+    "Safaitic Transliteration",
+    "URL",
+]
+
+COL_WIDTHS = {
+    "Inscription ID":        16,
+    "Location":              28,
+    "Deities Invoked":       24,
+    "Request Type":          28,
+    "Category":              26,
+    "Invocation (English)":  55,
+    "Full Translation":      55,
+    "Safaitic Transliteration": 55,
+    "URL":                   45,
+}
+
+# ── Parsing ──────────────────────────────────────────────────────────────────
+
+_INVOC_SPLIT = re.compile(r"(?:(?:[,.]\s*)?(?:So\s+)?)(\bO\b.+)", re.IGNORECASE | re.DOTALL)
 
 
 def _extract_invocation(translation: str) -> str:
-    """Return the invocation clause(s) only, stripping the author genealogy preamble.
-
-    Safaitic translations follow the pattern:
-        "By X son of Y [context clause], and may [Deity] [request]."
-    Everything from 'and may' onward is the invocation; the 'By …' part is the
-    genealogical formula, not the invocation itself.
-    """
+    """Return from the first 'O [Deity]' onward, capitalised."""
     m = _INVOC_SPLIT.search(translation)
     if m:
-        # Capitalise the first word so it reads as a standalone sentence.
-        rest = translation[m.start():].lstrip(", ")
+        rest = m.group(1).strip()
         return rest[0].upper() + rest[1:] if rest else rest
-    # Fallback: no split point found, return the full text.
+    # Fallback: 'and may / So may'
+    m2 = re.search(r"(?:[,.]\s*)?(?:So\s+)?(?:and\s+)?may\s+.+", translation, re.IGNORECASE | re.DOTALL)
+    if m2:
+        rest = m2.group(0).strip().lstrip(",. ")
+        return rest[0].upper() + rest[1:] if rest else rest
     return translation
 
 
-def _text_of(element) -> str:
-    """Recursively join all text content of an XML element."""
-    return " ".join(t.strip() for t in element.itertext() if t.strip())
+def _first_request_word(context: str) -> str:
+    """Return the first non-particle word from the post-deity context string."""
+    for tok in re.split(r"[\s{}\[\]<>.,;]+", context):
+        tok = tok.strip(".,;-{}[]()")
+        if tok and tok.lower() not in _PARTICLES and len(tok) > 1:
+            return tok
+    return ""
 
 
-def parse_inscription(xml_path: str | Path) -> dict | None:
-    """Parse one EpiDoc TEI file; return a record dict or None if no invocation."""
-    try:
-        tree = etree.parse(str(xml_path))
-    except etree.XMLSyntaxError:
-        return None
+def _request_info(transliteration: str) -> tuple[str, str]:
+    """Return (request_type_label, category) derived from the request word(s)."""
+    req_words = []
+    for m in _ANY_DEITY.finditer(transliteration):
+        context = m.group(1) if m.lastindex else ""
+        w = _first_request_word(context)
+        if w:
+            req_words.append(w)
 
-    root = tree.getroot()
+    if not req_words:
+        return ("—", "Other")
 
-    # ── inscription ID ──────────────────────────────────────────────────────
-    idno = root.find(".//tei:idno[@type='filename']", NS)
-    insc_id = idno.text.strip() if idno is not None and idno.text else Path(xml_path).stem
+    labels = []
+    cats = set()
+    for w in req_words:
+        lbl = REQUEST_LABELS.get(w)
+        cat = REQUEST_CATEGORIES.get(w)
+        if lbl:
+            labels.append(lbl)
+        if cat:
+            cats.add(cat)
 
-    # ── location ────────────────────────────────────────────────────────────
-    settlement = root.find(".//tei:settlement", NS)
-    location = (settlement.text or "").strip() if settlement is not None else ""
-
-    # ── edition text ────────────────────────────────────────────────────────
-    edition_div = root.find(
-        ".//tei:div[@type='edition']", NS
-    )
-    edition_text = _text_of(edition_div) if edition_div is not None else ""
-
-    # ── translation text ────────────────────────────────────────────────────
-    transl_div = root.find(".//tei:div[@type='translation']", NS)
-    translation = _text_of(transl_div) if transl_div is not None else ""
-
-    # ── detect invocation ───────────────────────────────────────────────────
-    deities_found = [
-        name
-        for name, pat in DEITY_PATTERNS.items()
-        if pat.search(edition_text)
-    ]
-
-    # Fallback: generic h- invocation (h- followed by uppercase/special char)
-    has_generic = bool(GENERIC_H_INVOC.search(edition_text))
-
-    if not deities_found and not has_generic:
-        return None  # not an invocation inscription
-
-    # ── classify ────────────────────────────────────────────────────────────
-    matched_categories = []
-    for cat, rules in CATEGORY_RULES.items():
-        if rules["transliteration"].search(edition_text) or \
-           rules["translation"].search(translation):
-            matched_categories.append(cat)
-
-    if len(matched_categories) == 0:
-        category = "Uncategorised Invocation"
-    elif len(matched_categories) == 1:
-        category = matched_categories[0]
+    label_str = "; ".join(dict.fromkeys(labels)) if labels else req_words[0]
+    if len(cats) == 0:
+        category = "Other"
+    elif len(cats) == 1:
+        category = next(iter(cats))
     else:
-        category = "Mixed Formulas"
+        category = "Mixed"
 
-    return {
-        "Inscription ID": insc_id,
-        "Location": location,
-        "Deities Invoked": ", ".join(deities_found) if deities_found else "Unknown",
-        "Category": category,
-        "Invocation (English)": _extract_invocation(translation),
-        "Full Translation": translation,
-        "Safaitic Text (Transliteration)": edition_text,
-        "Source File": Path(xml_path).name,
-    }
+    return (label_str, category)
 
 
-# ── Corpus loading ───────────────────────────────────────────────────────────
+def _load_corpus(xml_path: Path) -> etree._Element:
+    with open(xml_path, "rb") as f:
+        content = f.read()
+    content = re.sub(b"<\\?xml[^?]*\\?>", b"", content)
+    content = re.sub(b"<xs:schema>.*?</xs:schema>", b"", content, flags=re.DOTALL)
+    content = re.sub(b"[\x00-\x08\x0b\x0c\x0e-\x1f]", b"", content)
+    content = b"<corpus>" + content.strip() + b"</corpus>"
+    return etree.fromstring(content)
 
-def load_from_directory(xml_dir: Path) -> list[dict]:
-    files = list(xml_dir.glob("**/*.xml"))
-    print(f"  Found {len(files)} XML files in {xml_dir}")
+
+def parse_corpus(xml_path: Path) -> list[dict]:
+    print(f"  Parsing {xml_path} …")
+    root = _load_corpus(xml_path)
+    inscriptions = root.findall("inscription")
+    print(f"  Total inscriptions in file: {len(inscriptions):,}")
+
     records = []
-    for f in files:
-        rec = parse_inscription(f)
-        if rec:
-            records.append(rec)
+    for ins in inscriptions:
+        script = (ins.findtext("script") or "").strip()
+        if script != "Safaitic":
+            continue
+
+        translit = (ins.findtext("transliteration") or "").strip()
+        transl   = (ins.findtext("translation") or "").strip()
+
+        deities_found = [name for name, pat in DEITIES.items() if pat.search(translit)]
+        if not deities_found:
+            continue
+
+        siglum   = (ins.findtext("siglum") or "").strip()
+        site     = (ins.findtext("site") or "").strip()
+        region   = (ins.findtext("region") or "").strip()
+        country  = (ins.findtext("country") or "").strip()
+        location = ", ".join(p for p in [site, region, country] if p) or "—"
+        url      = (ins.findtext("url") or "").strip()
+
+        request_type, category = _request_info(translit)
+        invocation = _extract_invocation(transl)
+
+        records.append({
+            "Inscription ID":        siglum,
+            "Location":              location,
+            "Deities Invoked":       ", ".join(deities_found),
+            "Request Type":          request_type,
+            "Category":              category,
+            "Invocation (English)":  invocation,
+            "Full Translation":      transl,
+            "Safaitic Transliteration": translit,
+            "URL":                   url,
+        })
+
     return records
 
 
-def load_from_zip(zip_path: Path) -> list[dict]:
+def parse_sample(sample_dir: Path) -> list[dict]:
+    """Parse the bundled EpiDoc TEI sample files (legacy format)."""
+    TEI_NS = "http://www.tei-c.org/ns/1.0"
+    NS = {"tei": TEI_NS}
+
+    def _text(el):
+        return " ".join(t.strip() for t in el.itertext() if t.strip()) if el is not None else ""
+
     records = []
-    with zipfile.ZipFile(zip_path) as zf:
-        xml_members = [m for m in zf.namelist() if m.endswith(".xml")]
-        print(f"  Found {len(xml_members)} XML files in ZIP")
-        for member in xml_members:
-            data = zf.read(member)
-            try:
-                tree = etree.parse(io.BytesIO(data))
-            except etree.XMLSyntaxError:
-                continue
-            # write to temp and reuse parse_inscription logic inline
-            root = tree.getroot()
-            tmp_path = Path("/tmp/_ociana_tmp.xml")
-            tmp_path.write_bytes(data)
-            rec = parse_inscription(tmp_path)
-            if rec:
-                rec["Source File"] = member
-                records.append(rec)
-    return records
-
-
-def download_ora(url: str, out_path: Path) -> Path | None:
-    """Attempt to download the ORA ZIP. Returns local path on success."""
-    headers = {
-        "User-Agent": (
-            "Mozilla/5.0 (compatible; academic-research-script/1.0; "
-            "safaitic-corpus-extractor)"
-        )
-    }
-    print(f"  Attempting download from ORA …")
-    for attempt in range(1, 5):
+    for xml_path in sorted(sample_dir.glob("*.xml")):
         try:
-            r = requests.get(url, headers=headers, timeout=120, stream=True)
-            if r.status_code == 200:
-                out_path.write_bytes(r.content)
-                print(f"  Downloaded {len(r.content):,} bytes → {out_path}")
-                return out_path
-            else:
-                print(f"  HTTP {r.status_code} on attempt {attempt}")
-        except requests.RequestException as exc:
-            print(f"  Network error on attempt {attempt}: {exc}")
-        if attempt < 4:
-            wait = 2 ** attempt
-            print(f"  Retrying in {wait}s …")
-            time.sleep(wait)
-    return None
+            tree = etree.parse(str(xml_path))
+        except etree.XMLSyntaxError:
+            continue
+        root = tree.getroot()
+        idno = root.find(".//tei:idno[@type='filename']", NS)
+        siglum = idno.text.strip() if idno is not None and idno.text else xml_path.stem
+        settlement = root.find(".//tei:settlement", NS)
+        location = (settlement.text or "").strip() if settlement is not None else "—"
+        edition = root.find(".//tei:div[@type='edition']", NS)
+        translit = _text(edition)
+        transl_div = root.find(".//tei:div[@type='translation']", NS)
+        transl = _text(transl_div)
+
+        # Use translation-based detection for sample data
+        deity_trans = re.compile(
+            r"\bAllāt\b|\bRudā\b|\bShams\b", re.IGNORECASE
+        )
+        if not deity_trans.search(transl):
+            continue
+
+        deities = [d for d in ["Allāt", "Rudā", "Shams"] if re.search(rf"\b{d}\b", transl, re.IGNORECASE)]
+
+        # Simple category from translation
+        cat_map = [
+            ("Vengeance & Cursing",   re.compile(r"\b(veng|curse|retrib|evil|enemy|punish)\b", re.I)),
+            ("Security & Protection", re.compile(r"\b(protect|peace|security|help|save|guard)\b", re.I)),
+            ("Prosperity & Gain",     re.compile(r"\b(pasture|rain|gain|fortune|plunder|wealth)\b", re.I)),
+            ("Relief & Wellbeing",    re.compile(r"\b(relief|ease|wellbeing|benevolence)\b", re.I)),
+        ]
+        cats = [cat for cat, pat in cat_map if pat.search(transl)]
+        category = cats[0] if len(cats) == 1 else ("Mixed" if len(cats) > 1 else "Other")
+        request_type = "; ".join(cats) if cats else "—"
+
+        invocation = _extract_invocation(transl)
+        records.append({
+            "Inscription ID":           siglum,
+            "Location":                 location,
+            "Deities Invoked":          ", ".join(deities),
+            "Request Type":             request_type,
+            "Category":                 category,
+            "Invocation (English)":     invocation,
+            "Full Translation":         transl,
+            "Safaitic Transliteration": translit,
+            "URL":                      "",
+        })
+    return records
 
 
 # ── Excel export ─────────────────────────────────────────────────────────────
 
-_CAT_COLOURS = {
-    "Protection & Security":         "1F497D",  # dark blue
-    "Vengeance & Curse":             "C0392B",  # deep red
-    "Pastoral & Logistic Success":   "27AE60",  # green
-    "Mixed Formulas":                "8E44AD",  # purple
-    "Uncategorised Invocation":      "7F8C8D",  # grey
-}
-
-_CAT_FILL = {k: PatternFill("solid", fgColor=v) for k, v in _CAT_COLOURS.items()}
-
-_HEADER_FONT   = Font(name="Calibri", bold=True, color="FFFFFF", size=11)
-_BODY_FONT     = Font(name="Calibri", size=10)
-_WRAP_ALIGN    = Alignment(wrap_text=True, vertical="top")
-_CENTER_ALIGN  = Alignment(horizontal="center", vertical="center")
-_THIN_BORDER   = Border(
-    left=Side(style="thin"),  right=Side(style="thin"),
-    top=Side(style="thin"),   bottom=Side(style="thin"),
+_HEADER_FONT  = Font(name="Calibri", bold=True, color="FFFFFF", size=11)
+_BODY_FONT    = Font(name="Calibri", size=10)
+_WRAP_ALIGN   = Alignment(wrap_text=True, vertical="top")
+_CENTER_ALIGN = Alignment(horizontal="center", vertical="center")
+_THIN         = Border(
+    left=Side(style="thin"), right=Side(style="thin"),
+    top=Side(style="thin"),  bottom=Side(style="thin"),
 )
 
-_COLUMNS = [
-    "Inscription ID",
-    "Location",
-    "Deities Invoked",
-    "Category",
-    "Invocation (English)",
-    "Full Translation",
-    "Safaitic Text (Transliteration)",
-    "Source File",
-]
 
-_COL_WIDTHS = {
-    "Inscription ID":                  18,
-    "Location":                        28,
-    "Deities Invoked":                 22,
-    "Category":                        30,
-    "Invocation (English)":            55,
-    "Full Translation":                55,
-    "Safaitic Text (Transliteration)": 55,
-    "Source File":                     22,
-}
+def _lighten(hex_colour: str, factor: float = 0.85) -> str:
+    r = int(hex_colour[0:2], 16); g = int(hex_colour[2:4], 16); b = int(hex_colour[4:6], 16)
+    return "{:02X}{:02X}{:02X}".format(
+        int(r + (255 - r) * factor),
+        int(g + (255 - g) * factor),
+        int(b + (255 - b) * factor),
+    )
 
 
-def _apply_header_row(ws, fill_colour: str):
-    hdr_fill = PatternFill("solid", fgColor=fill_colour)
-    for col_idx, col_name in enumerate(_COLUMNS, start=1):
-        cell = ws.cell(row=1, column=col_idx, value=col_name)
-        cell.font      = _HEADER_FONT
-        cell.fill      = hdr_fill
-        cell.alignment = _CENTER_ALIGN
-        cell.border    = _THIN_BORDER
+def _header_row(ws, colour: str):
+    fill = PatternFill("solid", fgColor=colour)
+    for c, col in enumerate(COLUMNS, 1):
+        cell = ws.cell(row=1, column=c, value=col)
+        cell.font = _HEADER_FONT; cell.fill = fill
+        cell.alignment = _CENTER_ALIGN; cell.border = _THIN
 
 
-def _write_data_rows(ws, rows: list[dict], alt_fill: str):
-    alt = PatternFill("solid", fgColor=alt_fill)
+def _data_rows(ws, rows: list[dict], alt_colour: str):
+    alt   = PatternFill("solid", fgColor=alt_colour)
     plain = PatternFill("solid", fgColor="FFFFFF")
-    for r_idx, rec in enumerate(rows, start=2):
-        row_fill = alt if r_idx % 2 == 0 else plain
-        for c_idx, col_name in enumerate(_COLUMNS, start=1):
-            cell = ws.cell(row=r_idx, column=c_idx, value=rec.get(col_name, ""))
-            cell.font      = _BODY_FONT
-            cell.alignment = _WRAP_ALIGN
-            cell.border    = _THIN_BORDER
-            cell.fill      = row_fill
+    for r, rec in enumerate(rows, 2):
+        fill = alt if r % 2 == 0 else plain
+        for c, col in enumerate(COLUMNS, 1):
+            cell = ws.cell(row=r, column=c, value=rec.get(col, ""))
+            cell.font = _BODY_FONT; cell.fill = fill
+            cell.alignment = _WRAP_ALIGN; cell.border = _THIN
 
 
-def _freeze_and_size(ws):
+def _freeze_size(ws):
     ws.freeze_panes = "A2"
-    for col_idx, col_name in enumerate(_COLUMNS, start=1):
-        ws.column_dimensions[get_column_letter(col_idx)].width = _COL_WIDTHS[col_name]
-    # row heights: header taller, data rows auto
+    for c, col in enumerate(COLUMNS, 1):
+        ws.column_dimensions[get_column_letter(c)].width = COL_WIDTHS[col]
     ws.row_dimensions[1].height = 22
     for r in range(2, ws.max_row + 1):
-        ws.row_dimensions[r].height = 60
+        ws.row_dimensions[r].height = 55
 
 
 def export_excel(records: list[dict], output_path: Path):
     if not records:
-        print("  No matching inscriptions found — nothing to export.")
-        return
+        print("  No matching inscriptions — nothing to export."); return
 
-    df = pd.DataFrame(records, columns=_COLUMNS)
+    df = pd.DataFrame(records, columns=COLUMNS)
 
-    categories = [
-        "Protection & Security",
-        "Vengeance & Curse",
-        "Pastoral & Logistic Success",
-        "Mixed Formulas",
-        "Uncategorised Invocation",
-    ]
-
-    # Write via pandas first (creates the file), then re-open with openpyxl
     with pd.ExcelWriter(str(output_path), engine="openpyxl") as writer:
-        # ── Summary sheet ────────────────────────────────────────────────────
+        # Summary sheet
         summary_rows = []
-        for cat in categories:
-            subset = df[df["Category"] == cat]
-            if not subset.empty:
-                top_deities = (
-                    subset["Deities Invoked"]
-                    .str.split(", ")
-                    .explode()
-                    .value_counts()
-                    .head(3)
-                    .index.tolist()
-                )
-                summary_rows.append({
-                    "Category":            cat,
-                    "Count":               len(subset),
-                    "% of Total":          f"{100 * len(subset) / len(df):.1f}%",
-                    "Top Deities":         ", ".join(top_deities),
-                })
-        summary_df = pd.DataFrame(summary_rows)
-        summary_df.to_excel(writer, sheet_name="Summary", index=False)
-
-        # ── All Invocations sheet ────────────────────────────────────────────
+        for cat in _CAT_ORDER:
+            sub = df[df["Category"] == cat]
+            if sub.empty:
+                continue
+            top_d = (
+                sub["Deities Invoked"].str.split(", ").explode()
+                .value_counts().head(3).index.tolist()
+            )
+            top_r = (
+                sub["Request Type"].str.split("; ").explode()
+                .value_counts().head(3).index.tolist()
+            )
+            summary_rows.append({
+                "Category":        cat,
+                "Count":           len(sub),
+                "% of Total":      f"{100*len(sub)/len(df):.1f}%",
+                "Top Deities":     ", ".join(top_d),
+                "Top Requests":    ", ".join(top_r),
+            })
+        pd.DataFrame(summary_rows).to_excel(writer, sheet_name="Summary", index=False)
         df.to_excel(writer, sheet_name="All Invocations", index=False)
+        for cat in _CAT_ORDER:
+            sub = df[df["Category"] == cat]
+            if not sub.empty:
+                sub.to_excel(writer, sheet_name=cat[:31], index=False)
 
-        # ── Per-category sheets ──────────────────────────────────────────────
-        for cat in categories:
-            subset = df[df["Category"] == cat]
-            if not subset.empty:
-                safe_name = cat[:31]  # Excel sheet name limit
-                subset.to_excel(writer, sheet_name=safe_name, index=False)
-
-    # ── Re-open to apply formatting ─────────────────────────────────────────
     wb = load_workbook(str(output_path))
 
-    # Format Summary sheet
-    ws_summary = wb["Summary"]
-    sum_fill  = PatternFill("solid", fgColor="2C3E50")
-    sum_alt   = PatternFill("solid", fgColor="ECF0F1")
-    sum_plain = PatternFill("solid", fgColor="FFFFFF")
-    for cell in ws_summary[1]:
-        cell.font      = _HEADER_FONT
-        cell.fill      = sum_fill
-        cell.alignment = _CENTER_ALIGN
-        cell.border    = _THIN_BORDER
-    ws_summary.freeze_panes = "A2"
-    for r_idx in range(2, ws_summary.max_row + 1):
-        cat_val = ws_summary.cell(row=r_idx, column=1).value
-        cat_colour = _CAT_COLOURS.get(cat_val, "FFFFFF")
-        cat_chip   = PatternFill("solid", fgColor=cat_colour)
-        row_fill   = sum_alt if r_idx % 2 == 0 else sum_plain
-        for c_idx in range(1, ws_summary.max_column + 1):
-            cell = ws_summary.cell(row=r_idx, column=c_idx)
-            cell.font      = Font(
-                name="Calibri", size=11,
-                bold=(c_idx == 1),
-                color="FFFFFF" if c_idx == 1 else "2C3E50",
-            )
-            cell.fill      = cat_chip if c_idx == 1 else row_fill
-            cell.alignment = _CENTER_ALIGN
-            cell.border    = _THIN_BORDER
-    for col in ws_summary.columns:
-        ws_summary.column_dimensions[col[0].column_letter].width = 32
+    # Format Summary
+    ws = wb["Summary"]
+    ws.freeze_panes = "A2"
+    dark = PatternFill("solid", fgColor="2C3E50")
+    for cell in ws[1]:
+        cell.font = _HEADER_FONT; cell.fill = dark
+        cell.alignment = _CENTER_ALIGN; cell.border = _THIN
+    for r in range(2, ws.max_row + 1):
+        cat_val = ws.cell(r, 1).value or ""
+        cat_fill = PatternFill("solid", fgColor=_CAT_COLOURS.get(cat_val, "7F8C8D"))
+        row_fill = PatternFill("solid", fgColor="ECF0F1" if r % 2 == 0 else "FFFFFF")
+        for c in range(1, ws.max_column + 1):
+            cell = ws.cell(r, c)
+            cell.fill = cat_fill if c == 1 else row_fill
+            cell.font = Font(name="Calibri", size=11,
+                             bold=(c == 1), color="FFFFFF" if c == 1 else "2C3E50")
+            cell.alignment = _CENTER_ALIGN; cell.border = _THIN
+    for col in ws.columns:
+        ws.column_dimensions[col[0].column_letter].width = 32
 
-    # Format All Invocations sheet
+    # Format All Invocations
     ws_all = wb["All Invocations"]
-    _apply_header_row(ws_all, "2C3E50")
-    _write_data_rows(ws_all, records, "EBF5FB")
-    _freeze_and_size(ws_all)
+    _header_row(ws_all, "2C3E50")
+    _data_rows(ws_all, records, "EBF5FB")
+    _freeze_size(ws_all)
 
     # Format per-category sheets
-    for cat in categories:
-        safe_name = cat[:31]
-        if safe_name not in wb.sheetnames:
+    for cat in _CAT_ORDER:
+        name = cat[:31]
+        if name not in wb.sheetnames:
             continue
-        ws = wb[safe_name]
+        ws_cat = wb[name]
         colour = _CAT_COLOURS.get(cat, "2C3E50")
-        alt_colour = _lighten_hex(colour)
-        subset_records = [r for r in records if r["Category"] == cat]
-        _apply_header_row(ws, colour)
-        _write_data_rows(ws, subset_records, alt_colour)
-        _freeze_and_size(ws)
+        subset = [r for r in records if r["Category"] == cat]
+        _header_row(ws_cat, colour)
+        _data_rows(ws_cat, subset, _lighten(colour))
+        _freeze_size(ws_cat)
 
-    # Move Summary to first position
     wb.move_sheet("Summary", offset=-len(wb.sheetnames) + 1)
-
     wb.save(str(output_path))
-    print(f"\n  Exported {len(records)} inscriptions → {output_path}")
+    print(f"\n  Exported {len(records):,} inscriptions → {output_path}")
 
 
-def _lighten_hex(hex_colour: str, factor: float = 0.85) -> str:
-    """Return a lightened version of a hex RGB colour for alternating rows."""
-    r = int(hex_colour[0:2], 16)
-    g = int(hex_colour[2:4], 16)
-    b = int(hex_colour[4:6], 16)
-    r = int(r + (255 - r) * factor)
-    g = int(g + (255 - g) * factor)
-    b = int(b + (255 - b) * factor)
-    return f"{r:02X}{g:02X}{b:02X}"
-
-
-# ── CLI ──────────────────────────────────────────────────────────────────────
+# ── CLI ───────────────────────────────────────────────────────────────────────
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Extract Safaitic invocation inscriptions from OCIANA EpiDoc XML"
-    )
-    source = parser.add_mutually_exclusive_group(required=True)
-    source.add_argument(
-        "--sample", action="store_true",
-        help="Use the bundled sample EpiDoc XML files (no download needed)"
-    )
-    source.add_argument(
-        "--xml-dir", metavar="DIR",
-        help="Directory containing EpiDoc XML files"
-    )
-    source.add_argument(
-        "--zip", metavar="FILE",
-        help="Local ZIP archive of OCIANA bulk XML (as downloaded from ORA)"
-    )
-    source.add_argument(
-        "--download", action="store_true",
-        help="Attempt to download the bulk corpus from Oxford ORA (requires network access)"
-    )
-    parser.add_argument(
-        "--output", metavar="FILE", default="safaitic_invocations.xlsx",
-        help="Output .xlsx filename (default: safaitic_invocations.xlsx)"
-    )
-    args = parser.parse_args()
+    ap = argparse.ArgumentParser(description="OCIANA Safaitic Invocation Extractor")
+    src = ap.add_mutually_exclusive_group(required=True)
+    src.add_argument("--xml",    metavar="FILE", help="OCIANA bulk corpus XML file")
+    src.add_argument("--sample", action="store_true", help="Use bundled sample EpiDoc XML files")
+    ap.add_argument("--output",  metavar="FILE", default="safaitic_invocations.xlsx")
+    args = ap.parse_args()
 
     print("=" * 60)
     print("  OCIANA Safaitic Invocation Extractor")
     print("=" * 60)
 
-    records: list[dict] = []
-
-    if args.sample:
+    if args.xml:
+        xml_path = Path(args.xml)
+        if not xml_path.exists():
+            print(f"ERROR: file not found: {xml_path}"); sys.exit(1)
+        print(f"\n[1/3] Loading corpus from {xml_path}")
+        records = parse_corpus(xml_path)
+    else:
         sample_dir = Path(__file__).parent / "sample_data"
-        if not sample_dir.exists():
-            print(f"  ERROR: sample_data/ not found at {sample_dir}")
-            sys.exit(1)
         print(f"\n[1/3] Loading sample data from {sample_dir}")
-        records = load_from_directory(sample_dir)
+        records = parse_sample(sample_dir)
 
-    elif args.xml_dir:
-        xml_dir = Path(args.xml_dir)
-        if not xml_dir.exists():
-            print(f"  ERROR: Directory not found: {xml_dir}")
-            sys.exit(1)
-        print(f"\n[1/3] Loading XML files from {xml_dir}")
-        records = load_from_directory(xml_dir)
-
-    elif args.zip:
-        zip_path = Path(args.zip)
-        if not zip_path.exists():
-            print(f"  ERROR: ZIP file not found: {zip_path}")
-            sys.exit(1)
-        print(f"\n[1/3] Loading from ZIP: {zip_path}")
-        records = load_from_zip(zip_path)
-
-    elif args.download:
-        print(f"\n[1/3] Downloading corpus from ORA …")
-        zip_out = Path("OCIANA_bulk.zip")
-        result = download_ora(ORA_URL, zip_out)
-        if result is None:
-            print(
-                "\n  Download failed. The ORA host may block automated requests\n"
-                "  or require authentication in your network environment.\n"
-                "\n  Manual download steps:\n"
-                "    1. Open in a browser:\n"
-                "       https://ora.ox.ac.uk/objects/uuid:08a60ae8-e61d-486e-9ef1-836ca71d904c\n"
-                "    2. Click the 'Download' or 'Get the data' link to save the ZIP.\n"
-                "    3. Re-run: python3 parse_safaitic.py --zip OCIANA_bulk.zip\n"
-            )
-            sys.exit(1)
-        print(f"\n[1/3] Loading from downloaded ZIP: {zip_out}")
-        records = load_from_zip(zip_out)
-
-    print(f"\n[2/3] Parsing complete.")
-    print(f"       Total inscriptions scanned: see file count above")
-    print(f"       Invocation inscriptions found: {len(records)}")
-
+    print(f"\n[2/3] Parsing complete — {len(records):,} invocation inscriptions found")
     if records:
         cat_counts = {}
         for r in records:
             cat_counts[r["Category"]] = cat_counts.get(r["Category"], 0) + 1
         print("\n  Category breakdown:")
-        for cat, count in sorted(cat_counts.items(), key=lambda x: -x[1]):
-            print(f"    {cat:<38} {count:>4}")
+        for cat in _CAT_ORDER:
+            if cat in cat_counts:
+                print(f"    {cat:<30} {cat_counts[cat]:>6,}")
 
     print(f"\n[3/3] Exporting to {args.output} …")
-    output_path = Path(args.output)
-    export_excel(records, output_path)
-
+    export_excel(records, Path(args.output))
     print("\nDone.")
 
 
