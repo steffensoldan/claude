@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title>USMF 2</title></titleStmt>
+      <publicationStmt><idno type="filename">USMF0002</idno></publicationStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier><settlement>Usays, Syria</settlement></msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc><langUsage><language ident="xsa">Safaitic</language></langUsage></profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="edition" xml:lang="xsa" xml:space="preserve">
+        <ab>
+          <w>l-nṣr</w>
+          <w>bn</w>
+          <w>ṣlt</w>
+          <w>bn</w>
+          <w>ʿmr</w>
+          <w>w-h-Allāt</w>
+          <w>nqm</w>
+          <w>mn</w>
+          <w>fʿl</w>
+          <w>bh</w>
+          <w>s²r</w>
+        </ab>
+      </div>
+      <div type="translation">
+        <p>By Nṣr son of Ṣlt son of ʿMr, and may Allāt take vengeance on whoever did evil against him.</p>
+      </div>
+    </body>
+  </text>
+</TEI>

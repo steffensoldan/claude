@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title>RSIS 3</title></titleStmt>
+      <publicationStmt><idno type="filename">RSIS0003</idno></publicationStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier><settlement>Ras Siagha, Jordan</settlement></msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc><langUsage><language ident="xsa">Safaitic</language></langUsage></profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="edition" xml:lang="xsa" xml:space="preserve">
+        <ab>
+          <w>l-khl</w>
+          <w>bn</w>
+          <w>s²ʿd</w>
+          <w>bn</w>
+          <w>ḥwš</w>
+          <w>w-h-Allāt</w>
+          <w>ḥmyt</w>
+          <w>w-slm</w>
+          <w>w-ʿwn</w>
+        </ab>
+      </div>
+      <div type="translation">
+        <p>By Khl son of Šʿd son of Ḥwš, and may Allāt (grant) protection and peace and help.</p>
+      </div>
+    </body>
+  </text>
+</TEI>

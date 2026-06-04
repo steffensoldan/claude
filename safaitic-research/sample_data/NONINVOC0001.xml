@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title>NONINVOC 1</title></titleStmt>
+      <publicationStmt><idno type="filename">NONINVOC0001</idno></publicationStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier><settlement>Unknown</settlement></msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc><langUsage><language ident="xsa">Safaitic</language></langUsage></profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="edition" xml:lang="xsa" xml:space="preserve">
+        <ab>
+          <w>l-ʿmr</w>
+          <w>bn</w>
+          <w>ḥrb</w>
+          <w>bn</w>
+          <w>s¹ʿd</w>
+        </ab>
+      </div>
+      <div type="translation">
+        <p>By ʿMr son of Ḥrb son of Sʿd.</p>
+      </div>
+    </body>
+  </text>
+</TEI>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title>USMF 3</title></titleStmt>
+      <publicationStmt><idno type="filename">USMF0003</idno></publicationStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier><settlement>Usays, Syria</settlement></msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc><langUsage><language ident="xsa">Safaitic</language></langUsage></profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="edition" xml:lang="xsa" xml:space="preserve">
+        <ab>
+          <w>l-ṣhr</w>
+          <w>bn</w>
+          <w>s¹ʿd</w>
+          <w>bn</w>
+          <w>ṯlm</w>
+          <w>w-h-Allāt</w>
+          <w>ḥmyt</w>
+          <w>w-h-Rudā</w>
+          <w>nqm</w>
+          <w>mn</w>
+          <w>s²nʾ-h</w>
+          <w>w-h-Šms</w>
+          <w>gyt</w>
+          <w>w-mrʿ</w>
+        </ab>
+      </div>
+      <div type="translation">
+        <p>By Ṣhr son of Sʿd son of Ṯlm, and may Allāt (grant) protection, and may Rudā take vengeance on his enemy, and may Shams (grant) rain and good pasture.</p>
+      </div>
+    </body>
+  </text>
+</TEI>

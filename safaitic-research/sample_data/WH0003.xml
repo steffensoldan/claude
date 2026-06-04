@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title>WH 3</title></titleStmt>
+      <publicationStmt><idno type="filename">WH0003</idno></publicationStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier><settlement>Wadi Hauran, Syria</settlement></msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc><langUsage><language ident="xsa">Safaitic</language></langUsage></profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="edition" xml:lang="xsa" xml:space="preserve">
+        <ab>
+          <w>l-ṯlm</w>
+          <w>bn</w>
+          <w>ḫlf</w>
+          <w>bn</w>
+          <w>s²bq</w>
+          <w>w-h-Allāt</w>
+          <w>nqm-h</w>
+          <w>mn</w>
+          <w>s²nʾ-h</w>
+          <w>w-h-Rudā</w>
+          <w>ḥmy-h</w>
+        </ab>
+      </div>
+      <div type="translation">
+        <p>By Ṯlm son of Ḫlf son of Šbq, and may Allāt take vengeance for him on his enemy, and may Rudā protect him.</p>
+      </div>
+    </body>
+  </text>
+</TEI>

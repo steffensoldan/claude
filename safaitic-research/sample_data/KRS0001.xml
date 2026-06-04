@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>KRS 1</title>
+      </titleStmt>
+      <publicationStmt>
+        <idno type="filename">KRS0001</idno>
+        <idno type="URI">https://krc.orient.ox.ac.uk/ociana/inscription/KRS0001</idno>
+      </publicationStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier>
+            <settlement>Harrat al-Rajil, Jordan</settlement>
+          </msIdentifier>
+          <physDesc>
+            <objectDesc>
+              <supportDesc>
+                <support><material>Basalt</material></support>
+              </supportDesc>
+            </objectDesc>
+          </physDesc>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="xsa">Safaitic</language>
+      </langUsage>
+      <textClass>
+        <keywords>
+          <term>invocation</term>
+          <term>deity</term>
+        </keywords>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="edition" xml:lang="xsa" xml:space="preserve">
+        <ab>
+          <w>b-s¹nt</w>
+          <w>rḍw</w>
+          <w>bn</w>
+          <w>ḥzm</w>
+          <w>bn</w>
+          <w>ḥyw</w>
+          <w>bn</w>
+          <w>ġwt</w>
+          <w>w-h-Allāt</w>
+          <w>ḥmy-h</w>
+        </ab>
+      </div>
+      <div type="translation">
+        <p>By Rḍw son of Ḥzm son of Ḥyw son of Ġwt, and may Allāt protect him.</p>
+      </div>
+    </body>
+  </text>
+</TEI>

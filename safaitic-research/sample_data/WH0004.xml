@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title>WH 4</title></titleStmt>
+      <publicationStmt><idno type="filename">WH0004</idno></publicationStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier><settlement>Wadi Hauran, Syria</settlement></msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc><langUsage><language ident="xsa">Safaitic</language></langUsage></profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="edition" xml:lang="xsa" xml:space="preserve">
+        <ab>
+          <w>l-ʿbd</w>
+          <w>bn</w>
+          <w>ḥnn</w>
+          <w>w-h-Rudā</w>
+          <w>lʿn</w>
+          <w>mn</w>
+          <w>mḥy</w>
+          <w>h-ktbt</w>
+        </ab>
+      </div>
+      <div type="translation">
+        <p>By ʿBd son of Ḥnn, and may Rudā curse whoever erases this inscription.</p>
+      </div>
+    </body>
+  </text>
+</TEI>
