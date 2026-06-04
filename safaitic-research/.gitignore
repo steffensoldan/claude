@@ -3,3 +3,7 @@ ociana_corpus.xml
 
 # Generated output files
 *.xlsx
+
+# Python cache
+__pycache__/
+*.pyc
