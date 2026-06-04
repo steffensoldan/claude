@@ -121,6 +121,26 @@ CATEGORY_RULES = {
 
 # ── XML helpers ─────────────────────────────────────────────────────────────
 
+_INVOC_SPLIT = re.compile(r",?\s+and\s+may\s+", re.IGNORECASE)
+
+
+def _extract_invocation(translation: str) -> str:
+    """Return the invocation clause(s) only, stripping the author genealogy preamble.
+
+    Safaitic translations follow the pattern:
+        "By X son of Y [context clause], and may [Deity] [request]."
+    Everything from 'and may' onward is the invocation; the 'By …' part is the
+    genealogical formula, not the invocation itself.
+    """
+    m = _INVOC_SPLIT.search(translation)
+    if m:
+        # Capitalise the first word so it reads as a standalone sentence.
+        rest = translation[m.start():].lstrip(", ")
+        return rest[0].upper() + rest[1:] if rest else rest
+    # Fallback: no split point found, return the full text.
+    return translation
+
+
 def _text_of(element) -> str:
     """Recursively join all text content of an XML element."""
     return " ".join(t.strip() for t in element.itertext() if t.strip())
@@ -185,8 +205,9 @@ def parse_inscription(xml_path: str | Path) -> dict | None:
         "Location": location,
         "Deities Invoked": ", ".join(deities_found) if deities_found else "Unknown",
         "Category": category,
+        "Invocation (English)": _extract_invocation(translation),
+        "Full Translation": translation,
         "Safaitic Text (Transliteration)": edition_text,
-        "English Translation": translation,
         "Source File": Path(xml_path).name,
     }
 
@@ -279,8 +300,9 @@ _COLUMNS = [
     "Location",
     "Deities Invoked",
     "Category",
+    "Invocation (English)",
+    "Full Translation",
     "Safaitic Text (Transliteration)",
-    "English Translation",
     "Source File",
 ]
 
@@ -289,8 +311,9 @@ _COL_WIDTHS = {
     "Location":                        28,
     "Deities Invoked":                 22,
     "Category":                        30,
+    "Invocation (English)":            55,
+    "Full Translation":                55,
     "Safaitic Text (Transliteration)": 55,
-    "English Translation":             55,
     "Source File":                     22,
 }
 
