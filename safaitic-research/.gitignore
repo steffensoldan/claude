@@ -1,0 +1,4 @@
+ociana_corpus.xml
+*.pkl
+__pycache__/
+*.pyc
