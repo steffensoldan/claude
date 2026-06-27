@@ -1,0 +1,14 @@
+# Secrets
+.env
+
+# Laufzeit-Daten (nicht im Repo)
+state/
+reports/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Logs
+*.log
