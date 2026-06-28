@@ -1,6 +1,22 @@
 # ÜBERGABE — Erweiterte Ausgabe „Wer dies liest, lebe lang”
 
-Stand: 2026-06-10 · Status: Manuskript v1 gebaut (`wer_dies_liest_lebe_lang_erweitert.docx`, 22 S.)
+Stand: 2026-06-28 · Status: Zwei Manuskript-Fassungen
+- v1: `wer_dies_liest_lebe_lang_erweitert.docx` (22 S., Stand 2026-06-10)
+- **v2: `wer_dies_liest_lebe_lang_erweitert_v2.docx`** (reduzierter Apparat — siehe Abschnitt 0)
+
+## 0. Version 2 — Änderungen gegenüber v1
+
+Zweite Fassung mit zurückgenommenem redaktionellem Apparat. Inhalt der Nachdichtungen und Steine unverändert; geändert ist nur, was *um* die Texte herum steht. Fünf Eingriffe:
+
+1. **Namens-Zwischenüberschriften entfernt.** Der fett gesetzte Schreibername am Kopf der Steine (S¹ḫr., N˥mn., ˥my., Mġyr., Ḥnn.) ist gestrichen. Die Steine mit getilgter Genealogie beginnen jetzt direkt mit der Erzählung; die beiden Toledot-Steine (RQ.A 5, HSNS 5) behalten ihre volle „Von … Sohn des …“-Kette.
+2. **Poetische Kapitel-Untertitel entfernt.** Die gedeckten Zeilen unter jedem Kapitelnamen (z. B. „Heimkehr zur Tränke, quer durch die Wüste.“) sind gestrichen — Kapitel = Ziffer + Name.
+3. **Quellenangabe unter jedem Gedicht, einheitlich „Sigle xy“.** Die Bezeichnungen „Quellsigle“ und der Kopf-Kicker „STEIN · …“ entfallen. Jedes Stück — Gedicht *und* Stein — trägt seine Quelle als schlichte Zeile „Sigle xy“ darunter (67 umbenannt, 9 neu unter den Steinen ergänzt).
+4. **Echo aufgelöst.** Die Doppelung „verknapptes Gedicht + ganzer Stein nebeneinander“ funktionierte nicht. An den beiden Echo-Stellen steht jetzt nur noch der ganze Stein, die verknappte Fassung ist gestrichen: ASWS 73 (eröffnet Kap. VI), C 4803 (Schlussstein). Damit entfällt auch die verknappte C-4803-Fassung aus Kap. X.
+5. **Wiederkehrende Schlussformeln entfernt.** Die drei zwischen die Kapitel gesetzten Refrain-Seiten („nach RSIS 110“, „nach Al-Namārah.H 61“, „nach C 2770“) sind gestrichen — sie waren nur nachgedichtet und stehen für kein konkretes Original. Fluch/Segen bleibt dort, wo er im Original eines Steins oder Gedichts tatsächlich vorkommt (RSIS 351, C 4803, LP 243 u. a.).
+
+Mitgezogene Doku im Manuskript: Vorwort (Refrain-„Rad“-Satz neutralisiert), editorische Notiz (Echo-Absatz durch Schlussstein-Satz ersetzt; Satz zum „bloßen Namen als Kopf“ gestrichen; „sieben Steine am Kopf“ → „am Kopf der Abschnitte und am Schluss“), Glossar-Überschrift („Glossar der Quellsiglen“ → „Glossar der Siglen“), „Zu den Quellen“ (Quellsigle → Sigle).
+
+Build: Direktes XML-Transform von v1 (`scripts/build_v2.py`), kein Neusatz — alle nicht berührten Absätze bleiben byte-genau. Der Abschnitt 3 (Echo-Konzept) und die Register-Tabelle in Abschnitt 2 beschreiben den Stand v1.
 
 ## 1. Konzeptentscheidung (ersetzt das alte Band-2-Konzept)
 
