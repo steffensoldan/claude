@@ -1,9 +1,38 @@
 # ÜBERGABE — Erweiterte Ausgabe „Wer dies liest, lebe lang”
 
-Stand: 2026-06-28 · Status: Drei Manuskript-Fassungen
-- v1: `wer_dies_liest_lebe_lang_erweitert.docx` (22 S., Stand 2026-06-10)
-- v2: `wer_dies_liest_lebe_lang_erweitert_v2.docx` (reduzierter Apparat — siehe Abschnitt 0)
-- **v3: `wer_dies_liest_lebe_lang_erweitert_v3.docx`** (jedes Kapitel auf 15 Stücke — siehe Abschnitt 0a)
+Stand: 2026-06-28 · Status: Fünf Manuskript-Fassungen (jede baut auf der vorigen auf)
+- v1: `…_erweitert.docx` (22 S., Stand 2026-06-10)
+- v2: `…_erweitert_v2.docx` — reduzierter Apparat (Abschnitt 0)
+- v3: `…_erweitert_v3.docx` — jedes Kapitel auf 15 Stücke (Abschnitt 0a)
+- v4: `…_erweitert_v4.docx` — Kapitelüberschriften mit Komma statt „&“ (Abschnitt 0b)
+- **v5: `…_erweitert_v5.docx`** — einheitliche Er-Form (Abschnitt 0c)
+
+## 0c. Version 5 — einheitliche Er-Form
+
+Hebt die Stimm-Trennung auf. Bis v4 standen die verknappten Gedichte im **Ich**
+(Aneignung), nur die langen Steine im **Er**. Befund (und Anstoß): Die
+safaitischen Originale sind **durchweg dritte Person** — *l-Fulān* + „und er
+trauerte“; das Ich war die Hinzufügung, das Er die treue Form. Die Mehrheit
+trug also die Lizenz, die Minderheit die Treue. v5 stellt **alle 180 Stücke in
+die dritte Person**; die Steine waren schon Er und bleiben unberührt.
+
+Umsetzung (nur im Gedicht-Bereich, Front-/Backmatter bleibt): Präteritum ist in
+1./3. Person identisch (er blieb / er kam / er war), daher ändern sich vor allem
+Pronomen und Possessive — Ich→Er, mein→sein, reflexiv mich→sich, Objekt/Dativ
+mich/mir→ihn/ihm; der Plural-Grabtext JSLih 077 (zwei Stifter) wird Wir→Sie.
+Unangetastet: Anrufungen an die Gottheit (Imperativ „Allat — gib Sicherheit“),
+Fluch-/Segensformeln und die Frauenstimme C 5142 („Sie …“). 184 Verszeilen
+umgestellt. Editorische Notiz nachgezogen (Zwei-Register-/Aneignungs-Absätze).
+
+**Damit ist die „Stimme“-Zeile der Tabelle in Abschnitt 2 überholt** — beide
+Register stehen jetzt in der dritten Person; der Registerunterschied liegt nur
+noch im Grad der Verknappung. Build: `scripts/build_v5.py` (XML-Transform von v4).
+
+## 0b. Version 4 — Kapitelüberschriften mit Komma
+
+Kosmetische Fassung auf Basis v3: In den 9 Kapitelüberschriften mit „&“ wird das
+Et-Zeichen durch ein Komma ersetzt (Dürre, Lager · Wege, Wasser · … · Zeichen,
+Seltsames). Sonst unverändert.
 
 ## 0a. Version 3 — Aufstockung auf 15 je Kapitel
 
