@@ -7,6 +7,7 @@ Alle Projekte mit Claude
 | Projekt | Pfad | Status |
 |---|---|---|
 | [github-trend-monitor](./github-trend-monitor/) | `C:\AI-Tools\claude\github-trend-monitor\` | ✅ produktiv |
+| [aos](./aos/) | `C:\AI-Tools\claude\aos\` | 🔧 Struktur-Überarbeitung |
 
 ---
 
