@@ -10,13 +10,13 @@ Register, 0 Überschneidung mit der erweiterten Ausgabe). Nachdichtungen stehen
 als Datenblock unten. Lücken (----) werden in Register VII offen belassen.
 
 Aufruf (aus Poetics/):
-  python3 neues-konzept/scripts/build_register.py
+  python3 register/scripts/build_register.py
 """
 
 import os, re, zipfile
 
 V5 = "erweitert/wer_dies_liest_lebe_lang_erweitert_v5.docx"
-OUT = "neues-konzept/wer_dies_liest_register.docx"
+OUT = "register/wer_dies_liest_register.docx"
 GEO = '<w:rFonts w:ascii="Georgia" w:cs="Georgia" w:eastAsia="Georgia" w:hAnsi="Georgia"/>'
 
 def esc(s): return s.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")
