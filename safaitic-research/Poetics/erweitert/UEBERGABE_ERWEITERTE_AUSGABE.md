@@ -1,8 +1,32 @@
 # ÜBERGABE — Erweiterte Ausgabe „Wer dies liest, lebe lang”
 
-Stand: 2026-06-28 · Status: Zwei Manuskript-Fassungen
+Stand: 2026-06-28 · Status: Drei Manuskript-Fassungen
 - v1: `wer_dies_liest_lebe_lang_erweitert.docx` (22 S., Stand 2026-06-10)
-- **v2: `wer_dies_liest_lebe_lang_erweitert_v2.docx`** (reduzierter Apparat — siehe Abschnitt 0)
+- v2: `wer_dies_liest_lebe_lang_erweitert_v2.docx` (reduzierter Apparat — siehe Abschnitt 0)
+- **v3: `wer_dies_liest_lebe_lang_erweitert_v3.docx`** (jedes Kapitel auf 15 Stücke — siehe Abschnitt 0a)
+
+## 0a. Version 3 — Aufstockung auf 15 je Kapitel
+
+Baut auf v2 auf. Jedes der 12 Kapitel wird auf **15 Stücke** gebracht (Band = 180).
+Die 104 neuen Nachdichtungen stehen je Kapitel **in Reihenfolge ihrer Eignung**
+(OCIANA-LiteraryScore absteigend) ans Kapitelende angehängt — so lässt sich von
+hinten her kürzen, ohne die Spitze zu verlieren. Bei XII vor dem Schlussstein.
+
+Materialdecke (Prüfung in `VORSCHLAG_15ER_AUSGABE.md`): 8 Kapitel tragen 15 ohne
+Wiederholung; in 4 Kapiteln (Klage, Angst, Zeichen, Sehnsucht) wird gegen das
+Kapitelende **bewusst Motiv-Wiederholung** in Kauf genommen (Litanei „weinte vor
+Kummer“, „in Not“, „die Zeichnung des Löwen“) — als Reiz und als Kürzungsreserve.
+Sehnsucht (X) ist um Querschnitt-Texte aus der größeren Narrativ-Tabelle ergänzt
+(longing/love als Nebenmotiv), da das Eigenthema erschöpft war.
+
+Stil der neuen Stücke wie der Bestand: Ich-Form, Genealogie getilgt, Lücken
+geglättet, Gottesnamen eingedeutscht (Allat, Baalschamin, Schaihaqaum, Gad-ʿAud,
+Rudā, Duschara), je eine „Sigle …“-Zeile darunter. Vorwort: Stückzahl von
+„wenige Dutzend“ auf „gegen zweihundert“ angepasst.
+
+Build: `scripts/build_v3.py` (direktes XML-Transform von v2; die Auswahl- und
+Verstexte stehen als Datenblock im Skript). Offen: Lektorat der 104 neuen
+Nachdichtungen gegen die OCIANA-Einträge; Endkürzung je Kapitel von hinten.
 
 ## 0. Version 2 — Änderungen gegenüber v1
 
