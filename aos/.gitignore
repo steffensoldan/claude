@@ -1,0 +1,21 @@
+# Ignore temporary dialog threads
+dialog/*
+!dialog/README.md
+!dialog/uaos-overhead-check/
+
+# Windows/Node temp files
+.DS_Store
+Thumbs.db
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Projects folder containing separate git repositories
+projects/
+
+# Ignore secrets
+.env
+*.key
+*.pem
+secrets.json

@@ -1,0 +1,1393 @@
+From 96038170dd426cc0bae0ba228346551959eddd04 Mon Sep 17 00:00:00 2001
+From: AOS Loop <loop@aos.local>
+Date: Sun, 28 Jun 2026 04:13:54 +0000
+Subject: [PATCH 1/6] =?UTF-8?q?loop:=20Runde=201=20=E2=80=94=20schliesst?=
+ =?UTF-8?q?=20L1(Naming)=20L8(task.md)=20L11(MEMORY)=20L13(Datum)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ CLAUDE.md                |  6 +++---
+ README.md                | 10 +++++-----
+ SETUP.md                 |  4 ++--
+ commands/dialog-reply.md |  2 +-
+ commands/git-init.md     |  4 ++--
+ dialog/README.md         |  6 +++---
+ memory/MEMORY.md         |  6 +++++-
+ templates/task.md        | 26 +++++++++++++-------------
+ 8 files changed, 34 insertions(+), 30 deletions(-)
+
+diff --git a/CLAUDE.md b/CLAUDE.md
+index 53fd7f0..dcf3847 100644
+--- a/CLAUDE.md
++++ b/CLAUDE.md
+@@ -1,4 +1,4 @@
+-# CLAUDE.md (AOS - Agent Operating System)
++# CLAUDE.md (AOS - Agentic Operating System)
+ 
+ This file provides workspace-specific guidelines for Claude Code when working in the AOS repository.
+ 
+@@ -6,7 +6,7 @@ This file provides workspace-specific guidelines for Claude Code when working in
+ @memory/global-rules.md
+ 
+ ## Repository Overview
+-The Agent Operating System (AOS) is a private, lightweight system for managing agent environments, documentation, custom slash-commands, hooks, and active project workspaces.
++The Agentic Operating System (AOS) is a private, lightweight system for managing agent environments, documentation, custom slash-commands, hooks, and active project workspaces.
+ 
+ - **`commands/`**: Slash-commands for Claude Code (e.g., sync, git-init, entscheidungsvorlage).
+ - **`dialog/`**: Dialogue history templates and active threads.
+@@ -19,7 +19,7 @@ The Agent Operating System (AOS) is a private, lightweight system for managing a
+ ## Common Commands
+ 
+ ```powershell
+-# Install/Update UAOS on the current system (idempotent symlinks & rules)
++# Install/Update AOS on the current system (idempotent symlinks & rules)
+ powershell .\install.ps1
+ 
+ # Export a clean, secret-free AOS package to ZIP for mobile/VM migration
+diff --git a/README.md b/README.md
+index 1c77485..5d792eb 100644
+--- a/README.md
++++ b/README.md
+@@ -1,13 +1,13 @@
+-# Universal Agentic Operating System (UAOS)
++# Agentic Operating System (AOS)
+ 
+-Willkommen im UAOS. Dieses Verzeichnis dient als zentrale **Single Source of Truth (SSOT)** für Konventionen, Vorlagen, Skripte und Dokumente, die von **Claude Code** und **Antigravity (Gemini)** gemeinsam auf diesem Windows-System genutzt werden.
++Willkommen im AOS. Dieses Verzeichnis dient als zentrale **Single Source of Truth (SSOT)** für Konventionen, Vorlagen, Skripte und Dokumente, die von **Claude Code** und **Antigravity (Gemini)** gemeinsam auf diesem Windows-System genutzt werden.
+ 
+ ---
+ 
+ ## 1. Verzeichnisstruktur & Zuständigkeiten
+ 
+ ```text
+-C:\Users\sts\AOS\                   ← Dieses Verzeichnis (UAOS Master)
++C:\Users\sts\AOS\                   ← Dieses Verzeichnis (AOS Master)
+ │
+ ├── README.md                       ← Diese Einstiegs- und Orientierungsdatei
+ │
+@@ -73,7 +73,7 @@ Vor jeder Übergabe an das andere Tool muss dieser Block am Anfang von `task.md`
+ 
+ ```markdown
+ ## Aktueller Stand
+-Zuletzt bearbeitet: JJJJ-MM-TT durch [Claude Code | Antigravity]
++Zuletzt bearbeitet: YYYY-MM-DD durch [Claude Code | Antigravity]
+ Letzter abgeschlossener Schritt: [Beschreibung]
+ Nächster Schritt / Was als nächstes zu tun ist: [Beschreibung]
+ Offene Fragen / Blockaden: [Beschreibung oder "Keine"]
+@@ -122,4 +122,4 @@ Claude Code und Antigravity können über den `dialog\`-Ordner asynchron und vol
+ 
+ ## 8. Versionskontrolle (Git)
+ 
+-Das gesamte UAOS-Masterverzeichnis (`C:\Users\sts\AOS\`) wird per Git versioniert. Dies schützt vor unabsichtlichen Fehlkonfigurationen durch KIs und bietet eine lückenlose Historie aller Regel-, Befehls- und Skriptanpassungen.
++Das gesamte AOS-Masterverzeichnis (`C:\Users\sts\AOS\`) wird per Git versioniert. Dies schützt vor unabsichtlichen Fehlkonfigurationen durch KIs und bietet eine lückenlose Historie aller Regel-, Befehls- und Skriptanpassungen.
+diff --git a/SETUP.md b/SETUP.md
+index c02e389..4de0f8f 100644
+--- a/SETUP.md
++++ b/SETUP.md
+@@ -1,6 +1,6 @@
+-# UAOS Setup: Symbolische Links unter Windows
++# AOS Setup: Symbolische Links unter Windows
+ 
+-Diese Anleitung beschreibt die einmalige Einrichtung der symbolischen Links (Symlinks), um die UAOS-Befehle und Hooks für **Claude Code** auf diesem System verfügbar zu machen.
++Diese Anleitung beschreibt die einmalige Einrichtung der symbolischen Links (Symlinks), um die AOS-Befehle und Hooks für **Claude Code** auf diesem System verfügbar zu machen.
+ 
+ ---
+ 
+diff --git a/commands/dialog-reply.md b/commands/dialog-reply.md
+index 383aeb7..9e3de1a 100644
+--- a/commands/dialog-reply.md
++++ b/commands/dialog-reply.md
+@@ -5,7 +5,7 @@ description: Liest den Dialogverlauf unter einem bestimmten Thema ein, formulier
+ 
+ # Befehl: dialog-reply
+ 
+-Du wirst aufgerufen, um auf einen asynchronen Dialog im UAOS zu antworten.
++Du wirst aufgerufen, um auf einen asynchronen Dialog im AOS zu antworten.
+ 
+ ## Anweisungen:
+ 
+diff --git a/commands/git-init.md b/commands/git-init.md
+index 8e1aa4f..13f3ca3 100644
+--- a/commands/git-init.md
++++ b/commands/git-init.md
+@@ -1,6 +1,6 @@
+ ---
+ name: git-init
+-description: Initialisiert ein neues Projekt im Lightweight UAOS-Modus (erstellt .gitignore, PROJECT.md und task.md). Fragt nach abweichenden Regeln. Aufruf via /git-init <Projektpfad>.
++description: Initialisiert ein neues Projekt im Lightweight AOS-Modus (erstellt .gitignore, PROJECT.md und task.md). Fragt nach abweichenden Regeln. Aufruf via /git-init <Projektpfad>.
+ ---
+ 
+ Initialisiere ein lokales Git-Repository. Pfad: $ARGUMENTS
+@@ -21,7 +21,7 @@ Halte dich strikt an diese Reihenfolge:
+ 6. **Tool-Configs nur bei Bedarf (Abweichungsprüfung):**
+    - Frage den Benutzer, ob für dieses Projekt projektspezifische Abweichungen von den globalen Regeln nötig sind.
+    - Nur wenn der Benutzer dies bejaht, erstelle eine lokale `CLAUDE.md` (für Claude Code) bzw. `DEVELOPMENT.md` (für Antigravity) mit den entsprechenden abweichenden Anweisungen (Inhalt siehe unten). Andernfalls lasse diese Dateien weg (beide Clients laden standardmäßig die globalen Regeln aus `C:\Users\sts\AOS\memory\global-rules.md`).
+-7. `git add -A` und `git commit -m "init: Lightweight UAOS Projektstruktur"` ausführen.
++7. `git add -A` und `git commit -m "init: Lightweight AOS Projektstruktur"` ausführen.
+ 8. Status melden: Pfad, Branch, Anzahl committeter Dateien und bestätigen, dass das Projekt im Lightweight-Modus aufgesetzt wurde.
+ 
+ Noch kein Remote anlegen — das erfolgt separat bei Launch.
+diff --git a/dialog/README.md b/dialog/README.md
+index 287a63a..1c7e742 100644
+--- a/dialog/README.md
++++ b/dialog/README.md
+@@ -1,4 +1,4 @@
+-# UAOS Agent-Dialog
++# AOS Agent-Dialog
+ 
+ Asynchroner Kommunikationskanal zwischen Claude Code (CC) und Antigravity (AG).
+ Ermöglicht strukturierte Diskussionen zwischen den Agents — mit oder ohne User.
+@@ -22,14 +22,14 @@ dialog/<thema>/
+ status: waiting-for-claude | waiting-for-ag | done
+ max_rounds: 10
+ current_round: 1
+-started: JJJJ-MM-TT
++started: YYYY-MM-DD
+ topic: Kurzbeschreibung des Themas
+ ```
+ 
+ ### Nachrichtenformat (in from-*.md)
+ 
+ ```markdown
+-**[JJJJ-MM-TT, Claude Code — Runde N]**
++**[YYYY-MM-DD, Claude Code — Runde N]**
+ 
+ Nachrichtentext...
+ 
+diff --git a/memory/MEMORY.md b/memory/MEMORY.md
+index bd23248..4b2c2e4 100644
+--- a/memory/MEMORY.md
++++ b/memory/MEMORY.md
+@@ -3,4 +3,8 @@
+ Jeder Eintrag verweist auf eine Datei in diesem Verzeichnis.
+ Format: `- [Titel](datei.md) — einzeiliger Inhalt`
+ 
+-<!-- Einträge werden von Claude Code automatisch ergänzt -->
++## Einträge
++- [Globale Regeln](global-rules.md) — bindende Arbeits-, Qualitäts- und Sicherheitsanweisungen für jeden Agenten
++- [Debatten-Modus](debate-mode.md) — Bewertungsmatrix und Compliance-Gate für den Agent-zu-Agent-Dialog
++
++<!-- Neue Einträge von Claude Code via /remember anhängen — Format exakt wie oben -->
+diff --git a/templates/task.md b/templates/task.md
+index 0232654..4778cba 100644
+--- a/templates/task.md
++++ b/templates/task.md
+@@ -1,7 +1,7 @@
+ # Aufgabenliste: [Projektname / Meilenstein]
+ 
+ ## Aktueller Stand
+-* **Zuletzt bearbeitet:** [JJJJ-MM-TT] durch [Claude Code | Antigravity]
++* **Zuletzt bearbeitet:** [YYYY-MM-DD] durch [Claude Code | Antigravity]
+ * **Letzter Meilenstein:** [Kurzbeschreibung des letzten abgeschlossenen Schritts]
+ * **Nächster Schritt:** [Was als nächstes getan werden muss]
+ * **Offene Fragen / Blockaden:** [Beschreibung oder "Keine"]
+@@ -9,19 +9,19 @@
+ ---
+ 
+ ## 1. Planungsphase
+-- [ ] [ ] `PROJECT.md` ausgefüllt und verifiziert
+-- [ ] [ ] `implementation_plan.md` erstellt und vom Entwickler freigegeben
++- [ ] `PROJECT.md` ausgefüllt und verifiziert
++- [ ] `implementation_plan.md` erstellt und vom Entwickler freigegeben
+ 
+ ## 2. Umsetzung
+-- [ ] [ ] [Task-Gruppe 1 (z. B. Setup / Komponenten)]
+-  - [ ] `[ ]` [Teilschritt 1]
+-  - [ ] `[ ]` [Teilschritt 2]
+-- [ ] [ ] [Task-Gruppe 2 (z. B. Logik / Anbindung)]
+-  - [ ] `[ ]` [Teilschritt]
++- [ ] [Task-Gruppe 1 (z. B. Setup / Komponenten)]
++  - [ ] [Teilschritt 1]
++  - [ ] [Teilschritt 2]
++- [ ] [Task-Gruppe 2 (z. B. Logik / Anbindung)]
++  - [ ] [Teilschritt]
+ 
+ ## 3. Verifizierung & Dokumentation
+-- [ ] [ ] Lokale Tests ausgeführt und bestanden
+-- [ ] [ ] Build-Prozess verifiziert (falls anwendbar)
+-- [ ] [ ] `walkthrough.md` erstellt/aktualisiert
+-- [ ] [ ] Git Commit & Push durchgeführt (Working-Branch sauber)
+-- [ ] [ ] Statusblock für Übergabe aktualisiert
++- [ ] Lokale Tests ausgeführt und bestanden
++- [ ] Build-Prozess verifiziert (falls anwendbar)
++- [ ] `walkthrough.md` erstellt/aktualisiert
++- [ ] Git Commit & Push durchgeführt (Working-Branch sauber)
++- [ ] Statusblock für Übergabe aktualisiert
+-- 
+2.43.0
+
+
+From cf7d219ec47abe343028bfbd6a0665d6c09264c5 Mon Sep 17 00:00:00 2001
+From: AOS Loop <loop@aos.local>
+Date: Sun, 28 Jun 2026 04:17:04 +0000
+Subject: [PATCH 2/6] =?UTF-8?q?loop:=20Runde=202=20=E2=80=94=20schliesst?=
+ =?UTF-8?q?=20L2(Definition/Boot/Quickstart/Glossar)=20L5(Praezedenz)=20L6?=
+ =?UTF-8?q?(Debatten-Dedup/SSOT)=20L9(Hook-Abschnitt)=20L10(Map)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ README.md                | 225 +++++++++++++++++++++++++++------------
+ commands/dialog-reply.md |  28 +----
+ dialog/README.md         |  15 +--
+ hooks/block-dangerous.sh |   2 +-
+ memory/debate-mode.md    |  44 ++++++++
+ memory/global-rules.md   |  11 ++
+ 6 files changed, 219 insertions(+), 106 deletions(-)
+ create mode 100644 memory/debate-mode.md
+
+diff --git a/README.md b/README.md
+index 5d792eb..77b0258 100644
+--- a/README.md
++++ b/README.md
+@@ -1,125 +1,208 @@
+-# Agentic Operating System (AOS)
++# AOS — Agentic Operating System
+ 
+-Willkommen im AOS. Dieses Verzeichnis dient als zentrale **Single Source of Truth (SSOT)** für Konventionen, Vorlagen, Skripte und Dokumente, die von **Claude Code** und **Antigravity (Gemini)** gemeinsam auf diesem Windows-System genutzt werden.
++**AOS ist die Single Source of Truth für zwei Coding-Agenten — Claude Code und
++Antigravity (Googles agentische IDE) — die sich auf einem Windows-System ein Projekt
++teilen.** Es koordiniert sie über ein gemeinsames Dateisystem: kein Server, kein Dienst —
++das Repo *ist* der Kommunikationskanal. Regeln, Templates, Commands, Hooks und der
++Agent-Dialog liegen als Dateien vor; jeder Agent liest und schreibt sie nach festem Protokoll.
++
++> Pfad-Konvention: `<AOS_ROOT>` ist das Wurzelverzeichnis dieses Repos. Die PowerShell-Skripte
++> setzen `$env:AOS_ROOT` automatisch. In Beispielen steht `<AOS_ROOT>` als Platzhalter —
++> keine hartkodierten Benutzerpfade. Ein konkretes Beispiel: `<AOS_ROOT>` = `C:\Users\<user>\AOS`.
++
++---
++
++## Mentales Modell (30 Sekunden)
++
++- **Akteure:** Claude Code (CLI, textbasiert, **kein sessionübergreifendes Gedächtnis**) und
++  Antigravity (agentische IDE). Beide laden dieselben globalen Regeln.
++- **Bus:** das gemeinsame Dateisystem. Übergabe = Datei schreiben + Status setzen.
++- **Gedächtnis (3 Schichten, Präzedenz absteigend):** laufende User-Anweisung →
++  Projekt-`CLAUDE.md` (nur Abweichungen) → `memory/global-rules.md` (global, bindend).
++  Laufender Stand: Statusblock in `task.md`.
++- **Spec-First:** kein Code ohne `PROJECT.md` + `implementation_plan.md`.
++
++---
++
++## Agent-Quickstart (wenn du eine KI bist und hier aufwachst)
++
++1. Lies `memory/global-rules.md` — diese Regeln sind in **jeder** Session bindend.
++2. Lies `PROJECT.md` (was ist das Projekt) und den Statusblock in `task.md` (wo stehe ich).
++3. Arbeite ausschließlich an Dateien im aktuellen Task-Scope (Surgical Changes).
++4. Vor Übergabe: Tests grün, Git sauber, Statusblock in `task.md` aktualisiert.
++
++## Operator-Quickstart (Mensch, neues System)
++
++1. `powershell <AOS_ROOT>\install.ps1` — einziger autoritativer Setup-Pfad (idempotent).
++2. `powershell <AOS_ROOT>\install.ps1 -Verify` — Self-Test (Links, Hook, Commands).
++3. Manuelle Alternative (nur falls Installer nicht nutzbar): siehe [SETUP.md](SETUP.md).
+ 
+ ---
+ 
+-## 1. Verzeichnisstruktur & Zuständigkeiten
++## 1. Verzeichnisstruktur (vollständig)
+ 
+ ```text
+-C:\Users\sts\AOS\                   ← Dieses Verzeichnis (AOS Master)
++<AOS_ROOT>\                          ← AOS-Masterverzeichnis (SSOT)
++│
++├── README.md                        ← Diese Einstiegs- und Orientierungsdatei
++├── CLAUDE.md                        ← Workspace-Regeln für Claude Code (lädt global-rules)
++├── SETUP.md                         ← Fallback: manuelle Verknüpfung (sonst install.ps1)
++├── MOBILE.md                        ← Mobile-Dispatcher (Handy ↔ VM) inkl. Compliance-Gate
++├── install.ps1                      ← Installer/Updater + Self-Test (-Verify)
++├── export-aos.ps1                   ← Secret-freies ZIP-Paket für VM/Migration
+ │
+-├── README.md                       ← Diese Einstiegs- und Orientierungsdatei
++├── memory\                          ← Geteiltes Langzeitgedächtnis & Standards
++│   ├── MEMORY.md                    ← Index aller Memory-Dateien
++│   ├── global-rules.md             ← Globale, bindende Arbeitsanweisungen
++│   └── debate-mode.md              ← SSOT: Bewertungsmatrix & Compliance-Gate (Dialog)
+ │
+-├── memory\                         ← Geteiltes Langzeitgedächtnis & Standards
+-│   ├── global-rules.md             ← Globale Arbeitsanweisungen
+-│   └── MEMORY.md                   ← Index aller Memory-Dateien
++├── templates\                       ← Geteilte Dateischablonen
++│   ├── PROJECT.md                   ← Projekt-Metadaten & Tech-Stack (Zero-Context-Start)
++│   ├── implementation_plan.md       ← Technische Spezifikation (Spec-First)
++│   ├── task.md                      ← Aufgabenliste mit Statusblock
++│   ├── walkthrough.md               ← Änderungs- & Testdokumentation
++│   └── GOVERNANCE.md                ← Lifecycle, IP, Risiko, TCO, Barrierefreiheit
+ │
+-├── templates\                      ← Geteilte Dateischablonen
+-│   ├── PROJECT.md                  ← Projekt-Metadaten & Tech-Stack
+-│   ├── implementation_plan.md      ← Technische Spezifikationen (Spec-First)
+-│   ├── task.md                     ← Aufgabenliste mit Statusblock
+-│   └── walkthrough.md              ← Änderungs- & Testdokumentation
++├── commands\                        ← Slash-Commands für Claude Code (Master)
++│   ├── sync.md                      ← Sicherer Git-Sync-Zyklus
++│   ├── git-init.md                  ← Lightweight-Projektinitialisierung
++│   ├── entscheidungsvorlage.md      ← Entscheidungstaugliche Vorlage
++│   ├── zew-praesentation.md         ← ZEW-PPTX im Corporate Design
++│   └── dialog-reply.md              ← Antwort im Agent-Dialog
+ │
+-├── dialog\                         ← Agent-zu-Agent-Kommunikationskanal
+-│   ├── README.md                   ← Protokoll & Nutzungsanleitung
+-│   └── <thema>\                    ← Pro Thema ein Unterordner
+-│       ├── status.md               ← waiting-for-claude | waiting-for-ag | done
+-│       ├── from-claude.md          ← Claude Code schreibt hier
+-│       └── from-ag.md              ← Antigravity schreibt hier
++├── dialog\                          ← Agent-zu-Agent-Kommunikationskanal
++│   ├── README.md                    ← Protokoll & Nutzungsanleitung
++│   └── <thema>\                     ← Pro Thema: status.md, from-claude.md, from-ag.md
+ │
+-├── scripts\                        ← Geteilte Automatisierungsskripte (PowerShell)
+-│   ├── add-skill.ps1               ← Neuen Skill für beide Clients registrieren
+-│   └── pptx-to-png.ps1             ← Konvertiert PPTX in PNGs (visuelle QA)
++├── hooks\                           ← Sicherheits-Hooks für Claude Code
++│   └── block-dangerous.sh           ← PreToolUse-Guardrail gegen destruktive Befehle
+ │
+-├── commands\                       ← Befehle für Claude Code (Master-Verzeichnis)
+-│   ├── sync.md                     ← Symlink in ~/.claude/commands/sync.md
+-│   ├── git-init.md                 ← Symlink in ~/.claude/commands/git-init.md
+-│   ├── entscheidungsvorlage.md     ← Symlink in ~/.claude/commands/entscheidungsvorlage.md
+-│   ├── zew-praesentation.md        ← Symlink in ~/.claude/commands/zew-praesentation.md
+-│   └── dialog-reply.md             ← Symlink in ~/.claude/commands/dialog-reply.md
++├── scripts\                         ← Geteilte Automatisierung (PowerShell)
++│   ├── add-skill.ps1                ← Neuen Command/Skill für beide Clients registrieren
++│   └── pptx-to-png.ps1              ← PPTX → PNG (visuelle QA, PowerPoint-COM)
+ │
+-└── hooks\                          ← Sicherheits-Hooks für Claude Code
+-    └── block-dangerous.sh          ← Symlink in ~/.claude/hooks/block-dangerous.sh
++├── ops\                             ← Deployment & Betrieb
++│   └── deploy.ps1                   ← Projekt-Deploy nach deploy-manifest.json
++│
++├── projects\                        ← Aktive Projekt-Workspaces (von install.ps1 angelegt)
++│   ├── Projekte-Claude\             ← primär Claude Code
++│   └── Projekte-Antigravity\        ← primär Antigravity
++│
++└── live\                            ← Deploy-Ziele/Manifeste (von ops/deploy.ps1 genutzt)
+ ```
+ 
++> **Konsistenz-Invariante:** Jede versionierte Datei steht in dieser Map, und jeder
++> Map-Eintrag existiert real. `install.ps1 -Verify` prüft das.
++
+ ---
+ 
+-## 2. Einrichtung der symbolischen Links (Symlinks) unter Windows
++## 2. Glossar
++
++- **Antigravity:** Googles agentische IDE/Harness; zweiter Coding-Agent neben Claude Code.
++- **Claude Code:** Anthropics CLI-Agent; textbasiert, ohne sessionübergreifendes Gedächtnis.
++- **SSOT (Single Source of Truth):** genau eine maßgebliche Quelle je Regel/Information.
++- **Spec-First:** Spezifikation (`PROJECT.md`, `implementation_plan.md`) vor Implementierung.
++- **Statusblock:** Kopf von `task.md` (zuletzt/nächster Schritt/Blockaden) — Wiederaufsetzpunkt.
++- **Headless-Modus:** Claude wird als Hintergrundprozess gestartet, antwortet, beendet sich.
++- **Mutex (im Dialog):** `status.md` vergibt das exklusive Schreibrecht im Thema-Ordner.
++- **`__cc_trigger__`:** leere Markerdatei, mit der Claude Code einen Dialog initiiert.
++- **Bus-Faktor:** Anzahl Personen, deren Ausfall das Projekt stoppt (Übergabe-Risiko).
++- **Surgical Changes:** nur task-relevante Dateien ändern, keine kosmetischen Eingriffe.
++
++---
+ 
+-Um die ausführbaren Komponenten für **Claude Code** bereitzustellen, müssen symbolische Links (Symlinks) angelegt werden. Die genaue Anleitung und die PowerShell-Befehle hierzu finden Sie in der [SETUP.md](SETUP.md).
++## 3. Setup & Sicherheits-Hook aktivieren
++
++Standard: `powershell <AOS_ROOT>\install.ps1` legt Links idempotent an, registriert den
++Guardrail-Hook und führt eine Secret-Integritätsprüfung durch. Verifikation mit
++`install.ps1 -Verify`. Manuelle Alternative: [SETUP.md](SETUP.md).
++
++Den PreToolUse-Guardrail (`hooks/block-dangerous.sh`) in `~/.claude/settings.json` verdrahten
++(von `install.ps1` automatisch gesetzt; hier zur Nachvollziehbarkeit):
++
++```jsonc
++// ~/.claude/settings.json
++{
++  "hooks": {
++    "PreToolUse": [
++      { "matcher": "Bash",
++        "hooks": [
++          { "type": "command",
++            "command": "bash <AOS_ROOT>/hooks/block-dangerous.sh" }
++        ] }
++    ]
++  }
++}
++```
+ 
+ ---
+ 
+-## 3. Integration in Antigravity (Gemini)
++## 4. Integration in Antigravity
+ 
+-Antigravity nutzt die Skripte und Konventionen über Wrapper-Skills, die im globalen Plugin-Verzeichnis unter `C:\Users\sts\.gemini\config\plugins\agos-core\` liegen:
+-* **Globale Regeln:** Werden geladen, da Antigravity beim Start die `DEVELOPMENT.md` im Projekt-Root liest, welche auf `C:\Users\sts\AOS\memory\global-rules.md` verweist.
+-* **Wrapper-Skills:** Die Skills in `agos-core/skills/` stellen die Verbindung zu den globalen Konventionen und den lokalen Skripten in `C:\Users\sts\AOS\scripts\` her.
++Antigravity lädt die globalen Regeln über eine `DEVELOPMENT.md` im Projekt-Root, die auf
++`<AOS_ROOT>/memory/global-rules.md` verweist (Vorlage: `templates/DEVELOPMENT.md`).
++Wrapper-Skills unter `~/.gemini/config/plugins/agos-core/skills/` verbinden die globalen
++Konventionen mit den lokalen Skripten in `<AOS_ROOT>/scripts/`.
+ 
+ ---
+ 
+-## 4. Spezifikationsgetriebenes Arbeiten (Spec-Driven Work)
++## 5. Spezifikationsgetriebenes Arbeiten (Spec-Driven)
++
++Standard-Dateiset im Projekt-Root beim Tool-Wechsel:
+ 
+-Beim Wechseln zwischen den Tools wird folgendes, standardisiertes Dateiset im Projekt-Root verwendet:
++1. **`PROJECT.md`** — Projekt tool-neutral (Ziel, Stack, Pfade, Testbefehle).
++2. **`implementation_plan.md`** — technische Spezifikation und Architekturfragen.
++3. **`task.md`** — Aufgabenliste (GFM-Checkboxen) mit verpflichtendem Statusblock.
++4. **`walkthrough.md`** — Zusammenfassung von Codeänderungen und Testergebnissen.
+ 
+-1. **`PROJECT.md`:** Beschreibt das Projekt tool-neutral (Ziel, Stack, Ordnerpfade, Testbefehle).
+-2. **`implementation_plan.md`:** Technische Spezifikation und Architekturfragen.
+-3. **`task.md`:** Aufgabenliste (GFM Checkboxen `- [ ]` / `- [x]`) mit verpflichtendem Statusblock am Anfang der Datei.
+-4. **`walkthrough.md`:** Zusammenfassung von Codeänderungen und Testergebnissen.
++### Verpflichtender Statusblock (`task.md`)
+ 
+-### Der obligatorische Statusblock (`task.md`):
+-Vor jeder Übergabe an das andere Tool muss dieser Block am Anfang von `task.md` gepflegt werden, da **Claude Code kein sessionübergreifendes Gedächtnis besitzt**:
++Vor jeder Übergabe pflegen, da **Claude Code kein sessionübergreifendes Gedächtnis besitzt**:
+ 
+ ```markdown
+ ## Aktueller Stand
+ Zuletzt bearbeitet: YYYY-MM-DD durch [Claude Code | Antigravity]
+ Letzter abgeschlossener Schritt: [Beschreibung]
+-Nächster Schritt / Was als nächstes zu tun ist: [Beschreibung]
++Nächster Schritt: [Beschreibung]
+ Offene Fragen / Blockaden: [Beschreibung oder "Keine"]
+ ```
+ 
+ ---
+ 
+-## 5. Arbeitsaufteilung (Single-Client-Strategie)
++## 6. Arbeitsaufteilung (Single-Client-Strategie)
+ 
+-Um Merge-Konflikte und gesperrte Systemressourcen unter Windows zu vermeiden:
+-* Jedes Projekt wird primär von **einem** Client bearbeitet. Die Projektordner liegen unter `C:\Users\sts\AOS\projects\` und sind getrennt:
+-  * `C:\Users\sts\AOS\projects\Projekte-Claude\` (primär für Claude Code)
+-  * `C:\Users\sts\AOS\projects\Projekte-Antigravity\` (primär für Antigravity)
+-* Eine Übergabe an das jeweils andere Tool findet nur an expliziten **Meilensteinen** statt.
+-* **Übergabe-Regel:** Vor der Übergabe müssen alle Änderungen committet (cleaner Git-Status) und gepusht sein und der Statusblock in `task.md` muss aktualisiert sein.
++- Jedes Projekt wird primär von **einem** Client bearbeitet (Merge-Konflikte/Ressourcensperren vermeiden):
++  - `<AOS_ROOT>\projects\Projekte-Claude\` (primär Claude Code)
++  - `<AOS_ROOT>\projects\Projekte-Antigravity\` (primär Antigravity)
++- Übergabe an das andere Tool nur an expliziten **Meilensteinen**.
++- **Übergabe-Regel:** vorher alles committet (sauberer Git-Status), gepusht, Statusblock aktualisiert.
+ 
+ ---
+ 
+-## 6. Automatisierung & neue Skills (`add-skill.ps1`)
+-
+-Um einen neuen Befehl/Skill zu erstellen und automatisch für beide Clients zu verknüpfen, nutzen Sie das mitgelieferte PowerShell-Skript:
++## 7. Neue Skills (`add-skill.ps1`)
+ 
+ ```powershell
+-C:\Users\sts\AOS\scripts\add-skill.ps1 -CommandName "name-des-neuen-skills"
++powershell <AOS_ROOT>\scripts\add-skill.ps1 -CommandName "name-des-neuen-skills"
+ ```
+ 
+-### Funktionsweise:
+-1. Erstellt (falls nicht vorhanden) eine neue Prompt-Datei `C:\Users\sts\AOS\commands\name-des-neuen-skills.md`.
+-2. Erstellt einen Hard Link in `~/.claude/commands/name-des-neuen-skills.md` für Claude Code.
+-3. Erstellt die Ordnerstruktur und den Hard Link in `~/.gemini/config/plugins/agos-core/skills/name-des-neuen-skills/SKILL.md` für Antigravity.
++1. Erstellt (falls nötig) `<AOS_ROOT>\commands\name-des-neuen-skills.md`.
++2. Verknüpft die Datei für Claude Code (`~/.claude/commands/`).
++3. Legt Struktur + Verknüpfung für Antigravity (`agos-core/skills/.../SKILL.md`) an.
+ 
+----
++Verknüpfungsart einheitlich **Hardlinks** (kein Entwicklermodus nötig) — konsistent mit `install.ps1`.
+ 
+-## 7. Agent-zu-Agent-Kommunikation (`dialog\`)
++---
+ 
+-Claude Code und Antigravity können über den `dialog\`-Ordner asynchron und vollautomatisch miteinander kommunizieren. 
++## 8. Agent-zu-Agent-Kommunikation (`dialog\`)
+ 
+-### Ablauf (Chat-Orchestrierung):
+-* **Start:** Starten Sie den Dialog einfach per Textbefehl in Antigravitys Chat (z. B. *"Starte Dialog zum Thema 'X'..."*).
+-* **Ausführung:** Der Dialog läuft 100% im Hintergrund und verzögerungsfrei durch.
+-* **Ergebnis:** Nach Abschluss aller Runden wird der komplette Verlauf und das Ergebnis gesammelt im Chat ausgegeben.
+-* **Protokoll & Details:** Die genauen Details zum Status-Protokoll und den von Claude initiierten Dialogen (`__cc_trigger__`) finden Sie in der [dialog/README.md](dialog/README.md).
++Claude Code und Antigravity kommunizieren asynchron über `dialog\`. Start per Textbefehl in
++Antigravitys Chat; der Dialog läuft im Hintergrund; nach Abschluss wird der Verlauf
++ausgegeben. Protokoll, Status-Mutex und der Debatten-Modus: [dialog/README.md](dialog/README.md).
++Inhaltliche Qualitätsregeln (SSOT): [memory/debate-mode.md](memory/debate-mode.md).
+ 
+ ---
+ 
++## 9. Versionskontrolle (Git)
+ 
+-## 8. Versionskontrolle (Git)
+-
+-Das gesamte AOS-Masterverzeichnis (`C:\Users\sts\AOS\`) wird per Git versioniert. Dies schützt vor unabsichtlichen Fehlkonfigurationen durch KIs und bietet eine lückenlose Historie aller Regel-, Befehls- und Skriptanpassungen.
++Das gesamte AOS-Masterverzeichnis wird per Git versioniert — Schutz vor Fehlkonfiguration
++durch Agenten und lückenlose Historie aller Regel-, Befehls- und Skriptänderungen.
+diff --git a/commands/dialog-reply.md b/commands/dialog-reply.md
+index 9e3de1a..f50b346 100644
+--- a/commands/dialog-reply.md
++++ b/commands/dialog-reply.md
+@@ -40,29 +40,11 @@ Du wirst aufgerufen, um auf einen asynchronen Dialog im AOS zu antworten.
+    * Falls `status.md` auf `status: done` steht oder ein anderer unerwarteter Status vorliegt, brich sofort ab und beende die Ausführung. Ein abgeschlossener Thread (`done`) ist terminal und darf nie reaktiviert werden.
+ 
+ 5. **Antwort formulieren:**
+-   * Analysiere den gesamten Diskussionsverlauf, insbesondere den letzten Eintrag des anderen Agenten.
+-   * Befolge dabei die folgenden inhaltlichen Qualitätsstandards für den Agenten-Dialog (Debatten-Modus):
+-     1. **Kein blindes Zustimmen (Harmonie-Filter abbauen):**
+-        * Vermeide inhaltsleere Lobpreisungen (z. B. "Das ist ein hervorragender/genialer Vorschlag").
+-        * Finde in den Runden 1 und 2 zwingend mindestens eine Schwachstelle, eine alternative Option oder ein Risiko im Entwurf des anderen Agenten.
+-        * *Ausnahme (Entwarnung):* Falls kein direktes Risiko vorliegt, darf entwarnt werden. Der Agent muss dann zwingend aus den folgenden 5 Risikofeldern die **zwei für den aktuellen Entwurf kritischsten Felder** benennen, begründen warum genau diese relevant sind, und im Freitext detailliert analysieren, warum sie im konkreten Fall unkritisch sind:
+-          * *Netzwerk & Offline-Betrieb:* Fehlende Internetverbindung, Air-Gap-VMs.
+-          * *Daten & Volumen:* Extrem große Dateigrößen, RAM-Sperren, Timeouts.
+-          * *Plattform & OS:* Windows-Besonderheiten (Pfade, Registry, Zeichensätze, shell-spezifische Syntax).
+-          * *Berechtigungen & Pfade:* Dateizugriffskonflikte, Schreibschutz, mangelnde Rechte.
+-          * *Ressourcen-Limits:* CPU/RAM-Überlastung bei rechenintensiven Aufgaben (z. B. OCR, LibreOffice-Renderings).
+-     2. **Explizite Alternativenprüfung:**
+-        * Bei jedem technischen Entwurf muss mindestens eine alternative Herangehensweise genannt und kurz gegenübergestellt werden.
+-     3. **Kriterienbasierte Bewertung (Kriterien-Matrix):**
+-        * Bewerte Vorschläge strukturiert nach den Dimensionen: *Sicherheit*, *Robustheit*, *Wartbarkeit*, *Usability für den Endanwender* und *Compliance (Gate)*.
+-        * Die Dimension **"Compliance (Lizenz & Datensouveränität) [Gate]"** fungiert als Ausschlusskriterium gegen folgenden Katalog:
+-          * **Hard-Blocker** (Führen zum sofortigen Ausschluss des Entwurfs): (1) Unkontrollierter Datenabfluss (Cloud-Schnittstellen/CDNs ohne dokumentierte Opt-In-Lösungen), (2) Proprietäre Softwarelizenzen ohne kostenfreie kommerzielle Option für öffentliche/wissenschaftliche Einrichtungen, (3) Erfordernis einer permanenten Internetverbindung zur Laufzeit (Online-Zwang).
+-          * **Heilbare Verstöße** (Zulässig mit zu dokumentierendem Heilungspfad): (1) Externe Web-Ressourcen wie CDN-Fonts (Heilung: Lokales Hosten), (2) Unpräzise Versionierung (Heilung: Fixierung über requirements.txt/pyproject.toml), (3) Mangelnde Windows-Portabilität (Heilung: Kapselung in Rancher Desktop oder separates Setup-Skript).
+-     4. **Synthese vor Konsens (Runden-Dynamik):**
+-        * Ein finaler Konsens darf frühestens in Runde 3 (oder der letzten Runde) deklariert werden.
+-        * Falls am Ende von Runde 2 noch kein klarer, geprüfter Entwurf vorliegt, schlage dem Benutzer im Rundenstatement eine manuelle Verlängerung vor (*"Verlängerung um N Runden empfohlen, Begründung: [...]"*). Die Anpassung erfolgt durch den Benutzer manuell in `status.md`.
+-
+-
++   * Analysiere den gesamten Verlauf, besonders den letzten Beitrag des anderen Agenten.
++   * Befolge dabei verbindlich den Debatten-Modus — **Single Source of Truth:**
++     [`memory/debate-mode.md`](../memory/debate-mode.md) (kritische Distanz inkl.
++     Entwarnungs-Ausnahme, Alternativenprüfung, fünfdimensionale Kriterien-Matrix mit
++     Compliance-Gate, Synthese-vor-Konsens). Die Regeln werden hier nicht dupliziert.
+ 
+ 6. **Antwort schreiben (Atomarer Schreibschritt 1):**
+    * Hänge deine Antwort an deine Quell-Datei (`from-claude.md` bzw. `from-ag.md`) an. Nutze das aktuelle Datum/Uhrzeit und die aktuelle Runde `current_round` aus `status.md` im folgenden Format:
+diff --git a/dialog/README.md b/dialog/README.md
+index 1c7e742..6301e94 100644
+--- a/dialog/README.md
++++ b/dialog/README.md
+@@ -74,17 +74,10 @@ Um Race Conditions, Zeichensatz-Konflikte und gegenseitiges Überschreiben zu ve
+ 
+ ## Inhaltliche Qualitätsrichtlinien (Debatten-Modus)
+ 
+-Um die Qualität der erarbeiteten Lösungen zu sichern, gilt für beide Agenten im Dialog der "Debatten-Modus":
+-* **Kritische Distanz & Risiko-Auswahl:** Kein blindes Abnicken. Entwürfe müssen aktiv auf Schwachstellen geprüft werden. Wird entwarnt, müssen die zwei relevantesten Risikofelder (aus den Bereichen Netzwerk, Datenvolumen, Plattform, Berechtigungen, Ressourcenlimits) begründet benannt und analysiert werden.
+-* **Alternativenprüfung:** Technische Entwürfe sind zwingend mit mindestens einer Alternative zu kontrastieren.
+-* **Fünfdimensionale Kriterien-Matrix:** Bewertung entlang der Dimensionen *Sicherheit*, *Robustheit*, *Wartbarkeit*, *Usability* und *Compliance*.
+-* **ZEW-Compliance-Gate:** Compliance wird als Gate-Kriterium geführt. Hard-Blocker (unkontrollierter Datenabfluss, Online-Zwang zur Laufzeit, unfreie Lizenzen) führen zum Ausschluss. Heilbare Verstöße (z. B. CDN-Fonts) sind nur zulässig, wenn ein klarer Heilungspfad (z. B. Lokalisierung) dokumentiert wird.
+-* **Advisory-Modell zur Rundenanpassung:** Rundenverlängerungen werden im Rundenstatement empfohlen und ausschließlich manuell durch den Benutzer in `status.md` eingetragen.
+-* **Strikter Verzicht auf Floskeln:** Keine KI-typischen Motivations- und Lobesfloskeln (z. B. "Das ist ein hervorragender Vorschlag"). Der Ton ist präzise, analytisch und direkt.
+-
+----
+-
+-
++Verbindlich für beide Agenten im Dialog. **Single Source of Truth:**
++[`memory/debate-mode.md`](../memory/debate-mode.md) — kritische Distanz,
++Alternativenprüfung, fünfdimensionale Kriterien-Matrix, Compliance-Gate,
++Runden-Dynamik und Stil. Dieser Abschnitt dupliziert die Regeln nicht.
+ ## Claude aufrufen (verbindlich, AG-seitig)
+ 
+ > [!IMPORTANT]
+diff --git a/hooks/block-dangerous.sh b/hooks/block-dangerous.sh
+index 8df1c05..25ee725 100644
+--- a/hooks/block-dangerous.sh
++++ b/hooks/block-dangerous.sh
+@@ -1,7 +1,7 @@
+ #!/usr/bin/env bash
+ # PreToolUse-Guardrail für Claude Code.
+ # Blockt offensichtlich destruktive Bash-Befehle, bevor sie ausgeführt werden.
+-# Aktivierung über settings.json (siehe README am Ende dieser Anleitung).
++# Aktivierung über ~/.claude/settings.json (PreToolUse). Siehe README Abschnitt 3 "Setup & Sicherheits-Hook aktivieren" — install.ps1 setzt dies automatisch.
+ #
+ # Funktionsweise: Claude Code übergibt das Tool-Event als JSON via stdin.
+ # Exit-Code 2 = Befehl blockieren. Exit-Code 0 = erlauben.
+diff --git a/memory/debate-mode.md b/memory/debate-mode.md
+new file mode 100644
+index 0000000..c8178bf
+--- /dev/null
++++ b/memory/debate-mode.md
+@@ -0,0 +1,44 @@
++# Debatten-Modus (Agent-zu-Agent-Dialog)
++
++Single Source of Truth für die inhaltlichen Qualitätsregeln im Agent-Dialog.
++`dialog/README.md` und `commands/dialog-reply.md` verweisen auf diese Datei und
++duplizieren ihren Inhalt nicht.
++
++## 1. Kritische Distanz (kein blindes Zustimmen)
++- Keine inhaltsleeren Lobpreisungen ("hervorragender/genialer Vorschlag").
++- In Runde 1 und 2 zwingend mindestens eine Schwachstelle, Alternative oder ein
++  Risiko im Entwurf des anderen Agenten benennen.
++- **Entwarnungs-Ausnahme:** Liegt kein direktes Risiko vor, müssen aus den fünf
++  Risikofeldern die **zwei kritischsten** benannt, begründet und im Freitext
++  analysiert werden, warum sie im konkreten Fall unkritisch sind:
++  - *Netzwerk & Offline-Betrieb:* fehlende Internetverbindung, Air-Gap-VMs
++  - *Daten & Volumen:* extreme Dateigrößen, RAM-Sperren, Timeouts
++  - *Plattform & OS:* Windows-Besonderheiten (Pfade, Registry, Zeichensätze, Shell-Syntax)
++  - *Berechtigungen & Pfade:* Zugriffskonflikte, Schreibschutz, fehlende Rechte
++  - *Ressourcen-Limits:* CPU/RAM-Überlastung (z. B. OCR, Renderings)
++
++## 2. Explizite Alternativenprüfung
++- Jeder technische Entwurf wird mit mindestens einer alternativen Herangehensweise
++  kontrastiert (kurze Gegenüberstellung).
++
++## 3. Fünfdimensionale Kriterien-Matrix
++Bewertung entlang: *Sicherheit*, *Robustheit*, *Wartbarkeit*, *Usability*, *Compliance*.
++
++### Compliance (Lizenz & Datensouveränität)
++- **Hard-Blocker** (führen zum Ausschluss des Entwurfs):
++  1. Unkontrollierter Datenabfluss (Cloud/CDN ohne dokumentierte Opt-in-Lösung)
++  2. Proprietäre Lizenz ohne kostenfreie Option für öffentliche/wissenschaftliche Einrichtungen
++  3. Online-Zwang zur Laufzeit (permanente Internetverbindung erforderlich)
++- **Heilbare Verstöße** (zulässig mit dokumentiertem Heilungspfad):
++  1. Externe Web-Ressourcen wie CDN-Fonts → Heilung: lokales Hosten
++  2. Unpräzise Versionierung → Heilung: Fixierung über `requirements.txt`/`pyproject.toml`
++  3. Mangelnde Windows-Portabilität → Heilung: Kapselung (Rancher Desktop) oder Setup-Skript
++
++## 4. Synthese vor Konsens (Runden-Dynamik)
++- Finaler Konsens frühestens in Runde 3 (oder der letzten Runde).
++- Liegt am Ende von Runde 2 kein geprüfter Entwurf vor, im Rundenstatement eine
++  Verlängerung empfehlen ("Verlängerung um N Runden empfohlen, Begründung: …").
++  Die Anpassung trägt der Benutzer manuell in `status.md` ein (Advisory-Modell).
++
++## 5. Stil
++- Präzise, analytisch, direkt. Keine KI-typischen Motivations- oder Lobesfloskeln.
+diff --git a/memory/global-rules.md b/memory/global-rules.md
+index f141387..5e71731 100644
+--- a/memory/global-rules.md
++++ b/memory/global-rules.md
+@@ -1,5 +1,16 @@
+ # Globale Arbeitsanweisung
+ 
++## Geltung & Präzedenz (bindend)
++
++- Diese Regeln gelten für **jeden** Agenten in **jeder** Session, ohne Ausnahme.
++- Präzedenz bei Konflikt (höchste zuerst):
++  1. Explizite User-Anweisung in der laufenden Session
++  2. Projekt-`CLAUDE.md` / `DEVELOPMENT.md` — **nur** die dort gelisteten Abweichungen
++  3. Diese globalen Regeln (`memory/global-rules.md`)
++- **Definition of Done:** Eine Aufgabe ist erst „fertig", wenn sie gegen die Abschnitte
++  „Qualitätssicherung" und „Coding-Regeln & Übergabefähigkeit" geprüft wurde.
++
++
+ ## Rolle & Kontext
+ 
+ - Wissenschaftsmanager mit Fokus auf Strategie, Governance, Forschungsorganisation und institutionelle Kommunikation
+-- 
+2.43.0
+
+
+From 217083ca0421124c25ae9654094e5ff2317532c8 Mon Sep 17 00:00:00 2001
+From: AOS Loop <loop@aos.local>
+Date: Sun, 28 Jun 2026 04:20:23 +0000
+Subject: [PATCH 3/6] =?UTF-8?q?loop:=20Runde=203=20=E2=80=94=20schliesst?=
+ =?UTF-8?q?=20L3(Pfad-Variabilisierung)=20L7(install=20-Verify=20Self-Test?=
+ =?UTF-8?q?)=20L12(Link-Strategie=20Hardlink)=20+=20DEVELOPMENT.md-Anker?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ MOBILE.md                     |   2 +-
+ SETUP.md                      |  37 +++---
+ commands/dialog-reply.md      |   6 +-
+ commands/git-init.md          |   8 +-
+ commands/zew-praesentation.md |   4 +-
+ dialog/README.md              |   2 +-
+ install.ps1                   | 229 ++++++++++++++++++++--------------
+ templates/DEVELOPMENT.md      |  15 +++
+ 8 files changed, 185 insertions(+), 118 deletions(-)
+ create mode 100644 templates/DEVELOPMENT.md
+
+diff --git a/MOBILE.md b/MOBILE.md
+index e98bc95..611249d 100644
+--- a/MOBILE.md
++++ b/MOBILE.md
+@@ -31,7 +31,7 @@ iOS und Android trennen App-Hintergrundverbindungen nach ca. 3–10 Minuten Inak
+ ## Git-Workflow nach einer Session
+ Direkt im VM-Terminal ausführen:
+ ```powershell
+-cd C:\Users\sts\AOS\projects\<Kategorie>\<Projektname>
++cd <AOS_ROOT>\projects\<Kategorie>\<Projektname>
+ git add -A
+ git commit -m "Session: $(Get-Date -Format 'yyyy-MM-dd') — Mobile Ergänzungen"
+ git push origin main
+diff --git a/SETUP.md b/SETUP.md
+index 4de0f8f..41eb4eb 100644
+--- a/SETUP.md
++++ b/SETUP.md
+@@ -1,29 +1,36 @@
+-# AOS Setup: Symbolische Links unter Windows
++# AOS Setup (Fallback): Manuelle Verknüpfung
+ 
+-Diese Anleitung beschreibt die einmalige Einrichtung der symbolischen Links (Symlinks), um die AOS-Befehle und Hooks für **Claude Code** auf diesem System verfügbar zu machen.
++> **Standardweg ist `install.ps1`** (idempotent, setzt Hardlinks, verdrahtet den Hook,
++> registriert Skills, setzt `$env:AOS_ROOT`). Diese Anleitung ist nur der **Fallback**,
++> falls der Installer nicht nutzbar ist. Verifikation in beiden Fällen:
++> `powershell <AOS_ROOT>\install.ps1 -Verify`.
+ 
+ ---
+ 
+ ## Voraussetzungen
+ 
+-Stellen Sie sicher, dass in den Windows-Systemeinstellungen der **Entwicklermodus** (Developer Mode) aktiviert ist. Dadurch können symbolische Links ohne Administratorrechte erstellt werden.
++`<AOS_ROOT>` ist das Wurzelverzeichnis dieses Repos. Hardlinks benötigen **keinen**
++Entwicklermodus und keine Administratorrechte (Quelle und Ziel auf demselben Laufwerk).
+ 
+ ---
+ 
+-## Einrichtung der Links
++## Einrichtung der Links (Hardlinks, konsistent mit install.ps1)
+ 
+-Führen Sie die folgenden Befehle in einer **PowerShell-Konsole** aus:
++In einer **PowerShell-Konsole** ausführen:
+ 
+ ```powershell
+-# 1. Commands verknüpfen
+-New-Item -ItemType SymbolicLink -Path "$HOME\.claude\commands\sync.md" -Value "C:\Users\sts\AOS\commands\sync.md" -Force
+-New-Item -ItemType SymbolicLink -Path "$HOME\.claude\commands\git-init.md" -Value "C:\Users\sts\AOS\commands\git-init.md" -Force
+-New-Item -ItemType SymbolicLink -Path "$HOME\.claude\commands\entscheidungsvorlage.md" -Value "C:\Users\sts\AOS\commands\entscheidungsvorlage.md" -Force
+-New-Item -ItemType SymbolicLink -Path "$HOME\.claude\commands\zew-praesentation.md" -Value "C:\Users\sts\AOS\commands\zew-praesentation.md" -Force
+-New-Item -ItemType SymbolicLink -Path "$HOME\.claude\commands\dialog-reply.md" -Value "C:\Users\sts\AOS\commands\dialog-reply.md" -Force
+-
+-# 2. Hooks verknüpfen
+-New-Item -ItemType SymbolicLink -Path "$HOME\.claude\hooks\block-dangerous.sh" -Value "C:\Users\sts\AOS\hooks\block-dangerous.sh" -Force
++# 0. AOS_ROOT setzen (an euren Pfad anpassen)
++$env:AOS_ROOT = "C:\Users\<user>\AOS"
++
++# 1. Commands verknüpfen (alle .md im commands-Ordner)
++Get-ChildItem "$env:AOS_ROOT\commands" -Filter *.md | ForEach-Object {
++    New-Item -ItemType HardLink -Path "$HOME\.claude\commands\$($_.Name)" -Value $_.FullName -Force | Out-Null
++}
++
++# 2. Safety-Hook verknüpfen
++New-Item -ItemType HardLink -Path "$HOME\.claude\hooks\block-dangerous.sh" `
++         -Value "$env:AOS_ROOT\hooks\block-dangerous.sh" -Force | Out-Null
+ ```
+ 
+-*Hinweis: Neue Skills, die über das Skript `add-skill.ps1` erstellt werden, werden automatisch über Hard Links verknüpft, sodass hierfür keine manuellen Symlinks angelegt werden müssen.*
++*Hinweis: Neue Skills über `add-skill.ps1` werden automatisch per Hardlink verknüpft.*
++*Den PreToolUse-Hook in `~/.claude/settings.json` siehe README Abschnitt 3.*
+diff --git a/commands/dialog-reply.md b/commands/dialog-reply.md
+index f50b346..c3d22cc 100644
+--- a/commands/dialog-reply.md
++++ b/commands/dialog-reply.md
+@@ -25,11 +25,11 @@ Du wirst aufgerufen, um auf einen asynchronen Dialog im AOS zu antworten.
+ 
+ 2. **Thema bestimmen:**
+    * Ermittle den Namen des Themas primär aus der Aufforderung des Aufrufers (z. B. "Thema: <Name>" oder "für das Thema '<Name>'").
+-   * Falls kein Thema im Prompt angegeben ist, scanne das Verzeichnis `C:\Users\sts\AOS\dialog\` nach Ordnern, deren `status.md` auf deinen erwarteten Eingangs-Status steht.
++   * Falls kein Thema im Prompt angegeben ist, scanne das Verzeichnis `<AOS_ROOT>\dialog\` nach Ordnern, deren `status.md` auf deinen erwarteten Eingangs-Status steht.
+    * Falls mehrere Ordner infrage kommen und kein Thema im Prompt spezifiziert wurde, gib einen Fehler aus und frage nach dem genauen Namen.
+ 
+ 3. **Dateien lesen:**
+-   * Navigiere in das Thema-Verzeichnis: `C:\Users\sts\AOS\dialog\<thema>\`
++   * Navigiere in das Thema-Verzeichnis: `<AOS_ROOT>\dialog\<thema>\`
+    * Lies folgende Dateien ein:
+      * `status.md` (Metadaten und aktueller Stand)
+      * `from-claude.md`
+@@ -78,5 +78,5 @@ Du wirst aufgerufen, um auf einen asynchronen Dialog im AOS zu antworten.
+    * Beende dich sofort nach dem Schreiben von `status.md`. Modifiziere keine anderen Dateien.
+ 
+ 9. **Sicherheitsbeschränkung (Pfad-Restriktion):**
+-   * Da du im Headless-Modus mit weitreichenden Berechtigungen ausgeführt wirst, gilt eine strikte Selbstbeschränkung: Du darfst **ausschließlich** Dateien lesen, schreiben oder modifizieren, die sich im Verzeichnis `C:\Users\sts\AOS\dialog\<thema>\` befinden. Jegliche Dateioperationen außerhalb dieses Pfads oder das Ausführen von Systembefehlen ist dir in diesem Modus strengstens untersagt.
++   * Da du im Headless-Modus mit weitreichenden Berechtigungen ausgeführt wirst, gilt eine strikte Selbstbeschränkung: Du darfst **ausschließlich** Dateien lesen, schreiben oder modifizieren, die sich im Verzeichnis `<AOS_ROOT>\dialog\<thema>\` befinden. Jegliche Dateioperationen außerhalb dieses Pfads oder das Ausführen von Systembefehlen ist dir in diesem Modus strengstens untersagt.
+ 
+diff --git a/commands/git-init.md b/commands/git-init.md
+index 13f3ca3..8354ebf 100644
+--- a/commands/git-init.md
++++ b/commands/git-init.md
+@@ -5,7 +5,7 @@ description: Initialisiert ein neues Projekt im Lightweight AOS-Modus (erstellt
+ 
+ Initialisiere ein lokales Git-Repository. Pfad: $ARGUMENTS
+ 
+-Standardpfad für neue Projekte: `C:\Users\sts\.claude\Projekte\<Projektname>`
++Standardpfad für neue Projekte: `<AOS_ROOT>\projects\Projekte-Claude\<Projektname>`
+ 
+ Halte dich strikt an diese Reihenfolge:
+ 
+@@ -14,13 +14,13 @@ Halte dich strikt an diese Reihenfolge:
+ 3. `git init` im Zielverzeichnis ausführen.
+ 4. `.gitignore` anlegen (Inhalt siehe unten).
+ 5. **Lightweight-Setup durchführen (Standard):**
+-   - Kopiere die Vorlagen `PROJECT.md` und `task.md` aus `C:\Users\sts\AOS\templates\` in das Projektverzeichnis.
++   - Kopiere die Vorlagen `PROJECT.md` und `task.md` aus `<AOS_ROOT>\templates\` in das Projektverzeichnis.
+    - Frage den Benutzer vorab nach: Projektname, Ziel des Projekts, Tech-Stack und Testbefehlen.
+    - Befülle die kopierte `PROJECT.md` mit diesen Angaben.
+    - Initialisiere den Statusblock in `task.md` (Zuletzt bearbeitet: Heute, Nächster Schritt: Erste Implementierung planen).
+ 6. **Tool-Configs nur bei Bedarf (Abweichungsprüfung):**
+    - Frage den Benutzer, ob für dieses Projekt projektspezifische Abweichungen von den globalen Regeln nötig sind.
+-   - Nur wenn der Benutzer dies bejaht, erstelle eine lokale `CLAUDE.md` (für Claude Code) bzw. `DEVELOPMENT.md` (für Antigravity) mit den entsprechenden abweichenden Anweisungen (Inhalt siehe unten). Andernfalls lasse diese Dateien weg (beide Clients laden standardmäßig die globalen Regeln aus `C:\Users\sts\AOS\memory\global-rules.md`).
++   - Nur wenn der Benutzer dies bejaht, erstelle eine lokale `CLAUDE.md` (für Claude Code) bzw. `DEVELOPMENT.md` (für Antigravity) mit den entsprechenden abweichenden Anweisungen (Inhalt siehe unten). Andernfalls lasse diese Dateien weg (beide Clients laden standardmäßig die globalen Regeln aus `<AOS_ROOT>\memory\global-rules.md`).
+ 7. `git add -A` und `git commit -m "init: Lightweight AOS Projektstruktur"` ausführen.
+ 8. Status melden: Pfad, Branch, Anzahl committeter Dateien und bestätigen, dass das Projekt im Lightweight-Modus aufgesetzt wurde.
+ 
+@@ -77,7 +77,7 @@ Inhalt der lokalen `CLAUDE.md` oder `DEVELOPMENT.md` (NUR bei projektspezifische
+ ```markdown
+ # Projektspezifische Abweichungen / Sonderregeln
+ 
+-@C:\Users\sts\AOS\memory\global-rules.md
++@<AOS_ROOT>\memory\global-rules.md
+ 
+ ## Abweichende Regeln
+ - [Hier nur Regeln eintragen, die von den globalen Regeln abweichen. Falls keine Abweichungen nötig sind, diese Datei nicht erstellen!]
+diff --git a/commands/zew-praesentation.md b/commands/zew-praesentation.md
+index f077a92..6a1c6db 100644
+--- a/commands/zew-praesentation.md
++++ b/commands/zew-praesentation.md
+@@ -18,7 +18,7 @@ Template-Editing-Workflow ist Pflicht — **nicht** Folien-XML von Hand neu erfi
+ 1. **Existiert ein in PowerPoint gestaltetes Quell-Deck** (z. B. `input/*.pptx`, das Aufbau
+    und Inhalt vorgibt)? → **Dieses als Template nehmen** und Inhalte verfeinern. Native
+    PowerPoint-Optik bleibt erhalten — das ist der wichtigste Qualitätshebel.
+-2. Sonst die ZEW-Basisvorlage: `C:\Users\sts\Documents\Claude\Vorlage PPT.pptx`
++2. Sonst die ZEW-Basisvorlage: `<AOS_ROOT>\templates\Vorlage PPT.pptx`
+ 
+ Folien aus Layouts neu zu generieren ist nur die letzte Option (kein Quell-Deck, keine Vorlage).
+ 
+@@ -61,7 +61,7 @@ Der `soffice`+`pdftoppm`-Pfad des pptx-Skills läuft hier **nicht**. Stattdessen
+ PowerPoint-COM:
+ 
+ ```powershell
+-powershell -File C:\Users\sts\AOS\scripts\pptx-to-png.ps1 -Pptx "<deck>.pptx"
++powershell -File <AOS_ROOT>\scripts\pptx-to-png.ps1 -Pptx "<deck>.pptx"
+ # erzeugt <deck-Ordner>\render\Folie1.PNG …
+ ```
+ 
+diff --git a/dialog/README.md b/dialog/README.md
+index 6301e94..69764a7 100644
+--- a/dialog/README.md
++++ b/dialog/README.md
+@@ -107,7 +107,7 @@ if (-not $claude) {
+ ```
+ 
+ **Vorbedingungen vor dem Aufruf (AG stellt sie her):**
+-1. Ordner `C:\Users\sts\AOS\dialog\<thema>\` existiert.
++1. Ordner `<AOS_ROOT>\dialog\<thema>\` existiert.
+ 2. AGs Beitrag ist an `from-ag.md` angehängt.
+ 3. `status.md` steht auf `status: waiting-for-claude`.
+ 
+diff --git a/install.ps1 b/install.ps1
+index edb0896..2293983 100644
+--- a/install.ps1
++++ b/install.ps1
+@@ -1,52 +1,98 @@
+-# install.ps1 - UAOS Installer fuer VM / Zweitsysteme
++# install.ps1 - AOS Installer/Updater + Self-Test fuer VM / Zweitsysteme
++# Aufruf:
++#   powershell .\install.ps1            -> idempotente Installation
++#   powershell .\install.ps1 -Verify    -> Self-Test ohne Aenderungen
++param(
++    [switch]$Verify
++)
+ $ErrorActionPreference = 'Stop'
+ 
+-Write-Host "=== UAOS Installation gestartet ===" -ForegroundColor Cyan
++$AOS_ROOT     = $PSScriptRoot
++$claudeCmdDir = "$HOME\.claude\commands"
++$claudeHookDir= "$HOME\.claude\hooks"
++$settingsPath = "$HOME\.claude\settings.json"
++
++# ---------------------------------------------------------------------------
++# SELF-TEST (-Verify): prueft Installation, aendert nichts. Exit 0 = alle PASS.
++# ---------------------------------------------------------------------------
++if ($Verify) {
++    Write-Host "=== AOS Self-Test (-Verify) ===" -ForegroundColor Cyan
++    $fail = 0
++    function Check($name, $cond) {
++        if ($cond) { Write-Host "  PASS  $name" -ForegroundColor Green }
++        else       { Write-Host "  FAIL  $name" -ForegroundColor Red; $script:fail++ }
++    }
+ 
+-# 1. Sicherheits- Ingegritätsprüfung (Prüfung gegen eingepackte Secrets)
+-$badFiles = Get-ChildItem -Path $PSScriptRoot -Recurse -Include "*.env","*.env.*","secrets.json","credentials.json","*.key","*.pem" -ErrorAction SilentlyContinue |
+-    Where-Object { $_.Name -notmatch "\.(example|template|sample)$" }
++    # 1. AOS_ROOT-Umgebungsvariable gesetzt
++    Check "Umgebungsvariable AOS_ROOT gesetzt" ([Environment]::GetEnvironmentVariable("AOS_ROOT","User"))
+ 
+-if ($badFiles) {
+-    Write-Error "ABORT: Integritätsverletzung - Secrets im Installationspaket entdeckt:"
++    # 2. Alle Commands verknuepft und aufloesbar
++    $cmds = Get-ChildItem -Path "$AOS_ROOT\commands" -Filter "*.md"
++    foreach ($c in $cmds) {
++        Check "Command verknuepft: $($c.Name)" (Test-Path "$claudeCmdDir\$($c.Name)")
++    }
++
++    # 3. Safety-Hook verknuepft
++    Check "Safety-Hook verknuepft" (Test-Path "$claudeHookDir\block-dangerous.sh")
++
++    # 4. Hook in settings.json (PreToolUse) registriert
++    $hookWired = $false
++    if (Test-Path $settingsPath) {
++        $hookWired = (Get-Content $settingsPath -Raw) -match "block-dangerous\.sh"
++    }
++    Check "PreToolUse-Hook in settings.json registriert" $hookWired
++
++    # 5. Keine relativen Pfad-Hops (@../) in verschachtelten CLAUDE.md
++    $hops = Get-ChildItem -Path $AOS_ROOT -Recurse -Filter "CLAUDE.md" -ErrorAction SilentlyContinue |
++        Where-Object { $_.DirectoryName -ne $AOS_ROOT } |
++        Where-Object { (Get-Content $_.FullName -Raw) -match "@\.\./" }
++    Check "Keine '@../'-Pfad-Hops in Sub-CLAUDE.md" (-not $hops)
++
++    # 6. Map<->Dateien-Konsistenz: keine hartkodierten Benutzerpfade in Doku
++    # Trifft reale Benutzernamen, ignoriert markierte Platzhalter (<user>) und '..'
++    $hardcoded = Get-ChildItem -Path $AOS_ROOT -Recurse -Include "*.md","*.ps1","*.sh" -ErrorAction SilentlyContinue |
++        Where-Object { $_.Name -ne "install.ps1" } |
++        Where-Object { (Get-Content $_.FullName -Raw) -match "C:\\Users\\(?!<|\.\.)[^\\]+\\AOS" }
++    Check "Keine hartkodierten realen Benutzerpfade (C:\Users\<name>\AOS)" (-not $hardcoded)
++
++    Write-Host ""
++    if ($fail -eq 0) { Write-Host "Self-Test: ALLE PASS" -ForegroundColor Green; exit 0 }
++    else { Write-Host "Self-Test: $fail FEHLER" -ForegroundColor Red; exit 1 }
++}
++
++# ---------------------------------------------------------------------------
++# INSTALLATION
++# ---------------------------------------------------------------------------
++Write-Host "=== AOS Installation gestartet ===" -ForegroundColor Cyan
+ 
++# 1. Sicherheits-/Integritaetspruefung (gegen eingepackte Secrets)
++$badFiles = Get-ChildItem -Path $AOS_ROOT -Recurse -Include "*.env","*.env.*","secrets.json","credentials.json","*.key","*.pem" -ErrorAction SilentlyContinue |
++    Where-Object { $_.Name -notmatch "\.(example|template|sample)$" }
++if ($badFiles) {
++    Write-Error "ABORT: Integritaetsverletzung - Secrets im Installationspaket entdeckt:"
+     $badFiles | ForEach-Object { Write-Error "  $($_.FullName)" }
+     Write-Error "Bitte bereinigen Sie die Quelle und erstellen Sie den Export neu."
+     exit 1
+ }
+-Write-Host "Integritätsprüfung: OK" -ForegroundColor Green
+-
+-# 1.5 Validierung verschachtelter CLAUDE.md auf relative Pfad-Hop-Verstöße (Option C+A)
+-Write-Host "Prüfe verschachtelte CLAUDE.md auf Pfad-Hops..." -ForegroundColor Cyan
+-$nestedClaudes = Get-ChildItem -Path $PSScriptRoot -Recurse -Filter "CLAUDE.md" -ErrorAction SilentlyContinue |
+-    Where-Object { $_.DirectoryName -ne $PSScriptRoot -and $_.DirectoryName -ne "$HOME\.claude" }
++Write-Host "Integritaetspruefung: OK" -ForegroundColor Green
+ 
++# 1.5 Validierung verschachtelter CLAUDE.md auf relative Pfad-Hops
++$nestedClaudes = Get-ChildItem -Path $AOS_ROOT -Recurse -Filter "CLAUDE.md" -ErrorAction SilentlyContinue |
++    Where-Object { $_.DirectoryName -ne $AOS_ROOT -and $_.DirectoryName -ne "$HOME\.claude" }
+ foreach ($file in $nestedClaudes) {
+-    $content = Get-Content $file.FullName -Raw
+-    if ($content -match "@\.\./") {
+-        Write-Warning "WARNUNG: Relative Pfad-Hop-Direktive in verschachtelter CLAUDE.md gefunden:"
+-        Write-Warning "  $($file.FullName)"
+-        Write-Warning "  Bitte vermeiden Sie relative Imports mit '../' in Sub-Projekten (Option C+A)."
+-        Write-Warning "  Nutzen Sie stattdessen die Vererbung oder erstellen Sie separate Rules ohne relative Hops."
++    if ((Get-Content $file.FullName -Raw) -match "@\.\./") {
++        Write-Warning "WARNUNG: Relative Pfad-Hop-Direktive in $($file.FullName) — bitte vermeiden."
+     }
+ }
+ 
+-
+-# 2. Entwicklermodus pruefen
+-$devMode = Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" -Name "AllowDevelopmentWithoutDevLicense" -ErrorAction SilentlyContinue
+-if ($null -eq $devMode -or $devMode.AllowDevelopmentWithoutDevLicense -ne 1) {
+-    Write-Warning "Der Windows-Entwicklermodus scheint nicht aktiv zu sein."
+-    Write-Warning "Dies kann dazu fuehren, dass Symbolische Links nicht ohne Administratorrechte erstellt werden koennen."
+-    Write-Warning "Bitte aktiviere den Entwicklermodus in den Windows-Systemeinstellungen, falls Fehler auftreten."
+-}
++# 2. AOS_ROOT als Umgebungsvariable persistieren (User-Scope)
++[Environment]::SetEnvironmentVariable("AOS_ROOT", $AOS_ROOT, "User")
++$env:AOS_ROOT = $AOS_ROOT
++Write-Host "Umgebungsvariable AOS_ROOT gesetzt: $AOS_ROOT" -ForegroundColor Green
+ 
+ # 3. Verzeichnisse anlegen
+-$paths = @(
+-    "$HOME\.claude\commands",
+-    "$HOME\.claude\hooks",
+-    "$HOME\.gemini\config\plugins\agos-core\skills"
+-)
+-
++$paths = @($claudeCmdDir, $claudeHookDir, "$HOME\.gemini\config\plugins\agos-core\skills",
++           "$AOS_ROOT\projects\Projekte-Claude", "$AOS_ROOT\projects\Projekte-Antigravity")
+ foreach ($path in $paths) {
+     if (-not (Test-Path $path)) {
+         New-Item -ItemType Directory -Path $path -Force | Out-Null
+@@ -54,84 +100,83 @@ foreach ($path in $paths) {
+     }
+ }
+ 
+-# 4. Claude Commands verknuepfen (Idempotent)
+-$commands = Get-ChildItem -Path "$PSScriptRoot\commands" -Filter "*.md"
++# 4. Claude Commands verknuepfen (Hardlink, idempotent — kein Entwicklermodus noetig)
++$commands = Get-ChildItem -Path "$AOS_ROOT\commands" -Filter "*.md"
+ foreach ($cmd in $commands) {
+-    $targetLink = "$HOME\.claude\commands\$($cmd.Name)"
+-    $sourceFile = $cmd.FullName
+-    
++    $targetLink = "$claudeCmdDir\$($cmd.Name)"
+     if (-not (Test-Path $targetLink)) {
+-        New-Item -ItemType SymbolicLink -Path $targetLink -Value $sourceFile -Force | Out-Null
+-        Write-Host "Symbolischer Link fuer Claude erstellt: $targetLink" -ForegroundColor Green
++        New-Item -ItemType HardLink -Path $targetLink -Value $cmd.FullName -Force | Out-Null
++        Write-Host "Command verknuepft (Hardlink): $($cmd.Name)" -ForegroundColor Green
+     } else {
+-        Write-Host "Claude Command bereits verknuepft: $($cmd.Name)" -ForegroundColor Gray
++        Write-Host "Command bereits verknuepft: $($cmd.Name)" -ForegroundColor Gray
+     }
+ }
+ 
+-# 5. Safety Hooks verknuepfen (Idempotent)
+-$hookSource = Resolve-Path "$PSScriptRoot\hooks\block-dangerous.sh" -ErrorAction SilentlyContinue
+-$hookTarget = "$HOME\.claude\hooks\block-dangerous.sh"
+-if ($hookSource -and -not (Test-Path $hookTarget)) {
+-    New-Item -ItemType SymbolicLink -Path $hookTarget -Value $hookSource.Path -Force | Out-Null
+-    Write-Host "Safety Hook fuer Claude verknuepft: $hookTarget" -ForegroundColor Green
++# 5. Safety-Hook verknuepfen (Hardlink, idempotent)
++$hookSource = "$AOS_ROOT\hooks\block-dangerous.sh"
++$hookTarget = "$claudeHookDir\block-dangerous.sh"
++if ((Test-Path $hookSource) -and -not (Test-Path $hookTarget)) {
++    New-Item -ItemType HardLink -Path $hookTarget -Value $hookSource -Force | Out-Null
++    Write-Host "Safety-Hook verknuepft (Hardlink): $hookTarget" -ForegroundColor Green
++} else {
++    Write-Host "Safety-Hook bereits verknuepft." -ForegroundColor Gray
++}
++
++# 6. PreToolUse-Hook in settings.json verdrahten (idempotent, JSON-sicher)
++$settings = if (Test-Path $settingsPath) {
++    Get-Content $settingsPath -Raw | ConvertFrom-Json
++} else { [PSCustomObject]@{} }
++$hookCmd = "bash $AOS_ROOT/hooks/block-dangerous.sh"
++$raw = if (Test-Path $settingsPath) { Get-Content $settingsPath -Raw } else { "" }
++if ($raw -notmatch "block-dangerous\.sh") {
++    $hookEntry = [PSCustomObject]@{
++        matcher = "Bash"
++        hooks   = @(@{ type = "command"; command = $hookCmd })
++    }
++    if (-not $settings.PSObject.Properties['hooks']) {
++        $settings | Add-Member -NotePropertyName hooks -NotePropertyValue ([PSCustomObject]@{})
++    }
++    if (-not $settings.hooks.PSObject.Properties['PreToolUse']) {
++        $settings.hooks | Add-Member -NotePropertyName PreToolUse -NotePropertyValue @()
++    }
++    $settings.hooks.PreToolUse += $hookEntry
++    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
++    [System.IO.File]::WriteAllText($settingsPath, ($settings | ConvertTo-Json -Depth 10), $utf8NoBom)
++    Write-Host "PreToolUse-Hook in settings.json registriert." -ForegroundColor Green
+ } else {
+-    Write-Host "Claude Safety Hook bereits verknuepft." -ForegroundColor Gray
++    Write-Host "PreToolUse-Hook bereits in settings.json registriert." -ForegroundColor Gray
+ }
+ 
+-# 6. Gemini Skills registrieren (idempotent ueber add-skill.ps1)
+-if (Test-Path "$PSScriptRoot\scripts\add-skill.ps1") {
++# 7. Gemini Skills registrieren (idempotent ueber add-skill.ps1)
++if (Test-Path "$AOS_ROOT\scripts\add-skill.ps1") {
+     Write-Host "Registriere Skills in Antigravity (Gemini)..." -ForegroundColor Cyan
+     foreach ($cmd in $commands) {
+-        $cmdName = $cmd.BaseName
+-        $geminiSkillDir = "$HOME\.gemini\config\plugins\agos-core\skills\$cmdName"
+-        $geminiSkillFile = "$geminiSkillDir\SKILL.md"
+-        
++        $geminiSkillFile = "$HOME\.gemini\config\plugins\agos-core\skills\$($cmd.BaseName)\SKILL.md"
+         if (-not (Test-Path $geminiSkillFile)) {
+-            # Rufe das add-skill Skript auf
+-            & "$PSScriptRoot\scripts\add-skill.ps1" -CommandName $cmdName | Out-Null
+-            Write-Host "Skill registriert: $cmdName" -ForegroundColor Green
++            & "$AOS_ROOT\scripts\add-skill.ps1" -CommandName $cmd.BaseName | Out-Null
++            Write-Host "Skill registriert: $($cmd.BaseName)" -ForegroundColor Green
+         } else {
+-            Write-Host "Gemini Skill bereits registriert: $cmdName" -ForegroundColor Gray
++            Write-Host "Gemini Skill bereits registriert: $($cmd.BaseName)" -ForegroundColor Gray
+         }
+     }
+ }
+ 
+-# 7. Entpackte CLAUDE.md aus dem ZIP anwenden (falls vorhanden)
+-$zipClaudeMd = Join-Path $PSScriptRoot ".claude\CLAUDE.md"
+-if (Test-Path $zipClaudeMd) {
+-    $claudeGlobalDir = "$HOME\.claude"
+-    if (-not (Test-Path $claudeGlobalDir)) { New-Item -ItemType Directory -Path $claudeGlobalDir -Force | Out-Null }
+-    Copy-Item -Path $zipClaudeMd -Destination $claudeGlobalDir -Force
+-    Write-Host "Globale CLAUDE.md aus Export-Paket installiert." -ForegroundColor Green
+-}
+-
+-# 8. global-rules.md in globale CLAUDE.md eintragen (idempotent und bereinigt)
+-$claudeMdPath = "$HOME\.claude\CLAUDE.md"
+-$globalRulesRef = "@$($PSScriptRoot)\memory\global-rules.md"
+-
+-# Bereinige eventuelle veraltete Pfade zu global-rules.md aus dem Export-Paket
++# 8. global-rules.md in globale CLAUDE.md eintragen (idempotent, bereinigt, UTF-8 ohne BOM)
++$claudeMdPath  = "$HOME\.claude\CLAUDE.md"
++$globalRulesRef= "@$AOS_ROOT\memory\global-rules.md"
+ if (Test-Path $claudeMdPath) {
+-    $content = Get-Content $claudeMdPath
+-    # Entferne alle Zeilen, die ein Include von global-rules.md enthalten
+-    $cleanedContent = $content | Where-Object { $_ -notmatch '@.*\\memory\\global-rules\.md' }
+-    
+-    # Schreibe bereinigten Inhalt ohne BOM zurück
+-    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+-    [System.IO.File]::WriteAllLines($claudeMdPath, $cleanedContent, $utf8NoBom)
++    $cleaned = (Get-Content $claudeMdPath) | Where-Object { $_ -notmatch '@.*\\memory\\global-rules\.md' }
++    [System.IO.File]::WriteAllLines($claudeMdPath, $cleaned, [System.Text.UTF8Encoding]::new($false))
+ }
+-
+-$existingContent = if (Test-Path $claudeMdPath) { Get-Content $claudeMdPath -Raw } else { "" }
+-if ($existingContent -notmatch [regex]::Escape($globalRulesRef)) {
+-    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+-    [System.IO.File]::AppendAllText($claudeMdPath, "`r`n$globalRulesRef`r`n", $utf8NoBom)
+-    Write-Host "global-rules.md in CLAUDE.md verknüpft." -ForegroundColor Green
++$existing = if (Test-Path $claudeMdPath) { Get-Content $claudeMdPath -Raw } else { "" }
++if ($existing -notmatch [regex]::Escape($globalRulesRef)) {
++    [System.IO.File]::AppendAllText($claudeMdPath, "`r`n$globalRulesRef`r`n", [System.Text.UTF8Encoding]::new($false))
++    Write-Host "global-rules.md in CLAUDE.md verknuepft." -ForegroundColor Green
+ }
+ 
+-
+-Write-Host "=== UAOS Installation abgeschlossen ===" -ForegroundColor Cyan
++Write-Host "=== AOS Installation abgeschlossen ===" -ForegroundColor Cyan
++Write-Host "Verifikation: powershell $AOS_ROOT\install.ps1 -Verify" -ForegroundColor Yellow
+ Write-Host ""
+-Write-Host "NAECHSTE SCHRITTE FUER DIE VM (MOBILE DISPATCHER):" -ForegroundColor Yellow
+-Write-Host "1. Führe 'claude login' in der PowerShell der VM aus, um Claude Code zu autorisieren." -ForegroundColor White
+-Write-Host "2. Starte die Koppelung: Gib 'claude' im VM-Terminal ein." -ForegroundColor White
+-Write-Host "3. Öffne die mobile App 'Claude Desktop' auf dem Handy und kopple es per Koppelungscode." -ForegroundColor White
+-Write-Host "4. Detaillierte Infos zu Timeouts und dem Git-Workflow finden Sie in der neuen MOBILE.md im AOS-Root." -ForegroundColor White
++Write-Host "NAECHSTE SCHRITTE (MOBILE DISPATCHER, optional):" -ForegroundColor Yellow
++Write-Host "1. 'claude login' in der VM-PowerShell ausfuehren." -ForegroundColor White
++Write-Host "2. 'claude' starten und Handy per Koppelungscode verbinden (siehe MOBILE.md)." -ForegroundColor White
+diff --git a/templates/DEVELOPMENT.md b/templates/DEVELOPMENT.md
+new file mode 100644
+index 0000000..2df70d7
+--- /dev/null
++++ b/templates/DEVELOPMENT.md
+@@ -0,0 +1,15 @@
++# DEVELOPMENT.md — Antigravity-Anker
++
++Diese Datei liegt im Projekt-Root und bindet die globalen AOS-Regeln für Antigravity.
++Sie ist das Gegenstück zur `CLAUDE.md` (Claude Code).
++
++## Globale Regeln (verbindlich)
++@<AOS_ROOT>/memory/global-rules.md
++
++## Debatten-Modus (im Agent-Dialog)
++@<AOS_ROOT>/memory/debate-mode.md
++
++## Projektspezifische Abweichungen
++- [Nur hier eintragen, was von den globalen Regeln abweicht. Präzedenz: lokale
++  Abweichung sticht globale Regel, aber NUR für die hier gelisteten Punkte.
++  Keine Abweichungen → diesen Abschnitt leer lassen.]
+-- 
+2.43.0
+
+
+From ae71b6be6cb75a0b0c127e72b03c6e3f3ca7582b Mon Sep 17 00:00:00 2001
+From: AOS Loop <loop@aos.local>
+Date: Sun, 28 Jun 2026 04:21:50 +0000
+Subject: [PATCH 4/6] =?UTF-8?q?loop:=20Runde=204=20=E2=80=94=20Restkonsist?=
+ =?UTF-8?q?enz=20(UAOS-Reste=20in=20Skripten,=20Map/Verweise=20verifiziert?=
+ =?UTF-8?q?)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ scripts/add-skill.ps1 | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/add-skill.ps1 b/scripts/add-skill.ps1
+index 1171d68..46fa942 100644
+--- a/scripts/add-skill.ps1
++++ b/scripts/add-skill.ps1
+@@ -37,4 +37,4 @@ $geminiLink = "$geminiSkillDir\SKILL.md"
+ New-Item -ItemType HardLink -Path $geminiLink -Value $sourceFile -Force | Out-Null
+ Write-Host "Link fuer Antigravity erstellt: $geminiLink" -ForegroundColor Green
+ 
+-Write-Host "Neuer Skill '$CommandName' erfolgreich im UAOS registriert!" -ForegroundColor Cyan
++Write-Host "Neuer Skill '$CommandName' erfolgreich im AOS registriert!" -ForegroundColor Cyan
+-- 
+2.43.0
+
+
+From 85eb6ae22fffd6af67506dcf158cf7e45cf06d7f Mon Sep 17 00:00:00 2001
+From: AOS Loop <loop@aos.local>
+Date: Sun, 28 Jun 2026 04:24:08 +0000
+Subject: [PATCH 5/6] =?UTF-8?q?loop:=20Runde=205=20=E2=80=94=20schliesst?=
+ =?UTF-8?q?=20K6(PowerShell-Guardrail,=20runtime-getestet=2012/12)=20K2(Qu?=
+ =?UTF-8?q?ickstart-Disambiguierung)=20K5(Resume-Pointer)=20K7(Selbstwartu?=
+ =?UTF-8?q?ng+Regressionstest)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ README.md                     | 20 +++++++++++++---
+ hooks/block-dangerous.sh      |  9 ++++++++
+ hooks/test-block-dangerous.sh | 43 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 69 insertions(+), 3 deletions(-)
+ mode change 100644 => 100755 hooks/block-dangerous.sh
+ create mode 100755 hooks/test-block-dangerous.sh
+
+diff --git a/README.md b/README.md
+index 77b0258..e35ac2c 100644
+--- a/README.md
++++ b/README.md
+@@ -27,10 +27,15 @@ Agent-Dialog liegen als Dateien vor; jeder Agent liest und schreibt sie nach fes
+ ## Agent-Quickstart (wenn du eine KI bist und hier aufwachst)
+ 
+ 1. Lies `memory/global-rules.md` — diese Regeln sind in **jeder** Session bindend.
+-2. Lies `PROJECT.md` (was ist das Projekt) und den Statusblock in `task.md` (wo stehe ich).
++2. **Verorte dich:** Bist du im AOS-Masterverzeichnis (`<AOS_ROOT>`), gilt `CLAUDE.md` +
++   `memory/`. Bist du in einem Projekt unter `projects/…`, lies dort `PROJECT.md` (was ist
++   das Projekt) und den Statusblock in `task.md` (**wo stehe ich, was ist der nächste Schritt**).
+ 3. Arbeite ausschließlich an Dateien im aktuellen Task-Scope (Surgical Changes).
+ 4. Vor Übergabe: Tests grün, Git sauber, Statusblock in `task.md` aktualisiert.
+ 
++> **Wiederaufsetzen (Resume):** Der Statusblock in `task.md` ist der einzige verbindliche
++> Wiederaufsetzpunkt. Nie aus dem Gedächtnis fortfahren — immer zuerst den Statusblock lesen.
++
+ ## Operator-Quickstart (Mensch, neues System)
+ 
+ 1. `powershell <AOS_ROOT>\install.ps1` — einziger autoritativer Setup-Pfad (idempotent).
+@@ -75,7 +80,8 @@ Agent-Dialog liegen als Dateien vor; jeder Agent liest und schreibt sie nach fes
+ │   └── <thema>\                     ← Pro Thema: status.md, from-claude.md, from-ag.md
+ │
+ ├── hooks\                           ← Sicherheits-Hooks für Claude Code
+-│   └── block-dangerous.sh           ← PreToolUse-Guardrail gegen destruktive Befehle
++│   ├── block-dangerous.sh           ← PreToolUse-Guardrail gegen destruktive Befehle (Bash + PowerShell)
++│   └── test-block-dangerous.sh      ← Regressionstest der Guardrail-Muster
+ │
+ ├── scripts\                         ← Geteilte Automatisierung (PowerShell)
+ │   ├── add-skill.ps1                ← Neuen Command/Skill für beide Clients registrieren
+@@ -202,7 +208,15 @@ Inhaltliche Qualitätsregeln (SSOT): [memory/debate-mode.md](memory/debate-mode.
+ 
+ ---
+ 
+-## 9. Versionskontrolle (Git)
++## 9. Versionskontrolle & Wartung (Git)
+ 
+ Das gesamte AOS-Masterverzeichnis wird per Git versioniert — Schutz vor Fehlkonfiguration
+ durch Agenten und lückenlose Historie aller Regel-, Befehls- und Skriptänderungen.
++
++**Wartung des AOS selbst:**
++- Änderungen an Regeln/Commands/Skripten laufen über einen Branch (`git switch -c …`),
++  nie direkt auf `main`.
++- Nach jeder strukturellen Änderung: `install.ps1 -Verify` ausführen (Map-Invariante,
++  Links, Hook, keine hartkodierten Pfade).
++- Neue Memory-Regeln nur über `/remember` in `memory/global-rules.md`; neuer Index-Eintrag
++  in `memory/MEMORY.md`. Eine Regel = eine Quelle (SSOT), keine Duplikate.
+diff --git a/hooks/block-dangerous.sh b/hooks/block-dangerous.sh
+old mode 100644
+new mode 100755
+index 25ee725..e2dec97
+--- a/hooks/block-dangerous.sh
++++ b/hooks/block-dangerous.sh
+@@ -33,6 +33,15 @@ PATTERNS=(
+   '>[[:space:]]*/dev/sd'                     # direkt auf Block-Device schreiben
+   ':\(\)\{.*\};:'                            # Fork-Bomb
+   'chmod[[:space:]]+-R[[:space:]]+777'       # Rechte aufreißen
++  # --- PowerShell-Destruktivmuster (Windows-Realität: Agent ruft ggf. powershell -c ...) ---
++  'Remove-Item[[:space:]].*-Recurse.*-Force'  # rekursives Hard-Delete
++  'Remove-Item[[:space:]].*-Force.*-Recurse'  # Reihenfolge umgekehrt
++  '(^|[[:space:]])(rd|rmdir)[[:space:]]+/[sS]' # rd /s
++  '(^|[[:space:]])del[[:space:]]+/[sS]'        # del /s
++  'Format-Volume'                              # Volume formatieren
++  'Clear-Disk'                                  # Disk leeren
++  'Remove-Item[[:space:]]+.*\\\*'              # Wildcard-Delete
++  'git[[:space:]]+push[[:space:]].*-Force'     # erzwungener Push (PS-Casing)
+ )
+ 
+ for pat in "${PATTERNS[@]}"; do
+diff --git a/hooks/test-block-dangerous.sh b/hooks/test-block-dangerous.sh
+new file mode 100755
+index 0000000..db5813a
+--- /dev/null
++++ b/hooks/test-block-dangerous.sh
+@@ -0,0 +1,43 @@
++#!/usr/bin/env bash
++# Extrahiert die PATTERNS aus dem Hook und testet sie gegen Beispielbefehle (jq-Layer übersprungen).
++PATTERNS=(
++  'rm[[:space:]]+-rf?[[:space:]]+/'
++  'rm[[:space:]]+-rf?[[:space:]]+~'
++  'rm[[:space:]]+-rf?[[:space:]]+\*'
++  'git[[:space:]]+push[[:space:]].*--force'
++  'git[[:space:]]+push[[:space:]].*-f([[:space:]]|$)'
++  'git[[:space:]]+reset[[:space:]]+--hard'
++  'git[[:space:]]+clean[[:space:]]+-[a-z]*f'
++  'mkfs'
++  'dd[[:space:]]+if=.*of=/dev/'
++  '>[[:space:]]*/dev/sd'
++  ':\(\)\{.*\};:'
++  'chmod[[:space:]]+-R[[:space:]]+777'
++  'Remove-Item[[:space:]].*-Recurse.*-Force'
++  'Remove-Item[[:space:]].*-Force.*-Recurse'
++  '(^|[[:space:]])(rd|rmdir)[[:space:]]+/[sS]'
++  '(^|[[:space:]])del[[:space:]]+/[sS]'
++  'Format-Volume'
++  'Clear-Disk'
++  'Remove-Item[[:space:]]+.*\\\*'
++  'git[[:space:]]+push[[:space:]].*-Force'
++)
++blocks() { local cmd="$1"; for p in "${PATTERNS[@]}"; do printf '%s' "$cmd" | grep -Eq "$p" && return 0; done; return 1; }
++t() { local cmd="$1"; local want="$2"; local desc="$3"
++  if blocks "$cmd"; then got=BLOCK; else got=ALLOW; fi
++  [ "$got" = "$want" ] && echo "  PASS [$got] $desc" || echo "  FAIL [erwartet $want, war $got] $desc"
++}
++echo "=== destruktiv → BLOCK ==="
++t "rm -rf /" BLOCK "rm -rf /"
++t "git push origin main --force" BLOCK "git push --force"
++t "powershell -c Remove-Item C:\\data -Recurse -Force" BLOCK "PS Remove-Item -Recurse -Force"
++t "powershell Format-Volume -DriveLetter D" BLOCK "PS Format-Volume"
++t "cmd /c rd /s /q C:\\tmp" BLOCK "rd /s"
++t "git reset --hard HEAD~3" BLOCK "git reset --hard"
++t "git clean -fd" BLOCK "git clean -fd"
++echo "=== harmlos → ALLOW ==="
++t "ls -la" ALLOW "ls"
++t "git status" ALLOW "git status"
++t "git push origin main" ALLOW "git push (normal)"
++t "powershell Remove-Item .\\tmp.txt" ALLOW "Remove-Item einzeln"
++t "npm install" ALLOW "npm install"
+-- 
+2.43.0
+
+
+From 765e8af06f5162052e85af122fb91f7751a571e0 Mon Sep 17 00:00:00 2001
+From: AOS Loop <loop@aos.local>
+Date: Sun, 28 Jun 2026 04:25:16 +0000
+Subject: [PATCH 6/6] =?UTF-8?q?loop:=20Runde=206=20=E2=80=94=20schliesst?=
+ =?UTF-8?q?=20K6-Restl=C3=BCcke=20(jq=20fail-closed=20statt=20fail-open=20?=
+ =?UTF-8?q?+=20Self-Test-Check)?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ hooks/block-dangerous.sh | 9 ++++++++-
+ install.ps1              | 3 +++
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/hooks/block-dangerous.sh b/hooks/block-dangerous.sh
+index e2dec97..aba2bb2 100755
+--- a/hooks/block-dangerous.sh
++++ b/hooks/block-dangerous.sh
+@@ -11,7 +11,14 @@ set -euo pipefail
+ # JSON vom stdin lesen
+ INPUT="$(cat)"
+ 
+-# Auszuführenden Befehl extrahieren (jq erforderlich: brew install jq / apt install jq)
++# jq ist Pflicht. Fehlt es, FAIL-CLOSED (blockieren) statt unsicher durchlassen.
++if ! command -v jq >/dev/null 2>&1; then
++  echo "BLOCKIERT: 'jq' nicht gefunden — Guardrail kann Befehl nicht prüfen." >&2
++  echo "Installiere jq (z. B. 'winget install jqlang.jq' / 'apt install jq') und wiederhole." >&2
++  exit 2
++fi
++
++# Auszuführenden Befehl extrahieren
+ CMD="$(printf '%s' "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null || true)"
+ 
+ # Wenn kein Befehl vorhanden ist (z. B. anderes Tool als Bash), durchlassen
+diff --git a/install.ps1 b/install.ps1
+index 2293983..90c72eb 100644
+--- a/install.ps1
++++ b/install.ps1
+@@ -42,6 +42,9 @@ if ($Verify) {
+     }
+     Check "PreToolUse-Hook in settings.json registriert" $hookWired
+ 
++    # 4b. jq vorhanden (Guardrail-Abhaengigkeit; fehlt es, blockiert der Hook fail-closed)
++    Check "jq verfuegbar (Guardrail-Abhaengigkeit)" (Get-Command jq -ErrorAction SilentlyContinue)
++
+     # 5. Keine relativen Pfad-Hops (@../) in verschachtelten CLAUDE.md
+     $hops = Get-ChildItem -Path $AOS_ROOT -Recurse -Filter "CLAUDE.md" -ErrorAction SilentlyContinue |
+         Where-Object { $_.DirectoryName -ne $AOS_ROOT } |
+-- 
+2.43.0
+
