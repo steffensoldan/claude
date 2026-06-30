@@ -8,7 +8,7 @@ This file provides workspace-specific guidelines for Claude Code when working in
 ## Repository Overview
 The Agentic Operating System (AOS) is a private, lightweight system for managing agent environments, documentation, custom slash-commands, hooks, and active project workspaces.
 
-- **`commands/`**: Slash-commands for Claude Code (e.g., sync, git-init, entscheidungsvorlage).
+- **`commands/`**: Slash-commands for Claude Code (e.g., sync, git-init).
 - **`dialog/`**: Dialogue history templates and active threads.
 - **`hooks/`**: Claude Code safety hooks (e.g., `block-dangerous.sh`).
 - **`memory/`**: Global rules and behavioral instructions.

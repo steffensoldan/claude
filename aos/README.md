@@ -71,8 +71,6 @@ Agent-Dialog liegen als Dateien vor; jeder Agent liest und schreibt sie nach fes
 ├── commands\                        ← Slash-Commands für Claude Code (Master)
 │   ├── sync.md                      ← Sicherer Git-Sync-Zyklus
 │   ├── git-init.md                  ← Lightweight-Projektinitialisierung
-│   ├── entscheidungsvorlage.md      ← Entscheidungstaugliche Vorlage
-│   ├── zew-praesentation.md         ← ZEW-PPTX im Corporate Design
 │   └── dialog-reply.md              ← Antwort im Agent-Dialog
 │
 ├── dialog\                          ← Agent-zu-Agent-Kommunikationskanal
@@ -84,8 +82,7 @@ Agent-Dialog liegen als Dateien vor; jeder Agent liest und schreibt sie nach fes
 │   └── test-block-dangerous.sh      ← Regressionstest der Guardrail-Muster
 │
 ├── scripts\                         ← Geteilte Automatisierung (PowerShell)
-│   ├── add-skill.ps1                ← Neuen Command/Skill für beide Clients registrieren
-│   └── pptx-to-png.ps1              ← PPTX → PNG (visuelle QA, PowerPoint-COM)
+│   └── add-skill.ps1                ← Neuen Command/Skill für beide Clients registrieren
 │
 ├── ops\                             ← Deployment & Betrieb
 │   └── deploy.ps1                   ← Projekt-Deploy nach deploy-manifest.json
