@@ -4,11 +4,14 @@ Baut den Register-Band (Konzept A): safaitische Inschriften nach den sieben
 Sprechakt-Registern, gestaltet wie die erweiterte Ausgabe v5 (Georgia, Er-Form,
 „Sigle …“-Zeilen), mit den Register-Unterüberschriften aus dem Konzept.
 
+Kapitelüberschrift = Verb in der Ich-Form (schreibe/warte/bitte/klage/
+verfluche/bezeuge/schweige), darunter die Konzept-Unterüberschrift.
+
 Aufbau je Register:
-  Ziffer · Name · Konzept-Unterüberschrift
   → Kopfstücke aus der erweiterten Ausgabe v5 (1 Kopfstein + 3 weitere; lange
     Inschriften zuerst), faithful aus v5 übernommen
-  → 14 verknappte Stimmen aus dem Vollkorpus (Auswahl: REGISTER_BAND_AUSWAHL.md)
+  → knappe Stimmen aus dem Vollkorpus (Auswahl: REGISTER_BAND_AUSWAHL.md;
+    Kapitel I als „X war hier“-Litanei erweitert)
 
 Lücken (----) bleiben in Register VII offen.
 
@@ -45,14 +48,22 @@ PAGEBREAK = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>'
 # Register: (Ziffer, Name · Sprechaktklasse, Konzept-Unterüberschrift,
 #            [v5-Kopfstücke: Sigle], [(Sigle, [Verszeilen]) Korpus-Stimmen])
 REGISTERS = [
-("I","Er war hier · Präsentativ",
+("I","schreibe",
  "Dasein als Akt — Deixis, kein Verb des Fühlens. Die reinste Form: „dies ist”.",
  ["RWQ 342","RWQ 187","HYGQ 24","KRS 1341"],[
- ("JaS 16",["Von Bnḥt."]),
- ("HCH 117",["Von ʾnʿm."]),
- ("HCH 156",["Von S¹ḫr."]),
- ("HCH 160",["Von Gḥs²."]),
- ("HCH 158.1",["Von Gḥs²."]),
+ ("JaS 16",["Bnḥt war hier."]),
+ ("HCH 117",["ʾnʿm war hier."]),
+ ("HCH 156",["S¹ḫr war hier."]),
+ ("HCH 160",["Gḥs² war hier."]),
+ ("HCH 158.1",["Gḥs² war hier."]),
+ ("HCH 75",["ʿdy war hier."]),
+ ("HCH 158.2",["S¹ʿd war hier."]),
+ ("HCH 31.1",["ʿṭs¹ war hier."]),
+ ("Rees 150",["S¹lf war hier."]),
+ ("Rees 151",["ʾḫwn war hier."]),
+ ("Rees 155",["S²d war hier."]),
+ ("Rees 161 4",["Hnb war hier."]),
+ ("Rees 176",["S¹drt war hier."]),
  ("JaS 4",["Von Msk, Sohn des S²dt,","Sohn des Mḥlm, Sohn des S²dt,","Sohn des Mḥlm,","vom Stamm Tm."]),
  ("JaS 5",["Von Tm, Sohn des Mḥlm,","Sohn des S²dt, Sohn des Mḥlm,","vom Stamm Tm."]),
  ("JaS 15",["Von Ḥmr, Sohn des Bnġdw,","Sohn des S¹fʾ, Sohn des Ḥnf."]),
@@ -63,9 +74,10 @@ REGISTERS = [
  ("HCH 22",["Von Tm, Sohn des Ḫlṣ,","Sohn des Tm, Sohn des S²ʿ.","Und er trauerte um Hnʾ."]),
  ("HCH 38",["Von S¹ʿd, Sohn des Ẓn, Sohn des Ṯlm.","Und er trauerte um Hnʾ."]),
 ]),
-("II","Er wartet · Expressiv-Deferred",
+("II","warte",
  "Sehnsucht, die bleibt — Warten auf Regen, auf Familie, auf Rückkehr; im Stein für einen Späteren konserviert.",
- ["ASWS 73","RSIS 110","Is.Mu 255","SIJ 30"],[
+ ["RSIS 110","Is.Mu 255","SIJ 30"],[
+ ("LP 1196",["Von Ms¹wd, Sohn des Whbn,","Sohn des Hrṯ, Sohn des Ms¹k,","Sohn des Qmr, Sohn des ʿwḏ,","Sohn des Whbʾl —","und er hielt Ausschau","nach dem Reiterzug."]),
  ("KRS 3051",["Die junge Kamelstute.","Er zog hinaus ins weite, offene Land","und verzweifelte","auf der Lauer nach der Raubschar."]),
  ("CSNS 796",["Er wartete","auf den glückenden Raubzug."]),
  ("C 2756",["Er trauerte","um die Männer","im Späherposten."]),
@@ -81,7 +93,7 @@ REGISTERS = [
  ("GSSH 1",["Er lag auf der Lauer","am Späherplatz,","nach Feinden mit Kamelen."]),
  ("WH 1916",["Dieser Späherplatz","gehört Wgl dem Mkbly,","Jahr um Jahr."]),
 ]),
-("III","Er bittet · Intermediär-Direktiv",
+("III","bitte",
  "Das Gebet, das im Stein steht — an die Gottheit gerichtet, doch der Stein ist das Medium; es verhallt nicht, es bleibt adressiert.",
  ["BS 209","MKJS 80","LP 1267","Is.Mu 88"],[
  ("RVP 1",["Rudā —","hilf dem Ḥṣb."]),
@@ -99,7 +111,7 @@ REGISTERS = [
  ("C 1629",["Yalt —","Entkommen vom Bösen","in diesem Jahr."]),
  ("C 1660",["Allat —","dass er sicher sei."]),
 ]),
-("IV","Er klagt · Memorativ-Expressiv",
+("IV","klage",
  "Die Trauer als Denkmal — die Klage, dem Moment entzogen; die Namensliste ist die Form des Schmerzes.",
  ["LP 540","KRS 17","AbaNS 361","C 4273"],[
  ("CSNS 781",["Er weinte vor Kummer."]),
@@ -117,7 +129,7 @@ REGISTERS = [
  ("SSWS 28",["Er weinte vor Kummer."]),
  ("C 5367",["Er weinte vor Kummer."]),
 ]),
-("V","Er verflucht · Magisch-Deklarativ",
+("V","verfluche",
  "Der Fluch, der nie endet — der performativste Akt: ein gesprochener Fluch verhallt, ein gemeißelter gilt ewig.",
  ["C 4803","RSIS 351","LP 243","C 2775"],[
  ("WH 368",["Diese Schrift.","Allat —","dem, der sie austilgt:","Blindheit und Lähmung,","Stummheit, Krätze und Räude."]),
@@ -135,9 +147,9 @@ REGISTERS = [
  ("C 5299",["Rudā —","blende, wer die Schrift auskratzt."]),
  ("LP 308",["Er trauerte um Mqm,","um ʿqrb, um S¹ḫr,","um Tmʾl, um Mqm, um Ḥml.","Allat —","Blindheit dem, der dies auskratzt."]),
 ]),
-("VI","Er bezeugt · Assertiv-Deferred",
+("VI","bezeuge",
  "Zeugnis für Unbekannte — die Datierung als Akt: er war dabei, es war dieses Jahr; geschrieben für Fremde, die später kommen.",
- ["HSNS 5","LP 653","C 2670","ISB 57"],[
+ ["HSNS 5","LP 653","ASWS 73","C 2670","ISB 57"],[
  ("HSNS 1",["Er zog in die innere Wüste","im Jahr, als Agrippa starb."]),
  ("RQ.D 3",["Er trauerte um den Oheim,","den sie erschlugen,","im Jahr des ʾrm."]),
  ("LP 1291",["Er blieb die späten Regen in diesem Tal,","im Jahr, als der Sturzbach","mit seinen Kamelen vorüberzog."]),
@@ -153,7 +165,7 @@ REGISTERS = [
  ("RSIS 324",["Er weidete die Schafe","im Jahr des Krieges gegen die Juden."]),
  ("C 4902",["Er war hier","im Jahr des großen Regens","und jagte auf flachem Land."]),
 ]),
-("VII","Er schweigt · Abwesenheitsakt",
+("VII","schweige",
  "Lücken, die sprechen — nicht jede Lücke ist Zufall; was fehlt, wird durch sein Fehlen bezeichnet.",
  ["RQ.A 5","WH 1867.1","WH 1501.2"],[
  ("JaS 23",["----, Sohn des br,","Sohn des ----,","ʿbkz ----,","vom Stamm ʿmn."]),
