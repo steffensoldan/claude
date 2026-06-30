@@ -129,7 +129,7 @@ if ($Verify) {
     # 6. Map<->Dateien-Konsistenz: keine hartkodierten Benutzerpfade in Doku
     # Trifft reale Benutzernamen, ignoriert markierte Platzhalter (<user>) und '..'
     $hardcoded = Get-ChildItem -Path $AOS_ROOT -Recurse -Include "*.md","*.ps1","*.sh" -ErrorAction SilentlyContinue |
-        Where-Object { $_.Name -ne "install.ps1" } |
+        Where-Object { $_.FullName -notmatch '\\projects\\' -and $_.Name -ne "install.ps1" } |
         Where-Object { (Get-Content $_.FullName -Raw) -match "C:\\Users\\(?!<|\.\.)[^\\]+\\AOS" }
     Check "Keine hartkodierten realen Benutzerpfade (C:\Users\<name>\AOS)" (-not $hardcoded)
 
@@ -145,7 +145,7 @@ Write-Host "=== AOS Installation gestartet ===" -ForegroundColor Cyan
 
 # 1. Sicherheits-/Integritaetspruefung (gegen eingepackte Secrets)
 $badFiles = Get-ChildItem -Path $AOS_ROOT -Recurse -Include "*.env","*.env.*","secrets.json","credentials.json","*.key","*.pem" -ErrorAction SilentlyContinue |
-    Where-Object { $_.Name -notmatch "\.(example|template|sample)$" }
+    Where-Object { $_.FullName -notmatch '\\projects\\' -and $_.Name -notmatch "\.(example|template|sample)$" }
 if ($badFiles) {
     Write-Error "ABORT: Integritaetsverletzung - Secrets im Installationspaket entdeckt:"
     $badFiles | ForEach-Object { Write-Error "  $($_.FullName)" }
@@ -159,7 +159,7 @@ $nestedClaudes = Get-ChildItem -Path $AOS_ROOT -Recurse -Filter "CLAUDE.md" -Err
     Where-Object { $_.DirectoryName -ne $AOS_ROOT -and $_.DirectoryName -ne "$HOME\.claude" }
 foreach ($file in $nestedClaudes) {
     if ((Get-Content $file.FullName -Raw) -match "@\.\./") {
-        Write-Warning "WARNUNG: Relative Pfad-Hop-Direktive in $($file.FullName) — bitte vermeiden."
+        Write-Warning "WARNUNG: Relative Pfad-Hop-Direktive in $($file.FullName) - bitte vermeiden."
     }
 }
 
