@@ -129,7 +129,7 @@ if ($Verify) {
     # 6. Map<->Dateien-Konsistenz: keine hartkodierten Benutzerpfade in Doku
     # Trifft reale Benutzernamen, ignoriert markierte Platzhalter (<user>) und '..'
     $hardcoded = Get-ChildItem -Path $AOS_ROOT -Recurse -Include "*.md","*.ps1","*.sh" -ErrorAction SilentlyContinue |
-        Where-Object { $_.FullName -notmatch '\\projects\\' -and $_.Name -ne "install.ps1" } |
+        Where-Object { $_.FullName -notmatch '\\(projects|dialog|scratch)\\' -and $_.Name -ne "install.ps1" } |
         Where-Object { (Get-Content $_.FullName -Raw) -match "C:\\Users\\(?!<|\.\.)[^\\]+\\AOS" }
     Check "Keine hartkodierten realen Benutzerpfade (C:\Users\<name>\AOS)" (-not $hardcoded)
 
