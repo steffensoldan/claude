@@ -215,3 +215,15 @@ durch Agenten und lückenlose Historie aller Regel-, Befehls- und Skriptänderun
   Links, Hook, keine hartkodierten Pfade).
 - Neue Memory-Regeln nur über `/remember` in `memory/global-rules.md`; neuer Index-Eintrag
   in `memory/MEMORY.md`. Eine Regel = eine Quelle (SSOT), keine Duplikate.
+
+---
+
+## 10. Ziele & Philosophie des AOS
+
+Das AOS verfolgt fünf strategische Kernziele für den Betrieb autonomer KIs auf Windows-Systemen:
+
+1. **Single Source of Truth (SSOT)**: Einheitliche, widerspruchsfreie Regeln, Templates und Befehle für Claude Code und Antigravity zur Vermeidung von Drift.
+2. **Spec-First (Spezifikationsgetrieben)**: Strikte Einhaltung des Entwicklungszyklus (`PROJECT.md` -> `implementation_plan.md` -> `task.md` -> `walkthrough.md`) zur Gewährleistung der vollständigen Wiederherstellbarkeit (Zero-Context-Start).
+3. **Portabilität & Unabhängigkeit**: Komplette Vermeidung systemspezifischer Absolutpfade, um das AOS nahtlos zwischen VMs, Containern und lokalen Umgebungen migrieren zu können.
+4. **Sicherheit & Guardrails (Fail-Closed)**: Aktiver Schutz vor destruktiven Operationen und ungewollten Secrets-Exporten durch automatisierte Prüfungen (Allowlists und Hook-Checks).
+5. **Robuste Kooperation (Mutex-Orchestrierung)**: Ein Dateisystem-basiertes, asynchrones Dialog-Protokoll zur fehlerfreien Abstimmung zwischen textbasierten CLI-Agenten und IDE-Agenten.

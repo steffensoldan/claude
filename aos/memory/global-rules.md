@@ -111,4 +111,5 @@
 
 - Wenn in einer Session eine neue Präferenz oder Regel entsteht: "/remember [Regel]" → in diese Datei schreiben lassen
 - Projektspezifische Regeln gehören in `./CLAUDE.md` im jeweiligen Projektverzeichnis, nicht hier
+- **Archivierte Projekte**: Das Projekt `aos-structure-improvement` ist abgeschlossen und archiviert. Es muss nicht weiter gepflegt oder aktualisiert werden.
 
