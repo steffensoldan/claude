@@ -156,3 +156,4 @@ Sobald der Benutzer Antigravity bittet, nach offenen Dialogen zu suchen, liest A
 |---|---|---|---|
 | `stufe-2-konzept` | 1 | offen | CC stellt Fragen zu AG-Loop-Mechanismus |
 | `uaos-overhead-check` | 3 | done | Lightweight-Modus beschlossen, git-init angepasst |
+| `aos-optimierung` | 3 | done | 5 Nachbesserungen vereinbart (Symlink-Default, Fail-Fast-Prüfung, Allowlist-ZIP-Export) |

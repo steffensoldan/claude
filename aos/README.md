@@ -195,7 +195,7 @@ powershell <AOS_ROOT>\scripts\add-skill.ps1 -CommandName "name-des-neuen-skills"
 2. Verknüpft die Datei für Claude Code (`~/.claude/commands/`).
 3. Legt Struktur + Verknüpfung für Antigravity (`agos-core/skills/.../SKILL.md`) an.
 
-Verknüpfungsart einheitlich **Hardlinks** (kein Entwicklermodus nötig) — konsistent mit `install.ps1`.
+Verknüpfungsart standardmäßig **Symbolic Links** (mit automatischem Fallback auf **Hardlinks**, falls Berechtigungen fehlen) — konsistent mit `install.ps1`.
 
 ---
 

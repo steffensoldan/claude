@@ -4,7 +4,6 @@ $ErrorActionPreference = 'Stop'
 $SourcePath = $PSScriptRoot
 $ExportPath = Join-Path (Split-Path $PSScriptRoot -Parent) "AOS-export.zip"
 
-
 Write-Host "=== Erstelle AOS Export-Paket ===" -ForegroundColor Cyan
 
 # 1. Sicherheits- und Integritätsprüfung vor ZIP-Export
@@ -47,7 +46,7 @@ if ($missing) {
 }
 Write-Host "Secrets-Scan & gitignore-Prüfung: OK" -ForegroundColor Green
 
-# 1.5 Validierung verschachtelter CLAUDE.md auf relative Pfad-Hop-Verstöße (Option C+A)
+# 1.5 Validierung verschachtelter CLAUDE.md auf relative Pfad-Hop-Verstöße
 Write-Host "Prüfe verschachtelte CLAUDE.md auf Pfad-Hops..." -ForegroundColor Cyan
 $nestedClaudes = Get-ChildItem -Path $SourcePath -Recurse -Filter "CLAUDE.md" -ErrorAction SilentlyContinue |
     Where-Object { $_.DirectoryName -ne $SourcePath -and $_.DirectoryName -ne "$HOME\.claude" }
@@ -57,11 +56,10 @@ foreach ($file in $nestedClaudes) {
     if ($content -match "@\.\./") {
         Write-Warning "WARNUNG: Relative Pfad-Hop-Direktive in verschachtelter CLAUDE.md gefunden:"
         Write-Warning "  $($file.FullName)"
-        Write-Warning "  Bitte vermeiden Sie relative Imports mit '../' in Sub-Projekten (Option C+A)."
+        Write-Warning "  Bitte vermeiden Sie relative Imports mit '../' in Sub-Projekten."
         Write-Warning "  Nutzen Sie stattdessen die Vererbung oder erstellen Sie separate Rules ohne relative Hops."
     }
 }
-
 
 # Temporaeres Verzeichnis fuer sauberen ZIP-Build
 $TempPath = Join-Path $env:TEMP "AOS_Export_Temp"
@@ -88,7 +86,6 @@ foreach ($file in $FilesToCopy) {
     }
 }
 
-
 # Globale CLAUDE.md auslesen und einpacken
 $claudeGlobal = "$env:USERPROFILE\.claude\CLAUDE.md"
 if (Test-Path $claudeGlobal) {
@@ -100,9 +97,26 @@ if (Test-Path $claudeGlobal) {
 
 # Dialog-Unterordner (bis auf README.md) loeschen, um Privatsphaere zu wahren
 if (Test-Path "$TempPath\dialog") {
-    Get-ChildItem -Path "$TempPath\dialog" -Directory | Remove-Item -Recurse -Force
-    Write-Host "Laufende Dialog-Threads entfernt." -ForegroundColor Gray
+    Get-ChildItem -Path "$TempPath\dialog" -Directory | Where-Object { $_.Name -ne "aos-optimierung" } | Remove-Item -Recurse -Force
+    Write-Host "Laufende Dialog-Threads bis auf 'aos-optimierung' entfernt." -ForegroundColor Gray
 }
+
+# 2. Staging-Allowlist-Integritätsprüfung (Sicherheits-Check gegen unerwünschte Exporte)
+Write-Host "Prüfe Staging-Bereich auf unerwünschte Dateien (Allowlist)..." -ForegroundColor Cyan
+$allowedExtensions = @('.md', '.ps1', '.sh', '.json', '.txt', '.yaml', '.yml', '.example', '.gitignore', '.patch', '.png', '.jpg', '.py', '.js', '.ts', '.html', '.css', '.xml')
+
+$unallowedFiles = Get-ChildItem -Path $TempPath -Recurse -File | Where-Object {
+    $ext = $_.Extension
+    $ext -notin $allowedExtensions
+}
+
+if ($unallowedFiles) {
+    Write-Error "ABORT: Unerwünschte Dateitypen im Export-Paket gefunden!"
+    $unallowedFiles | ForEach-Object { Write-Error "  [NICHT ERLAUBT] $($_.FullName.Replace($TempPath, ''))" }
+    Remove-Item -Recurse -Force $TempPath
+    exit 1
+}
+Write-Host "Staging-Allowlist-Prüfung: OK" -ForegroundColor Green
 
 # Archivieren
 if (Test-Path $ExportPath) { 

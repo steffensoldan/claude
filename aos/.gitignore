@@ -2,6 +2,7 @@
 dialog/*
 !dialog/README.md
 !dialog/uaos-overhead-check/
+!dialog/aos-optimierung/
 
 # Windows/Node temp files
 .DS_Store

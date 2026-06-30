@@ -13,6 +13,69 @@ $claudeHookDir= "$HOME\.claude\hooks"
 $settingsPath = "$HOME\.claude\settings.json"
 
 # ---------------------------------------------------------------------------
+# HILFSFUNKTIONEN
+# ---------------------------------------------------------------------------
+function Write-Utf8NoBom {
+    param([string]$Path, [string]$Content)
+    [System.IO.File]::WriteAllText($Path, $Content, [System.Text.UTF8Encoding]::new($false))
+}
+
+function Write-Utf8NoBomLines {
+    param([string]$Path, [string[]]$Content)
+    [System.IO.File]::WriteAllLines($Path, $Content, [System.Text.UTF8Encoding]::new($false))
+}
+
+function Append-Utf8NoBom {
+    param([string]$Path, [string]$Content)
+    [System.IO.File]::AppendAllText($Path, $Content, [System.Text.UTF8Encoding]::new($false))
+}
+
+function Test-FileContentMatch([string]$path1, [string]$path2) {
+    if (-not (Test-Path $path1) -or -not (Test-Path $path2)) { return $false }
+    try {
+        $bytes1 = [System.IO.File]::ReadAllBytes($path1)
+        $bytes2 = [System.IO.File]::ReadAllBytes($path2)
+        if ($bytes1.Length -ne $bytes2.Length) { return $false }
+        for ($i = 0; $i -lt $bytes1.Length; $i++) {
+            if ($bytes1[$i] -ne $bytes2[$i]) { return $false }
+        }
+        return $true
+    } catch {
+        return $false
+    }
+}
+
+function Create-Link {
+    param([string]$LinkPath, [string]$TargetPath)
+    if (Test-Path $LinkPath) {
+        # Pruefe ob Inhalt uebereinstimmt
+        if (Test-FileContentMatch $LinkPath $TargetPath) {
+            Write-Host "Link bereits verknuepft und konsistent: $(Split-Path $LinkPath -Leaf)" -ForegroundColor Gray
+            return
+        }
+        # Bei Inkonstistenz (Drift) Loeschen und neu verknuepfen
+        Remove-Item -Force $LinkPath
+    }
+    
+    try {
+        # Symbolischer Link als Standard (Developer Mode oder Admin-Rechte erforderlich)
+        New-Item -ItemType SymbolicLink -Path $LinkPath -Value $TargetPath -Force | Out-Null
+        Write-Host "Link verknuepft (Symlink): $(Split-Path $LinkPath -Leaf)" -ForegroundColor Green
+    }
+    catch {
+        # Fallback auf HardLink bei fehlenden Rechten
+        try {
+            New-Item -ItemType HardLink -Path $LinkPath -Value $TargetPath -Force | Out-Null
+            Write-Warning "WARNUNG: Symlink-Erstellung fehlgeschlagen (Berechtigung?). Nutze Hardlink-Fallback fuer $(Split-Path $LinkPath -Leaf). Drift-Gefahr bei Updates!"
+        }
+        catch {
+            Write-Error "FEHLER: Link-Erstellung fehlgeschlagen fuer $LinkPath: $_"
+            throw $_
+        }
+    }
+}
+
+# ---------------------------------------------------------------------------
 # SELF-TEST (-Verify): prueft Installation, aendert nichts. Exit 0 = alle PASS.
 # ---------------------------------------------------------------------------
 if ($Verify) {
@@ -26,14 +89,26 @@ if ($Verify) {
     # 1. AOS_ROOT-Umgebungsvariable gesetzt
     Check "Umgebungsvariable AOS_ROOT gesetzt" ([Environment]::GetEnvironmentVariable("AOS_ROOT","User"))
 
-    # 2. Alle Commands verknuepft und aufloesbar
+    # 2. Alle Commands verknuepft und konsistent
     $cmds = Get-ChildItem -Path "$AOS_ROOT\commands" -Filter "*.md"
     foreach ($c in $cmds) {
-        Check "Command verknuepft: $($c.Name)" (Test-Path "$claudeCmdDir\$($c.Name)")
+        $linkPath = "$claudeCmdDir\$($c.Name)"
+        $exists = Test-Path $linkPath
+        $match = $false
+        if ($exists) {
+            $match = Test-FileContentMatch $c.FullName $linkPath
+        }
+        Check "Command verknuepft und konsistent: $($c.Name)" ($exists -and $match)
     }
 
-    # 3. Safety-Hook verknuepft
-    Check "Safety-Hook verknuepft" (Test-Path "$claudeHookDir\block-dangerous.sh")
+    # 3. Safety-Hook verknuepft und konsistent
+    $hookTarget = "$claudeHookDir\block-dangerous.sh"
+    $exists = Test-Path $hookTarget
+    $match = $false
+    if ($exists) {
+        $match = Test-FileContentMatch "$AOS_ROOT\hooks\block-dangerous.sh" $hookTarget
+    }
+    Check "Safety-Hook verknuepft und konsistent" ($exists -and $match)
 
     # 4. Hook in settings.json (PreToolUse) registriert
     $hookWired = $false
@@ -79,7 +154,7 @@ if ($badFiles) {
 }
 Write-Host "Integritaetspruefung: OK" -ForegroundColor Green
 
-# 1.5 Validierung verschachtelter CLAUDE.md auf relative Pfad-Hops
+# 1.5 Validierung verschachtelter CLAUDE.md auf relative Pfad-Hop-Verstöße
 $nestedClaudes = Get-ChildItem -Path $AOS_ROOT -Recurse -Filter "CLAUDE.md" -ErrorAction SilentlyContinue |
     Where-Object { $_.DirectoryName -ne $AOS_ROOT -and $_.DirectoryName -ne "$HOME\.claude" }
 foreach ($file in $nestedClaudes) {
@@ -103,26 +178,18 @@ foreach ($path in $paths) {
     }
 }
 
-# 4. Claude Commands verknuepfen (Hardlink, idempotent — kein Entwicklermodus noetig)
+# 4. Claude Commands verknuepfen (Symlink mit Hardlink-Fallback)
 $commands = Get-ChildItem -Path "$AOS_ROOT\commands" -Filter "*.md"
 foreach ($cmd in $commands) {
     $targetLink = "$claudeCmdDir\$($cmd.Name)"
-    if (-not (Test-Path $targetLink)) {
-        New-Item -ItemType HardLink -Path $targetLink -Value $cmd.FullName -Force | Out-Null
-        Write-Host "Command verknuepft (Hardlink): $($cmd.Name)" -ForegroundColor Green
-    } else {
-        Write-Host "Command bereits verknuepft: $($cmd.Name)" -ForegroundColor Gray
-    }
+    Create-Link -LinkPath $targetLink -TargetPath $cmd.FullName
 }
 
-# 5. Safety-Hook verknuepfen (Hardlink, idempotent)
+# 5. Safety-Hook verknuepfen (Symlink mit Hardlink-Fallback)
 $hookSource = "$AOS_ROOT\hooks\block-dangerous.sh"
 $hookTarget = "$claudeHookDir\block-dangerous.sh"
-if ((Test-Path $hookSource) -and -not (Test-Path $hookTarget)) {
-    New-Item -ItemType HardLink -Path $hookTarget -Value $hookSource -Force | Out-Null
-    Write-Host "Safety-Hook verknuepft (Hardlink): $hookTarget" -ForegroundColor Green
-} else {
-    Write-Host "Safety-Hook bereits verknuepft." -ForegroundColor Gray
+if (Test-Path $hookSource) {
+    Create-Link -LinkPath $hookTarget -TargetPath $hookSource
 }
 
 # 6. PreToolUse-Hook in settings.json verdrahten (idempotent, JSON-sicher)
@@ -143,8 +210,7 @@ if ($raw -notmatch "block-dangerous\.sh") {
         $settings.hooks | Add-Member -NotePropertyName PreToolUse -NotePropertyValue @()
     }
     $settings.hooks.PreToolUse += $hookEntry
-    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
-    [System.IO.File]::WriteAllText($settingsPath, ($settings | ConvertTo-Json -Depth 10), $utf8NoBom)
+    Write-Utf8NoBom $settingsPath ($settings | ConvertTo-Json -Depth 10)
     Write-Host "PreToolUse-Hook in settings.json registriert." -ForegroundColor Green
 } else {
     Write-Host "PreToolUse-Hook bereits in settings.json registriert." -ForegroundColor Gray
@@ -169,17 +235,37 @@ $claudeMdPath  = "$HOME\.claude\CLAUDE.md"
 $globalRulesRef= "@$AOS_ROOT\memory\global-rules.md"
 if (Test-Path $claudeMdPath) {
     $cleaned = (Get-Content $claudeMdPath) | Where-Object { $_ -notmatch '@.*\\memory\\global-rules\.md' }
-    [System.IO.File]::WriteAllLines($claudeMdPath, $cleaned, [System.Text.UTF8Encoding]::new($false))
+    Write-Utf8NoBomLines $claudeMdPath $cleaned
 }
 $existing = if (Test-Path $claudeMdPath) { Get-Content $claudeMdPath -Raw } else { "" }
 if ($existing -notmatch [regex]::Escape($globalRulesRef)) {
-    [System.IO.File]::AppendAllText($claudeMdPath, "`r`n$globalRulesRef`r`n", [System.Text.UTF8Encoding]::new($false))
+    Append-Utf8NoBom $claudeMdPath "`r`n$globalRulesRef`r`n"
     Write-Host "global-rules.md in CLAUDE.md verknuepft." -ForegroundColor Green
 }
+
+# 9. Abschliessende Konsistenzprüfung (Fail-Fast)
+Write-Host "Führe abschliessende Verifikation durch..." -ForegroundColor Cyan
+$installFailed = $false
+foreach ($cmd in $commands) {
+    $targetLink = "$claudeCmdDir\$($cmd.Name)"
+    if (-not (Test-FileContentMatch $cmd.FullName $targetLink)) {
+        Write-Error "FEHLER: Konsistenzprüfung fehlgeschlagen für $($cmd.Name). Link weicht von Quelle ab!"
+        $installFailed = $true
+    }
+}
+if (-not (Test-FileContentMatch $hookSource $hookTarget)) {
+    Write-Error "FEHLER: Konsistenzprüfung fehlgeschlagen für Safety-Hook. Link weicht von Quelle ab!"
+    $installFailed = $true
+}
+if ($installFailed) {
+    Write-Error "AOS-Installation ist inkonsistent! Bitte überprüfen Sie Berechtigungen und führen Sie install.ps1 erneut aus."
+    exit 1
+}
+Write-Host "Konsistenzprüfung: OK" -ForegroundColor Green
 
 Write-Host "=== AOS Installation abgeschlossen ===" -ForegroundColor Cyan
 Write-Host "Verifikation: powershell $AOS_ROOT\install.ps1 -Verify" -ForegroundColor Yellow
 Write-Host ""
 Write-Host "NAECHSTE SCHRITTE (MOBILE DISPATCHER, optional):" -ForegroundColor Yellow
 Write-Host "1. 'claude login' in der VM-PowerShell ausfuehren." -ForegroundColor White
-Write-Host "2. 'claude' starten und Handy per Koppelungscode verbinden (siehe MOBILE.md)." -ForegroundColor White
+2. 'claude' starten und Handy per Koppelungscode verbinden (siehe MOBILE.md)." -ForegroundColor White

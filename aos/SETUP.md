@@ -1,6 +1,6 @@
 # AOS Setup (Fallback): Manuelle Verknüpfung
 
-> **Standardweg ist `install.ps1`** (idempotent, setzt Hardlinks, verdrahtet den Hook,
+> **Standardweg ist `install.ps1`** (idempotent, setzt Symlinks/Hardlinks, verdrahtet den Hook,
 > registriert Skills, setzt `$env:AOS_ROOT`). Diese Anleitung ist nur der **Fallback**,
 > falls der Installer nicht nutzbar ist. Verifikation in beiden Fällen:
 > `powershell <AOS_ROOT>\install.ps1 -Verify`.
@@ -32,5 +32,5 @@ New-Item -ItemType HardLink -Path "$HOME\.claude\hooks\block-dangerous.sh" `
          -Value "$env:AOS_ROOT\hooks\block-dangerous.sh" -Force | Out-Null
 ```
 
-*Hinweis: Neue Skills über `add-skill.ps1` werden automatisch per Hardlink verknüpft.*
+*Hinweis: Neue Skills über `add-skill.ps1` werden standardmäßig per Symlink verknüpft.*
 *Den PreToolUse-Hook in `~/.claude/settings.json` siehe README Abschnitt 3.*
