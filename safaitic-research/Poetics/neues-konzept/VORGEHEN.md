@@ -80,13 +80,22 @@ Poetics/
 │                    Manuskript + Übergabe-Dokumentation
 │                    9 neue Steine (Er-Form), 2 Echos, Schlussstein
 │
-└── neues-konzept/   Dieses Verzeichnis
-    ├── VORGEHEN.md       Dieses Dokument
-    ├── KONZEPT.md        Konzeptionelle Beschreibung / Vorwort-Entwurf
-    ├── PROOF_OF_CONCEPT.md   21 Gedichte als Strukturprobe
-    ├── data/             Ausgabedateien (Vollkorpus-Lauf)
-    └── scripts/          generate_outputs.py
+├── neues-konzept/   Dieses Verzeichnis (Konzept + Korpus-Daten)
+│   ├── VORGEHEN.md       Dieses Dokument
+│   ├── KONZEPT.md        Konzeptionelle Beschreibung / Vorwort-Entwurf
+│   ├── PROOF_OF_CONCEPT.md   21 Gedichte als Strukturprobe
+│   ├── data/             Ausgabedateien (Vollkorpus-Lauf)
+│   └── scripts/          generate_outputs.py
+│
+└── register/        Register-Band (Realisierung von Konzept A)
+    ├── wer_dies_liest_register.docx   Manuskript, 7 Register, 134 Stücke
+    ├── REGISTER_BAND_AUSWAHL.md       Auswahl, Fundorte, Manuskript-Stand
+    └── scripts/build_register.py      Build (liest v5-Kopfstücke aus erweitert/)
 ```
+
+Hinweis: Das hier beschriebene Sieben-Register-Konzept ist im Ordner `register/`
+ausgearbeitet (eigener Band, Er-Form, Ich-Form-Überschriften schreibe…schweige,
+v5-Kopfstücke je Register, normalisierte Fundort-Beizeilen).
 
 ---
 

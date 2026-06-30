@@ -1,6 +1,6 @@
 # Register-Band — Auswahl aus dem Vollkorpus
 
-Stand: 2026-06-28 · Konzept A: eigener Band nach den sieben Sprechakt-Registern (`neues-konzept`)
+Stand: 2026-06-28 · Konzept A: eigener Band nach den sieben Sprechakt-Registern · Ordner `register/`
 
 ## Idee
 
@@ -10,9 +10,34 @@ Nicht der Jahresbogen der erweiterten Ausgabe, sondern die **Sprechhaltung** ord
 
 Quellen: `neues-konzept/data/safaitic_full_corpus.xlsx` (31.768 safaitische, mit Typ-Spalte) für I + VII; `safaitic_invocations.xlsx` (2.018, thematische Blätter) für III + V; `band1/data/…auswahl.xlsx` (Longlist, 2.448 gerankt) für II, IV, VI. **Ausgeschlossen:** alle 180 bereits in der erweiterten Ausgabe (v5) verbauten Siglen — der Register-Band ist materiell eigenständig (0 Überschneidung).
 
-## Auswahl — 14 je Register (98 gesamt)
+## Stand des Manuskripts (gebaut: `wer_dies_liest_register.docx`)
 
-Englische OCIANA-Glosse; Nachdichtung ins deutsche Er-Form folgt. Genealogien werden (außer in I und VII, wo sie Pointe sind) getilgt.
+Realisiert sind **134 Stücke** in sieben Registern, gestaltet wie die erweiterte Ausgabe v5 (Georgia, Er-Form, „Sigle“-Zeilen). Über die Korpus-Ausgangsauswahl unten hinaus enthält der Band:
+
+**Kapitelüberschriften** = Verb in der Ich-Form (das einzige Ich im Band): schreibe · warte · bitte · klage · verfluche · bezeuge · schweige. Darunter je eine Konzept-Unterüberschrift. Kapitel I „schreibe“ und VII „schweige“ rahmen den Band: reine, mündungsfreie Schrift ↔ Verstummen.
+
+**v5-Kopfstücke** je Register (lange Inschriften zuerst, aus der erweiterten Ausgabe übernommen — der Band ist dadurch nicht mehr überschneidungsfrei zur erweiterten Ausgabe):
+- I: RWQ 342, RWQ 187, HYGQ 24, KRS 1341
+- II: RSIS 110, Is.Mu 255, SIJ 30
+- III: BS 209, MKJS 80, LP 1267, Is.Mu 88
+- IV: LP 540, KRS 17, AbaNS 361, C 4273
+- V: C 4803, RSIS 351, LP 243, C 2775
+- VI: HSNS 5, LP 653, **ASWS 73** (aus II hierher verschoben — datiert), C 2670, ISB 57
+- VII: RQ.A 5, WH 1867.1, WH 1501.2
+
+**Kapitel I** als „X war hier“-Litanei erweitert: die fünf reinen Signaturen auf „X war hier“ umgestellt + 8 neue (HCH 75/158.2/31.1, Rees 150/151/155/161 4/176) — geografisch dicht (Cairn of Haniʾ, Km 612, Ḥarrat al-Raǧil). **Kapitel II**: Genealogie-Gedicht **LP 1196** (sieben Generationen + Späh-Verb) neu.
+
+### Fundort-Beizeilen (Normalisierung)
+
+Unter jeder Sigle steht der normalisierte Fundort, z. B. „Sigle HCH 117 · Cairn of Haniʾ“. Regeln: Survey-Apparat (Seitenrefs, Anführungszeichen, „Unknown,“) gestrichen; spezifischster benannter Ort gewählt; zwei Zonen als Oberordnung — **NO-Jordanien (Ḥarrah)** und **Süd-Syrien (Ṣafā)**. Mapping als statisches `FINDSPOT`-Dict im Build-Skript. Größte Cluster: Cairn of Haniʾ (HCH), Km 612 (JaS), Zalaf (C), Wādī Salma, al-ʿĪsāwī, Ḥarrat al-Raǧil, Riǧm Qaʿqūl, Tall aḍ-Ḍabiʿ.
+
+**8 ortlose Korpus-Stimmen → verortete Ersätze aus starken Clustern:** WH 1116→**RSIS 322** (Tall aḍ-Ḍabiʿ) · AWS 379→**AbSWS 15** (Wādī Salma) · WH 1916→**C 2194** (Zalaf) · RVP 1→**AbSWS 42** (Wādī Salma) · ZN 4→**C 2190** (Zalaf) · WH 1851→**RWQ 304** (Wādī Salma) · RVP 10→**C 1146** (Riǧm Qaʿqūl) · WAMS 4→**SIJ 10** (Jathum).
+
+**Bewusst „Fundort unbekannt“ belassen (8):** die vier IV-Klage-Litanei-Verse (Anonymität passt zum Chor), der Fluchkatalog WH 368, die drei v5-Kopfstücke HYGQ 24, WH 1867.1, WH 1501.2.
+
+## Korpus-Ausgangsauswahl — 14 je Register (98)
+
+Die Basis-Auswahl aus dem Vollkorpus (vor v5-Kopfstücken, war-hier-Erweiterung und den 8 Verortungs-Ersätzen oben). Englische OCIANA-Glosse; Genealogien werden (außer in I und VII, wo sie Pointe sind) getilgt.
 
 ### I. Er war hier
 *Präsentativ — Dasein als Akt: der bloße Name (oder die Ahnenkette), kein Verb. Aus den ~19.800 Signaturen + ~6.300 Minimal-Texten des Vollkorpus, die in keinem bisherigen Band vorkamen.*
@@ -140,8 +165,14 @@ Englische OCIANA-Glosse; Nachdichtung ins deutsche Er-Form folgt. Genealogien we
 - **C 1312** — By Ḥḍg son of S¹wr ---- and {he kept watch} ----
 - **C 1368** — By Ḫlṣ ---- son of Qdm son of {ʾnʿm} son of Rʿ of the lineage of ----
 
-## Nächste Schritte
-- [ ] Nachdichtung der 98 Texte ins deutsche Er-Form (Stil wie die erweiterte Ausgabe), je „Sigle …“-Zeile darunter.
-- [ ] Manuskript bauen (`…_register.docx`): Vorwort nach dem Sprechakt-Prinzip, sieben Register, je ein Kopfstück.
-- [ ] Register I (Signaturen) und VII (Fragmente) ggf. erweitern — Material ist praktisch unbegrenzt.
-- [ ] Reihenfolge je Register nach Eignung, damit von hinten kürzbar.
+## Stand & nächste Schritte
+- [x] Nachdichtung ins deutsche Er-Form, je „Sigle“-Zeile darunter.
+- [x] Manuskript gebaut (`wer_dies_liest_register.docx`, 134 Stücke): Vorwort nach dem Sprechakt-Prinzip, sieben Register, v5-Kopfstücke.
+- [x] Kapitel I als „X war hier“-Litanei erweitert; Ich-Form-Überschriften.
+- [x] Fundort-Beizeilen normalisiert; 8 ortlose Stimmen verortet ersetzt.
+- [ ] Optional: Fundort-Anhang im Backmatter (alle Stücke nach Zonen/Clustern gruppiert).
+- [ ] Optional: Intra-Register-Clustering (same-site-Stücke benachbart).
+- [ ] Optional: echte Karte via OCIANA-Koordinaten (externer Abruf).
+- [ ] Lektorat der Nachdichtungen gegen die OCIANA-Einträge.
+
+Build: `scripts/build_register.py` (Auswahl, Verstexte und `FINDSPOT`-Dict inline; liest die v5-Kopfstücke faithful aus `erweitert/…_v5.docx`).
