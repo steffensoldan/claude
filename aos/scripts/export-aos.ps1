@@ -1,8 +1,8 @@
 # export-aos.ps1 - Erstellt das saubere ZIP-Archiv fuer die VM-Installation
 $ErrorActionPreference = 'Stop'
 
-$SourcePath = $PSScriptRoot
-$ExportPath = Join-Path (Split-Path $PSScriptRoot -Parent) "AOS-export.zip"
+$SourcePath = Split-Path $PSScriptRoot -Parent
+$ExportPath = Join-Path (Split-Path $SourcePath -Parent) "AOS-export.zip"
 
 Write-Host "=== Erstelle AOS Export-Paket ===" -ForegroundColor Cyan
 
@@ -68,8 +68,8 @@ if (Test-Path $TempPath) {
 }
 New-Item -ItemType Directory -Path $TempPath | Out-Null
 
-# Kopiere nur relevante Ordner
-$FoldersToCopy = @("memory", "templates", "commands", "hooks", "scripts", "dialog", "ops")
+# Kopiere nur relevante Ordner (ops gelöscht, scripts enthält alle ps1-Dateien)
+$FoldersToCopy = @("memory", "templates", "commands", "hooks", "scripts", "dialog")
 foreach ($folder in $FoldersToCopy) {
     if (Test-Path "$SourcePath\$folder") {
         Copy-Item -Path "$SourcePath\$folder" -Destination "$TempPath\$folder" -Recurse -Force

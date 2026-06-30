@@ -53,8 +53,7 @@ Agent-Dialog liegen als Dateien vor; jeder Agent liest und schreibt sie nach fes
 ├── CLAUDE.md                        ← Workspace-Regeln für Claude Code (lädt global-rules)
 ├── SETUP.md                         ← Fallback: manuelle Verknüpfung (sonst install.ps1)
 ├── MOBILE.md                        ← Mobile-Dispatcher (Handy ↔ VM) inkl. Compliance-Gate
-├── install.ps1                      ← Installer/Updater + Self-Test (-Verify)
-├── export-aos.ps1                   ← Secret-freies ZIP-Paket für VM/Migration
+└── install.ps1                      ← Installer/Updater + Self-Test (-Verify)
 │
 ├── memory\                          ← Geteiltes Langzeitgedächtnis & Standards
 │   ├── MEMORY.md                    ← Index aller Memory-Dateien
@@ -82,16 +81,15 @@ Agent-Dialog liegen als Dateien vor; jeder Agent liest und schreibt sie nach fes
 │   └── test-block-dangerous.sh      ← Regressionstest der Guardrail-Muster
 │
 ├── scripts\                         ← Geteilte Automatisierung (PowerShell)
-│   └── add-skill.ps1                ← Neuen Command/Skill für beide Clients registrieren
-│
-├── ops\                             ← Deployment & Betrieb
-│   └── deploy.ps1                   ← Projekt-Deploy nach deploy-manifest.json
+│   ├── add-skill.ps1                ← Neuen Command/Skill für beide Clients registrieren
+│   ├── deploy.ps1                   ← Projekt-Deploy nach deploy-manifest.json
+│   └── export-aos.ps1               ← Secret-freies ZIP-Paket für VM/Migration
 │
 ├── projects\                        ← Aktive Projekt-Workspaces (von install.ps1 angelegt)
 │   ├── Projekte-Claude\             ← primär Claude Code
 │   └── Projekte-Antigravity\        ← primär Antigravity
 │
-└── live\                            ← Deploy-Ziele/Manifeste (von ops/deploy.ps1 genutzt)
+└── live\                            ← Deploy-Ziele/Manifeste (von scripts/deploy.ps1 genutzt)
 ```
 
 > **Konsistenz-Invariante:** Jede versionierte Datei steht in dieser Map, und jeder
