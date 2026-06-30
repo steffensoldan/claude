@@ -69,7 +69,7 @@ function Create-Link {
             Write-Warning "WARNUNG: Symlink-Erstellung fehlgeschlagen (Berechtigung?). Nutze Hardlink-Fallback fuer $(Split-Path $LinkPath -Leaf). Drift-Gefahr bei Updates!"
         }
         catch {
-            Write-Error "FEHLER: Link-Erstellung fehlgeschlagen fuer $LinkPath: $_"
+            Write-Error "FEHLER: Link-Erstellung fehlgeschlagen fuer $($LinkPath). Fehler: $_"
             throw $_
         }
     }
@@ -268,4 +268,4 @@ Write-Host "Verifikation: powershell $AOS_ROOT\install.ps1 -Verify" -ForegroundC
 Write-Host ""
 Write-Host "NAECHSTE SCHRITTE (MOBILE DISPATCHER, optional):" -ForegroundColor Yellow
 Write-Host "1. 'claude login' in der VM-PowerShell ausfuehren." -ForegroundColor White
-2. 'claude' starten und Handy per Koppelungscode verbinden (siehe MOBILE.md)." -ForegroundColor White
+Write-Host "2. 'claude' starten und Handy per Koppelungscode verbinden (siehe MOBILE.md)." -ForegroundColor White
