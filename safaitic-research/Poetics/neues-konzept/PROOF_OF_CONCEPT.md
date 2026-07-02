@@ -1,6 +1,10 @@
 # Proof of Concept — Sieben Register
 *21 Gedichte · minimaler Eingriff · Vollkorpusbasis*
 
+> **Realisierung:** Der ausgearbeitete Band liegt in `../register/` (134 Stücke,
+> inzwischen acht Register — Kapitel „Ich war hier“ aufgeteilt in „stehe“ und
+> „schreibe“). Dies ist die frühe Strukturprobe.
+
 Vorgehen: Genealogien gestrichen, Zeilenbrüche gesetzt, Lacunae (----) und
 editorische Klammern [ ] belassen. Keine erfundenen Zeilen.
 Siglen sind OCIANA-Nachweise; alle Texte abrufbar über krc.orient.ox.ac.uk.

@@ -42,7 +42,9 @@ Am Fuß jedes Gedichts steht **zuerst der Fundort, dann die Corpus-Sigle** (das 
 
 ## Korpus-Ausgangsauswahl — 14 je Register (98)
 
-Die Basis-Auswahl aus dem Vollkorpus (vor v5-Kopfstücken, war-hier-Erweiterung und den 8 Verortungs-Ersätzen oben). Englische OCIANA-Glosse; Genealogien werden (außer in I und VII, wo sie Pointe sind) getilgt.
+Die Basis-Auswahl aus dem Vollkorpus (vor v5-Kopfstücken, war-hier-Erweiterung und den 8 Verortungs-Ersätzen oben). Englische OCIANA-Glosse; Genealogien werden (außer in „Er war hier“ und „Er schweigt“, wo sie Pointe sind) getilgt.
+
+**Historischer Stand:** Diese Liste zeigt die *ursprünglichen sieben* Konzept-Register mit ihren damaligen Namen. Im gebauten Band (oben) heißen die Kapitel anders und sind acht: „Er war hier“ ist aufgeteilt in **I stehe** (Genealogien) + **II schreibe** (Litanei „X war hier“); danach **III warte · IV bitte · V klage · VI verfluche · VII bezeuge · VIII schweige**. Acht der hier gelisteten Stimmen wurden später aus Verortungsgründen ersetzt (siehe „Fundort-Beizeilen“ oben).
 
 ### I. Er war hier
 *Präsentativ — Dasein als Akt: der bloße Name (oder die Ahnenkette), kein Verb. Aus den ~19.800 Signaturen + ~6.300 Minimal-Texten des Vollkorpus, die in keinem bisherigen Band vorkamen.*
@@ -172,7 +174,7 @@ Die Basis-Auswahl aus dem Vollkorpus (vor v5-Kopfstücken, war-hier-Erweiterung 
 
 ## Stand & nächste Schritte
 - [x] Nachdichtung ins deutsche Er-Form, je „Sigle“-Zeile darunter.
-- [x] Manuskript gebaut (`wer_dies_liest_register.docx`, 134 Stücke): Vorwort nach dem Sprechakt-Prinzip, sieben Register, v5-Kopfstücke.
+- [x] Manuskript gebaut (`wer_dies_liest_register.docx`, 134 Stücke): acht Register, v5-Kopfstücke, Einleitung + Nachwort mit zwei Tabellen (Corpus-Siglen, Fundorte) am Bandende.
 - [x] Kapitel I als „X war hier“-Litanei erweitert; Ich-Form-Überschriften.
 - [x] Fundort-Beizeilen normalisiert; 8 ortlose Stimmen verortet ersetzt.
 - [ ] Optional: Fundort-Anhang im Backmatter (alle Stücke nach Zonen/Clustern gruppiert).

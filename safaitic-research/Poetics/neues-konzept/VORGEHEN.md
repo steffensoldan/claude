@@ -88,14 +88,18 @@ Poetics/
 │   └── scripts/          generate_outputs.py
 │
 └── register/        Register-Band (Realisierung von Konzept A)
-    ├── wer_dies_liest_register.docx   Manuskript, 7 Register, 134 Stücke
+    ├── wer_dies_liest_register.docx   Manuskript, 8 Register, 134 Stücke
     ├── REGISTER_BAND_AUSWAHL.md       Auswahl, Fundorte, Manuskript-Stand
     └── scripts/build_register.py      Build (liest v5-Kopfstücke aus erweitert/)
 ```
 
 Hinweis: Das hier beschriebene Sieben-Register-Konzept ist im Ordner `register/`
-ausgearbeitet (eigener Band, Er-Form, Ich-Form-Überschriften schreibe…schweige,
-v5-Kopfstücke je Register, normalisierte Fundort-Beizeilen).
+ausgearbeitet — dort inzwischen **acht** Register (das ursprüngliche Kapitel
+„Ich war hier“ ist in „stehe“ = Ahnenreihen und „schreibe“ = Litanei „X war hier“
+aufgeteilt). Ich-Form-Überschriften: stehe · schreibe · warte · bitte · klage ·
+verfluche · bezeuge · schweige. Er-Form, v5-Kopfstücke je Register, normalisierte
+Fundort-Beizeilen (Fundort · Corpus), Einleitung + Nachwort mit zwei Tabellen
+(Corpus-Siglen, Fundorte) am Bandende.
 
 ---
 
