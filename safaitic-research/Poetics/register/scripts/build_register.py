@@ -42,16 +42,48 @@ def roman(t):    return para(run(t, '<w:b/><w:color w:val="7A5C3E"/><w:sz w:val=
 def regname(t):  return para(run(t, '<w:b/><w:sz w:val="30"/><w:szCs w:val="30"/>'), f'<w:pPr>{sp(after="40")}</w:pPr>')
 def subtitle(t): return para(run(t, '<w:color w:val="666666"/><w:sz w:val="20"/><w:szCs w:val="20"/>'), f'<w:pPr>{sp(after="200")}</w:pPr>')
 def line(t):     return para(run(t, '<w:sz w:val="22"/><w:szCs w:val="22"/>'), f'<w:pPr>{sp(after="40")}</w:pPr>')
-def sigle(t, ort=None):
-    label = "Sigle "+t if not ort else "Sigle "+t+" \u00b7 "+ort
+def sigle(t, ort="Fundort unbekannt"):
+    label = ort + " · " + t
     return para(run(label, '<w:color w:val="7A5C3E"/><w:sz w:val="16"/><w:szCs w:val="16"/>'), f'<w:pPr>{sp(after="280", before="60")}</w:pPr>')
 PAGEBREAK = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>'
+
+_BORD = ('<w:top w:val="single" w:color="DDDDDD" w:sz="4"/><w:left w:val="single" w:color="DDDDDD" w:sz="4"/>'
+         '<w:bottom w:val="single" w:color="DDDDDD" w:sz="4"/><w:right w:val="single" w:color="DDDDDD" w:sz="4"/>')
+_TBLB = _BORD + '<w:insideH w:val="single" w:color="DDDDDD" w:sz="4"/><w:insideV w:val="single" w:color="DDDDDD" w:sz="4"/>'
+EMPTY = '<w:p/>'
+def subhead(t): return para(run(t, '<w:b/><w:sz w:val="24"/><w:szCs w:val="24"/>'), f'<w:pPr>{sp(before="200", after="80")}</w:pPr>')
+def _cell(inner, w):
+    return (f'<w:tc><w:tcPr><w:tcW w:type="dxa" w:w="{w}"/><w:tcBorders>{_BORD}</w:tcBorders>'
+            '<w:tcMar><w:top w:type="dxa" w:w="60"/><w:left w:type="dxa" w:w="100"/>'
+            '<w:bottom w:type="dxa" w:w="60"/><w:right w:type="dxa" w:w="100"/></w:tcMar></w:tcPr>'+inner+'</w:tc>')
+def table(rows, w1=2400, w2=6600):
+    trs=[]
+    for a,b in rows:
+        ca=_cell(para(run(a,'<w:b/><w:sz w:val="18"/><w:szCs w:val="18"/>')), w1)
+        cb=_cell(para(run(b,'<w:sz w:val="18"/><w:szCs w:val="18"/>')), w2)
+        trs.append('<w:tr>'+ca+cb+'</w:tr>')
+    return (f'<w:tbl><w:tblPr><w:tblW w:type="dxa" w:w="{w1+w2}"/><w:tblBorders>{_TBLB}</w:tblBorders></w:tblPr>'
+            f'<w:tblGrid><w:gridCol w:w="{w1}"/><w:gridCol w:w="{w2}"/></w:tblGrid>'+''.join(trs)+'</w:tbl>')
+
 
 # Register: (Ziffer, Name · Sprechaktklasse, Konzept-Unterüberschrift,
 #            [v5-Kopfstücke: Sigle], [(Sigle, [Verszeilen]) Korpus-Stimmen])
 REGISTERS = [
-("I","schreibe",
- "Dasein als Akt — Deixis, kein Verb des Fühlens. Die reinste Form: „dies ist”.",
+("I","stehe",
+ "",
+ [],[
+ ("JaS 4",["Von Msk, Sohn des S²dt,","Sohn des Mḥlm, Sohn des S²dt,","Sohn des Mḥlm,","vom Stamm Tm."]),
+ ("JaS 5",["Von Tm, Sohn des Mḥlm,","Sohn des S²dt, Sohn des Mḥlm,","vom Stamm Tm."]),
+ ("JaS 15",["Von Ḥmr, Sohn des Bnġdw,","Sohn des S¹fʾ, Sohn des Ḥnf."]),
+ ("JaS 22",["Von Hnʾ, Sohn des S²nʾ,","Sohn des Gmr, Sohn des Ḍʾ."]),
+ ("JaS 13",["Von Gs²m, Sohn des S¹mr,","vom Stamm Bs¹ʾ.","Und er trauerte um Nḥṭ."]),
+ ("JaS 21",["Von Tʾl, Sohn des ʿz.","Und er trauerte um den Vater."]),
+ ("HCH 99",["Von ʿrb, Sohn des Hrs¹.","Und er trauerte um Hnʾ."]),
+ ("HCH 22",["Von Tm, Sohn des Ḫlṣ,","Sohn des Tm, Sohn des S²ʿ.","Und er trauerte um Hnʾ."]),
+ ("HCH 38",["Von S¹ʿd, Sohn des Ẓn, Sohn des Ṯlm.","Und er trauerte um Hnʾ."]),
+]),
+("II","schreibe",
+ "",
  ["RWQ 342","RWQ 187","HYGQ 24","KRS 1341"],[
  ("JaS 16",["Bnḥt war hier."]),
  ("HCH 117",["ʾnʿm war hier."]),
@@ -66,19 +98,10 @@ REGISTERS = [
  ("Rees 155",["S²d war hier."]),
  ("Rees 161 4",["Hnb war hier."]),
  ("Rees 176",["S¹drt war hier."]),
- ("JaS 4",["Von Msk, Sohn des S²dt,","Sohn des Mḥlm, Sohn des S²dt,","Sohn des Mḥlm,","vom Stamm Tm."]),
- ("JaS 5",["Von Tm, Sohn des Mḥlm,","Sohn des S²dt, Sohn des Mḥlm,","vom Stamm Tm."]),
- ("JaS 15",["Von Ḥmr, Sohn des Bnġdw,","Sohn des S¹fʾ, Sohn des Ḥnf."]),
- ("JaS 22",["Von Hnʾ, Sohn des S²nʾ,","Sohn des Gmr, Sohn des Ḍʾ."]),
- ("JaS 13",["Von Gs²m, Sohn des S¹mr,","vom Stamm Bs¹ʾ.","Und er trauerte um Nḥṭ."]),
- ("JaS 21",["Von Tʾl, Sohn des ʿz.","Und er trauerte um den Vater."]),
- ("HCH 99",["Von ʿrb, Sohn des Hrs¹.","Und er trauerte um Hnʾ."]),
- ("HCH 22",["Von Tm, Sohn des Ḫlṣ,","Sohn des Tm, Sohn des S²ʿ.","Und er trauerte um Hnʾ."]),
- ("HCH 38",["Von S¹ʿd, Sohn des Ẓn, Sohn des Ṯlm.","Und er trauerte um Hnʾ."]),
 ]),
-("II","warte",
+("III","warte",
  "Sehnsucht, die bleibt — Warten auf Regen, auf Familie, auf Rückkehr; im Stein für einen Späteren konserviert.",
- ["RSIS 110","Is.Mu 255","SIJ 30"],[
+ ["ASWS 73","RSIS 110","Is.Mu 255","SIJ 30"],[
  ("LP 1196",["Von Ms¹wd, Sohn des Whbn,","Sohn des Hrṯ, Sohn des Ms¹k,","Sohn des Qmr, Sohn des ʿwḏ,","Sohn des Whbʾl —","und er hielt Ausschau","nach dem Reiterzug."]),
  ("KRS 3051",["Die junge Kamelstute.","Er zog hinaus ins weite, offene Land","und verzweifelte","auf der Lauer nach der Raubschar."]),
  ("CSNS 796",["Er wartete","auf den glückenden Raubzug."]),
@@ -95,7 +118,7 @@ REGISTERS = [
  ("GSSH 1",["Er lag auf der Lauer","am Späherplatz,","nach Feinden mit Kamelen."]),
  ("C 2194",["Er hielt Ausschau.","Yalt — Beute von den Feinden."]),
 ]),
-("III","bitte",
+("IV","bitte",
  "Das Gebet, das im Stein steht — an die Gottheit gerichtet, doch der Stein ist das Medium; es verhallt nicht, es bleibt adressiert.",
  ["BS 209","MKJS 80","LP 1267","Is.Mu 88"],[
  ("AbSWS 42",["Er blieb die Trockenzeit.","Allat — gib Sicherheit."]),
@@ -113,7 +136,7 @@ REGISTERS = [
  ("C 1629",["Yalt —","Entkommen vom Bösen","in diesem Jahr."]),
  ("C 1660",["Allat —","dass er sicher sei."]),
 ]),
-("IV","klage",
+("V","klage",
  "Die Trauer als Denkmal — die Klage, dem Moment entzogen; die Namensliste ist die Form des Schmerzes.",
  ["LP 540","KRS 17","AbaNS 361","C 4273"],[
  ("CSNS 781",["Er weinte vor Kummer."]),
@@ -131,7 +154,7 @@ REGISTERS = [
  ("SSWS 28",["Er weinte vor Kummer."]),
  ("C 5367",["Er weinte vor Kummer."]),
 ]),
-("V","verfluche",
+("VI","verfluche",
  "Der Fluch, der nie endet — der performativste Akt: ein gesprochener Fluch verhallt, ein gemeißelter gilt ewig.",
  ["C 4803","RSIS 351","LP 243","C 2775"],[
  ("WH 368",["Diese Schrift.","Allat —","dem, der sie austilgt:","Blindheit und Lähmung,","Stummheit, Krätze und Räude."]),
@@ -149,9 +172,9 @@ REGISTERS = [
  ("C 5299",["Rudā —","blende, wer die Schrift auskratzt."]),
  ("LP 308",["Er trauerte um Mqm,","um ʿqrb, um S¹ḫr,","um Tmʾl, um Mqm, um Ḥml.","Allat —","Blindheit dem, der dies auskratzt."]),
 ]),
-("VI","bezeuge",
+("VII","bezeuge",
  "Zeugnis für Unbekannte — die Datierung als Akt: er war dabei, es war dieses Jahr; geschrieben für Fremde, die später kommen.",
- ["HSNS 5","LP 653","ASWS 73","C 2670","ISB 57"],[
+ ["HSNS 5","LP 653","C 2670","ISB 57"],[
  ("HSNS 1",["Er zog in die innere Wüste","im Jahr, als Agrippa starb."]),
  ("RQ.D 3",["Er trauerte um den Oheim,","den sie erschlugen,","im Jahr des ʾrm."]),
  ("LP 1291",["Er blieb die späten Regen in diesem Tal,","im Jahr, als der Sturzbach","mit seinen Kamelen vorüberzog."]),
@@ -167,7 +190,7 @@ REGISTERS = [
  ("RSIS 324",["Er weidete die Schafe","im Jahr des Krieges gegen die Juden."]),
  ("C 4902",["Er war hier","im Jahr des großen Regens","und jagte auf flachem Land."]),
 ]),
-("VII","schweige",
+("VIII","schweige",
  "Lücken, die sprechen — nicht jede Lücke ist Zufall; was fehlt, wird durch sein Fehlen bezeichnet.",
  ["RQ.A 5","WH 1867.1","WH 1501.2"],[
  ("JaS 23",["----, Sohn des br,","Sohn des ----,","ʿbkz ----,","vom Stamm ʿmn."]),
@@ -190,13 +213,13 @@ REGISTERS = [
 VORWORT = [
  "Wer diese Texte liest, merkt bald: die meisten sind keine Gedichte. Viele sind kürzer als ein Satz, manche nur ein Name. Das ist kein Mangel, sondern die Form. Safaitisch schreiben heißt, an einen Stein zu klopfen, an dem man gerade vorbeikommt — für niemanden Bestimmten, weil der Stein bleibt, wenn man weitergeht.",
  "Was so entsteht, ist kein Literatur-System, sondern ein Verständigen anderer Art: eines, das nicht auf die Gleichzeitigkeit von Sender und Empfänger angewiesen ist, das die Gottheit als Zeugen einschließt und das Schweigen als eigene Aussage kennt.",
- "Dieser Band ordnet darum nicht nach Thema, sondern nach Sprechhaltung. Jedes der sieben Register ist eine andere Art, mit dem Stein zu sprechen — vom bloßen Dasein über die Bitte und die Klage bis zum Fluch, zum Zeugnis und zuletzt zum Verstummen. Jedes Register eröffnen einige lange Inschriften aus der erweiterten Ausgabe; danach folgen die knappen Stimmen des Vollkorpus.",
- "Die Texte stehen in der dritten Person, wie ihre Originale (l-Fulān, „Von X“, danach „und er …“). Genealogien sind getilgt — außer dort, wo der Name selbst der Akt ist (Register I) oder wo das Fehlen spricht (Register VII). Lücken werden hier nicht geglättet; die Striche ---- bleiben stehen.",
+ "Dieser Band ordnet darum nicht nach Thema, sondern nach Sprechhaltung. Jedes der acht Register ist eine andere Art, mit dem Stein zu sprechen — vom Stehen in der Ahnenreihe und dem bloßen Dasein über das Warten, die Bitte und die Klage bis zum Fluch, zum Zeugnis und zuletzt zum Verstummen. Jedes Register eröffnen einige lange Inschriften aus der erweiterten Ausgabe; danach folgen die knappen Stimmen des Vollkorpus.",
+ "Die Texte stehen in der dritten Person, wie ihre Originale (l-Fulān, „Von X“, danach „und er …“). Genealogien sind getilgt — außer in „stehe“ (I), wo die Ahnenreihe selbst der Akt ist, und in „schweige“ (VIII), wo das Fehlen spricht. Lücken werden hier nicht geglättet; die Striche ---- bleiben stehen.",
 ]
 NOTE = [
- "Der Band schöpft aus dem Vollkorpus der ~31.800 safaitischen Inschriften (OCIANA), nicht aus einer Spitzenauswahl. Erschlossen sind damit auch die rund 18.500 reinen Signaturen und die Minimal-Texte, die in den bisherigen Bänden fehlten — sie tragen das Register „Er war hier“.",
- "Jedes Register ist gezielt aus seinem eigenen Korpus-Material gespeist: die Signaturen für I, die Anrufungen für III, die Fluchformeln für V, die fragmentarischen Steine für VII, die datierten für VI. Den Auftakt geben je Register Kopfstücke aus der erweiterten Ausgabe (lange Inschriften zuerst). Die Auswahl ist kuratiert und nicht repräsentativ; jede Nachdichtung trägt die OCIANA-Sigle ihrer Quelle.",
- "Übersetzungskette: gemeißelter Stein → philologische Lesung → englische OCIANA-Edition → deutsche Nachdichtung. Eckige Klammern und Striche ---- der Philologen bleiben in Register VII sichtbar.",
+ "Der Band schöpft aus dem Vollkorpus der ~31.800 safaitischen Inschriften (OCIANA), nicht aus einer Spitzenauswahl. Erschlossen sind damit auch die rund 18.500 reinen Signaturen und die Minimal-Texte, die in den bisherigen Bänden fehlten — sie tragen die Register „stehe“ (die Ahnenreihen) und „schreibe“ (die Litanei „X war hier“).",
+ "Jedes Register ist gezielt aus seinem eigenen Korpus-Material gespeist: die Signaturen für „schreibe“ und „stehe“, die Anrufungen für „bitte“, die Fluchformeln für „verfluche“, die fragmentarischen Steine für „schweige“, die datierten für „bezeuge“. Den Auftakt geben je Register Kopfstücke aus der erweiterten Ausgabe (lange Inschriften zuerst). Die Auswahl ist kuratiert und nicht repräsentativ; jede Nachdichtung trägt die OCIANA-Sigle ihrer Quelle.",
+ "Übersetzungskette: gemeißelter Stein → philologische Lesung → englische OCIANA-Edition → deutsche Nachdichtung. Eckige Klammern und Striche ---- der Philologen bleiben im Register „schweige“ sichtbar.",
 ]
 
 FINDSPOT = {
@@ -248,25 +271,25 @@ FINDSPOT = {
     'CSNS 781': 'Qāʿ al-Maḥfūr',
     'CSNS 796': 'Qāʿ al-Maḥfūr',
     'GSSH 1': 'Al-Mafraq',
-    'HCH 102': 'Cairn of Haniʾ',
-    'HCH 117': 'Cairn of Haniʾ',
-    'HCH 125': 'Cairn of Haniʾ',
-    'HCH 151': 'Cairn of Haniʾ',
-    'HCH 156': 'Cairn of Haniʾ',
-    'HCH 157': 'Cairn of Haniʾ',
-    'HCH 158.1': 'Cairn of Haniʾ',
-    'HCH 158.2': 'Cairn of Haniʾ',
-    'HCH 160': 'Cairn of Haniʾ',
-    'HCH 164': 'Cairn of Haniʾ',
-    'HCH 183': 'Cairn of Haniʾ',
-    'HCH 184': 'Cairn of Haniʾ',
-    'HCH 195': 'S. of Aratain S. of HF/S',
-    'HCH 22': 'Cairn of Haniʾ',
-    'HCH 31.1': 'Cairn of Haniʾ',
-    'HCH 38': 'Cairn of Haniʾ',
-    'HCH 75': 'Cairn of Haniʾ',
-    'HCH 85': 'Cairn of Haniʾ',
-    'HCH 99': 'Cairn of Haniʾ',
+    'HCH 102': 'Hani',
+    'HCH 117': 'Hani',
+    'HCH 125': 'Hani',
+    'HCH 151': 'Hani',
+    'HCH 156': 'Hani',
+    'HCH 157': 'Hani',
+    'HCH 158.1': 'Hani',
+    'HCH 158.2': 'Hani',
+    'HCH 160': 'Hani',
+    'HCH 164': 'Hani',
+    'HCH 183': 'Hani',
+    'HCH 184': 'Hani',
+    'HCH 195': 'bei Safawi',
+    'HCH 22': 'Hani',
+    'HCH 31.1': 'Hani',
+    'HCH 38': 'Hani',
+    'HCH 75': 'Hani',
+    'HCH 85': 'Hani',
+    'HCH 99': 'Hani',
     'HNSD 13': 'Jordanien (allg.)',
     'HSNS 1': 'Jordanien (allg.)',
     'HSNS 5': 'Jordanien (allg.)',
@@ -321,7 +344,7 @@ FINDSPOT = {
     'Rees 161 4': 'Ḥarrat al-Raǧil',
     'Rees 176': 'Ḥarrat al-Raǧil',
     'SIJ 10': 'Jathum',
-    'SIJ 1001': 'Cairn S. of the Baghdad ',
+    'SIJ 1001': 'bei Ruwayshid',
     'SIJ 14': 'Jathum',
     'SIJ 30': 'Jathum',
     'SIJ 323': 'Jawa',
@@ -343,6 +366,43 @@ FINDSPOT = {
     'ZN 1': 'Zimlet Nāṣir',
     'ZN 4': 'Fundort unbekannt',
 }
+
+CORPUS = [
+ ("C", "Corpus Inscriptionum Semiticarum, Pars V — safaitische Inschriften (u. a. Dussaud & Macler; Ryckmans 1950)."),
+ ("LP", "E. Littmann, Safāʾitic Inscriptions (Leiden 1943)."),
+ ("WH", "F. V. Winnett & G. L. Harding, Inscriptions from Fifty Safaitic Cairns (Toronto 1978)."),
+ ("KRS", "Basalt Desert Rescue Survey (G. M. H. King, 1989) — NO-jordanische Ḥarrah."),
+ ("HCH", "G. L. Harding, The Cairn of Hāniʾ (1953)."),
+ ("SIJ", "F. V. Winnett, Safaitic Inscriptions from Jordan (Toronto 1957)."),
+ ("ISB", "W. G. Oxtoby, Some Inscriptions of the Safaitic Bedouin (New Haven 1968)."),
+ ("CSNS", "V. A. Clark, A Study of New Safaitic Inscriptions from Jordan (1979)."),
+ ("Rees", "L. W. B. Rees, frühe Aufnahmen aus der Ḥarrat al-Raǧil (1920er)."),
+ ("Is.L / Is.Mu", "Sammlungen aus al-ʿĪsāwī (Rif Dimašq); Nachweis im OCIANA-Eintrag."),
+ ("RQ.A / RQ.D", "Aufnahmen aus Riǧm Qaʿqūl (Rif Dimašq); OCIANA."),
+ ("RSIS / ASWS / SSWS / AbSWS / RWQ", "Surveys der Wādī-Sārah-/Salma-Region (Al-Mafraq); OCIANA."),
+ ("AbaNS / HaNSB / HaNS / HNSD / HSNS", "nordjordanische Safaitic-Surveys; OCIANA."),
+ ("JaS / KWQ / CEDS / GSSH / MKJS / BS / HYGQ / WAMS / RVP / BWM / ASFF / ZN", "weitere OCIANA-Survey-Siglen; vollständiger Editionsnachweis jeweils im OCIANA-Eintrag."),
+]
+FINDORT = [
+ ("Hani", "Steinhügel (Cairn) des Ḥāniʾ, NO-jordanische Ḥarrah; 1953 von Harding ergraben (Sammlung HCH)."),
+ ("Km 612", "Kilometerstein 612 (≈ 32 km westl. Badana) an der Pipeline-Piste — Survey-Fundpunkt, NO-Jordanien."),
+ ("Wādī Salma", "Wādī Salma, Provinz Al-Mafraq, NO-Jordanien."),
+ ("Wādī Sārah", "Wādī Sārah, Provinz Al-Mafraq, NO-Jordanien."),
+ ("Ḥarrat al-Raǧil", "Basaltwüste al-Raǧil, NO-Jordanien / nördl. Saudi-Arabien."),
+ ("Jathum", "Jathum, NO-Jordanien."),
+ ("Jawa / Wādī Miqāṭ / Qāʿ al-Maḥfūr / Zimlet Nāṣir / bei Safawi / bei Ruwayshid", "weitere Fundpunkte der NO-jordanischen Ḥarrah."),
+ ("Zalaf", "Gegend um Zalaf am Wādī al-Shām, südsyrische Ṣafā."),
+ ("al-ʿĪsāwī", "al-ʿĪsāwī, Rif Dimašq, südsyrische Ṣafā."),
+ ("Riǧm Qaʿqūl", "Riǧm Qaʿqūl, Rif Dimašq, Süd-Syrien."),
+ ("Ǧabal Says", "Ǧabal Says (Basaltmassiv), Rif Dimašq, Süd-Syrien."),
+ ("Tall aḍ-Ḍabiʿ", "Tall aḍ-Ḍabiʿ / Wādī as-Samin, Süd-Syrien."),
+ ("Khirbat al-Hubayrīyah / al-Umbāšī / Al-Mrōshan", "Fundpunkte in Al-Suwaydā, Süd-Syrien."),
+ ("Al-Mafraq", "Provinz Al-Mafraq (NO-Jordanien) — genauer Fundpunkt nicht angegeben."),
+ ("Rif Dimašq / Al-Suwaydā", "südsyrische Provinzen — genauer Fundpunkt nicht angegeben."),
+ ("Jordanien / Syrien (allg.)", "nur das Land überliefert (Ḥarrah bzw. Ṣafā)."),
+ ("Site / Tell / EDS / Cairn / WH Cairn + Nr.", "interne Survey-Codes — Fundpunkt ohne benannten Ort."),
+ ("Fundort unbekannt", "keine Ortsangabe im OCIANA-Eintrag."),
+]
 
 def v5_poem_lines(raw):
     """Aus der v5-document.xml: Sigle -> Verszeilen (Prosa >90 Zeichen ausgefiltert)."""
@@ -378,13 +438,12 @@ def main():
     xml = [title("Wer dies liest, lebe lang"),
            tsub("Safaitische Inschriften, nachgedichtet", 26),
            tsub("Aus der nordarabischen Steppe · 1. Jh. v. – 4. Jh. n. Chr.", 20, "7A5C3E"),
-           tsub("Sieben Register · nach Sprechakten geordnet", 20),
-           PAGEBREAK, head("Vorwort")] + [body(p) for p in VORWORT]
+           tsub("Acht Register · nach Sprechakten geordnet", 20)]
 
     total = 0
     for rom, name, sub, v5head, poems in REGISTERS:
         xml.append(PAGEBREAK)
-        xml += [roman(rom), regname(name), subtitle(sub)]
+        xml += [roman(rom), regname(name)]
         for sg in v5head:                       # Kopfstücke aus v5
             lines = v5lines.get(sg)
             if not lines:
@@ -395,7 +454,13 @@ def main():
             xml += [line(l) for l in lines] + [sigle(sg, FINDSPOT.get(sg, "Fundort unbekannt"))]
             total += 1
 
-    xml += [PAGEBREAK, head("Editorische Notiz")] + [body(p) for p in NOTE]
+    xml += [PAGEBREAK, head("Nachwort")] + [body(p) for p in VORWORT] + [body(p) for p in NOTE]
+    xml += [subhead("Die Corpus-Siglen"),
+            body("Jede Nachdichtung nennt am Fuß zuerst den Fundort, dann die Corpus-Sigle. Die Siglen bezeichnen die Sammlung oder Edition, in der die Inschrift zuerst erfasst wurde:"),
+            table(CORPUS), EMPTY,
+            subhead("Die Fundorte"),
+            body("Der Fundort ist normalisiert (spezifischster benannter Ort); zwei Zonen ordnen: die nordostjordanische Ḥarrah und die südsyrische Ṣafā."),
+            table(FINDORT), EMPTY]
     doc = decl + root_open + "<w:body>" + "".join(xml) + sect + "</w:body></w:document>"
 
     with zipfile.ZipFile(V5) as zin:

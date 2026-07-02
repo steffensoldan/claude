@@ -12,24 +12,29 @@ Quellen: `neues-konzept/data/safaitic_full_corpus.xlsx` (31.768 safaitische, mit
 
 ## Stand des Manuskripts (gebaut: `wer_dies_liest_register.docx`)
 
-Realisiert sind **134 Stücke** in sieben Registern, gestaltet wie die erweiterte Ausgabe v5 (Georgia, Er-Form, „Sigle“-Zeilen). Über die Korpus-Ausgangsauswahl unten hinaus enthält der Band:
+Realisiert sind **134 Stücke** in **acht** Registern, gestaltet wie die erweiterte Ausgabe v5 (Georgia, Er-Form). Über die Korpus-Ausgangsauswahl unten hinaus enthält der Band:
 
-**Kapitelüberschriften** = Verb in der Ich-Form (das einzige Ich im Band): schreibe · warte · bitte · klage · verfluche · bezeuge · schweige. Darunter je eine Konzept-Unterüberschrift. Kapitel I „schreibe“ und VII „schweige“ rahmen den Band: reine, mündungsfreie Schrift ↔ Verstummen.
+**Kapitelüberschriften** = Verb in der Ich-Form (das einzige Ich im Band): **stehe · schreibe · warte · bitte · klage · verfluche · bezeuge · schweige**. Kapitel I „stehe“ (die Ahnenreihen) und VIII „schweige“ (das Verstummen) rahmen den Band. Unterüberschriften sind vorerst **entfernt** (bis eine bessere Fassung feststeht).
 
-**v5-Kopfstücke** je Register (lange Inschriften zuerst, aus der erweiterten Ausgabe übernommen — der Band ist dadurch nicht mehr überschneidungsfrei zur erweiterten Ausgabe):
-- I: RWQ 342, RWQ 187, HYGQ 24, KRS 1341
-- II: RSIS 110, Is.Mu 255, SIJ 30
-- III: BS 209, MKJS 80, LP 1267, Is.Mu 88
-- IV: LP 540, KRS 17, AbaNS 361, C 4273
-- V: C 4803, RSIS 351, LP 243, C 2775
-- VI: HSNS 5, LP 653, **ASWS 73** (aus II hierher verschoben — datiert), C 2670, ISB 57
-- VII: RQ.A 5, WH 1867.1, WH 1501.2
+**Aufteilung des alten Kapitels I:** Die Genealogie-Gedichte („Von X, Sohn des Y …“) bilden jetzt das eigene Kapitel **I „stehe“**; die „X war hier“-Litanei der reinen Signaturen wird Kapitel **II „schreibe“**.
 
-**Kapitel I** als „X war hier“-Litanei erweitert: die fünf reinen Signaturen auf „X war hier“ umgestellt + 8 neue (HCH 75/158.2/31.1, Rees 150/151/155/161 4/176) — geografisch dicht (Cairn of Haniʾ, Km 612, Ḥarrat al-Raǧil). **Kapitel II**: Genealogie-Gedicht **LP 1196** (sieben Generationen + Späh-Verb) neu.
+**v5-Kopfstücke** je Register (lange Inschriften zuerst, aus der erweiterten Ausgabe — der Band ist dadurch nicht mehr überschneidungsfrei zur erweiterten Ausgabe):
+- I stehe: — (keine; nur Korpus-Genealogien)
+- II schreibe: RWQ 342, RWQ 187, HYGQ 24, KRS 1341
+- III warte: **ASWS 73** (zurück aus VI), RSIS 110, Is.Mu 255, SIJ 30
+- IV bitte: BS 209, MKJS 80, LP 1267, Is.Mu 88
+- V klage: LP 540, KRS 17, AbaNS 361, C 4273
+- VI verfluche: C 4803, RSIS 351, LP 243, C 2775
+- VII bezeuge: HSNS 5, LP 653, C 2670, ISB 57
+- VIII schweige: RQ.A 5, WH 1867.1, WH 1501.2
+
+**Kapitel II** als „X war hier“-Litanei: die fünf reinen Signaturen auf „X war hier“ umgestellt + 8 neue (HCH 75/158.2/31.1, Rees 150/151/155/161 4/176) — geografisch dicht (Hani, Km 612, Ḥarrat al-Raǧil). **Kapitel III**: Genealogie-Gedicht **LP 1196** (sieben Generationen + Späh-Verb) neu.
+
+**Einleitung + Nachwort** stehen zusammen in einem Schluss-Kapitel „Nachwort“ **nach** den Gedichten, mit zwei Tabellen: **Corpus-Siglen** (Auflösung der Abkürzungen) und **Fundorte** (Erklärung, inkl. generischer Angaben wie „Jordanien“, „Km 612“).
 
 ### Fundort-Beizeilen (Normalisierung)
 
-Unter jeder Sigle steht der normalisierte Fundort, z. B. „Sigle HCH 117 · Cairn of Haniʾ“. Regeln: Survey-Apparat (Seitenrefs, Anführungszeichen, „Unknown,“) gestrichen; spezifischster benannter Ort gewählt; zwei Zonen als Oberordnung — **NO-Jordanien (Ḥarrah)** und **Süd-Syrien (Ṣafā)**. Mapping als statisches `FINDSPOT`-Dict im Build-Skript. Größte Cluster: Cairn of Haniʾ (HCH), Km 612 (JaS), Zalaf (C), Wādī Salma, al-ʿĪsāwī, Ḥarrat al-Raǧil, Riǧm Qaʿqūl, Tall aḍ-Ḍabiʿ.
+Am Fuß jedes Gedichts steht **zuerst der Fundort, dann die Corpus-Sigle** (das Wort „Sigle“ gestrichen), z. B. „Hani · HCH 117“. „Cairn of Haniʾ“ ist zu **„Hani“** verkürzt. Regeln: Survey-Apparat (Seitenrefs, Anführungszeichen, „Unknown,“) gestrichen; spezifischster benannter Ort gewählt; zwei Zonen — **NO-Jordanien (Ḥarrah)** / **Süd-Syrien (Ṣafā)**. Mapping als statisches `FINDSPOT`-Dict im Build-Skript. Größte Cluster: Hani (HCH), Km 612 (JaS), Zalaf (C), Wādī Salma, al-ʿĪsāwī, Ḥarrat al-Raǧil, Riǧm Qaʿqūl, Tall aḍ-Ḍabiʿ.
 
 **8 ortlose Korpus-Stimmen → verortete Ersätze aus starken Clustern:** WH 1116→**RSIS 322** (Tall aḍ-Ḍabiʿ) · AWS 379→**AbSWS 15** (Wādī Salma) · WH 1916→**C 2194** (Zalaf) · RVP 1→**AbSWS 42** (Wādī Salma) · ZN 4→**C 2190** (Zalaf) · WH 1851→**RWQ 304** (Wādī Salma) · RVP 10→**C 1146** (Riǧm Qaʿqūl) · WAMS 4→**SIJ 10** (Jathum).
 
