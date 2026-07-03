@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wisskomm-Viz Dashboard</title>
+<style>
+  :root {
+    --bg: #0B132B;
+    --card-bg: rgba(28, 37, 65, 0.4);
+    --card-border: rgba(91, 192, 190, 0.15);
+    --primary: #5BC0BE;
+    --text: #F4F4F9;
+    --text-muted: #8E9AAF;
+    --error: #FF5A5F;
+  }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: system-ui, -apple-system, sans-serif;
+    min-height: 100vh; padding: 48px 24px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container {
+    max-width: 900px; margin: 0 auto;
+  }
+  header {
+    margin-bottom: 48px; border-bottom: 1px solid var(--card-border);
+    padding-bottom: 24px;
+  }
+  h1 { margin: 0 0 8px 0; font-weight: 700; font-size: 2.2rem; }
+  p.subtitle { margin: 0; color: var(--text-muted); font-size: 1.1rem; }
+  
+  /* --- Card & Forms --- */
+  .card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 28px; backdrop-filter: blur(12px);
+    margin-bottom: 36px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  }
+  .card h2 { margin: 0 0 20px 0; font-size: 1.4rem; color: var(--primary); }
+  
+  .form-group { margin-bottom: 20px; }
+  label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.95rem; }
+  input[type="file"] {
+    display: block; width: 100%; padding: 12px;
+    background: rgba(11, 19, 43, 0.5); border: 1px dashed var(--card-border);
+    border-radius: 6px; color: var(--text); cursor: pointer;
+  }
+  textarea {
+    width: 100%; height: 100px; padding: 12px;
+    background: rgba(11, 19, 43, 0.5); border: 1px solid var(--card-border);
+    border-radius: 6px; color: var(--text); font-family: inherit; font-size: 1rem;
+    resize: vertical; box-sizing: border-box;
+  }
+  textarea:focus { outline: none; border-color: var(--primary); }
+  
+  button.btn {
+    background: var(--primary); color: var(--bg); border: none;
+    padding: 12px 24px; font-size: 1rem; font-weight: 700;
+    border-radius: 6px; cursor: pointer; transition: opacity 0.2s, transform 0.1s;
+  }
+  button.btn:hover { opacity: 0.9; }
+  button.btn:active { transform: scale(0.98); }
+  
+  /* --- List --- */
+  .pub-list { display: grid; gap: 18px; }
+  .pub-item {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 8px; padding: 20px; display: flex;
+    justify-content: space-between; align-items: center;
+    transition: border-color 0.2s;
+  }
+  .pub-item:hover { border-color: rgba(91, 192, 190, 0.4); }
+  .pub-info h3 { margin: 0 0 6px 0; font-size: 1.15rem; font-weight: 600; }
+  .pub-info .meta { font-size: 0.82rem; color: var(--text-muted); }
+  
+  .actions { display: flex; gap: 12px; }
+  .actions a {
+    text-decoration: none; padding: 8px 16px; font-size: 0.9rem;
+    border-radius: 4px; font-weight: 600; transition: background 0.2s;
+  }
+  .actions a.btn-view {
+    background: transparent; color: var(--primary); border: 1px solid var(--primary);
+  }
+  .actions a.btn-view:hover { background: rgba(91, 192, 190, 0.15); }
+  .actions a.btn-edit {
+    background: var(--primary); color: var(--bg);
+  }
+  .actions a.btn-edit:hover { opacity: 0.9; }
+
+  /* --- Spinner --- */
+  .loading-overlay {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(11, 19, 43, 0.85); backdrop-filter: blur(8px);
+    z-index: 1000; justify-content: center; align-items: center; flex-direction: column;
+  }
+  .spinner {
+    width: 50px; height: 50px; border: 5px solid rgba(91, 192, 190, 0.2);
+    border-top-color: var(--primary); border-radius: 50%;
+    animation: spin 1s linear infinite; margin-bottom: 20px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { font-size: 1.2rem; font-weight: 500; letter-spacing: 0.05em; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>Wisskomm-Viz Dashboard</h1>
+    <p class="subtitle">Interaktive Befund-Aufbereitung &bull; ZEW Hausdienst</p>
+  </header>
+
+  <section class="card">
+    <h2>Neues Paper aufbereiten</h2>
+    <form action="/wisskomm/upload" method="post" enctype="multipart/form-data" id="uploadForm">
+      <div class="form-group">
+        <label for="file">Discussion Paper auswählen (PDF-Format):</label>
+        <input type="file" id="file" name="file" accept="application/pdf" required>
+      </div>
+      <div class="form-group">
+        <label for="instructions">Optionale Anforderungen / Wünsche (Deutsch):</label>
+        <textarea id="instructions" name="instructions" placeholder="Z. B.: Fokus auf Flachstahl legen. Cap-Szenario weglassen. Legendfarben anpassen..."></textarea>
+      </div>
+      <button type="submit" class="btn">Aufbereitung starten (Claude API)</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Bestehende Publikationen</h2>
+    {% if publications %}
+      <div class="pub-list">
+        {% for pub in publications %}
+          <div class="pub-item">
+            <div class="pub-info">
+              <h3>{{ pub.title }}</h3>
+              <div class="meta">ID / Slug: <code>{{ pub.slug }}</code> &bull; Zuletzt geändert: {{ pub.last_modified }}</div>
+            </div>
+            <div class="actions">
+              <a href="/wisskomm/view/{{ pub.slug }}/index.html" class="btn-view" target="_blank">Ansehen</a>
+              <a href="/wisskomm/edit/{{ pub.slug }}" class="btn-edit">Verfeinern / Chat</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p style="color: var(--text-muted); text-align: center; margin: 20px 0;">Noch keine Publikationen erstellt. Lade oben ein PDF hoch, um zu beginnen!</p>
+    {% endif %}
+  </section>
+</div>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text">Befund wird extrahiert & analysiert...</div>
+  <p style="color: var(--text-muted); margin-top: 8px; font-size: 0.9rem;">Dies kann 15-30 Sekunden dauern.</p>
+</div>
+
+<script>
+  document.getElementById("uploadForm").onsubmit = function() {
+    document.getElementById("loadingOverlay").style.display = "flex";
+  };
+</script>
+</body>
+</html>

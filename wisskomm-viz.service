@@ -1,0 +1,17 @@
+# HINWEIS: Diese Unit ist derzeit NICHT aktiv. Die Installation als System-Unit
+# erfordert root-Rechte, die auf der ZEW-VM nicht vorliegen. Der Autostart läuft
+# stattdessen über einen @reboot-Crontab-Eintrag (siehe deploy.py, Schritt 8).
+# Diese Datei ist für den Fall vorgehalten, dass später root-Rechte verfügbar sind.
+[Unit]
+Description=ZEW Wisskomm-Viz Web Service
+After=network.target
+
+[Service]
+User=sts
+WorkingDirectory=/home/sts/wisskomm-viz
+ExecStart=/home/sts/wisskomm-viz/venv/bin/uvicorn app:app --host 127.0.0.1 --port 8090 --env-file .env
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,14 @@
+# Secrets / Zugangsdaten
+.env
+*.key
+*.pem
+
+# Python-Laufzeit
+venv/
+__pycache__/
+*.pyc
+
+# Laufzeit-Artefakte des Dienstes (nicht versionieren)
+sessions/
+output/
+uvicorn.log
