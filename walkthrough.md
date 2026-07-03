@@ -216,3 +216,18 @@ Nutzer wählen beim Upload den Ausgabe-Zugang: **Fixes HTML** (unverändert) ode
     funktionieren unabhängig davon, unter welcher URL die Seite gerade angezeigt wird.
 *   Verifiziert (extern über Proxy): Leiste vorhanden, alle Zielformate 200; `dp26008`/`dp26018`
     neu gerendert.
+
+## 6. Fix (03.07.2026): Upload großer PDFs → leere Antwort (NS_ERROR_NET_EMPTY_RESPONSE)
+*   **Ursache (aus gunicorn.log):** Der Django-Proxy (`stellar-galaxy/coop_app/views.py:27`,
+    `body = request.body`) liest den kompletten Upload in den Speicher; das unterliegt
+    Djangos `DATA_UPLOAD_MAX_MEMORY_SIZE` (Default **2,5 MB**). PDFs darüber → `RequestDataTooBig`
+    → leere Antwort, **bevor** die Anfrage Wisskomm erreicht. Kein Wisskomm-Bug.
+*   **Fix (PROJEKTÜBERGREIFEND, in `stellar-galaxy` = Antigravity):** in `coop_app/settings.py`
+    `DATA_UPLOAD_MAX_MEMORY_SIZE` und `FILE_UPLOAD_MAX_MEMORY_SIZE` = **10 MB**; Gunicorn neu
+    gestartet. Verifiziert: 3-MB-Upload passiert den Proxy (HTTP 400 „PDF-Extraktion",
+    kein RequestDataTooBig).
+*   **ACHTUNG Drift:** Änderung direkt auf der VM gemacht; die lokale Kopie unter
+    `projects/Projekte-Antigravity/stellar-galaxy` ist dadurch veraltet → mit Antigravity
+    synchronisieren. Wisskomm selbst wurde für diesen Fix NICHT geändert.
+*   **Bekannte Rest-Grenze:** Sehr große Paper könnten das 120-s-Timeout (Claude + Render)
+    treffen (bewusst nicht angefasst).
