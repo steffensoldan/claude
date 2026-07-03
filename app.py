@@ -63,11 +63,15 @@ async def dashboard(request: Request):
     """Zeigt die Übersicht aller Publikationen und das Upload-Formular."""
     publications = []
     
-    # Durchlaufe alle Sessions und sammle Metadaten
+    # Durchlaufe alle Sessions und sammle Metadaten.
+    # Quarto-Sessions gehören NICHT in diese Fixed-HTML-Liste (sie haben kein /view/-Ziel,
+    # sondern erscheinen unten in der Quarto-Sektion mit korrekten /pub/-Links).
     for session_file in SESSIONS_DIR.glob("*.json"):
         try:
             with open(session_file, "r", encoding="utf-8") as f:
                 session = json.load(f)
+                if session.get("output_mode", "html") == "quarto":
+                    continue
                 publications.append({
                     "slug": session_file.stem,
                     "title": session.get("data", {}).get("title", "Unbenannter Befund"),

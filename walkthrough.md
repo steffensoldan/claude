@@ -196,3 +196,12 @@ Nutzer wählen beim Upload den Ausgabe-Zugang: **Fixes HTML** (unverändert) ode
 *   An die aktuelle (BCA-)Datenstruktur gebunden — wie das Fixed-HTML.
 *   KI-Textfelder mit HTML-Tags: sauber im HTML-Output, in PDF/PPTX ggf. ignoriert.
 *   Kein Refine/Chat für Quarto-Pubs (generate-once); Live-Render blockiert kurz (Sekunden).
+
+## 4. Fix (03.07.2026): Quarto-Uploads erzeugten toten /view/-Link
+*   **Symptom:** Quarto-Uploads (z. B. `dp26018`) tauchten auch in „Bestehende Publikationen"
+    (Fixed-HTML) auf, dort mit `/wisskomm/view/<slug>/…` → 404 (kein Fixed-HTML-Output).
+*   **Fix (`app.py`):** Dashboard-Route überspringt Sessions mit `output_mode == "quarto"`
+    in der Fixed-HTML-Liste; sie erscheinen nur in der Quarto-Sektion mit `/pub/`-Links
+    (Web/PDF/Folien/PPTX). Verifiziert: `view/dp26018` = 0 Links, `pub/dp26018` = 4 Links.
+*   **Legibility (`publication.qmd.j2`):** größere Schrift (14) + höhere Auflösung (dpi 160)
+    + größere Beschriftungen/Figuren; `dp26018` neu gerendert.
