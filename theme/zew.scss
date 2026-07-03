@@ -1,0 +1,54 @@
+/*-- scss:defaults --*/
+// ZEW-CD-Farben (aus RGB normalisiert). Ergänzt die zentralen brand-Werte.
+$zew-intrans:    #394846;
+$zew-eisblau:    #C2DDE1;
+$zew-blue-2:     #80B3C4;
+$zew-green:      #CEDB2D;
+$zew-green-dark: #A2BC0C;
+$zew-grey:       #575756;
+
+$body-bg: #ffffff;
+
+/*-- scss:rules --*/
+
+// ---- Hero / Signature ----
+.hero {
+  margin: 0 0 2.5rem 0;
+  padding: 2.5rem 0 1.5rem 0;
+  border-bottom: 3px solid $zew-eisblau;
+}
+.hero .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: .72rem;
+  color: $zew-grey;
+}
+.hero h1 {
+  font-size: clamp(1.9rem, 4.5vw, 3rem);
+  line-height: 1.08;
+  margin: .5rem 0 1rem 0;
+  color: $zew-intrans;
+}
+.hero .lede { font-size: 1.2rem; max-width: 40rem; }
+
+// ---- Signal-Meter (Anteil des übertragenen Preissignals) ----
+.signal-meter { margin: 2rem 0 0 0; display: grid; gap: .6rem; }
+.signal-row { display: grid; grid-template-columns: 12rem 1fr 4rem; align-items: center; gap: .75rem; }
+.signal-row .name { font-size: .9rem; }
+.signal-row .track { height: 1.5rem; border-radius: 2px; background: rgba(57,72,70,.08); overflow: hidden; }
+.signal-row .fill { height: 100%; border-radius: 2px; }
+.signal-row .fill.full    { background: $zew-blue-2; }   // volles Signal
+.signal-row .fill.diluted { background: $zew-grey; }     // verdünntes/verlorenes Signal
+.signal-row .pct { font-variant-numeric: tabular-nums; font-weight: 600; text-align: right; }
+@media (max-width: 600px) { .signal-row { grid-template-columns: 1fr; } .signal-row .track { order: 3; } }
+
+// ---- KPI-Karten ----
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: 1rem; margin: 2rem auto; }
+.kpi { border: 1px solid rgba(57,72,70,.15); border-radius: 6px; padding: 1.1rem 1.2rem; }
+.kpi .num { font-family: Georgia, serif; font-size: 2.1rem; line-height: 1; color: $zew-green-dark; font-variant-numeric: tabular-nums; }
+.kpi .lab { font-size: .85rem; color: $zew-grey; margin-top: .4rem; }
+
+// ---- Schlussfolgerungen ----
+.takeaways { counter-reset: t; }
+.takeaways .item { display: grid; grid-template-columns: 2.4rem 1fr; gap: 1rem; padding: 1rem 0; border-top: 1px solid rgba(57,72,70,.15); }
+.takeaways .item::before { counter-increment: t; content: counter(t); font-family: Georgia, serif; font-size: 1.4rem; color: $zew-blue-2; }

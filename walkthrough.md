@@ -64,3 +64,47 @@ Zweite Änderungsrunde durch Claude Code: Beseitigung eines Secret-Lecks, Härtu
 ## 5. Offen
 *   SSH-Key-Auth statt Passwort in `deploy.py` (separat vereinbart).
 *   Echter Reboot-Test des `@reboot`-Autostarts steht aus (root erforderlich).
+
+---
+
+# Walkthrough (Stand: 03.07.2026) — Quarto-Pilot (Ausbaustufe 3)
+
+Isolierter Pilot des im `implementation_plan.md` (Teil J) entworfenen Quarto-Hausdienstes:
+aus einer Quelle mehrere Formate mit zentraler ZEW-CD. Kein Eingriff in den laufenden
+FastAPI-Dienst.
+
+## 1. Neue Dateien (Repo)
+*   `_quarto.yml` — 4 Formate (html, typst/PDF, revealjs, pptx); `brand: _brand.yml`; `embed-resources`.
+*   `_brand.yml` — zentrale ZEW-CD; Farben aus den offiziellen RGB-Werten normalisiert;
+    System-Schrift als DSGVO-sauberer Platzhalter (ZEW-Hausschrift folgt als WOFF2).
+*   `theme/zew.scss` — HTML-Feinschliff (Hero, Signal-Meter, KPI-Karten).
+*   `templates/reference-zew.pptx` — PPTX-CD-Vorlage (Theme-Farbschema + Schriften via python-pptx).
+*   `publications/zew-dp-26-021/index.qmd` + `data/*.csv` + `data/README.md` — Referenz-DP;
+    Grafiken mit matplotlib in CD-Farben (formatübergreifend statisch).
+
+## 2. Bewusste Pilot-Entscheidungen
+*   **Charts als matplotlib-Standbilder** (statt Observable/interaktiv), damit alle vier Formate
+    aus derselben Quelle funktionieren (Interaktivität ginge nur in HTML/RevealJS).
+*   **Kein Marken-Rot:** Die ZEW-CD führt kein Rot; die Signatur „signal/diluted" nutzt Blau
+    (voll) vs. Grau (verdünnt). Finale Festlegung offen.
+
+## 3. Build-Umgebung auf der VM (user-lokal, ohne root)
+*   Quarto 1.9.38 nach `~/opt/quarto-1.9.38` (Tarball, kein root).
+*   Isolierter venv `~/wisskomm-quarto-pilot/.venv` (via `virtualenv`) mit
+    `ipykernel nbclient nbformat matplotlib pandas pyyaml`.
+*   Render mit `QUARTO_PYTHON` auf den venv gesetzt. Pilot liegt getrennt vom Dienst unter
+    `~/wisskomm-quarto-pilot/` — der FastAPI-Dienst bleibt unberührt.
+
+## 4. Testergebnisse & Verifikation
+1.  **Render:** alle vier Formate erzeugt — `index.html` (self-contained), `index.pdf` (Typst),
+    `slides.html` (RevealJS), `index.pptx`.
+2.  **DSGVO (statisch):** keine `fonts.googleapis`/`gstatic`; keine externen `src`/`href`/`url()`;
+    Assets als `data:`-URIs eingebettet. Finaler Netzwerk-Monitor zur Laufzeit steht als
+    letzte Bestätigung noch aus.
+3.  **PPTX-Realität:** Folien-XML enthält nativen `<a:t>`-Text (editierbar); 3 Chart-Bilder
+    unter `ppt/media/` — bestätigt: Text editierbar, Grafiken als Standbilder.
+
+## 5. Offen
+*   Serving der Quarto-Ausgaben unter eigener URL (getrennte Eingänge) — Folgephase.
+*   ZEW-Hausschrift (WOFF2) einbinden; offizielles CD-Handbuch gegenprüfen.
+*   „signal vs. diluted" ohne Marken-Rot final festlegen.

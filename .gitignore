@@ -12,3 +12,8 @@ __pycache__/
 sessions/
 output/
 uvicorn.log
+
+# Quarto-Build-Output und lokale venv (nicht versionieren)
+_site/
+.venv/
+.quarto/

@@ -1,0 +1,41 @@
+# Zentrale Quarto-Projektkonfiguration. Eine Quelle (.qmd) -> mehrere Formate.
+# Quarto sucht diese Datei beim Rendern eines Unterordners aufwärts im Baum;
+# jede Publikation unter publications/<slug>/ erbt Format und CD automatisch.
+project:
+  type: default
+  output-dir: _site
+
+# Zentrale ZEW-CD für alle Formate (Farben, Schriften).
+brand: _brand.yml
+
+format:
+  # 1) Web-Seite (Basis, self-contained -> DSGVO)
+  html:
+    theme: [cosmo, theme/zew.scss]
+    embed-resources: true
+    toc: true
+    toc-title: "Inhalt"
+    smooth-scroll: true
+    lang: de
+  # 2) PDF via Typst (schnell, kein LaTeX nötig)
+  typst:
+    papersize: a4
+    margin:
+      x: 2.5cm
+      y: 2.5cm
+  # 3) HTML-Folien (behalten CD; stärkstes Präsentationsformat)
+  # eigener Dateiname, sonst kollidiert die .html-Ausgabe mit dem html-Format
+  revealjs:
+    output-file: slides.html
+    theme: default
+    embed-resources: true
+    slide-number: true
+    lang: de
+  # 4) PowerPoint (Text/Tabellen editierbar im CD-Template; Charts als Standbilder)
+  pptx:
+    reference-doc: templates/reference-zew.pptx
+
+execute:
+  echo: false
+  warning: false
+  freeze: auto

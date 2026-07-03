@@ -2,9 +2,9 @@
 
 ## Aktueller Stand
 * **Zuletzt bearbeitet:** 2026-07-03 durch Claude Code
-* **Letzter Meilenstein:** Sicherheits- und Betriebs-Härtung + Ersteinrichtung der Versionskontrolle. Zugangsdaten aus `deploy.py` entfernt (jetzt Env-Vars), Uvicorn auf `127.0.0.1` gebunden, VM-`.env` auf `600`, Crontab-Autostart angeglichen, Repo initialisiert und als Branch `claude/wisskomm-viz` nach `steffensoldan/claude` gepusht.
-* **Nächster Schritt:** (1) SSH-Key-Auth statt Passwort in `deploy.py` (separat vereinbart). (2) Auswertung der ersten echten PDF-Aufbereitung durch Forschende.
-* **Offene Fragen / Blockaden:** Autostart via systemd nicht möglich (kein root); Boot-Autostart läuft über `@reboot`-Crontab, real per Reboot noch unbestätigt (nur Prozess-Simulation verifiziert).
+* **Letzter Meilenstein:** Quarto-Pilot (Stufe 3) umgesetzt und auf der VM gerendert — aus einer Quelle (`index.qmd`) HTML, PDF (Typst), RevealJS und PPTX mit zentraler ZEW-CD; DSGVO-Check (keine externen Requests) bestanden. Davor: Sicherheits-/Betriebs-Härtung + Versionskontrolle (Branch `claude/wisskomm-viz`).
+* **Nächster Schritt:** (1) Design-Frage „signal vs. diluted" ohne Marken-Rot final festlegen. (2) Serving der Quarto-Ausgaben unter eigener URL (getrennte Eingänge). (3) ZEW-Hausschrift als WOFF2 einbinden. (4) SSH-Key-Auth (separat vereinbart).
+* **Offene Fragen / Blockaden:** CD-Farben aus RGB normalisiert, offizielles CD-Handbuch noch nicht gegengeprüft. Autostart-Reboot weiterhin nur simuliert (kein root).
 
 ---
 
@@ -36,3 +36,14 @@
 - [x] `.gitignore` angelegt; Repo initialisiert, Push als Branch `claude/wisskomm-viz`
 - [x] VM: `.env` auf `600`, Testartefakte aus `output/` entfernt, Autostart-Kommando per Neustart-Simulation verifiziert (HTTP 200)
 - [ ] SSH-Key-Auth statt Passwort in `deploy.py` (separat vereinbart)
+
+## 5. Quarto-Pilot (Stufe 3, 2026-07-03, Claude Code)
+- [x] Struktur gem. `implementation_plan.md` Teil J: `_quarto.yml`, `_brand.yml`, `theme/zew.scss`
+- [x] Zentrale ZEW-CD (`_brand.yml`) mit aus RGB normalisierten Farben; System-Schrift als Platzhalter
+- [x] PPTX-CD-Vorlage `templates/reference-zew.pptx` (Theme-Farben + Schriften)
+- [x] Referenz-DP `publications/zew-dp-26-021/` (`index.qmd` + Daten-CSV + Datenvertrag-README)
+- [x] Quarto + venv (matplotlib/jupyter) user-lokal auf VM installiert (`~/opt`, `~/wisskomm-quarto-pilot`)
+- [x] Render aller 4 Formate erfolgreich; DSGVO-Check (keine externen Requests) bestanden
+- [x] PPTX-Realitätscheck: Text nativ/editierbar, Charts als Standbilder (empirisch bestätigt)
+- [ ] Serving unter eigener URL (Folgephase)
+- [ ] „signal vs. diluted" ohne Marken-Rot final festlegen; ZEW-Hausschrift einbinden

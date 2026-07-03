@@ -1,0 +1,143 @@
+---
+title: "Wie viel Klimaschutz kommt an der Grenze an?"
+subtitle: "CO₂-Grenzausgleich für Stahl: warum die Bauart über die Wirkung entscheidet"
+author: "ZEW – Leibniz-Zentrum für Europäische Wirtschaftsforschung"
+date: "2026-05-01"
+lang: de
+---
+
+```{python}
+#| label: setup
+import pandas as pd
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+# ZEW-CD-Farben (aus RGB normalisiert)
+ZEW = {
+    "intrans": "#394846", "eisblau": "#C2DDE1", "blue1": "#7FBEC4",
+    "blue2": "#80B3C4", "green": "#CEDB2D", "green_dark": "#A2BC0C", "grey": "#575756",
+}
+# Kategorienfarben der EU-Szenarien (A/B/C/D) aus der CD
+SCEN_COLORS = {"A. Cap": ZEW["grey"], "B. M-BCA": ZEW["blue2"],
+               "C. R-BCA": ZEW["green_dark"], "D. DM-BCA": ZEW["intrans"]}
+
+mpl.rcParams.update({
+    "font.size": 11, "text.color": ZEW["intrans"],
+    "axes.edgecolor": ZEW["grey"], "axes.labelcolor": ZEW["intrans"],
+    "xtick.color": ZEW["intrans"], "ytick.color": ZEW["intrans"],
+    "axes.spines.top": False, "axes.spines.right": False, "figure.dpi": 130,
+})
+
+eu     = pd.read_csv("data/scenarios_eu.csv")
+prices = pd.read_csv("data/prices_eu.csv")
+signal = pd.read_csv("data/signal.csv")
+```
+
+::: {.hero}
+[ZEW Discussion Paper 26-021 · Befund kompakt]{.eyebrow}
+
+CO₂-Grenzausgleiche (Border Carbon Adjustments) sollen Klimaschutz und Industrie zugleich
+schützen. Entscheidend ist die **Bauart**: Ein **mengenbasiertes** Design bepreist die
+gesamten eingebetteten Emissionen, ein **benchmarkbasiertes** nur die Abweichung von einem
+Richtwert. Letzteres entlastet die Abnehmer — aber nur ein Bruchteil des CO₂-Preises erreicht
+die ausländischen Produzenten.
+:::
+
+```{python}
+#| label: fig-signal
+#| fig-cap: "Effektiver Signal-Anteil λ: Anteil des nominalen CO₂-Preises, der als Grenzabgabe auf ausländische Produzenten wirkt. Mengenbasiert = 100 %."
+rows = [("EU · mengenbasiert", 1.00, ZEW["blue2"]),
+        ("EU · benchmarkbasiert", 0.36, ZEW["grey"]),
+        ("US · benchmark (allein)", 0.12, ZEW["grey"])]
+fig, ax = plt.subplots(figsize=(7, 2.2))
+for i, (name, val, col) in enumerate(rows):
+    ax.barh(i, 1.0, color=ZEW["eisblau"], alpha=.35, height=.6)
+    ax.barh(i, val, color=col, height=.6)
+    ax.text(val + .02, i, f"{val*100:.0f} %", va="center", fontweight="bold")
+ax.set_yticks(range(len(rows))); ax.set_yticklabels([r[0] for r in rows])
+ax.set_xlim(0, 1.15); ax.invert_yaxis(); ax.set_xticks([])
+ax.spines["left"].set_visible(False); ax.spines["bottom"].set_visible(False)
+plt.tight_layout(); plt.show()
+```
+
+## Kernbefunde
+
+| Kennzahl | Wert | Bedeutung |
+|---|---|---|
+| Signal-Anteil (EU-Benchmark) | **36 %** | des CO₂-Preises erreichen die ausländischen Produzenten – Rabatt von 64 %. |
+| Wohlfahrtsverlust EU | **+55 %** | höher als mengenbasiert (1,38 statt 0,89 Mrd. USD). |
+| Carbon-Leakage-Rate | **16 → 36 %** | Anstieg vom mengen- zum benchmarkbasierten Design. |
+| EU-Roheisenimporte | **×2** | Verdopplung (1,73 → 3,50 Mt); Importpreis rund 41 % niedriger. |
+
+## Zwei Bauarten, ein Zielkonflikt
+
+Stahl steht für rund 7 % der globalen Treibhausgasemissionen, ist stark gehandelt und
+technologisch heterogen. Genau diese Streuung macht das Design des Grenzausgleichs folgenreich.
+
+- **Mengenbasiert (wie EU-CBAM):** bepreist jede Tonne eingebetteter Emissionen. Erhält das
+  Preissignal, schützt die heimische Vorstufe, verteuert aber die Abnehmerprodukte stärker.
+- **Benchmarkbasiert:** bepreist nur die Abweichung von einem Intensitäts-Richtwert. Dämpft
+  Abnehmerpreise, verdünnt aber das Klimasignal.
+
+## Befunde im Szenarienvergleich (EU)
+
+```{python}
+#| label: fig-eu
+#| fig-cap: "Quelle: DP 26-021, Tab. 2 (Panel a). Carbon-Leakage-Rate je Szenario, gleicher Stringenzpunkt (≈ 30 % Reduktion, CO₂-Preis ≈ 88 USD/t)."
+fig, ax = plt.subplots(figsize=(7, 3.4))
+colors = [SCEN_COLORS[s] for s in eu["scenario"]]
+ax.bar(eu["scenario"], eu["leakage_pct"], color=colors, width=.62)
+for x, v in zip(eu["scenario"], eu["leakage_pct"]):
+    ax.text(x, v + 1, f"{v:.1f}".replace(".", ","), ha="center", fontsize=10)
+ax.set_ylabel("Leakage-Rate (%)"); ax.set_ylim(0, 62)
+plt.tight_layout(); plt.show()
+```
+
+Das Muster ist konsistent: Das benchmarkbasierte Design (C) senkt die globalen Emissionen
+weniger, erhöht die Leakage (36 statt 16 %) und kostet mehr Wohlfahrt – bei niedrigerem
+effektivem CO₂-Preis an der Grenze.
+
+## Wer trägt die Kosten? Import- und Nutzerpreise (EU)
+
+```{python}
+#| label: fig-prices
+#| fig-cap: "Quelle: DP 26-021, Tab. 4 (% ggü. Baseline). Nutzerpreis Flachstahl steigt benchmarkbasiert um 24,2 % statt 34,6 %."
+import numpy as np
+series = [("Nutzerpreis Flachstahl", "user_flat_pct"), ("Importpreis Flachstahl", "import_flat_pct")]
+x = np.arange(len(prices)); w = .38
+fig, ax = plt.subplots(figsize=(7, 3.4))
+ax.bar(x - w/2, prices["user_flat_pct"], w, label="Nutzerpreis Flachstahl", color=ZEW["blue2"])
+ax.bar(x + w/2, prices["import_flat_pct"], w, label="Importpreis Flachstahl", color=ZEW["green_dark"])
+ax.set_xticks(x); ax.set_xticklabels(prices["scenario"]); ax.set_ylabel("% ggü. Baseline")
+ax.legend(frameon=False, fontsize=9)
+plt.tight_layout(); plt.show()
+```
+
+## Im US-Alleingang fast wirkungslos
+
+Ohne nationalen CO₂-Preis als Anker wirkt ein benchmarkbasierter Grenzausgleich kaum als
+Klimapolitik: Nur rund ein Achtel des Preissignals (λ ≈ 0,12) erreicht die Grenze.
+
+## Was folgt daraus
+
+::: {.takeaways}
+::: {.item}
+Grenzausgleich und nationaler CO₂-Preis sind **Komplemente, kein Ersatz**.
+:::
+::: {.item}
+Das **Benchmark-Design entscheidet über die Umweltwirkung** – besonders die Behandlung
+homogener Vorprodukte wie Roheisen.
+:::
+::: {.item}
+Belastbare Bewertung braucht Modelle mit **Technologie-Heterogenität und vertikalen
+Lieferketten** – sonst bleiben Reshuffling und vertikale Leakage unsichtbar.
+:::
+:::
+
+---
+
+**Methode:** Plant-level allgemeines Gleichgewichtsmodell der globalen Stahl-Lieferkette
+(~300 Werke, 48 Länder, 15 Regionen). **Quelle:** Park, Rausch, Karplus (2026),
+*Environmental Ambition and Economic Protectionism: The Design of Border Carbon Adjustments.*
+ZEW Discussion Paper No. 26-021. Alle Zahlen aus dem Paper; nicht-amtliche Aufbereitung für
+die Wissenschaftskommunikation.

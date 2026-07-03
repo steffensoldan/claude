@@ -1,0 +1,31 @@
+# ---------------------------------------------------------------------------
+# ZEW Haus-CD (Quarto Brand, >= 1.6) — zentrale Farb- und Schriftquelle.
+# Farben aus den offiziellen ZEW-RGB-Werten normalisiert (Hex aus RGB).
+# Semantik der Daten-Viz: "signal" = übertragenes Preissignal, "diluted" = Verlust/Leakage.
+# HINWEIS: Die ZEW-CD führt KEIN Rot. Für das negative Semantik-Feld wird daher Grau
+# verwendet, nicht ein markenfremdes Rot.
+# SCHRIFT: derzeit System-Schrift (DSGVO-sauber, keine Google-Fonts). Sobald die ZEW-
+# Hausschrift als WOFF2 vorliegt, unter theme/fonts/ ablegen und hier via source: file
+# referenzieren.
+# ---------------------------------------------------------------------------
+color:
+  palette:
+    zew-intrans:    "#394846"   # ZEW Intrans (Text/Headings)
+    zew-eisblau:    "#C2DDE1"   # Pantone 318 "Eisblau"
+    zew-blue-1:     "#7FBEC4"   # abgedunkelt I (Grafik-Differenzierung)
+    zew-blue-2:     "#80B3C4"   # abgedunkelt II (Grafik-Differenzierung)
+    zew-green:      "#CEDB2D"   # News Grün
+    zew-green-dark: "#A2BC0C"   # News Grün abgedunkelt
+    zew-grey:       "#575756"   # Grau (80% Schwarz)
+  foreground: zew-intrans
+  background: "#FFFFFF"
+  primary: zew-blue-2
+  secondary: zew-grey
+
+typography:
+  base:
+    family: Segoe UI
+    size: 1.05rem
+  headings:
+    family: Georgia
+    weight: 600
