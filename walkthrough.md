@@ -31,3 +31,36 @@ Die Fehlerbehebung wurde über lokale Diagnoseskripte direkt auf der remote VM d
 2.  **Modell-Kompatibilität:** Diagnosetests bestanden für `claude-opus-4-8` und `claude-haiku-4-5`.
 3.  **End-to-End-Upload:** Ein simulierter PDF-Multipart-Upload an den Port-8080-Proxy lief erfolgreich durch und lieferte den Status **`200 OK`** samt der vollständig generierten HTML-Befundseite.
 4.  **IFrame-Kompatibilität:** Der Ausschluss des `X-Frame-Options`-Headers wurde im HTTP-Antwortkopf verifiziert.
+
+---
+
+# Walkthrough (Stand: 03.07.2026) — Sicherheits- & Betriebs-Härtung
+
+Zweite Änderungsrunde durch Claude Code: Beseitigung eines Secret-Lecks, Härtung des Netzwerk-Bindings und Ersteinrichtung der Versionskontrolle.
+
+## 1. Änderungen (lokales Repo)
+*   **`deploy.py`:** Hartkodiertes SSH-Passwort, Server-IP, User und Pfade entfernt. Konfiguration jetzt ausschließlich über Umgebungsvariablen (`WISSKOMM_VM_*`) bzw. lokale `.env`; Abbruch mit Klartext-Hinweis bei fehlenden Variablen. Start- und Crontab-Kommando auf `--host 127.0.0.1` umgestellt.
+*   **`.gitignore` / `.env.example`:** Neu angelegt (`.env`, `venv/`, `sessions/`, `output/`, `uvicorn.log` ausgeschlossen; Vorlage für alle benötigten Variablen).
+*   **`requirements.txt`:** `anthropic` auf `==0.115.1` gepinnt (Stand VM), fehlendes `python-dotenv==1.2.2` ergänzt.
+*   **`SPEC-Wisskomm-Viz.md` → `implementation_plan.md`:** Umbenannt gemäß AOS-Dateikonvention; Referenzen in `PROJECT.md` und `task.md` nachgezogen.
+*   **`build.py`:** Tippfehler „Standlone" → „Standalone" in der Log-Ausgabe.
+*   **`wisskomm-viz.service`:** `--host 127.0.0.1 --env-file .env`; als derzeit inaktiv dokumentiert (System-Unit erfordert root; Autostart läuft über Crontab).
+
+## 2. Änderungen auf der VM (als `sts`, ohne root)
+*   `.env`-Berechtigung von `644` auf `600` gesetzt.
+*   `@reboot`-Crontab auf das kanonische Startkommando (localhost, `--env-file`) angeglichen.
+*   Testartefakte (`test`, `test-*`) aus `output/` entfernt; echte Publikationen (`dp*`) erhalten.
+*   Uvicorn per Prozess-Simulation neu gestartet (kein echter Reboot mangels root und wegen mitlaufender Django-Instanz).
+
+## 3. Versionskontrolle
+*   Repository initialisiert, erster Commit (`init:`), Push als Branch `claude/wisskomm-viz` nach `steffensoldan/claude`.
+
+## 4. Testergebnisse & Verifikation
+1.  **Localhost-Bindung:** `ss` bestätigt `127.0.0.1:8090`; direkter externer Zugriff auf `:8090` liefert kein Ergebnis mehr (erwartet).
+2.  **Selbsttest VM-intern:** `GET http://127.0.0.1:8090/wisskomm` → **HTTP 200**.
+3.  **End-to-End über Proxy:** `GET http://192.168.70.65:8080/wisskomm` → **HTTP 200** (Nutzerpfad unverändert funktionsfähig).
+4.  **Secret-Gegenprobe:** Kein Passwort mehr in `deploy.py`; keine `.env`/Key-Dateien im Git-Staging.
+
+## 5. Offen
+*   SSH-Key-Auth statt Passwort in `deploy.py` (separat vereinbart).
+*   Echter Reboot-Test des `@reboot`-Autostarts steht aus (root erforderlich).
