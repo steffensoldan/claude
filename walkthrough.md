@@ -164,3 +164,35 @@ Vor Beginn der nächsten Erweiterung wurde die Dreifach-Synchronität verifizier
     `.env.example`, `.gitignore`, Doku — reine Steuer-/Repo-Dateien, kein Laufzeitbedarf.
 
 Ausgangsbasis für den Ausbau ist damit sauber und reproduzierbar.
+
+---
+
+# Walkthrough (Stand: 03.07.2026) — Zwei wählbare Zugänge (KI→Quarto-Prototyp)
+
+Nutzer wählen beim Upload den Ausgabe-Zugang: **Fixes HTML** (unverändert) oder **Quarto**
+(Mehrformat mit ZEW-CD). Der Quarto-Zugang nutzt das bestehende KI-JSON — Claude schreibt
+**kein** freies Quarto; ein Konverter erzeugt CSVs + eine getemplatete `.qmd`.
+
+## 1. Änderungen (Repo)
+*   `templates/dashboard.html`: Radio-Auswahl `output_mode` (html/quarto) im Upload-Formular.
+*   `app.py` (`upload_pdf`): `output_mode` entgegennehmen, in Session speichern; bei `quarto`
+    → `build_quarto.build_quarto_publication(...)` via `run_in_threadpool` → Redirect
+    `/wisskomm/pub/<slug>/`. Fixed-HTML-Pfad unverändert.
+*   `build_quarto.py` (neu): KI-JSON → `data/*.csv` (Datenvertrag) + `.qmd` aus Vorlage →
+    `quarto render` (Subprozess, Quarto-venv als Engine) → Ausgaben nach `published/<slug>/`.
+*   `templates/publication.qmd.j2` (neu): feste `.qmd`-Struktur mit matplotlib-Charts (lesen die
+    CSVs) und ZEW-CD. Eigene Jinja-Delimiter `[[ ]]`/`[% %]`, damit Python-`{ }` nicht kollidiert.
+*   `deploy.py`: `build_quarto.py` + `publication.qmd.j2` in die Upload-Liste aufgenommen.
+
+## 2. Verifikation
+1.  **Offline (lokal, ohne Quarto):** echte Session-JSON → alle `[[ ]]`-Platzhalter aufgelöst,
+    CSVs korrekt, keine Delimiter-Kollision; `py_compile` aller Dateien OK.
+2.  **VM (nach Freigabe):** Deploy + Uvicorn-Neustart; Dashboard trägt die Auswahl.
+    Render-Test (`build_quarto` gegen `dp26011`-Daten) → `/wisskomm/pub/dp26011-quarto/` 200
+    (extern über Proxy, 4,9 MB; PDF 200). Testartefakt danach entfernt.
+3.  **Regression:** `/wisskomm/view/dp26011/index.html` → 200 (Fixed-HTML unverändert).
+
+## 3. Bewusste Prototyp-Grenzen
+*   An die aktuelle (BCA-)Datenstruktur gebunden — wie das Fixed-HTML.
+*   KI-Textfelder mit HTML-Tags: sauber im HTML-Output, in PDF/PPTX ggf. ignoriert.
+*   Kein Refine/Chat für Quarto-Pubs (generate-once); Live-Render blockiert kurz (Sekunden).

@@ -69,10 +69,12 @@ def main():
         ("app.py", f"{remote_dir}/app.py"),
         ("prompt.py", f"{remote_dir}/prompt.py"),
         ("build.py", f"{remote_dir}/build.py"),
+        ("build_quarto.py", f"{remote_dir}/build_quarto.py"),
         ("requirements.txt", f"{remote_dir}/requirements.txt"),
         ("templates/standalone.html", f"{remote_dir}/templates/standalone.html"),
         ("templates/dashboard.html", f"{remote_dir}/templates/dashboard.html"),
-        ("templates/ui.html", f"{remote_dir}/templates/ui.html")
+        ("templates/ui.html", f"{remote_dir}/templates/ui.html"),
+        ("templates/publication.qmd.j2", f"{remote_dir}/templates/publication.qmd.j2")
     ]
     
     for local_path, remote_path in local_files:

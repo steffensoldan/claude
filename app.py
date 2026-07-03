@@ -8,6 +8,7 @@ from fastapi import FastAPI, Request, File, UploadFile, Form, HTTPException
 from fastapi.responses import RedirectResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.concurrency import run_in_threadpool
 from pypdf import PdfReader
 from dotenv import load_dotenv
 
@@ -15,6 +16,7 @@ load_dotenv()
 
 import prompt
 import build
+import build_quarto
 
 app = FastAPI()
 
@@ -109,7 +111,8 @@ async def dashboard(request: Request):
 @app.post("/wisskomm/upload")
 async def upload_pdf(
     file: UploadFile = File(...),
-    instructions: str = Form(None)
+    instructions: str = Form(None),
+    output_mode: str = Form("html")
 ):
     """Verarbeitet den Upload, ruft Claude API auf und generiert das erste HTML."""
     file_bytes = await file.read()
@@ -155,18 +158,27 @@ async def upload_pdf(
         "paper_text": paper_text,
         "history": history,
         "data": data,
+        "output_mode": output_mode,
         "last_modified": datetime.now().strftime("%d.%m.%Y %H:%M:%S")
     }
-    
+
     with open(SESSIONS_DIR / f"{slug}.json", "w", encoding="utf-8") as f:
         json.dump(session, f, indent=2, ensure_ascii=False)
-        
-    # 6. HTML generieren
+
+    # 6. Ausgabe erzeugen — je nach gewähltem Zugang
+    if output_mode == "quarto":
+        # Prototyp: KI-JSON -> CSV + .qmd -> Quarto-Render (blockierend, daher im Threadpool)
+        try:
+            await run_in_threadpool(build_quarto.build_quarto_publication, slug, data, PUBLISH_DIR)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Quarto-Erzeugung fehlgeschlagen: {e}")
+        return RedirectResponse(url=f"/wisskomm/pub/{slug}/", status_code=303)
+
+    # Standard: Fixed-HTML-Pfad (unverändert)
     try:
         build.build_html(slug, data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"HTML-Kompilierung fehlgeschlagen: {e}")
-        
     return RedirectResponse(url=f"/wisskomm/edit/{slug}", status_code=303)
 
 @app.get("/wisskomm/edit/{slug}", response_class=HTMLResponse)

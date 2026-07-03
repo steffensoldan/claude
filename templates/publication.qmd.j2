@@ -1,0 +1,133 @@
+---
+title: "[[ title ]]"
+subtitle: "[[ subtitle ]]"
+lang: de
+---
+
+```{python}
+#| label: setup
+import pandas as pd
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
+
+# ZEW-CD-Farben (aus RGB normalisiert)
+ZEW = {"intrans": "#394846", "eisblau": "#C2DDE1", "blue1": "#7FBEC4",
+       "blue2": "#80B3C4", "green": "#CEDB2D", "green_dark": "#A2BC0C", "grey": "#575756"}
+# Kategorienfarbe je Szenario über den Anfangsbuchstaben (robust ggü. Label-Varianten)
+SCEN_LETTER = {"A": ZEW["grey"], "B": ZEW["blue2"], "C": ZEW["green_dark"], "D": ZEW["intrans"]}
+mpl.rcParams.update({"font.size": 11, "text.color": ZEW["intrans"],
+    "axes.edgecolor": ZEW["grey"], "axes.labelcolor": ZEW["intrans"],
+    "xtick.color": ZEW["intrans"], "ytick.color": ZEW["intrans"],
+    "axes.spines.top": False, "axes.spines.right": False, "figure.dpi": 130})
+
+signal = pd.read_csv("data/signal.csv")
+eu = pd.read_csv("data/scenarios_eu.csv")
+try:
+    prices = pd.read_csv("data/prices_eu.csv")
+except Exception:
+    prices = None
+```
+
+::: {.hero}
+::: {.eyebrow}
+[[ eyebrow ]]
+:::
+
+[[ lede ]]
+:::
+
+```{python}
+#| label: fig-signal
+#| fig-cap: "Effektiver Signal-Anteil λ: Anteil des nominalen CO₂-Preises, der an der Grenze wirkt."
+fig, ax = plt.subplots(figsize=(7, 2.4))
+labels = signal["label"].tolist()
+vals = signal["lambda"].tolist()
+for i, (name, val) in enumerate(zip(labels, vals)):
+    col = ZEW["blue2"] if float(val) >= 0.99 else ZEW["grey"]
+    ax.barh(i, 1.0, color=ZEW["eisblau"], alpha=.35, height=.6)
+    ax.barh(i, float(val), color=col, height=.6)
+    ax.text(float(val) + .02, i, f"{float(val)*100:.0f} %", va="center", fontweight="bold")
+ax.set_yticks(range(len(labels)))
+ax.set_yticklabels(labels)
+ax.set_xlim(0, 1.15)
+ax.invert_yaxis()
+ax.set_xticks([])
+ax.spines["left"].set_visible(False)
+ax.spines["bottom"].set_visible(False)
+plt.tight_layout()
+plt.show()
+```
+
+## Kernbefunde
+
+[% if kpis %]
+| Kennzahl | Bedeutung |
+|---|---|
+[% for k in kpis %]| **[[ k.num ]]** | [[ k.lab ]] |
+[% endfor %]
+[% endif %]
+
+## [[ section1_title ]]
+
+[[ section1_text ]]
+
+## [[ section2_title ]]
+
+[[ section2_text ]]
+
+```{python}
+#| label: fig-eu
+#| fig-cap: "Carbon-Leakage-Rate je EU-Szenario (Quelle: DP-Daten)."
+fig, ax = plt.subplots(figsize=(7, 3.4))
+colors = [SCEN_LETTER.get(str(s).strip()[:1], ZEW["blue2"]) for s in eu["scenario"]]
+ax.bar(eu["scenario"], eu["leakage_pct"], color=colors, width=.62)
+for x, v in zip(eu["scenario"], eu["leakage_pct"]):
+    ax.text(x, float(v) + 1, f"{float(v):.1f}".replace(".", ","), ha="center", fontsize=10)
+ax.set_ylabel("Leakage-Rate (%)")
+plt.tight_layout()
+plt.show()
+```
+
+## [[ section3_title ]]
+
+[[ section3_text ]]
+
+## [[ section4_title ]]
+
+[[ section4_text ]]
+
+```{python}
+#| label: fig-prices
+#| fig-cap: "Import- und Nutzerpreise Flachstahl (% ggü. Baseline)."
+if prices is not None:
+    x = np.arange(len(prices))
+    w = .38
+    fig, ax = plt.subplots(figsize=(7, 3.4))
+    ax.bar(x - w/2, prices["user_flat_pct"], w, label="Nutzerpreis Flachstahl", color=ZEW["blue2"])
+    ax.bar(x + w/2, prices["import_flat_pct"], w, label="Importpreis Flachstahl", color=ZEW["green_dark"])
+    ax.set_xticks(x)
+    ax.set_xticklabels(prices["scenario"])
+    ax.set_ylabel("% ggü. Baseline")
+    ax.legend(frameon=False, fontsize=9)
+    plt.tight_layout()
+    plt.show()
+```
+
+## [[ section5_title ]]
+
+[[ section5_text ]]
+
+## Was folgt daraus
+
+::: {.takeaways}
+[% for t in takeaways %]
+::: {.item}
+[[ t ]]
+:::
+[% endfor %]
+:::
+
+---
+
+[[ methodology ]]
