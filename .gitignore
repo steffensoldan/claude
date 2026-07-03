@@ -11,6 +11,7 @@ __pycache__/
 # Laufzeit-Artefakte des Dienstes (nicht versionieren)
 sessions/
 output/
+published/
 uvicorn.log
 
 # Quarto-Build-Output und lokale venv (nicht versionieren)

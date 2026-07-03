@@ -2,8 +2,8 @@
 
 ## Aktueller Stand
 * **Zuletzt bearbeitet:** 2026-07-03 durch Claude Code
-* **Letzter Meilenstein:** Quarto-Pilot (Stufe 3) umgesetzt und auf der VM gerendert — aus einer Quelle (`index.qmd`) HTML, PDF (Typst), RevealJS und PPTX mit zentraler ZEW-CD; DSGVO-Check (keine externen Requests) bestanden. Davor: Sicherheits-/Betriebs-Härtung + Versionskontrolle (Branch `claude/wisskomm-viz`).
-* **Nächster Schritt:** (1) Design-Frage „signal vs. diluted" ohne Marken-Rot final festlegen. (2) Serving der Quarto-Ausgaben unter eigener URL (getrennte Eingänge). (3) ZEW-Hausschrift als WOFF2 einbinden. (4) SSH-Key-Auth (separat vereinbart).
+* **Letzter Meilenstein:** Quarto-Serving live — getrennter Eingang `/wisskomm/pub/<slug>/` (über Django-Proxy verifiziert, HTTP 200), KI-Pfad `/wisskomm` unverändert. Davor: Quarto-Pilot (4 Formate, DSGVO-Check), Sicherheits-/Betriebs-Härtung, Versionskontrolle.
+* **Nächster Schritt:** (1) Design-Frage „signal vs. diluted" ohne Marken-Rot final festlegen. (2) ZEW-Hausschrift als WOFF2 einbinden. (3) Optional: KI→Quarto-Integration (ein Trichter). (4) SSH-Key-Auth (separat vereinbart).
 * **Offene Fragen / Blockaden:** CD-Farben aus RGB normalisiert, offizielles CD-Handbuch noch nicht gegengeprüft. Autostart-Reboot weiterhin nur simuliert (kein root).
 
 ---
@@ -45,5 +45,5 @@
 - [x] Quarto + venv (matplotlib/jupyter) user-lokal auf VM installiert (`~/opt`, `~/wisskomm-quarto-pilot`)
 - [x] Render aller 4 Formate erfolgreich; DSGVO-Check (keine externen Requests) bestanden
 - [x] PPTX-Realitätscheck: Text nativ/editierbar, Charts als Standbilder (empirisch bestätigt)
-- [ ] Serving unter eigener URL (Folgephase)
+- [x] Serving unter eigener URL: `app.py` mountet `/wisskomm/pub`, `publish_quarto.py` rendert+veröffentlicht; End-to-End über Proxy verifiziert (HTTP 200)
 - [ ] „signal vs. diluted" ohne Marken-Rot final festlegen; ZEW-Hausschrift einbinden

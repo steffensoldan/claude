@@ -105,6 +105,39 @@ FastAPI-Dienst.
     unter `ppt/media/` — bestätigt: Text editierbar, Grafiken als Standbilder.
 
 ## 5. Offen
-*   Serving der Quarto-Ausgaben unter eigener URL (getrennte Eingänge) — Folgephase.
 *   ZEW-Hausschrift (WOFF2) einbinden; offizielles CD-Handbuch gegenprüfen.
 *   „signal vs. diluted" ohne Marken-Rot final festlegen.
+
+---
+
+# Walkthrough (Stand: 03.07.2026) — Quarto-Serving (getrennte Eingänge)
+
+Die Quarto-Ausgaben sind jetzt für Nutzer unter eigener URL erreichbar, parallel zum
+KI-Pfad. Kein Django-Eingriff nötig — der bestehende Proxy `re_path(^wisskomm/(?P<path>.*)$)`
+reicht beliebige Unterpfade an den FastAPI-Dienst weiter.
+
+## 1. Änderungen (Repo)
+*   `app.py`: zusätzliches StaticFiles-Mount `/wisskomm/pub` → `published/` (Pfad über
+    `WISSKOMM_PUBLISH_DIR` überschreibbar, `html=True`). KI-Pfad `/wisskomm/view` unverändert.
+*   `publish_quarto.py` (neu): env-getriebenes Skript, das auf der VM `quarto render` ausführt
+    und `_site/publications/*` in den bedienten `published/`-Ordner kopiert.
+*   `.env.example`: `WISSKOMM_QUARTO_DIR`, `WISSKOMM_QUARTO_BIN`, `WISSKOMM_PUBLISH_DIR`.
+*   `.gitignore`: `published/`.
+
+## 2. Deployment (VM, nach ausdrücklicher Freigabe)
+*   `app.py` hochgeladen, Quarto-Ausgabe nach `~/wisskomm-viz/published/` kopiert, Uvicorn
+    kanonisch (localhost, `--env-file`) neu gestartet.
+
+## 3. Testergebnisse & Verifikation
+1.  Intern (127.0.0.1:8090): `/wisskomm` → 200 (KI-Pfad unverändert),
+    `/wisskomm/pub/zew-dp-26-021/` → 200.
+2.  Extern über Django-Proxy (192.168.70.65:8080): `/wisskomm` → 200;
+    `/wisskomm/pub/zew-dp-26-021/` → 200 (4,85 MB, Titel korrekt ausgeliefert).
+
+## 4. Zugangsmodell (Ergebnis)
+*   **KI-Schnellentwurf:** `…/wisskomm` (Upload) → `…/wisskomm/view/<slug>/`.
+*   **Quarto-Hausdienst:** `…/wisskomm/pub/<slug>/`.
+
+## 5. Offen
+*   Verlinkung/Listing der Quarto-Publikationen im Dashboard (bislang Direkt-URL).
+*   Auto-Rebuild-Trigger (aktuell Publishing als eigener Schritt via `publish_quarto.py`).

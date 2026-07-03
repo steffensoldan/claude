@@ -22,15 +22,20 @@ app = FastAPI()
 BASE_DIR = Path(__file__).parent
 SESSIONS_DIR = BASE_DIR / "sessions"
 OUTPUT_DIR = BASE_DIR / "output"
+# Bediente Quarto-Publikationen (getrennter Eingang vom KI-Pfad); Pfad überschreibbar.
+PUBLISH_DIR = Path(os.environ.get("WISSKOMM_PUBLISH_DIR", str(BASE_DIR / "published")))
 
 SESSIONS_DIR.mkdir(exist_ok=True)
 OUTPUT_DIR.mkdir(exist_ok=True)
+PUBLISH_DIR.mkdir(exist_ok=True)
 
 # Templates laden
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
-# Statische Dateien mounten unter /wisskomm/view
+# Statische Dateien mounten unter /wisskomm/view (KI-generierte Standalone-Befunde)
 app.mount("/wisskomm/view", StaticFiles(directory=str(OUTPUT_DIR)), name="view")
+# Quarto-gerenderte Publikationen unter /wisskomm/pub (html=True -> index.html je Ordner)
+app.mount("/wisskomm/pub", StaticFiles(directory=str(PUBLISH_DIR), html=True), name="pub")
 
 def slugify(text: str) -> str:
     """Konvertiert den Dateinamen in einen sauberen URL-Slug."""
