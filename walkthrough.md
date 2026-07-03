@@ -146,3 +146,21 @@ reicht beliebige Unterpfade an den FastAPI-Dienst weiter.
     (Ordner mit `index.html`), liest den Titel aus dem HTML und erkennt vorhandene Formate.
 *   `templates/dashboard.html`: neue Sektion „Quarto-Hausdienst" mit Links Web/PDF/Folien/PPTX.
 *   Deployed und über den Proxy verifiziert: `/wisskomm` → 200, Sektion + `/wisskomm/pub/…`-Links vorhanden.
+
+---
+
+# Sync-Checkpoint (03.07.2026, vor Ausbau „zwei Zugänge / KI→Quarto")
+
+Vor Beginn der nächsten Erweiterung wurde die Dreifach-Synchronität verifiziert:
+
+*   **Lokal ↔ GitHub:** Working Tree sauber, Branch `claude/wisskomm-viz` gepusht
+    (Stand Commit `5db45e4`), 0 Commits Differenz zu `origin`.
+*   **Lokal ↔ VM (MD5-Abgleich, alle identisch):**
+    *   deployte App (`~/wisskomm-viz`): `app.py`, `prompt.py`, `build.py`,
+        `requirements.txt`, `wisskomm-viz.service`, `templates/{dashboard,ui,standalone}.html`.
+    *   Quarto-Projekt (`~/wisskomm-quarto-pilot`): `_quarto.yml`, `_brand.yml`,
+        `theme/zew.scss`, `templates/reference-zew.pptx`, `publications/zew-dp-26-021/*`.
+*   **Nur lokal/GitHub (bewusst nicht auf der VM):** `deploy.py`, `publish_quarto.py`,
+    `.env.example`, `.gitignore`, Doku — reine Steuer-/Repo-Dateien, kein Laufzeitbedarf.
+
+Ausgangsbasis für den Ausbau ist damit sauber und reproduzierbar.

@@ -3,7 +3,7 @@
 ## Aktueller Stand
 * **Zuletzt bearbeitet:** 2026-07-03 durch Claude Code
 * **Letzter Meilenstein:** Quarto-Serving live — getrennter Eingang `/wisskomm/pub/<slug>/` (über Django-Proxy verifiziert, HTTP 200), KI-Pfad `/wisskomm` unverändert. Davor: Quarto-Pilot (4 Formate, DSGVO-Check), Sicherheits-/Betriebs-Härtung, Versionskontrolle.
-* **Nächster Schritt:** (1) Design-Frage „signal vs. diluted" ohne Marken-Rot final festlegen. (2) ZEW-Hausschrift als WOFF2 einbinden. (3) Optional: KI→Quarto-Integration (ein Trichter). (4) SSH-Key-Auth (separat vereinbart).
+* **Nächster Schritt:** Ausbau „zwei wählbare Zugänge (Fixes HTML / Quarto)" — Quarto zuerst als Prototyp (Konverter KI-JSON → CSV + `.qmd` → Render, Auswahl im Dashboard). Sync-Checkpoint vor Beginn verifiziert (lokal ↔ GitHub ↔ VM identisch, Commit `5db45e4`). Später: Design (signal/diluted, Hausschrift), SSH-Key-Auth.
 * **Offene Fragen / Blockaden:** CD-Farben aus RGB normalisiert, offizielles CD-Handbuch noch nicht gegengeprüft. Autostart-Reboot weiterhin nur simuliert (kein root).
 
 ---
