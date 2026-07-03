@@ -146,6 +146,30 @@
       <p style="color: var(--text-muted); text-align: center; margin: 20px 0;">Noch keine Publikationen erstellt. Lade oben ein PDF hoch, um zu beginnen!</p>
     {% endif %}
   </section>
+
+  <section class="card">
+    <h2>Quarto-Hausdienst (Publikationen)</h2>
+    {% if quarto_pubs %}
+      <div class="pub-list">
+        {% for pub in quarto_pubs %}
+          <div class="pub-item">
+            <div class="pub-info">
+              <h3>{{ pub.title }}</h3>
+              <div class="meta">Slug: <code>{{ pub.slug }}</code></div>
+            </div>
+            <div class="actions">
+              <a href="/wisskomm/pub/{{ pub.slug }}/" class="btn-edit" target="_blank">Web</a>
+              {% if pub.has_pdf %}<a href="/wisskomm/pub/{{ pub.slug }}/index.pdf" class="btn-view" target="_blank">PDF</a>{% endif %}
+              {% if pub.has_slides %}<a href="/wisskomm/pub/{{ pub.slug }}/slides.html" class="btn-view" target="_blank">Folien</a>{% endif %}
+              {% if pub.has_pptx %}<a href="/wisskomm/pub/{{ pub.slug }}/index.pptx" class="btn-view">PPTX</a>{% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p style="color: var(--text-muted); text-align: center; margin: 20px 0;">Noch keine Quarto-Publikationen veröffentlicht. Rendern &amp; Veröffentlichen via <code>publish_quarto.py</code>.</p>
+    {% endif %}
+  </section>
 </div>
 
 <div class="loading-overlay" id="loadingOverlay">

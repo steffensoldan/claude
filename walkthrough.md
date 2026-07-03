@@ -139,5 +139,10 @@ reicht beliebige Unterpfade an den FastAPI-Dienst weiter.
 *   **Quarto-Hausdienst:** `…/wisskomm/pub/<slug>/`.
 
 ## 5. Offen
-*   Verlinkung/Listing der Quarto-Publikationen im Dashboard (bislang Direkt-URL).
 *   Auto-Rebuild-Trigger (aktuell Publishing als eigener Schritt via `publish_quarto.py`).
+
+## 6. Nachtrag: Dashboard-Verlinkung (03.07.2026)
+*   `app.py` (Dashboard-Route) sammelt veröffentlichte Quarto-Pubs unter `PUBLISH_DIR`
+    (Ordner mit `index.html`), liest den Titel aus dem HTML und erkennt vorhandene Formate.
+*   `templates/dashboard.html`: neue Sektion „Quarto-Hausdienst" mit Links Web/PDF/Folien/PPTX.
+*   Deployed und über den Proxy verifiziert: `/wisskomm` → 200, Sektion + `/wisskomm/pub/…`-Links vorhanden.

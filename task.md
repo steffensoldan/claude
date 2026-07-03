@@ -46,4 +46,5 @@
 - [x] Render aller 4 Formate erfolgreich; DSGVO-Check (keine externen Requests) bestanden
 - [x] PPTX-Realitätscheck: Text nativ/editierbar, Charts als Standbilder (empirisch bestätigt)
 - [x] Serving unter eigener URL: `app.py` mountet `/wisskomm/pub`, `publish_quarto.py` rendert+veröffentlicht; End-to-End über Proxy verifiziert (HTTP 200)
+- [x] Dashboard-Verlinkung: Sektion „Quarto-Hausdienst" mit Web/PDF/Folien/PPTX-Links; deployed und über Proxy verifiziert
 - [ ] „signal vs. diluted" ohne Marken-Rot final festlegen; ZEW-Hausschrift einbinden

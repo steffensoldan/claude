@@ -76,10 +76,34 @@ async def dashboard(request: Request):
             
     # Sortieren nach Modifikationsdatum (neueste zuerst)
     publications.sort(key=lambda x: x["last_modified"], reverse=True)
-    
+
+    # Quarto-Publikationen einsammeln: Ordner unter PUBLISH_DIR mit index.html.
+    quarto_pubs = []
+    if PUBLISH_DIR.exists():
+        for pub_dir in sorted(PUBLISH_DIR.iterdir()):
+            index = pub_dir / "index.html"
+            if not (pub_dir.is_dir() and index.exists()):
+                continue
+            title = pub_dir.name
+            try:
+                head = index.read_text(encoding="utf-8", errors="ignore")[:4000]
+                match = re.search(r"<title>(.*?)</title>", head, re.IGNORECASE | re.DOTALL)
+                if match:
+                    title = match.group(1).strip()
+            except Exception:
+                pass
+            quarto_pubs.append({
+                "slug": pub_dir.name,
+                "title": title,
+                "has_pdf": (pub_dir / "index.pdf").exists(),
+                "has_slides": (pub_dir / "slides.html").exists(),
+                "has_pptx": (pub_dir / "index.pptx").exists(),
+            })
+
     return templates.TemplateResponse("dashboard.html", {
         "request": request,
-        "publications": publications
+        "publications": publications,
+        "quarto_pubs": quarto_pubs
     })
 
 @app.post("/wisskomm/upload")
