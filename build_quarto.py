@@ -10,6 +10,7 @@ Konfiguration über Umgebungsvariablen (siehe .env.example):
   WISSKOMM_QUARTO_BIN  – Pfad zur quarto-CLI
 """
 import os
+import re
 import csv
 import shutil
 import subprocess
@@ -65,6 +66,40 @@ def prepare_sources(slug: str, data: dict, quarto_dir: Path) -> Path:
     return pub_src
 
 
+def _inject_format_bar(index_html: Path, slug: str) -> None:
+    """Fügt oben in die Web-Ansicht eine Leiste mit absoluten Links zu allen Formaten ein.
+    Absolute /wisskomm/pub/-Pfade funktionieren auch, wenn die Seite (durch den
+    Proxy-Redirect) unter der /upload-URL angezeigt wird."""
+    if not index_html.exists():
+        return
+    base = f"/wisskomm/pub/{slug}"
+    folder = index_html.parent
+    links = [("Web", f"{base}/index.html")]
+    if (folder / "index.pdf").exists():
+        links.append(("PDF", f"{base}/index.pdf"))
+    if (folder / "slides.html").exists():
+        links.append(("Folien", f"{base}/slides.html"))
+    if (folder / "index.pptx").exists():
+        links.append(("PPTX", f"{base}/index.pptx"))
+    items = " ".join(
+        f'<a href="{href}" style="color:#fff;text-decoration:none;font-weight:600;">{name}</a>'
+        for name, href in links
+    )
+    bar = (
+        '<div style="position:sticky;top:0;z-index:99999;background:#394846;color:#fff;'
+        'padding:10px 16px;font-family:system-ui,-apple-system,sans-serif;font-size:14px;'
+        'display:flex;gap:18px;align-items:center;">'
+        '<span style="color:#C2DDE1;font-weight:700;">Formate:</span>'
+        f'{items}'
+        '<a href="/wisskomm" style="margin-left:auto;color:#C2DDE1;text-decoration:none;">↩ Dashboard</a>'
+        '</div>'
+    )
+    html = index_html.read_text(encoding="utf-8", errors="ignore")
+    new_html, n = re.subn(r"(<body[^>]*>)", r"\1" + bar, html, count=1)
+    if n:
+        index_html.write_text(new_html, encoding="utf-8")
+
+
 def build_quarto_publication(slug: str, data: dict, publish_dir: Path) -> Path:
     """Konvertiert, rendert und veröffentlicht eine Publikation. Gibt den Ausgabeordner zurück."""
     quarto_dir = Path(os.environ.get("WISSKOMM_QUARTO_DIR", "/home/sts/wisskomm-quarto-pilot"))
@@ -92,4 +127,5 @@ def build_quarto_publication(slug: str, data: dict, publish_dir: Path) -> Path:
     target = Path(publish_dir) / slug
     target.mkdir(parents=True, exist_ok=True)
     shutil.copytree(rendered, target, dirs_exist_ok=True)
+    _inject_format_bar(target / "index.html", slug)
     return target

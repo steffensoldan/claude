@@ -205,3 +205,14 @@ Nutzer wählen beim Upload den Ausgabe-Zugang: **Fixes HTML** (unverändert) ode
     (Web/PDF/Folien/PPTX). Verifiziert: `view/dp26018` = 0 Links, `pub/dp26018` = 4 Links.
 *   **Legibility (`publication.qmd.j2`):** größere Schrift (14) + höhere Auflösung (dpi 160)
     + größere Beschriftungen/Figuren; `dp26018` neu gerendert.
+
+## 5. Fix (03.07.2026): keine Format-Navigation aus der gerenderten Ansicht
+*   **Symptom:** Der Django-Proxy folgt dem 303-Redirect nach dem Upload serverseitig
+    (`urllib`), daher wird die Web-Version unter der `/upload`-URL angezeigt. Die gerenderte
+    Seite hatte keine Links zu den anderen Formaten → „not found" bzw. Sackgasse; nur manuelle
+    `/pub/<slug>/…`-URLs funktionierten.
+*   **Fix (`build_quarto.py`):** `_inject_format_bar()` fügt oben in `index.html` eine Leiste
+    mit **absoluten** Links (Web/PDF/Folien/PPTX + Dashboard) ein. Absolute `/wisskomm/pub/`-Pfade
+    funktionieren unabhängig davon, unter welcher URL die Seite gerade angezeigt wird.
+*   Verifiziert (extern über Proxy): Leiste vorhanden, alle Zielformate 200; `dp26008`/`dp26018`
+    neu gerendert.
