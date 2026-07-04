@@ -32,7 +32,7 @@ if (-not (Test-Path (Join-Path $BaseDir "data\app.db"))) {
 # -- Task-Aktion ----------------------------------------------------------------
 $Action = New-ScheduledTaskAction `
     -Execute $Python `
-    -Argument "-m uvicorn app.main:create_app --factory --host 127.0.0.1 --port 8000" `
+    -Argument "-m uvicorn app.main:create_app --factory --host 0.0.0.0 --port 8000" `
     -WorkingDirectory $BackendDir
 
 # -- Trigger: bei Systemstart -----------------------------------------------------
@@ -70,7 +70,7 @@ Register-ScheduledTask `
 
 Write-Host "Task '$TaskName' registriert."
 Write-Host "  Startet automatisch beim naechsten Systemstart als $RunAsUser."
-Write-Host "  Bindet an 127.0.0.1:8000 (VM-intern)."
+Write-Host "  Bindet an 0.0.0.0:8000 (netzwerkweit erreichbar)."
 Write-Host ""
 Write-Host "Manueller Start/Stop/Test:"
 Write-Host "  schtasks /run /tn $TaskName"
