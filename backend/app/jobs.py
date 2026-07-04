@@ -126,7 +126,7 @@ def run_job(
 
         download_dir.mkdir(parents=True, exist_ok=True)
         result_path = download_dir / f"{job_id}.txt"
-        result_path.write_text(output_text, encoding="utf-8")
+        result_path.write_text(output_text, encoding="utf-8", newline="\n")
         _set_status(conn, job_id, "done", result_path=str(result_path))
     except Exception as exc:
         _set_status(conn, job_id, "error", error_message=str(exc))
