@@ -39,9 +39,15 @@ class MeetilySource(ABC):
 
 
 class SqliteMeetilySource(MeetilySource):
-    """Assumed schema: table `meetings(id, title, created_at, transcript_text)`.
-    Opens the database read-only to avoid interfering with a live Meetily
-    instance still writing to the same file."""
+    """Verified against a real Meetily v0.4.0 installation (see
+    ../../docs/meetily-integration-spike.md). `meetings(id, title, created_at,
+    updated_at, folder_path)` holds metadata only — the transcript is NOT a
+    column there. The actual text lives in `transcripts`, one row per audio
+    segment (`meeting_id` is a plain foreign key, not unique), each with its
+    own `transcript`, `speaker` ('mic'/'system'), and `audio_start_time`. The
+    full meeting transcript is reassembled by concatenating all segment rows
+    in chronological order. Opens the database read-only to avoid interfering
+    with a live Meetily instance still writing to the same file."""
 
     def __init__(self, db_path: Path) -> None:
         self._db_path = db_path
@@ -60,31 +66,35 @@ class SqliteMeetilySource(MeetilySource):
             conn.row_factory = sqlite3.Row
             try:
                 rows = conn.execute(
-                    "SELECT id, title, created_at, transcript_text FROM meetings ORDER BY created_at DESC"
+                    "SELECT id, title, created_at FROM meetings ORDER BY created_at DESC"
                 ).fetchall()
             except sqlite3.Error as exc:
                 raise MeetilySourceError(f"Query against Meetily database failed: {exc}") from exc
         return [
-            Meeting(
-                id=row["id"],
-                title=row["title"],
-                created_at=row["created_at"],
-                transcript_text=row["transcript_text"],
-            )
+            Meeting(id=row["id"], title=row["title"], created_at=row["created_at"], transcript_text="")
             for row in rows
         ]
 
     def get_transcript(self, meeting_id: str) -> str:
         with self._connect() as conn:
+            conn.row_factory = sqlite3.Row
             try:
-                row = conn.execute(
-                    "SELECT transcript_text FROM meetings WHERE id = ?", (meeting_id,)
+                meeting = conn.execute(
+                    "SELECT id FROM meetings WHERE id = ?", (meeting_id,)
                 ).fetchone()
+                if meeting is None:
+                    raise MeetilySourceError(f"No meeting found with id={meeting_id!r}")
+                segments = conn.execute(
+                    "SELECT transcript, speaker FROM transcripts WHERE meeting_id = ? "
+                    "ORDER BY COALESCE(audio_start_time, 0), timestamp",
+                    (meeting_id,),
+                ).fetchall()
             except sqlite3.Error as exc:
                 raise MeetilySourceError(f"Query against Meetily database failed: {exc}") from exc
-        if row is None:
-            raise MeetilySourceError(f"No meeting found with id={meeting_id!r}")
-        return row[0]
+        return "\n".join(
+            f"{row['speaker']}: {row['transcript']}" if row["speaker"] else row["transcript"]
+            for row in segments
+        )
 
 
 class ExportFolderMeetilySource(MeetilySource):
