@@ -1,10 +1,34 @@
-# Meetily-Integrations-Spike — SIMULIERT, vor Ort zu verifizieren
+# Meetily-Integrations-Spike — Status: VM-Check durchgeführt, weiterhin ungetestet gegen echte Meetily-Daten
 
 Diese Session lief in einer Cloud-Sandbox ohne Zugriff auf eine echte
 Meetily-Installation (Tauri-Desktop-App, benötigt Windows/macOS/Linux-GUI +
 Audio-Hardware für ein reales Testmeeting). Der unten beschriebene Spike
 wurde daher **nicht live durchgeführt**, sondern durch eine dokumentierte,
 plausible Annahme ersetzt (Nutzer-Entscheidung, siehe Chat-Verlauf).
+
+## VM-Befund (2026-07-04)
+
+Auf der Ziel-VM wurde geprüft, ob Meetily bereits installiert ist:
+- Kein Eintrag in `%APPDATA%`/`%LOCALAPPDATA%` mit `*meetily*` im Namen
+- Kein AppX-Paket, kein Eintrag in der Windows-Uninstall-Registry, kein
+  Treffer über `Get-CimInstance Win32_Product`
+- **Ergebnis: Meetily ist auf dieser VM nicht installiert.**
+
+Da eine Tauri-Desktop-App mit Audio-Hardware-Anforderung nicht Teil dieses
+Produktivsetup-Auftrags war (nur Prüfung, ob bereits vorhanden), wurde die
+SQLite-Schema-Annahme **nicht** live verifiziert. Stattdessen wird gemäß der
+im Auftrag vorgesehenen Fallback-Option `MEETILY_SOURCE_MODE=export_folder`
+verwendet — diese Variante ist ohnehin von Meetilys internem DB-Schema
+entkoppelt (siehe Begründung unten) und ist bereits der Default in
+`.env.example`. Der konfigurierte Ordner (`./data/meetily_exports`) muss
+manuell mit `*.json`-Exportdateien im unten dokumentierten Format befüllt
+werden, sobald Meetily installiert ist und Exporte liefert, oder bis dahin
+mit von Hand erstellten Transkript-Dateien für den Smoke-Test.
+
+**Weiterhin offen:** ob die aktuelle Meetily-Version überhaupt einen
+`*.json`-Export in diesem Format anbietet, ist unverifiziert. Sobald Meetily
+auf der VM installiert wird, muss Schritt "Zwingender Verifikationsschritt"
+unten nachgeholt werden.
 
 ## Recherchebefund (Web-Recherche, nicht live gegen Meetily verifiziert)
 
