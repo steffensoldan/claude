@@ -10,9 +10,15 @@
   (`Path.write_text` übersetzte auf Windows `\n`→`\r\n`, dadurch schlug
   `test_full_pipeline_transcript_to_download` fehl; Fix: `newline="\n"` in
   `app/jobs.py::run_job`). Danach alle 51 Tests grün, `ruff check .` clean.
-* **Nächster Schritt:** Schritt 3 — lokale Meetily-Schema-Verifikation
-  (`docs/meetily-integration-spike.md`), danach Produktivkonfiguration und
-  Live-Smoke-Test mit echtem Anthropic-Key
+* **Schritt 3 (Meetily-Verifikation):** Meetily ist auf dieser VM NICHT
+  installiert (AppData/AppX/Uninstall-Registry/Win32_Product geprüft, kein
+  Treffer). `MEETILY_SOURCE_MODE=export_folder` verwendet (bereits
+  `.env.example`-Default, entkoppelt vom internen DB-Schema). Ordner
+  `data/meetily_exports/` angelegt, aktuell leer. SQLite-Schema-Annahme
+  bleibt unverifiziert, bis Meetily installiert wird — siehe
+  `docs/meetily-integration-spike.md`.
+* **Nächster Schritt:** Produktivkonfiguration (Schritt 4) — benötigt Secrets
+  vom Nutzer
 * **Offene Fragen / Blockaden:** Warte auf Secrets vom Nutzer (ANTHROPIC_API_KEY,
   Admin-Zugangsdaten) für Schritt 4
 
