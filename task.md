@@ -17,10 +17,26 @@
   `data/meetily_exports/` angelegt, aktuell leer. SQLite-Schema-Annahme
   bleibt unverifiziert, bis Meetily installiert wird — siehe
   `docs/meetily-integration-spike.md`.
-* **Nächster Schritt:** Produktivkonfiguration (Schritt 4) — benötigt Secrets
-  vom Nutzer
-* **Offene Fragen / Blockaden:** Warte auf Secrets vom Nutzer (ANTHROPIC_API_KEY,
-  Admin-Zugangsdaten) für Schritt 4
+* **Schritt 4 (Produktivkonfiguration):** `.env` mit vom Nutzer bereitgestelltem
+  `ANTHROPIC_API_KEY` sowie `ADMIN_USERNAME=admin`/`ADMIN_PASSWORD=meetily2026`
+  befüllt (Nutzerentscheidung). Dabei zwei echte Bugs gefunden und gefixt:
+  (1) `.env` wurde nie geladen — kein `dotenv`-Aufruf existierte; jetzt
+  `python-dotenv` + `load_dotenv()` in `app/config.py`. (2) Relative Pfade aus
+  `.env` (`DATABASE_PATH` etc.) wurden gegen das Arbeitsverzeichnis statt den
+  Projekt-Root aufgelöst — landete in `backend/data/` statt `data/`, da die
+  dokumentierte Startroutine `cd backend && uvicorn ...` lautet; jetzt via
+  `_resolve_path()` gegen `_PROJECT_ROOT` aufgelöst. DB initialisiert
+  (`python -m app.db init`), Admin-User `admin` angelegt. Dienst manuell
+  gestartet und per curl verifiziert (Login + Dashboard funktionieren).
+  **Autostart-Blocker:** `setup-vm.ps1` (Windows Scheduled Task) liegt bereit,
+  aber `Register-ScheduledTask` schlägt mit „Zugriff verweigert" fehl — die
+  Sitzung läuft als `ZEW\sts` ohne Administratorrechte (nicht elevated). Der
+  Dienst läuft aktuell nur manuell im Vordergrund (PID variiert je Neustart);
+  Autostart nach VM-Neustart ist NICHT eingerichtet, bis jemand mit
+  Admin-Rechten `setup-vm.ps1` ausführt.
+* **Nächster Schritt:** Schritt 5 — Smoke-Test mit laufendem manuellem Dienst
+* **Offene Fragen / Blockaden:** Admin-Rechte auf der VM nötig, um
+  `setup-vm.ps1` erfolgreich auszuführen (Autostart-Registrierung)
 
 ---
 
