@@ -30,28 +30,34 @@ if (-not (Test-Path (Join-Path $BaseDir "data\app.db"))) {
 }
 
 # -- Task-Aktion ----------------------------------------------------------------
-$Action = New-ScheduledTaskAction `
-    -Execute $Python `
-    -Argument "-m uvicorn app.main:create_app --factory --host 0.0.0.0 --port 8000" `
-    -WorkingDirectory $BackendDir
+$ActionArgs = @{
+    Execute          = $Python
+    Argument         = "-m uvicorn app.main:create_app --factory --host 0.0.0.0 --port 8000"
+    WorkingDirectory = $BackendDir
+}
+$Action = New-ScheduledTaskAction @ActionArgs
 
 # -- Trigger: bei Systemstart -----------------------------------------------------
 $Trigger = New-ScheduledTaskTrigger -AtStartup
 
 # -- Einstellungen: laeuft dauerhaft, startet bei Absturz neu ---------------------
-$Settings = New-ScheduledTaskSettingsSet `
-    -ExecutionTimeLimit ([TimeSpan]::Zero) `
-    -RestartCount 3 `
-    -RestartInterval (New-TimeSpan -Minutes 1) `
-    -StartWhenAvailable `
-    -AllowStartIfOnBatteries `
-    -DontStopIfGoingOnBatteries
+$SettingsArgs = @{
+    ExecutionTimeLimit         = [TimeSpan]::Zero
+    RestartCount               = 3
+    RestartInterval            = New-TimeSpan -Minutes 1
+    StartWhenAvailable         = $true
+    AllowStartIfOnBatteries    = $true
+    DontStopIfGoingOnBatteries = $true
+}
+$Settings = New-ScheduledTaskSettingsSet @SettingsArgs
 
 # -- Principal: laeuft als aktueller Nutzer, auch ohne aktive Anmeldung (S4U) -----
-$Principal = New-ScheduledTaskPrincipal `
-    -UserId $RunAsUser `
-    -LogonType S4U `
-    -RunLevel Limited
+$PrincipalArgs = @{
+    UserId   = $RunAsUser
+    LogonType = "S4U"
+    RunLevel  = "Limited"
+}
+$Principal = New-ScheduledTaskPrincipal @PrincipalArgs
 
 # -- Registrieren (idempotent) ----------------------------------------------------
 $existing = Get-ScheduledTask -TaskName $TaskName -ErrorAction SilentlyContinue
@@ -60,13 +66,15 @@ if ($existing) {
     Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false
 }
 
-Register-ScheduledTask `
-    -TaskName $TaskName `
-    -Action $Action `
-    -Trigger $Trigger `
-    -Settings $Settings `
-    -Principal $Principal `
-    -Force | Out-Null
+$RegisterArgs = @{
+    TaskName  = $TaskName
+    Action    = $Action
+    Trigger   = $Trigger
+    Settings  = $Settings
+    Principal = $Principal
+    Force     = $true
+}
+Register-ScheduledTask @RegisterArgs | Out-Null
 
 Write-Host "Task '$TaskName' registriert."
 Write-Host "  Startet automatisch beim naechsten Systemstart als $RunAsUser."
