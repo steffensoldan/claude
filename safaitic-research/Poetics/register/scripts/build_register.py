@@ -222,6 +222,10 @@ NOTE = [
  "Übersetzungskette: gemeißelter Stein → philologische Lesung → englische OCIANA-Edition → deutsche Nachdichtung. Eckige Klammern und Striche ---- der Philologen bleiben im Register „schweige“ sichtbar.",
 ]
 
+TITLES = [
+ "Die acht Titel sind jeweils der Infinitiv des Verbs ohne das End-„n“ (schreiben → schreibe, stehen → stehe, …). Diese verkürzte Form ist absichtlich mehrdeutig: Sie ist zugleich erste Person Singular Präsens („ich schreibe“ — die aneignende Stimme), dritte Person Konjunktiv Präsens („er schreibe“ — der Wunsch, der die dritte Person und die Bitten und Flüche der Originale trifft), Imperativ („schreibe!“ — der Befehl an den späteren Leser oder die Gottheit) und mitunter Nomen (die Klage, die Bitte). Weil das Wort auf keine dieser Lesarten festgelegt ist, wird es — im Wortspiel mit „Infinitiv“ — infinit: unbegrenzt, in mehrere Richtungen zugleich offen. Das entspricht dem Gegenstand des Bandes: der aufgeschobenen Inschrift ohne festen Sender und Empfänger, die Aussage, Wunsch und Befehl in einem ist.",
+]
+
 FINDSPOT = {
     'ASFF 267': 'Al-Mafraq',
     'ASWS 183': 'Wādī Sārah',
@@ -454,7 +458,7 @@ def main():
             xml += [line(l) for l in lines] + [sigle(sg, FINDSPOT.get(sg, "Fundort unbekannt"))]
             total += 1
 
-    xml += [PAGEBREAK, head("Nachwort")] + [body(p) for p in VORWORT] + [body(p) for p in NOTE]
+    xml += [PAGEBREAK, head("Nachwort")] + [body(p) for p in VORWORT] + [body(p) for p in NOTE] + [subhead("Zu den Kapiteltiteln")] + [body(p) for p in TITLES]
     xml += [subhead("Die Corpus-Siglen"),
             body("Jede Nachdichtung nennt am Fuß zuerst den Fundort, dann die Corpus-Sigle. Die Siglen bezeichnen die Sammlung oder Edition, in der die Inschrift zuerst erfasst wurde:"),
             table(CORPUS), EMPTY,

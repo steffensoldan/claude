@@ -16,6 +16,8 @@ Realisiert sind **134 Stücke** in **acht** Registern, gestaltet wie die erweite
 
 **Kapitelüberschriften** = Verb in der Ich-Form (das einzige Ich im Band): **stehe · schreibe · warte · bitte · klage · verfluche · bezeuge · schweige**. Kapitel I „stehe“ (die Ahnenreihen) und VIII „schweige“ (das Verstummen) rahmen den Band. Unterüberschriften sind vorerst **entfernt** (bis eine bessere Fassung feststeht).
 
+**Zu den Titeln:** Jeder Titel ist der Infinitiv minus End-„n“ (schreiben → schreibe …). Die Form ist bewusst mehrdeutig — zugleich 1. Person Präsens („ich schreibe“), 3. Person Konjunktiv Präsens („er schreibe“), Imperativ („schreibe!“) und teils Nomen (Klage, Bitte); dadurch auf keine Lesart festgelegt und, im Wortspiel mit „Infinitiv“, *infinit*. Erklärt im Nachwort des Manuskripts („Zu den Kapiteltiteln“).
+
 **Aufteilung des alten Kapitels I:** Die Genealogie-Gedichte („Von X, Sohn des Y …“) bilden jetzt das eigene Kapitel **I „stehe“**; die „X war hier“-Litanei der reinen Signaturen wird Kapitel **II „schreibe“**.
 
 **v5-Kopfstücke** je Register (lange Inschriften zuerst, aus der erweiterten Ausgabe — der Band ist dadurch nicht mehr überschneidungsfrei zur erweiterten Ausgabe):
