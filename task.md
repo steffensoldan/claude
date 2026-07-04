@@ -34,9 +34,27 @@
   Dienst läuft aktuell nur manuell im Vordergrund (PID variiert je Neustart);
   Autostart nach VM-Neustart ist NICHT eingerichtet, bis jemand mit
   Admin-Rechten `setup-vm.ps1` ausführt.
-* **Nächster Schritt:** Schritt 5 — Smoke-Test mit laufendem manuellem Dienst
+* **Schritt 5 (Smoke-Test):** Synthetisches Testtranskript (kein reales
+  Meeting) in `data/meetily_exports/` gelegt, echten Übersetzungs-Job über
+  die Web-UI/API gegen den echten Anthropic-Key gefahren — Job-Status
+  `done`, Download lieferte plausible deutsche Übersetzung. Zweiten
+  Test-Nutzer `bob` angelegt (Passwort `bob-testpass-2026`) und
+  Cross-User-Isolation im echten Chrome-Browser verifiziert: `bob` sieht
+  `admin`s Job nicht in "Meine Jobs" und erhält beim direkten Aufruf von
+  `admin`s Download-URL `404 Job not found`. Test-Transkript nach Abschluss
+  wieder gelöscht; Test-User `bob` bewusst belassen für künftige manuelle
+  Tests.
+* **Produktivsetup insgesamt: funktional abgeschlossen.** Einziger offener
+  Punkt: Autostart-Registrierung (`setup-vm.ps1`) erfordert Admin-Rechte,
+  die diese Sitzung nicht hat — siehe unten.
+* **Nächster Schritt:** Jemand mit Admin-Rechten auf der VM führt
+  `setup-vm.ps1` aus (oder alternative Autostart-Lösung), damit der Dienst
+  einen VM-Neustart übersteht. Danach: Test-User `bob` optional wieder
+  entfernen; Scaleway-Migration folgt in separatem Auftrag.
 * **Offene Fragen / Blockaden:** Admin-Rechte auf der VM nötig, um
-  `setup-vm.ps1` erfolgreich auszuführen (Autostart-Registrierung)
+  `setup-vm.ps1` erfolgreich auszuführen (Autostart-Registrierung). Bis
+  dahin muss der Dienst nach jedem VM-Neustart manuell gestartet werden:
+  `cd backend && .venv\Scripts\python -m uvicorn app.main:create_app --factory --host 127.0.0.1 --port 8000`
 
 ---
 
@@ -56,3 +74,14 @@
 - [x] `walkthrough.md` erstellt
 - [x] Git Commit durchgeführt
 - [x] Statusblock für Übergabe aktualisiert
+
+## 4. VM-Produktivsetup (dieser Auftrag)
+- [x] Code auf VM übertragen, eigenständiges Git-Repo
+- [x] Regressionscheck auf VM (1 Bugfix: Windows-Zeilenumbrüche)
+- [x] Meetily-Installation geprüft (nicht vorhanden) → `export_folder`-Modus
+- [x] `.env` produktiv befüllt (2 Bugfixes: dotenv-Loading, Pfadauflösung)
+- [x] DB initialisiert, Admin-User angelegt
+- [x] Dienst manuell gestartet und erreichbar
+- [ ] Autostart via Windows Task Scheduler — **blockiert, Admin-Rechte nötig**
+- [x] Live-Smoke-Test mit echtem Anthropic-Key
+- [x] Cross-User-Download-Isolation im Browser verifiziert
