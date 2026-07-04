@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Login — Meetily-GLM-Bridge</title>
+</head>
+<body>
+  <h1>Meetily-GLM-Bridge — Login</h1>
+  {% if error %}<p style="color:red">{{ error }}</p>{% endif %}
+  <form method="post" action="/login">
+    <label>Benutzername <input type="text" name="username" required autofocus></label><br>
+    <label>Passwort <input type="password" name="password" required></label><br>
+    <button type="submit">Anmelden</button>
+  </form>
+</body>
+</html>

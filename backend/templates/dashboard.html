@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Meetily-GLM-Bridge</title>
+</head>
+<body>
+  <h1>Meetily-GLM-Bridge</h1>
+  <p>
+    Angemeldet als {{ user.username }}
+    <form method="post" action="/logout" style="display:inline">
+      <button type="submit">Abmelden</button>
+    </form>
+  </p>
+
+  <h2>Meetings</h2>
+  <table>
+    <tr><th>Titel</th><th>Datum</th><th>Aktion</th></tr>
+    {% for meeting in meetings %}
+    <tr>
+      <td>{{ meeting.title }}</td>
+      <td>{{ meeting.created_at }}</td>
+      <td>
+        <form method="post" action="/jobs" style="display:inline">
+          <input type="hidden" name="meeting_id" value="{{ meeting.id }}">
+          <input type="hidden" name="meeting_title" value="{{ meeting.title }}">
+          <input type="hidden" name="job_type" value="translate">
+          <button type="submit">Übersetzen</button>
+        </form>
+        <form method="post" action="/jobs" style="display:inline">
+          <input type="hidden" name="meeting_id" value="{{ meeting.id }}">
+          <input type="hidden" name="meeting_title" value="{{ meeting.title }}">
+          <input type="hidden" name="job_type" value="summarize">
+          <button type="submit">Zusammenfassen</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <h2>Meine Jobs</h2>
+  <table id="jobs-table">
+    <tr><th>Meeting</th><th>Typ</th><th>Status</th><th>Download</th></tr>
+    {% for job in jobs %}
+    <tr data-job-id="{{ job.id }}">
+      <td>{{ job.meeting_title }}</td>
+      <td>{{ job.job_type }}</td>
+      <td class="status">{{ job.status }}</td>
+      <td class="download-cell">
+        {% if job.status == "done" %}<a href="/jobs/{{ job.id }}/download">Herunterladen</a>{% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

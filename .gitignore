@@ -1,0 +1,14 @@
+# Secrets
+.env
+
+# Runtime data (users.db, jobs.db, downloads, meetily exports)
+data/*
+!data/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
