@@ -16,7 +16,7 @@ Formfassung v3:
     das Verstummen zuläuft.
 
 Kapitelüberschrift = Verb in der Ich-Form (stehe/schreibe/warte/bitte/schweige/
-klage/verfluche/bezeuge).
+klage/fluche/bezeuge).
 
 Aufbau je Register:
   → Kopfstücke aus der erweiterten Ausgabe v5 (1 Kopfstein + weitere; lange
@@ -32,6 +32,7 @@ Aufruf (aus Poetics/):
 
 import os
 import struct
+import unicodedata
 import zipfile
 import xml.etree.ElementTree as ET
 
@@ -74,7 +75,25 @@ IMG_STONES = {   # Sigle → Bildunterschrift unter der eingebetteten Abbildung
     "HCH 85":   "Auf dem Stein: zwei Zeichnungen; die Inschrift in einer Kartusche.",
     "C 2670":   "Auf dem Stein: Umriss eines Oryx.",
 }
-MAXW_EMU = 3060000     # max. Bildbreite 8,5 cm (EMU)
+MAXW_FLOAT = 1650000   # max. Bildbreite ~4,6 cm (EMU) — klein, rechts neben dem Gedicht
+
+# Bildnachweis (Sigle, Motiv, OCIANA-Bild-ID, Quelle) — für das Backmatter
+BILDNACHWEIS = [
+    ("KRS 1341", "Löwe",                        "im0015581", "Basalt Desert Rescue Survey (G. M. H. King, 1989)"),
+    ("HYGQ 24",  "Löwe",                        "im0056364", "OCIANA-Survey (HYGQ)"),
+    ("KRS 3051", "junge Kamelstute",            "im0021957", "Basalt Desert Rescue Survey (G. M. H. King, 1989)"),
+    ("HCH 85",   "zwei Zeichnungen",            "im0038237", "G. L. Harding, The Cairn of Hāniʾ (1953)"),
+    ("C 286",    "Göttin Rḍy / weibl. Figuren", "im0027384", "CIS V (Ryckmans 1950); Dunand 1339 a"),
+    ("C 1658",   "zwei Kamele + Krieger",       "im0028730", "CIS V (Ryckmans 1950); Dunand 388"),
+    ("C 2670",   "Oryx",                        "im0029738", "CIS V (Ryckmans 1950); Dunand 207 a; SESP"),
+]
+
+def _alpha(s):
+    """Sortierschlüssel: Diakritika/Modifikatoren entfernen, klein, ohne führende Artikel-Striche."""
+    k = "".join(c for c in unicodedata.normalize("NFKD", s) if not unicodedata.combining(c))
+    for ch in "ʿʾˀˁ˥‹›«»„“”\"'":
+        k = k.replace(ch, "")
+    return k.lower().lstrip(" -")
 
 def _safe(sg):
     return sg.replace(" ", "_").replace("/", "-").replace(".", "_")
@@ -110,25 +129,32 @@ def _dims(b):
             i += 2 + struct.unpack(">H", b[i + 2:i + 4])[0]
     return 480, 360
 
-def image_par(rid, docid, w, h):
+def anchor_run(rid, docid, w, h):
+    """Rechts schwebende Abbildung (Text läuft links daneben), ~4,6 cm breit."""
     cx, cy = int(w * 9525), int(h * 9525)          # px → EMU (96 dpi)
-    if cx > MAXW_EMU:
-        cy = int(cy * MAXW_EMU / cx); cx = MAXW_EMU
-    draw = (f'<w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0">'
-            f'<wp:extent cx="{cx}" cy="{cy}"/><wp:docPr id="{docid}" name="rockart{docid}"/>'
+    if cx > MAXW_FLOAT:
+        cy = int(cy * MAXW_FLOAT / cx); cx = MAXW_FLOAT
+    pic = (f'<pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">'
+           f'<pic:nvPicPr><pic:cNvPr id="{docid}" name="rockart{docid}"/><pic:cNvPicPr/></pic:nvPicPr>'
+           f'<pic:blipFill><a:blip r:embed="{rid}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill>'
+           f'<pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="{cx}" cy="{cy}"/></a:xfrm>'
+           f'<a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic>')
+    return (f'<w:r><w:drawing>'
+            f'<wp:anchor distT="0" distB="0" distL="114300" distR="114300" simplePos="0" '
+            f'relativeHeight="{251658240 + docid}" behindDoc="0" locked="0" layoutInCell="1" allowOverlap="1">'
+            f'<wp:simplePos x="0" y="0"/>'
+            f'<wp:positionH relativeFrom="margin"><wp:align>right</wp:align></wp:positionH>'
+            f'<wp:positionV relativeFrom="paragraph"><wp:posOffset>0</wp:posOffset></wp:positionV>'
+            f'<wp:extent cx="{cx}" cy="{cy}"/><wp:effectExtent l="0" t="0" r="0" b="0"/>'
+            f'<wp:wrapSquare wrapText="left"/><wp:docPr id="{docid}" name="rockart{docid}"/>'
+            f'<wp:cNvGraphicFramePr/>'
             f'<a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">'
-            f'<a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">'
-            f'<pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">'
-            f'<pic:nvPicPr><pic:cNvPr id="{docid}" name="rockart{docid}"/><pic:cNvPicPr/></pic:nvPicPr>'
-            f'<pic:blipFill><a:blip r:embed="{rid}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill>'
-            f'<pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="{cx}" cy="{cy}"/></a:xfrm>'
-            f'<a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr>'
-            f'</pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing>')
-    return para(f'<w:r>{draw}</w:r>', f'<w:pPr>{sp(before="80", after="20")}</w:pPr>')
+            f'<a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">{pic}</a:graphicData>'
+            f'</a:graphic></wp:anchor></w:drawing></w:r>')
 
-def imgcap(t):
-    return para(run(t, '<w:i/><w:color w:val="666666"/><w:sz w:val="16"/><w:szCs w:val="16"/>'),
-                f'<w:pPr>{sp(after="120")}</w:pPr>')
+def titel_ueber_img(t, imgrun):  # Kopfzeile mit rechts schwebender Abbildung
+    return para(imgrun + run(t, '<w:color w:val="7A5C3E"/><w:sz w:val="16"/><w:szCs w:val="16"/>'),
+                f'<w:pPr>{sp(before="260", after="40")}</w:pPr>')
 
 _BORD = ('<w:top w:val="single" w:color="DDDDDD" w:sz="4"/><w:left w:val="single" w:color="DDDDDD" w:sz="4"/>'
          '<w:bottom w:val="single" w:color="DDDDDD" w:sz="4"/><w:right w:val="single" w:color="DDDDDD" w:sz="4"/>')
@@ -255,7 +281,7 @@ REGISTERS = [
  ("SSWS 28",["Er weinte vor Kummer."]),
  ("C 5367",["Er weinte vor Kummer."]),
 ]),
-("VII","verfluche",
+("VII","fluche",
  "Der Fluch, der nie endet — der performativste Akt: ein gesprochener Fluch verhallt, ein gemeißelter gilt ewig.",
  ["C 4803","RSIS 351","LP 243","C 2775"],[
  ("WH 368",["Diese Schrift.","Allat —","dem, der sie austilgt:","Blindheit und Lähmung,","Stummheit, Krätze und Räude."]),
@@ -301,7 +327,7 @@ VORWORT = [
 ]
 NOTE = [
  "Der Band schöpft aus dem Vollkorpus der ~31.800 safaitischen Inschriften (OCIANA), die zwischen dem ersten und vierten Jahrhundert n. Chr. in Süden Syriens und in Nordjordanien entstanden sind. Erschlossen sind damit auch rund 18.500 reinen Signaturen und die Minimal-Texte — sie tragen die Register „stehe“ (die Ahnenreihen) und „schreibe“ (die Signaturen „Von X“). Revier- und Präsenzmarkierung, indifferent gegenüber dem konkreten Empfänger. Sie steht im Raum, unabhängig davon, ob und wann sie gelesen wird.",
- "Jedes Register speist aus seinem eigenen Korpus-Material: die Signaturen für „schreibe“ und „stehe“, die Anrufungen für „bitte“, die Fluchformeln für „verfluche“, die fragmentarischen Steine für „schweige“, die datierten für „bezeuge“. Die Auswahl ist kuratiert, nicht repräsentativ; jede Nachdichtung trägt die Sigle ihrer Quelle im Korpus.",
+ "Jedes Register speist aus seinem eigenen Korpus-Material: die Signaturen für „schreibe“ und „stehe“, die Anrufungen für „bitte“, die Fluchformeln für „fluche“, die fragmentarischen Steine für „schweige“, die datierten für „bezeuge“. Die Auswahl ist kuratiert, nicht repräsentativ; jede Nachdichtung trägt die Sigle ihrer Quelle im Korpus.",
  "Übersetzungskette: gemeißelter Stein → philologische Lesung → englische OCIANA-Edition → deutsche Nachdichtung. Eckige Klammern und Striche ---- der Philologen bleiben im Register „schweige“ sichtbar. Protokolle eines kaum sterblichen sprachlichen Systems.",
 ]
 
@@ -522,25 +548,32 @@ def main():
     sect = raw[raw.find("<w:sectPr"):raw.find("</w:body>")]
     v5lines = v5_poem_lines(raw)
 
-    xml = [title("Wer dies liest, lebe lang"),
-           tsub("Safaitische Inschriften, nachgedichtet", 26),
-           tsub("Aus der nordarabischen Steppe · 1. Jh. v. – 4. Jh. n. Chr.", 20, "7A5C3E"),
+    xml = [title("Antike safaitische Inschriften"),
+           tsub("nomadischer Beduinen Nordarabiens · 1. Jh. v. Chr. – 4. Jh. n. Chr.", 22, "7A5C3E"),
+           tsub("»Wer dies liest, lebe lang« — in deutscher Nachdichtung", 20),
            tsub("Acht Register · nach Sprechakten geordnet", 20)]
 
     media = []          # (rId, arcname, bytes) der eingebetteten Abbildungen
     seq = [9000]        # Zähler für rId/docPr-Id
 
-    def emit_image(sg):
+    def img_anchor(sg):
+        """Rechts schwebende Abbildung als Run (in die Kopfzeile), oder '' ohne Bild."""
         got = _img_for(sg)
-        if not got:     # kein Bild vorhanden → nichts einfügen (Band = v3-Text)
-            return []
+        if not got:
+            return ""
         b, ext = got
         w, h = _dims(b)
         seq[0] += 1
         rid, docid = f"rId{seq[0]}", seq[0]
         arc = f"rockart{docid}." + ("png" if ext == "png" else "jpg")
         media.append((rid, arc, b))
-        return [image_par(rid, docid, w, h), imgcap(IMG_STONES[sg])]
+        return anchor_run(rid, docid, w, h)
+
+    def entry(sg, lines):
+        ort = FINDSPOT.get(sg, "Fundort unbekannt")
+        ar = img_anchor(sg) if sg in IMG_STONES else ""
+        head_par = titel_ueber_img(f"{ort} · {sg}", ar) if ar else titel_ueber(f"{ort} · {sg}")
+        return [head_par] + [line(l) for l in lines]
 
     total = 0
     for rom, name, sub, v5head, poems in REGISTERS:
@@ -550,25 +583,24 @@ def main():
             lines = v5lines.get(sg)
             if not lines:
                 raise SystemExit(f"v5-Kopfstück fehlt: {sg}")
-            ort = FINDSPOT.get(sg, "Fundort unbekannt")
-            xml += [titel_ueber(f"{ort} · {sg}")] + [line(l) for l in lines]
-            if sg in IMG_STONES:
-                xml += emit_image(sg)
+            xml += entry(sg, lines)
             total += 1
         for sg, lines in poems:                 # Korpus-Stimmen
-            ort = FINDSPOT.get(sg, "Fundort unbekannt")
-            xml += [titel_ueber(f"{ort} · {sg}")] + [line(l) for l in lines]
-            if sg in IMG_STONES:
-                xml += emit_image(sg)
+            xml += entry(sg, lines)
             total += 1
 
     xml += [PAGEBREAK, head("Nachwort")] + [body(p) for p in VORWORT] + [body(p) for p in NOTE] + [subhead("Zu den Kapiteltiteln")] + [body(p) for p in TITLES]
     xml += [subhead("Die Corpus-Siglen"),
             body("Jede Nachdichtung trägt als Kopfzeile zuerst den Fundort, dann die Corpus-Sigle. Die Siglen bezeichnen die Sammlung oder Edition, in der die Inschrift zuerst erfasst wurde:"),
-            table(CORPUS), EMPTY,
+            table(sorted(CORPUS, key=lambda r: _alpha(r[0]))), EMPTY,
             subhead("Die Fundorte"),
-            body("Der Fundort ist normalisiert (spezifischster benannter Ort); zwei Zonen ordnen: die nordostjordanische Ḥarrah und die südsyrische Ṣafā."),
-            table(FINDORT), EMPTY]
+            table(sorted(FINDORT, key=lambda r: _alpha(r[0]))), EMPTY]
+    xml += [subhead("Bildnachweis"),
+            body("Sieben Steine tragen eine assoziierte Felszeichnung (OCIANA-Feld „Associated Drawings“); "
+                 "sie stehen als Abbildung neben der jeweiligen Nachdichtung. Alle Bilder: OCIANA (Online Corpus "
+                 "of the Inscriptions of Ancient North Arabia), krc.orient.ox.ac.uk — Wiedergabe für diese "
+                 "Arbeitsfassung; vor einer Veröffentlichung sind die Bildrechte zu klären."),
+            table([(sg, f"{motiv} · OCIANA {imid} · {src}") for sg, motiv, imid, src in BILDNACHWEIS]), EMPTY]
     doc = decl + root_open + "<w:body>" + "".join(xml) + sect + "</w:body></w:document>"
 
     imgrels = "".join(

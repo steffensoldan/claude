@@ -19,11 +19,11 @@ Realisiert sind **134 Stücke** in **acht** Registern, gestaltet wie die erweite
 - **Fundort · Sigle als Kopfzeile ÜBER dem Text** (aus v2 beibehalten) — Herkunftsort und Inschriftennummer betiteln jeden Eintrag.
 - **Verbregel:** die finite Er-Form bleibt, wo das Original ein Verb vorsieht; wo keines vorliegt (Genealogien, Anrufungen, Signaturen), bleibt der Eintrag nominal — **kein Infinitiv** (am Original orientiert).
 - **Register II „schreibe“ als „Von X“:** die reinen Signaturen werden nominal wiedergegeben (`l-Fulān` = „Von X“, das *l-* steht im Fels), nicht mehr als Satz „X war hier“ — die früher zugefügte Verbform ist getilgt.
-- **Kapitelordnung strukturell, nicht als Lebenszyklus:** „schweige“ ist von der letzten Position (vormals VIII) auf die **Mitte (V)** gerückt, damit der Band nicht auf das Verstummen zuläuft. Neue Folge: **I stehe · II schreibe · III warte · IV bitte · V schweige · VI klage · VII verfluche · VIII bezeuge.**
+- **Kapitelordnung strukturell, nicht als Lebenszyklus:** „schweige“ ist von der letzten Position (vormals VIII) auf die **Mitte (V)** gerückt, damit der Band nicht auf das Verstummen zuläuft. Neue Folge: **I stehe · II schreibe · III warte · IV bitte · V schweige · VI klage · VII fluche · VIII bezeuge.**
 
 Das **Nachwort** übernimmt die vom Autor überarbeitete Fassung (hochgeladenes `nachwort.docx`) mit drei umbaubedingten Anpassungen: die Register-Reihung endet jetzt auf „Zeugnis“ (Verstummen in der Mitte) mit einem Satz zur strukturellen (nicht biografischen) Ordnung; „schweige“ ist als **(V)** referenziert; und ein Zusatz erklärt, dass das safaitische *l-* zugleich „von / für / gehörig zu“ heißt und Urheber, Adressat und Besitzer offenlässt. Die Beizeilen-Erklärung nennt die Kopfzeile-Platzierung.
 
-**Kapitelüberschriften** = Verb in der Ich-Form (das einzige Ich im Band): **stehe · schreibe · warte · bitte · schweige · klage · verfluche · bezeuge**. Kapitel I „stehe“ (die Ahnenreihen) eröffnet, VIII „bezeuge“ (die Datierung für Fremde) schließt den Band. Unterüberschriften sind vorerst **entfernt** (bis eine bessere Fassung feststeht).
+**Kapitelüberschriften** = Verb in der Ich-Form (das einzige Ich im Band): **stehe · schreibe · warte · bitte · schweige · klage · fluche · bezeuge**. Kapitel I „stehe“ (die Ahnenreihen) eröffnet, VIII „bezeuge“ (die Datierung für Fremde) schließt den Band. Unterüberschriften sind vorerst **entfernt** (bis eine bessere Fassung feststeht).
 
 **Zu den Titeln:** Jeder Titel ist der Infinitiv minus End-„n“ (schreiben → schreibe …). Die Form ist bewusst mehrdeutig — zugleich 1. Person Präsens („ich schreibe“), 3. Person Konjunktiv Präsens („er schreibe“), Imperativ („schreibe!“) und teils Nomen (Klage, Bitte); dadurch auf keine Lesart festgelegt und, im Wortspiel mit „Infinitiv“, *infinit*. Erklärt im Nachwort des Manuskripts („Zu den Kapiteltiteln“).
 
@@ -36,7 +36,7 @@ Das **Nachwort** übernimmt die vom Autor überarbeitete Fassung (hochgeladenes 
 - IV bitte: BS 209, MKJS 80, LP 1267, Is.Mu 88
 - V schweige: RQ.A 5, WH 1867.1, WH 1501.2
 - VI klage: LP 540, KRS 17, AbaNS 361, C 4273
-- VII verfluche: C 4803, RSIS 351, LP 243, C 2775
+- VII fluche: C 4803, RSIS 351, LP 243, C 2775
 - VIII bezeuge: HSNS 5, LP 653, C 2670, ISB 57
 
 **Kapitel II** als „Von X“-Signaturenreihe: die reinen Signaturen (`l-Fulān`) nominal wiedergegeben — die fünf ursprünglichen + 8 neue (HCH 75/158.2/31.1, Rees 150/151/155/161 4/176) — geografisch dicht (Hani, Km 612, Ḥarrat al-Raǧil). Das früher zugefügte „war hier“ ist getilgt (das Original hat kein Verb, nur das *l-* „von/für/gehörig zu“). **Kapitel III**: Genealogie-Gedicht **LP 1196** (sieben Generationen + Späh-Verb) neu.
@@ -191,7 +191,8 @@ Die Basis-Auswahl aus dem Vollkorpus (vor v5-Kopfstücken, war-hier-Erweiterung 
 - [x] **Formfassung v2:** Fließtext je Eintrag, Fundort · Sigle als Kopfzeile über dem Text, Verbregel, überarbeitetes Nachwort übernommen.
 - [x] **Formfassung v3:** Verszeilen (Absatzformat) statt Fließtext zurückgeholt; Kopfzeile beibehalten; Register II auf „Von X“; „schweige“ von VIII auf V (Mitte) gerückt (keine Lebenszyklus-Suggestion); Nachwort an den drei betreffenden Stellen aktualisiert (Reihung endet auf „Zeugnis“, „schweige“ (V), *l-*-Zusatz).
 - [x] **Felszeichnungen ausgewertet** (OCIANA-Feld „Associated Drawings“, alle 134 Seiten): 7 Steine mit Bild — Übersicht in `ROCKART_UEBERSICHT.md`.
-- [x] **Formfassung v4:** die 7 OCIANA-Fotos als Inline-Abbildungen neben die jeweilige Inschrift eingebettet (`wer_dies_liest_register_v4.docx`), mit Bildunterschrift „Auf dem Stein: …“. Bilder in `register/rockart_images/`; reproduzierbar via `build_register.py`. Bildrechte vor Veröffentlichung klären.
+- [x] **Formfassung v4:** die 7 OCIANA-Fotos als Abbildungen neben die jeweilige Inschrift eingebettet (`wer_dies_liest_register_v4.docx`). Bilder in `register/rockart_images/`; reproduzierbar via `build_register.py`. Bildrechte vor Veröffentlichung klären.
+- [x] **Feinschliff:** Bandtitel neu („Antike safaitische Inschriften / nomadischer Beduinen Nordarabiens · 1. Jh. v. Chr. – 4. Jh. n. Chr.“; „Wer dies liest, lebe lang“ als Untertitel); Kapitel VII „fluche“ (statt „verfluche“); Corpus- und Fundort-Tabelle alphabetisch, Einleitungstext über der Fundort-Tabelle entfernt; Abbildungen kleiner und rechts neben dem Gedicht (schwebend); **Bildnachweis** am Ende des Nachworts.
 - [ ] Optional: Fundort-Anhang im Backmatter (alle Stücke nach Zonen/Clustern gruppiert).
 - [ ] Optional: Intra-Register-Clustering (same-site-Stücke benachbart).
 - [ ] Optional: echte Karte via OCIANA-Koordinaten (externer Abruf).
