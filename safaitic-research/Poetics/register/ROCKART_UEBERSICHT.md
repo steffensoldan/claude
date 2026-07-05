@@ -52,3 +52,14 @@ Mehrere Inschriften nennen „the carving" oder „carved", meinen damit aber di
 Vier der sieben Fälle (KRS 1341, HYGQ 24, KRS 3051, C 1658) sind **Bildunterschriften**: Der Inschriftentext benennt die daneben geritzte Figur selbst („ist [die Zeichnung] des Löwen", „ist die junge Kamelstute", „sind die zwei Kamele"). Bei ihnen sind Schrift und Bild **ein Akt** — der Stein beschriftet sein eigenes Bild. Unsere Nachdichtungen geben genau das schon wieder. Bei den übrigen drei (C 286, HCH 85, C 2670) steht das Bild **neben** dem Text, ohne im Text erwähnt zu werden.
 
 Datengrundlage: `ociana_rockart_result.csv` (alle 134), Rohseiten in `ociana_pages.zip`.
+
+## Einbau der Abbildungen in den Band
+
+`build_register.py` kann die 7 Zeichnungen **neben die jeweilige Inschrift** einbetten (echte Inline-Bilder im .docx, mit Bildunterschrift „Auf dem Stein: …"). Ablauf:
+
+1. **Bilder holen** (Netz nötig, z. B. Cowork): `python3 register/scripts/download_rockart_images.py` lädt die 18 OCIANA-JPGs aus `rockart_images_manifest.csv` nach `register/rockart_images/`.
+2. **Bauen**: `python3 register/scripts/build_register.py` bettet je Stein automatisch das erste vorhandene Bild ein und schreibt `wer_dies_liest_register_v4.docx` (mit Abbildungen); liegt kein Bild vor, entsteht wie bisher `…_v3.docx` (ohne). Zum gezielten Auswählen eines Motivs: das gewünschte Bild als `register/rockart_images/<Sigle>.jpg` ablegen (hat Vorrang, z. B. `C_286.jpg`).
+
+Die Bildmechanik (Media-Part + Relationship + Inline-Drawing) ist gegen Platzhalter getestet; sie wartet nur noch auf die echten JPGs.
+
+**Rechte:** Die OCIANA-Fotos/Squeezes unterliegen den OCIANA-Nutzungsbedingungen (Herkunft je Stein z. B. „Dunand", CIS). Für einen internen Arbeitsstand unkritisch; vor einer Veröffentlichung des Bandes sind Genehmigung und Bildnachweis zu klären.

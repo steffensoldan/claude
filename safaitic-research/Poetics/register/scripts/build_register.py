@@ -30,6 +30,8 @@ Aufruf (aus Poetics/):
   python3 register/scripts/build_register.py
 """
 
+import os
+import struct
 import zipfile
 import xml.etree.ElementTree as ET
 
@@ -60,6 +62,73 @@ def titel_ueber(t):  # Fundort · Sigle als Kopfzeile ÜBER dem Text (klein, bra
     return para(run(t, '<w:color w:val="7A5C3E"/><w:sz w:val="16"/><w:szCs w:val="16"/>'),
                 f'<w:pPr>{sp(before="260", after="40")}</w:pPr>')
 PAGEBREAK = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>'
+
+# --- Felszeichnungen (OCIANA „Associated Drawings“): 7 Steine mit Bild -----------
+IMG_DIR = "register/rockart_images"
+IMG_STONES = {   # Sigle → Bildunterschrift unter der eingebetteten Abbildung
+    "KRS 1341": "Auf dem Stein: Zeichnung eines Löwen.",
+    "HYGQ 24":  "Auf dem Stein: Zeichnung eines Löwen.",
+    "KRS 3051": "Auf dem Stein: Zeichnung einer jungen Kamelstute.",
+    "C 1658":   "Auf dem Stein: zwei Kamele und ein Mann mit Schwert und Schild, in einer Kartusche.",
+    "C 286":    "Auf dem Stein: Bild der Göttin Rḍy als weibliche Gestalt.",
+    "HCH 85":   "Auf dem Stein: zwei Zeichnungen; die Inschrift in einer Kartusche.",
+    "C 2670":   "Auf dem Stein: Umriss eines Oryx.",
+}
+MAXW_EMU = 3060000     # max. Bildbreite 8,5 cm (EMU)
+
+def _safe(sg):
+    return sg.replace(" ", "_").replace("/", "-").replace(".", "_")
+
+def _img_for(sg):
+    """(bytes, ext) des ersten Bildes zu einer Sigle: bevorzugt <Sigle>.jpg,
+    sonst das erste <Sigle>__*.jpg/.png in IMG_DIR — oder None."""
+    if not os.path.isdir(IMG_DIR):
+        return None
+    pref = os.path.join(IMG_DIR, _safe(sg) + ".jpg")
+    if os.path.exists(pref):
+        pick = pref
+    else:
+        hits = [fn for fn in sorted(os.listdir(IMG_DIR))
+                if fn.startswith(_safe(sg) + "__") and fn.lower().endswith((".jpg", ".jpeg", ".png"))]
+        if not hits:
+            return None
+        pick = os.path.join(IMG_DIR, hits[0])
+    with open(pick, "rb") as f:
+        return f.read(), os.path.splitext(pick)[1].lower().lstrip(".")
+
+def _dims(b):
+    if b[:8] == b"\x89PNG\r\n\x1a\n":
+        w, h = struct.unpack(">II", b[16:24]); return w, h
+    if b[:2] == b"\xff\xd8":                      # JPEG: SOF-Marker suchen
+        i = 2
+        while i < len(b) - 9:
+            if b[i] != 0xFF:
+                i += 1; continue
+            m = b[i + 1]
+            if 0xC0 <= m <= 0xCF and m not in (0xC4, 0xC8, 0xCC):
+                h, w = struct.unpack(">HH", b[i + 5:i + 9]); return w, h
+            i += 2 + struct.unpack(">H", b[i + 2:i + 4])[0]
+    return 480, 360
+
+def image_par(rid, docid, w, h):
+    cx, cy = int(w * 9525), int(h * 9525)          # px → EMU (96 dpi)
+    if cx > MAXW_EMU:
+        cy = int(cy * MAXW_EMU / cx); cx = MAXW_EMU
+    draw = (f'<w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0">'
+            f'<wp:extent cx="{cx}" cy="{cy}"/><wp:docPr id="{docid}" name="rockart{docid}"/>'
+            f'<a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">'
+            f'<a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">'
+            f'<pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">'
+            f'<pic:nvPicPr><pic:cNvPr id="{docid}" name="rockart{docid}"/><pic:cNvPicPr/></pic:nvPicPr>'
+            f'<pic:blipFill><a:blip r:embed="{rid}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill>'
+            f'<pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="{cx}" cy="{cy}"/></a:xfrm>'
+            f'<a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr>'
+            f'</pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing>')
+    return para(f'<w:r>{draw}</w:r>', f'<w:pPr>{sp(before="80", after="20")}</w:pPr>')
+
+def imgcap(t):
+    return para(run(t, '<w:i/><w:color w:val="666666"/><w:sz w:val="16"/><w:szCs w:val="16"/>'),
+                f'<w:pPr>{sp(after="120")}</w:pPr>')
 
 _BORD = ('<w:top w:val="single" w:color="DDDDDD" w:sz="4"/><w:left w:val="single" w:color="DDDDDD" w:sz="4"/>'
          '<w:bottom w:val="single" w:color="DDDDDD" w:sz="4"/><w:right w:val="single" w:color="DDDDDD" w:sz="4"/>')
@@ -458,6 +527,21 @@ def main():
            tsub("Aus der nordarabischen Steppe · 1. Jh. v. – 4. Jh. n. Chr.", 20, "7A5C3E"),
            tsub("Acht Register · nach Sprechakten geordnet", 20)]
 
+    media = []          # (rId, arcname, bytes) der eingebetteten Abbildungen
+    seq = [9000]        # Zähler für rId/docPr-Id
+
+    def emit_image(sg):
+        got = _img_for(sg)
+        if not got:     # kein Bild vorhanden → nichts einfügen (Band = v3-Text)
+            return []
+        b, ext = got
+        w, h = _dims(b)
+        seq[0] += 1
+        rid, docid = f"rId{seq[0]}", seq[0]
+        arc = f"rockart{docid}." + ("png" if ext == "png" else "jpg")
+        media.append((rid, arc, b))
+        return [image_par(rid, docid, w, h), imgcap(IMG_STONES[sg])]
+
     total = 0
     for rom, name, sub, v5head, poems in REGISTERS:
         xml.append(PAGEBREAK)
@@ -468,10 +552,14 @@ def main():
                 raise SystemExit(f"v5-Kopfstück fehlt: {sg}")
             ort = FINDSPOT.get(sg, "Fundort unbekannt")
             xml += [titel_ueber(f"{ort} · {sg}")] + [line(l) for l in lines]
+            if sg in IMG_STONES:
+                xml += emit_image(sg)
             total += 1
         for sg, lines in poems:                 # Korpus-Stimmen
             ort = FINDSPOT.get(sg, "Fundort unbekannt")
             xml += [titel_ueber(f"{ort} · {sg}")] + [line(l) for l in lines]
+            if sg in IMG_STONES:
+                xml += emit_image(sg)
             total += 1
 
     xml += [PAGEBREAK, head("Nachwort")] + [body(p) for p in VORWORT] + [body(p) for p in NOTE] + [subhead("Zu den Kapiteltiteln")] + [body(p) for p in TITLES]
@@ -483,12 +571,24 @@ def main():
             table(FINDORT), EMPTY]
     doc = decl + root_open + "<w:body>" + "".join(xml) + sect + "</w:body></w:document>"
 
+    imgrels = "".join(
+        f'<Relationship Id="{rid}" '
+        f'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" '
+        f'Target="media/{arc}"/>' for rid, arc, _ in media)
+    out_path = OUT.replace("_v3", "_v4") if media else OUT
+
     with zipfile.ZipFile(V5) as zin:
         items = [(i, zin.read(i.filename)) for i in zin.infolist()]
-    with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED) as zout:
+    with zipfile.ZipFile(out_path, "w", zipfile.ZIP_DEFLATED) as zout:
         for info, data in items:
-            zout.writestr(info, doc.encode("utf-8") if info.filename == "word/document.xml" else data)
-    print(f"geschrieben: {OUT}  ({total} Stücke)")
+            if info.filename == "word/document.xml":
+                data = doc.encode("utf-8")
+            elif info.filename == "word/_rels/document.xml.rels" and imgrels:
+                data = data.decode("utf-8").replace("</Relationships>", imgrels + "</Relationships>").encode("utf-8")
+            zout.writestr(info, data)
+        for rid, arc, b in media:
+            zout.writestr("word/media/" + arc, b)
+    print(f"geschrieben: {out_path}  ({total} Stücke, {len(media)} Abbildungen)")
 
 if __name__ == "__main__":
     main()
