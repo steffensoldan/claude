@@ -28,7 +28,7 @@ sect = raw[raw.find("<w:sectPr"):raw.find("</w:body>")]
 xml = [head("Nachwort")] + [body(p) for p in VORWORT] + [body(p) for p in NOTE]
 xml += [subhead("Zu den Kapiteltiteln")] + [body(p) for p in TITLES]
 xml += [subhead("Die Corpus-Siglen"),
-        body("Jede Nachdichtung nennt am Fuß zuerst den Fundort, dann die Corpus-Sigle. "
+        body("Jede Nachdichtung trägt als Kopfzeile zuerst den Fundort, dann die Corpus-Sigle. "
              "Die Siglen bezeichnen die Sammlung oder Edition, in der die Inschrift zuerst erfasst wurde:"),
         table(CORPUS), EMPTY,
         subhead("Die Fundorte"),

@@ -1,19 +1,26 @@
 #!/usr/bin/env python3
 """
-Baut den Register-Band (Konzept A): safaitische Inschriften nach den sieben
-Sprechakt-Registern, gestaltet wie die erweiterte Ausgabe v5 (Georgia, Er-Form,
-„Sigle …“-Zeilen), mit den Register-Unterüberschriften aus dem Konzept.
+Baut den Register-Band (Konzept A, Fassung v2): safaitische Inschriften nach den
+acht Sprechakt-Registern, gestaltet wie die erweiterte Ausgabe v5 (Georgia).
+
+Formfassung v2 (drei Umstellungen gegenüber v1):
+  → Fließtext: jeder Eintrag steht als ein fortlaufender Block, ohne Verszeilen.
+  → Fundort · Sigle als Kopfzeile ÜBER dem Text (statt „Sigle …“ darunter).
+  → Verbregel: die finite Er-Form bleibt, wo das Original ein Verb vorsieht;
+    wo keines vorliegt (Genealogien, Anrufungen, Signaturen), bleibt der Eintrag
+    nominal — es wird KEIN Infinitiv eingesetzt. Der Textbestand von v1 bleibt
+    damit unverändert; nur die Darbietung wechselt.
 
 Kapitelüberschrift = Verb in der Ich-Form (schreibe/warte/bitte/klage/
-verfluche/bezeuge/schweige), darunter die Konzept-Unterüberschrift.
+verfluche/bezeuge/schweige/stehe).
 
 Aufbau je Register:
-  → Kopfstücke aus der erweiterten Ausgabe v5 (1 Kopfstein + 3 weitere; lange
+  → Kopfstücke aus der erweiterten Ausgabe v5 (1 Kopfstein + weitere; lange
     Inschriften zuerst), faithful aus v5 übernommen
   → knappe Stimmen aus dem Vollkorpus (Auswahl: REGISTER_BAND_AUSWAHL.md;
-    Kapitel I als „X war hier“-Litanei erweitert)
+    Kapitel II als „X war hier“-Litanei)
 
-Lücken (----) bleiben in Register VII offen.
+Lücken (----) bleiben in Register VIII offen.
 
 Aufruf (aus Poetics/):
   python3 register/scripts/build_register.py
@@ -23,7 +30,7 @@ import zipfile
 import xml.etree.ElementTree as ET
 
 V5 = "erweitert/wer_dies_liest_lebe_lang_erweitert_v5.docx"
-OUT = "register/wer_dies_liest_register.docx"
+OUT = "register/wer_dies_liest_register_v2.docx"
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 GEO = '<w:rFonts w:ascii="Georgia" w:cs="Georgia" w:eastAsia="Georgia" w:hAnsi="Georgia"/>'
 
@@ -45,6 +52,11 @@ def line(t):     return para(run(t, '<w:sz w:val="22"/><w:szCs w:val="22"/>'), f
 def sigle(t, ort="Fundort unbekannt"):
     label = ort + " · " + t
     return para(run(label, '<w:color w:val="7A5C3E"/><w:sz w:val="16"/><w:szCs w:val="16"/>'), f'<w:pPr>{sp(after="280", before="60")}</w:pPr>')
+def titel_ueber(t):  # Fundort · Sigle als Kopfzeile ÜBER dem Text (klein, braun)
+    return para(run(t, '<w:color w:val="7A5C3E"/><w:sz w:val="16"/><w:szCs w:val="16"/>'),
+                f'<w:pPr>{sp(before="260", after="40")}</w:pPr>')
+def flow(t):         # ein fortlaufender Fließtext-Block je Eintrag (Georgia sz22)
+    return para(run(t, '<w:sz w:val="22"/><w:szCs w:val="22"/>'), f'<w:pPr>{sp(after="60", line="300")}</w:pPr>')
 PAGEBREAK = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>'
 
 _BORD = ('<w:top w:val="single" w:color="DDDDDD" w:sz="4"/><w:left w:val="single" w:color="DDDDDD" w:sz="4"/>'
@@ -211,19 +223,19 @@ REGISTERS = [
 ]
 
 VORWORT = [
- "Wer diese Texte liest, merkt bald: die meisten sind keine Gedichte. Viele sind kürzer als ein Satz, manche nur ein Name. Das ist kein Mangel, sondern die Form. Safaitisch schreiben heißt, an einen Stein zu klopfen, an dem man gerade vorbeikommt — für niemanden Bestimmten, weil der Stein bleibt, wenn man weitergeht.",
- "Was so entsteht, ist kein Literatur-System, sondern ein Verständigen anderer Art: eines, das nicht auf die Gleichzeitigkeit von Sender und Empfänger angewiesen ist, das die Gottheit als Zeugen einschließt und das Schweigen als eigene Aussage kennt.",
- "Dieser Band ordnet darum nicht nach Thema, sondern nach Sprechhaltung. Jedes der acht Register ist eine andere Art, mit dem Stein zu sprechen — vom Stehen in der Ahnenreihe und dem bloßen Dasein über das Warten, die Bitte und die Klage bis zum Fluch, zum Zeugnis und zuletzt zum Verstummen. Jedes Register eröffnen einige lange Inschriften aus der erweiterten Ausgabe; danach folgen die knappen Stimmen des Vollkorpus.",
- "Die Texte stehen in der dritten Person, wie ihre Originale (l-Fulān, „Von X“, danach „und er …“). Genealogien sind getilgt — außer in „stehe“ (I), wo die Ahnenreihe selbst der Akt ist, und in „schweige“ (VIII), wo das Fehlen spricht. Lücken werden hier nicht geglättet; die Striche ---- bleiben stehen.",
+ "Die meisten sind keine Gedichte. Viele kürzer als ein Satz, manche nur Name. Die Formen - safaitisch - schreiben heißt, an einen Stein zu klopfen, an dem man gerade vorbeikommt — er bleibt, wenn man weitergeht.",
+ "Das Verständigen anderer Art, die antiken Beduinen nicht auf die Gleichzeitigkeit von Sender und Empfänger angewiesen. Es schließt Wüste, Hitze und Kälte, Steine als Zeugen ein und kennt Schweigen als eigene Aussage kennt. Im Gegensatz zu modernen Feeds operieren die Inschriften über minimale Zeichenzahl existenzieller Tiefe über lange Dauer.",
+ "Jedes der acht Register dieses Bandes eine andere Art, mit dem Stein zu sprechen — vom Stehen in der Ahnenreihe, dem bloßen Dasein über das Warten, Bitten und Klagen bis zum Fluch, bis Zeugnis und zuletzt Verstummen. Die Register eröffnen einige lange Inschriften, es folgen knappere Stimmen.",
+ "Texte stehen in der dritten Person, wie ihre Originale (l-Fulān, „Von X“, danach „und er …“). Genealogien sind getilgt — außer in „stehe“ (I), wo die Ahnenreihe selbst der Akt ist, und in „schweige“ (VIII), wo das Fehlen spricht. Lücken werden hier nicht geglättet; die Striche ---- bleiben stehen. Die unregelmäßige Oberfläche des Steins und Erosion oder Beschädigung des Steins bilden eine untrennbare Einheit.",
 ]
 NOTE = [
- "Der Band schöpft aus dem Vollkorpus der ~31.800 safaitischen Inschriften (OCIANA), nicht aus einer Spitzenauswahl. Erschlossen sind damit auch die rund 18.500 reinen Signaturen und die Minimal-Texte, die in den bisherigen Bänden fehlten — sie tragen die Register „stehe“ (die Ahnenreihen) und „schreibe“ (die Litanei „X war hier“).",
- "Jedes Register ist gezielt aus seinem eigenen Korpus-Material gespeist: die Signaturen für „schreibe“ und „stehe“, die Anrufungen für „bitte“, die Fluchformeln für „verfluche“, die fragmentarischen Steine für „schweige“, die datierten für „bezeuge“. Den Auftakt geben je Register Kopfstücke aus der erweiterten Ausgabe (lange Inschriften zuerst). Die Auswahl ist kuratiert und nicht repräsentativ; jede Nachdichtung trägt die OCIANA-Sigle ihrer Quelle.",
- "Übersetzungskette: gemeißelter Stein → philologische Lesung → englische OCIANA-Edition → deutsche Nachdichtung. Eckige Klammern und Striche ---- der Philologen bleiben im Register „schweige“ sichtbar.",
+ "Der Band schöpft aus dem Vollkorpus der ~31.800 safaitischen Inschriften (OCIANA), die zwischen dem ersten und vierten Jahrhundert n. Chr. in Süden Syriens und in Nordjordanien entstanden sind. Erschlossen sind damit auch rund 18.500 reinen Signaturen und die Minimal-Texte — sie tragen die Register „stehe“ (die Ahnenreihen) und „schreibe“ (die Litanei „X war hier“). Revier- und Präsenzmarkierung, indifferent gegenüber dem konkreten Empfänger. Sie steht im Raum, unabhängig davon, ob und wann sie gelesen wird.",
+ "Jedes Register speist aus seinem eigenen Korpus-Material: die Signaturen für „schreibe“ und „stehe“, die Anrufungen für „bitte“, die Fluchformeln für „verfluche“, die fragmentarischen Steine für „schweige“, die datierten für „bezeuge“. Die Auswahl ist kuratiert, nicht repräsentativ; jede Nachdichtung trägt die Sigle ihrer Quelle im Korpus.",
+ "Übersetzungskette: gemeißelter Stein → philologische Lesung → englische OCIANA-Edition → deutsche Nachdichtung. Eckige Klammern und Striche ---- der Philologen bleiben im Register „schweige“ sichtbar. Protokolle eines kaum sterblichen sprachlichen Systems.",
 ]
 
 TITLES = [
- "Die acht Titel sind jeweils der Infinitiv des Verbs ohne das End-„n“ (schreiben → schreibe, stehen → stehe, …). Diese verkürzte Form ist absichtlich mehrdeutig: Sie ist zugleich erste Person Singular Präsens („ich schreibe“ — die aneignende Stimme), dritte Person Konjunktiv Präsens („er schreibe“ — der Wunsch, der die dritte Person und die Bitten und Flüche der Originale trifft), Imperativ („schreibe!“ — der Befehl an den späteren Leser oder die Gottheit) und mitunter Nomen (die Klage, die Bitte). Weil das Wort auf keine dieser Lesarten festgelegt ist, wird es — im Wortspiel mit „Infinitiv“ — infinit: unbegrenzt, in mehrere Richtungen zugleich offen. Das entspricht dem Gegenstand des Bandes: der aufgeschobenen Inschrift ohne festen Sender und Empfänger, die Aussage, Wunsch und Befehl in einem ist.",
+ "Die acht Titel sind jeweils der Infinitiv des Verbs ohne das End-„n“ (schreiben → schreibe, stehen → stehe, …). Diese verkürzte Form ist absichtlich mehrdeutig: Sie ist zugleich erste Person Singular Präsens („ich schreibe“ — die aneignende Stimme), dritte Person Konjunktiv Präsens („er schreibe“ — der Wunsch, der die dritte Person und die Bitten und Flüche der Originale trifft), Imperativ („schreibe!“ — der Befehl an den späteren Leser oder die Gottheit) und mitunter Nomen (die Klage, die Bitte). Weil das Wort auf keine dieser Lesarten festgelegt ist, wird es — im Wortspiel mit „Infinitiv“ — infinit: unbegrenzt, in mehrere Richtungen zugleich offen. Das entspricht dem Gegenstand des Bandes: der aufgeschobenen Inschrift ohne festen Sender und Empfänger, die Aussage, Wunsch und Befehl in einem ist. Im Safaitischen (einer nordarabischen Konsonantenschrift) sind Vokale und damit exakte grammatische Modi oft hochgradig mehrdeutig oder aus dem Kontext zu erschließen. Die Reduktion auf die wurzelhafte Stammform im Deutschen bildet diese semantische Offenheit präzise ab.",
 ]
 
 FINDSPOT = {
@@ -452,15 +464,17 @@ def main():
             lines = v5lines.get(sg)
             if not lines:
                 raise SystemExit(f"v5-Kopfstück fehlt: {sg}")
-            xml += [line(l) for l in lines] + [sigle(sg, FINDSPOT.get(sg, "Fundort unbekannt"))]
+            ort = FINDSPOT.get(sg, "Fundort unbekannt")
+            xml += [titel_ueber(f"{ort} · {sg}"), flow(" ".join(lines))]
             total += 1
         for sg, lines in poems:                 # Korpus-Stimmen
-            xml += [line(l) for l in lines] + [sigle(sg, FINDSPOT.get(sg, "Fundort unbekannt"))]
+            ort = FINDSPOT.get(sg, "Fundort unbekannt")
+            xml += [titel_ueber(f"{ort} · {sg}"), flow(" ".join(lines))]
             total += 1
 
     xml += [PAGEBREAK, head("Nachwort")] + [body(p) for p in VORWORT] + [body(p) for p in NOTE] + [subhead("Zu den Kapiteltiteln")] + [body(p) for p in TITLES]
     xml += [subhead("Die Corpus-Siglen"),
-            body("Jede Nachdichtung nennt am Fuß zuerst den Fundort, dann die Corpus-Sigle. Die Siglen bezeichnen die Sammlung oder Edition, in der die Inschrift zuerst erfasst wurde:"),
+            body("Jede Nachdichtung trägt als Kopfzeile zuerst den Fundort, dann die Corpus-Sigle. Die Siglen bezeichnen die Sammlung oder Edition, in der die Inschrift zuerst erfasst wurde:"),
             table(CORPUS), EMPTY,
             subhead("Die Fundorte"),
             body("Der Fundort ist normalisiert (spezifischster benannter Ort); zwei Zonen ordnen: die nordostjordanische Ḥarrah und die südsyrische Ṣafā."),

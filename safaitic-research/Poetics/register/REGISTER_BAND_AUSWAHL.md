@@ -1,6 +1,6 @@
 # Register-Band — Auswahl aus dem Vollkorpus
 
-Stand: 2026-06-28 · Konzept A: eigener Band nach den sieben Sprechakt-Registern · Ordner `register/`
+Stand: 2026-07-05 · Konzept A: eigener Band nach den acht Sprechakt-Registern · Ordner `register/` · Formfassung **v2** (`wer_dies_liest_register_v2.docx`)
 
 ## Idee
 
@@ -10,9 +10,16 @@ Nicht der Jahresbogen der erweiterten Ausgabe, sondern die **Sprechhaltung** ord
 
 Quellen: `neues-konzept/data/safaitic_full_corpus.xlsx` (31.768 safaitische, mit Typ-Spalte) für I + VII; `safaitic_invocations.xlsx` (2.018, thematische Blätter) für III + V; `band1/data/…auswahl.xlsx` (Longlist, 2.448 gerankt) für II, IV, VI. **Ausgeschlossen:** alle 180 bereits in der erweiterten Ausgabe (v5) verbauten Siglen — der Register-Band ist materiell eigenständig (0 Überschneidung).
 
-## Stand des Manuskripts (gebaut: `wer_dies_liest_register.docx`)
+## Stand des Manuskripts (gebaut: `wer_dies_liest_register_v2.docx`)
 
-Realisiert sind **134 Stücke** in **acht** Registern, gestaltet wie die erweiterte Ausgabe v5 (Georgia, Er-Form). Über die Korpus-Ausgangsauswahl unten hinaus enthält der Band:
+Realisiert sind **134 Stücke** in **acht** Registern, gestaltet wie die erweiterte Ausgabe v5 (Georgia). Über die Korpus-Ausgangsauswahl unten hinaus enthält der Band:
+
+**Formfassung v2** — drei Umstellungen gegenüber der ersten Fassung (`wer_dies_liest_register.docx`, als Historie behalten):
+- **Fließtext:** jeder Eintrag steht als *ein* fortlaufender Block, ohne Verszeilen — die „Steinwand“-Anmutung des Epigraphischen.
+- **Fundort · Sigle als Kopfzeile ÜBER dem Text** (statt der „Sigle …“-Zeile darunter) — Herkunftsort und Inschriftennummer betiteln jeden Eintrag.
+- **Verbregel:** die finite Er-Form bleibt, wo das Original ein Verb vorsieht; wo keines vorliegt (Genealogien, Anrufungen, die Signaturen von „schreibe“), bleibt der Eintrag nominal — es wird **kein Infinitiv** eingesetzt (am Original orientiert). Der *Textbestand* aus v1 bleibt damit unverändert; nur die Darbietung wechselt. Insbesondere bleibt die „X war hier“-Litanei in II erhalten (finite Form, keine Signatur wird zum bloßen Namen verkürzt).
+
+Das **Nachwort** übernimmt die vom Autor überarbeitete Fassung (hochgeladenes `nachwort.docx`); die Beizeilen-Erklärung ist auf die Kopfzeile-Platzierung angepasst („trägt als Kopfzeile zuerst den Fundort“). Sonst ergab der Umbau keine inhaltlichen Änderungen am Nachwort.
 
 **Kapitelüberschriften** = Verb in der Ich-Form (das einzige Ich im Band): **stehe · schreibe · warte · bitte · klage · verfluche · bezeuge · schweige**. Kapitel I „stehe“ (die Ahnenreihen) und VIII „schweige“ (das Verstummen) rahmen den Band. Unterüberschriften sind vorerst **entfernt** (bis eine bessere Fassung feststeht).
 
@@ -36,7 +43,7 @@ Realisiert sind **134 Stücke** in **acht** Registern, gestaltet wie die erweite
 
 ### Fundort-Beizeilen (Normalisierung)
 
-Am Fuß jedes Gedichts steht **zuerst der Fundort, dann die Corpus-Sigle** (das Wort „Sigle“ gestrichen), z. B. „Hani · HCH 117“. „Cairn of Haniʾ“ ist zu **„Hani“** verkürzt. Regeln: Survey-Apparat (Seitenrefs, Anführungszeichen, „Unknown,“) gestrichen; spezifischster benannter Ort gewählt; zwei Zonen — **NO-Jordanien (Ḥarrah)** / **Süd-Syrien (Ṣafā)**. Mapping als statisches `FINDSPOT`-Dict im Build-Skript. Größte Cluster: Hani (HCH), Km 612 (JaS), Zalaf (C), Wādī Salma, al-ʿĪsāwī, Ḥarrat al-Raǧil, Riǧm Qaʿqūl, Tall aḍ-Ḍabiʿ.
+Als Kopfzeile **über** jedem Eintrag steht **zuerst der Fundort, dann die Corpus-Sigle** (das Wort „Sigle“ gestrichen), z. B. „Hani · HCH 117“ (in Fassung v1 stand die Zeile am Fuß). „Cairn of Haniʾ“ ist zu **„Hani“** verkürzt. Regeln: Survey-Apparat (Seitenrefs, Anführungszeichen, „Unknown,“) gestrichen; spezifischster benannter Ort gewählt; zwei Zonen — **NO-Jordanien (Ḥarrah)** / **Süd-Syrien (Ṣafā)**. Mapping als statisches `FINDSPOT`-Dict im Build-Skript. Größte Cluster: Hani (HCH), Km 612 (JaS), Zalaf (C), Wādī Salma, al-ʿĪsāwī, Ḥarrat al-Raǧil, Riǧm Qaʿqūl, Tall aḍ-Ḍabiʿ.
 
 **8 ortlose Korpus-Stimmen → verortete Ersätze aus starken Clustern:** WH 1116→**RSIS 322** (Tall aḍ-Ḍabiʿ) · AWS 379→**AbSWS 15** (Wādī Salma) · WH 1916→**C 2194** (Zalaf) · RVP 1→**AbSWS 42** (Wādī Salma) · ZN 4→**C 2190** (Zalaf) · WH 1851→**RWQ 304** (Wādī Salma) · RVP 10→**C 1146** (Riǧm Qaʿqūl) · WAMS 4→**SIJ 10** (Jathum).
 
@@ -175,13 +182,14 @@ Die Basis-Auswahl aus dem Vollkorpus (vor v5-Kopfstücken, war-hier-Erweiterung 
 - **C 1368** — By Ḫlṣ ---- son of Qdm son of {ʾnʿm} son of Rʿ of the lineage of ----
 
 ## Stand & nächste Schritte
-- [x] Nachdichtung ins deutsche Er-Form, je „Sigle“-Zeile darunter.
-- [x] Manuskript gebaut (`wer_dies_liest_register.docx`, 134 Stücke): acht Register, v5-Kopfstücke, Einleitung + Nachwort mit zwei Tabellen (Corpus-Siglen, Fundorte) am Bandende.
-- [x] Kapitel I als „X war hier“-Litanei erweitert; Ich-Form-Überschriften.
+- [x] Nachdichtung ins deutsche Er-Form.
+- [x] Manuskript gebaut (`wer_dies_liest_register_v2.docx`, 134 Stücke): acht Register, v5-Kopfstücke, Einleitung + Nachwort mit zwei Tabellen (Corpus-Siglen, Fundorte) am Bandende.
+- [x] Kapitel II als „X war hier“-Litanei; Ich-Form-Überschriften.
 - [x] Fundort-Beizeilen normalisiert; 8 ortlose Stimmen verortet ersetzt.
+- [x] **Formfassung v2:** Fließtext je Eintrag, Fundort · Sigle als Kopfzeile über dem Text, Verbregel (finite Form nur wo im Original ein Verb steht, sonst nominal, kein Infinitiv), überarbeitetes Nachwort übernommen.
 - [ ] Optional: Fundort-Anhang im Backmatter (alle Stücke nach Zonen/Clustern gruppiert).
 - [ ] Optional: Intra-Register-Clustering (same-site-Stücke benachbart).
 - [ ] Optional: echte Karte via OCIANA-Koordinaten (externer Abruf).
 - [ ] Lektorat der Nachdichtungen gegen die OCIANA-Einträge.
 
-Build: `scripts/build_register.py` (Auswahl, Verstexte und `FINDSPOT`-Dict inline; liest die v5-Kopfstücke faithful aus `erweitert/…_v5.docx`).
+Build: `scripts/build_register.py` (Auswahl, Texte und `FINDSPOT`-Dict inline; rendert je Eintrag Fließtext + Kopfzeile; liest die v5-Kopfstücke faithful aus `erweitert/…_v5.docx`). Ausgabe: `wer_dies_liest_register_v2.docx`.
