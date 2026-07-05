@@ -1,6 +1,6 @@
 # Register-Band — Auswahl aus dem Vollkorpus
 
-Stand: 2026-07-05 · Konzept A: eigener Band nach den acht Sprechakt-Registern · Ordner `register/` · Formfassung **v3** (`wer_dies_liest_register_v3.docx`)
+Stand: 2026-07-05 · Konzept A: eigener Band nach den acht Sprechakt-Registern · Ordner `register/` · Formfassung **v3** (`…_v3.docx`, ohne Bilder) bzw. **v4** (`…_v4.docx`, mit den 7 Felszeichnungen eingebettet)
 
 ## Idee
 
@@ -190,6 +190,8 @@ Die Basis-Auswahl aus dem Vollkorpus (vor v5-Kopfstücken, war-hier-Erweiterung 
 - [x] Fundort-Beizeilen normalisiert; 8 ortlose Stimmen verortet ersetzt.
 - [x] **Formfassung v2:** Fließtext je Eintrag, Fundort · Sigle als Kopfzeile über dem Text, Verbregel, überarbeitetes Nachwort übernommen.
 - [x] **Formfassung v3:** Verszeilen (Absatzformat) statt Fließtext zurückgeholt; Kopfzeile beibehalten; Register II auf „Von X“; „schweige“ von VIII auf V (Mitte) gerückt (keine Lebenszyklus-Suggestion); Nachwort an den drei betreffenden Stellen aktualisiert (Reihung endet auf „Zeugnis“, „schweige“ (V), *l-*-Zusatz).
+- [x] **Felszeichnungen ausgewertet** (OCIANA-Feld „Associated Drawings“, alle 134 Seiten): 7 Steine mit Bild — Übersicht in `ROCKART_UEBERSICHT.md`.
+- [x] **Formfassung v4:** die 7 OCIANA-Fotos als Inline-Abbildungen neben die jeweilige Inschrift eingebettet (`wer_dies_liest_register_v4.docx`), mit Bildunterschrift „Auf dem Stein: …“. Bilder in `register/rockart_images/`; reproduzierbar via `build_register.py`. Bildrechte vor Veröffentlichung klären.
 - [ ] Optional: Fundort-Anhang im Backmatter (alle Stücke nach Zonen/Clustern gruppiert).
 - [ ] Optional: Intra-Register-Clustering (same-site-Stücke benachbart).
 - [ ] Optional: echte Karte via OCIANA-Koordinaten (externer Abruf).
