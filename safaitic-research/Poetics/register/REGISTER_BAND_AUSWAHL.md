@@ -1,6 +1,6 @@
 # Register-Band — Auswahl aus dem Vollkorpus
 
-Stand: 2026-07-05 · Konzept A: eigener Band nach den acht Sprechakt-Registern · Ordner `register/` · Formfassung **v2** (`wer_dies_liest_register_v2.docx`)
+Stand: 2026-07-05 · Konzept A: eigener Band nach den acht Sprechakt-Registern · Ordner `register/` · Formfassung **v3** (`wer_dies_liest_register_v3.docx`)
 
 ## Idee
 
@@ -10,34 +10,36 @@ Nicht der Jahresbogen der erweiterten Ausgabe, sondern die **Sprechhaltung** ord
 
 Quellen: `neues-konzept/data/safaitic_full_corpus.xlsx` (31.768 safaitische, mit Typ-Spalte) für I + VII; `safaitic_invocations.xlsx` (2.018, thematische Blätter) für III + V; `band1/data/…auswahl.xlsx` (Longlist, 2.448 gerankt) für II, IV, VI. **Ausgeschlossen:** alle 180 bereits in der erweiterten Ausgabe (v5) verbauten Siglen — der Register-Band ist materiell eigenständig (0 Überschneidung).
 
-## Stand des Manuskripts (gebaut: `wer_dies_liest_register_v2.docx`)
+## Stand des Manuskripts (gebaut: `wer_dies_liest_register_v3.docx`)
 
 Realisiert sind **134 Stücke** in **acht** Registern, gestaltet wie die erweiterte Ausgabe v5 (Georgia). Über die Korpus-Ausgangsauswahl unten hinaus enthält der Band:
 
-**Formfassung v2** — drei Umstellungen gegenüber der ersten Fassung (`wer_dies_liest_register.docx`, als Historie behalten):
-- **Fließtext:** jeder Eintrag steht als *ein* fortlaufender Block, ohne Verszeilen — die „Steinwand“-Anmutung des Epigraphischen.
-- **Fundort · Sigle als Kopfzeile ÜBER dem Text** (statt der „Sigle …“-Zeile darunter) — Herkunftsort und Inschriftennummer betiteln jeden Eintrag.
-- **Verbregel:** die finite Er-Form bleibt, wo das Original ein Verb vorsieht; wo keines vorliegt (Genealogien, Anrufungen, die Signaturen von „schreibe“), bleibt der Eintrag nominal — es wird **kein Infinitiv** eingesetzt (am Original orientiert). Der *Textbestand* aus v1 bleibt damit unverändert; nur die Darbietung wechselt. Insbesondere bleibt die „X war hier“-Litanei in II erhalten (finite Form, keine Signatur wird zum bloßen Namen verkürzt).
+**Formfassung v3** — Stand nach mehreren Iterationen (v1 = Verszeilen + „Sigle …“ am Fuß; v2 = Fließtext + Kopfzeile; beide als Historie behalten):
+- **Verszeilen (Absatzformat):** jeder Eintrag steht wieder in Verszeilen — der Fließtext-Block aus v2 ist aus ästhetischen Gründen (Lesbarkeit, Schönheit) zurückgenommen.
+- **Fundort · Sigle als Kopfzeile ÜBER dem Text** (aus v2 beibehalten) — Herkunftsort und Inschriftennummer betiteln jeden Eintrag.
+- **Verbregel:** die finite Er-Form bleibt, wo das Original ein Verb vorsieht; wo keines vorliegt (Genealogien, Anrufungen, Signaturen), bleibt der Eintrag nominal — **kein Infinitiv** (am Original orientiert).
+- **Register II „schreibe“ als „Von X“:** die reinen Signaturen werden nominal wiedergegeben (`l-Fulān` = „Von X“, das *l-* steht im Fels), nicht mehr als Satz „X war hier“ — die früher zugefügte Verbform ist getilgt.
+- **Kapitelordnung strukturell, nicht als Lebenszyklus:** „schweige“ ist von der letzten Position (vormals VIII) auf die **Mitte (V)** gerückt, damit der Band nicht auf das Verstummen zuläuft. Neue Folge: **I stehe · II schreibe · III warte · IV bitte · V schweige · VI klage · VII verfluche · VIII bezeuge.**
 
-Das **Nachwort** übernimmt die vom Autor überarbeitete Fassung (hochgeladenes `nachwort.docx`); die Beizeilen-Erklärung ist auf die Kopfzeile-Platzierung angepasst („trägt als Kopfzeile zuerst den Fundort“). Sonst ergab der Umbau keine inhaltlichen Änderungen am Nachwort.
+Das **Nachwort** übernimmt die vom Autor überarbeitete Fassung (hochgeladenes `nachwort.docx`) mit drei umbaubedingten Anpassungen: die Register-Reihung endet jetzt auf „Zeugnis“ (Verstummen in der Mitte) mit einem Satz zur strukturellen (nicht biografischen) Ordnung; „schweige“ ist als **(V)** referenziert; und ein Zusatz erklärt, dass das safaitische *l-* zugleich „von / für / gehörig zu“ heißt und Urheber, Adressat und Besitzer offenlässt. Die Beizeilen-Erklärung nennt die Kopfzeile-Platzierung.
 
-**Kapitelüberschriften** = Verb in der Ich-Form (das einzige Ich im Band): **stehe · schreibe · warte · bitte · klage · verfluche · bezeuge · schweige**. Kapitel I „stehe“ (die Ahnenreihen) und VIII „schweige“ (das Verstummen) rahmen den Band. Unterüberschriften sind vorerst **entfernt** (bis eine bessere Fassung feststeht).
+**Kapitelüberschriften** = Verb in der Ich-Form (das einzige Ich im Band): **stehe · schreibe · warte · bitte · schweige · klage · verfluche · bezeuge**. Kapitel I „stehe“ (die Ahnenreihen) eröffnet, VIII „bezeuge“ (die Datierung für Fremde) schließt den Band. Unterüberschriften sind vorerst **entfernt** (bis eine bessere Fassung feststeht).
 
 **Zu den Titeln:** Jeder Titel ist der Infinitiv minus End-„n“ (schreiben → schreibe …). Die Form ist bewusst mehrdeutig — zugleich 1. Person Präsens („ich schreibe“), 3. Person Konjunktiv Präsens („er schreibe“), Imperativ („schreibe!“) und teils Nomen (Klage, Bitte); dadurch auf keine Lesart festgelegt und, im Wortspiel mit „Infinitiv“, *infinit*. Erklärt im Nachwort des Manuskripts („Zu den Kapiteltiteln“).
 
-**Aufteilung des alten Kapitels I:** Die Genealogie-Gedichte („Von X, Sohn des Y …“) bilden jetzt das eigene Kapitel **I „stehe“**; die „X war hier“-Litanei der reinen Signaturen wird Kapitel **II „schreibe“**.
+**Aufteilung des alten Kapitels I:** Die Genealogie-Gedichte („Von X, Sohn des Y …“) bilden jetzt das eigene Kapitel **I „stehe“**; die reinen Signaturen („Von X“) werden Kapitel **II „schreibe“**.
 
 **v5-Kopfstücke** je Register (lange Inschriften zuerst, aus der erweiterten Ausgabe — der Band ist dadurch nicht mehr überschneidungsfrei zur erweiterten Ausgabe):
 - I stehe: — (keine; nur Korpus-Genealogien)
 - II schreibe: RWQ 342, RWQ 187, HYGQ 24, KRS 1341
 - III warte: **ASWS 73** (zurück aus VI), RSIS 110, Is.Mu 255, SIJ 30
 - IV bitte: BS 209, MKJS 80, LP 1267, Is.Mu 88
-- V klage: LP 540, KRS 17, AbaNS 361, C 4273
-- VI verfluche: C 4803, RSIS 351, LP 243, C 2775
-- VII bezeuge: HSNS 5, LP 653, C 2670, ISB 57
-- VIII schweige: RQ.A 5, WH 1867.1, WH 1501.2
+- V schweige: RQ.A 5, WH 1867.1, WH 1501.2
+- VI klage: LP 540, KRS 17, AbaNS 361, C 4273
+- VII verfluche: C 4803, RSIS 351, LP 243, C 2775
+- VIII bezeuge: HSNS 5, LP 653, C 2670, ISB 57
 
-**Kapitel II** als „X war hier“-Litanei: die fünf reinen Signaturen auf „X war hier“ umgestellt + 8 neue (HCH 75/158.2/31.1, Rees 150/151/155/161 4/176) — geografisch dicht (Hani, Km 612, Ḥarrat al-Raǧil). **Kapitel III**: Genealogie-Gedicht **LP 1196** (sieben Generationen + Späh-Verb) neu.
+**Kapitel II** als „Von X“-Signaturenreihe: die reinen Signaturen (`l-Fulān`) nominal wiedergegeben — die fünf ursprünglichen + 8 neue (HCH 75/158.2/31.1, Rees 150/151/155/161 4/176) — geografisch dicht (Hani, Km 612, Ḥarrat al-Raǧil). Das früher zugefügte „war hier“ ist getilgt (das Original hat kein Verb, nur das *l-* „von/für/gehörig zu“). **Kapitel III**: Genealogie-Gedicht **LP 1196** (sieben Generationen + Späh-Verb) neu.
 
 **Einleitung + Nachwort** stehen zusammen in einem Schluss-Kapitel „Nachwort“ **nach** den Gedichten, mit zwei Tabellen: **Corpus-Siglen** (Auflösung der Abkürzungen) und **Fundorte** (Erklärung, inkl. generischer Angaben wie „Jordanien“, „Km 612“).
 
@@ -183,13 +185,14 @@ Die Basis-Auswahl aus dem Vollkorpus (vor v5-Kopfstücken, war-hier-Erweiterung 
 
 ## Stand & nächste Schritte
 - [x] Nachdichtung ins deutsche Er-Form.
-- [x] Manuskript gebaut (`wer_dies_liest_register_v2.docx`, 134 Stücke): acht Register, v5-Kopfstücke, Einleitung + Nachwort mit zwei Tabellen (Corpus-Siglen, Fundorte) am Bandende.
-- [x] Kapitel II als „X war hier“-Litanei; Ich-Form-Überschriften.
+- [x] Manuskript gebaut (`wer_dies_liest_register_v3.docx`, 134 Stücke): acht Register, v5-Kopfstücke, Einleitung + Nachwort mit zwei Tabellen (Corpus-Siglen, Fundorte) am Bandende.
+- [x] Kapitel II als „Von X“-Signaturenreihe (nominal, ohne „war hier“); Ich-Form-Überschriften.
 - [x] Fundort-Beizeilen normalisiert; 8 ortlose Stimmen verortet ersetzt.
-- [x] **Formfassung v2:** Fließtext je Eintrag, Fundort · Sigle als Kopfzeile über dem Text, Verbregel (finite Form nur wo im Original ein Verb steht, sonst nominal, kein Infinitiv), überarbeitetes Nachwort übernommen.
+- [x] **Formfassung v2:** Fließtext je Eintrag, Fundort · Sigle als Kopfzeile über dem Text, Verbregel, überarbeitetes Nachwort übernommen.
+- [x] **Formfassung v3:** Verszeilen (Absatzformat) statt Fließtext zurückgeholt; Kopfzeile beibehalten; Register II auf „Von X“; „schweige“ von VIII auf V (Mitte) gerückt (keine Lebenszyklus-Suggestion); Nachwort an den drei betreffenden Stellen aktualisiert (Reihung endet auf „Zeugnis“, „schweige“ (V), *l-*-Zusatz).
 - [ ] Optional: Fundort-Anhang im Backmatter (alle Stücke nach Zonen/Clustern gruppiert).
 - [ ] Optional: Intra-Register-Clustering (same-site-Stücke benachbart).
 - [ ] Optional: echte Karte via OCIANA-Koordinaten (externer Abruf).
 - [ ] Lektorat der Nachdichtungen gegen die OCIANA-Einträge.
 
-Build: `scripts/build_register.py` (Auswahl, Texte und `FINDSPOT`-Dict inline; rendert je Eintrag Fließtext + Kopfzeile; liest die v5-Kopfstücke faithful aus `erweitert/…_v5.docx`). Ausgabe: `wer_dies_liest_register_v2.docx`.
+Build: `scripts/build_register.py` (Auswahl, Texte und `FINDSPOT`-Dict inline; rendert je Eintrag Verszeilen + Kopfzeile; liest die v5-Kopfstücke faithful aus `erweitert/…_v5.docx`). Ausgabe: `wer_dies_liest_register_v3.docx`.

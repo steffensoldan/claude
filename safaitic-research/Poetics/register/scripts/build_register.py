@@ -1,26 +1,30 @@
 #!/usr/bin/env python3
 """
-Baut den Register-Band (Konzept A, Fassung v2): safaitische Inschriften nach den
+Baut den Register-Band (Konzept A, Fassung v3): safaitische Inschriften nach den
 acht Sprechakt-Registern, gestaltet wie die erweiterte Ausgabe v5 (Georgia).
 
-Formfassung v2 (drei Umstellungen gegenüber v1):
-  → Fließtext: jeder Eintrag steht als ein fortlaufender Block, ohne Verszeilen.
-  → Fundort · Sigle als Kopfzeile ÜBER dem Text (statt „Sigle …“ darunter).
+Formfassung v3:
+  → Verszeilen (Absatzformat) je Eintrag — der Fließtext-Block aus v2 ist aus
+    ästhetischen Gründen zurückgenommen.
+  → Fundort · Sigle als Kopfzeile ÜBER dem Text (aus v2 beibehalten).
   → Verbregel: die finite Er-Form bleibt, wo das Original ein Verb vorsieht;
     wo keines vorliegt (Genealogien, Anrufungen, Signaturen), bleibt der Eintrag
-    nominal — es wird KEIN Infinitiv eingesetzt. Der Textbestand von v1 bleibt
-    damit unverändert; nur die Darbietung wechselt.
+    nominal — es wird KEIN Infinitiv eingesetzt.
+  → Register II „schreibe“ als „Von X“ (l-Fulān, nominal, ohne „war hier“).
+  → Kapitelordnung strukturell, nicht als Lebenszyklus: „schweige“ ist von der
+    letzten Position (VIII) auf die Mitte (V) gerückt, damit der Band nicht auf
+    das Verstummen zuläuft.
 
-Kapitelüberschrift = Verb in der Ich-Form (schreibe/warte/bitte/klage/
-verfluche/bezeuge/schweige/stehe).
+Kapitelüberschrift = Verb in der Ich-Form (stehe/schreibe/warte/bitte/schweige/
+klage/verfluche/bezeuge).
 
 Aufbau je Register:
   → Kopfstücke aus der erweiterten Ausgabe v5 (1 Kopfstein + weitere; lange
     Inschriften zuerst), faithful aus v5 übernommen
   → knappe Stimmen aus dem Vollkorpus (Auswahl: REGISTER_BAND_AUSWAHL.md;
-    Kapitel II als „X war hier“-Litanei)
+    Kapitel II als „Von X“-Signaturenreihe)
 
-Lücken (----) bleiben in Register VIII offen.
+Lücken (----) bleiben in Register V („schweige“) offen.
 
 Aufruf (aus Poetics/):
   python3 register/scripts/build_register.py
@@ -30,7 +34,7 @@ import zipfile
 import xml.etree.ElementTree as ET
 
 V5 = "erweitert/wer_dies_liest_lebe_lang_erweitert_v5.docx"
-OUT = "register/wer_dies_liest_register_v2.docx"
+OUT = "register/wer_dies_liest_register_v3.docx"
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 GEO = '<w:rFonts w:ascii="Georgia" w:cs="Georgia" w:eastAsia="Georgia" w:hAnsi="Georgia"/>'
 
@@ -55,8 +59,6 @@ def sigle(t, ort="Fundort unbekannt"):
 def titel_ueber(t):  # Fundort · Sigle als Kopfzeile ÜBER dem Text (klein, braun)
     return para(run(t, '<w:color w:val="7A5C3E"/><w:sz w:val="16"/><w:szCs w:val="16"/>'),
                 f'<w:pPr>{sp(before="260", after="40")}</w:pPr>')
-def flow(t):         # ein fortlaufender Fließtext-Block je Eintrag (Georgia sz22)
-    return para(run(t, '<w:sz w:val="22"/><w:szCs w:val="22"/>'), f'<w:pPr>{sp(after="60", line="300")}</w:pPr>')
 PAGEBREAK = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>'
 
 _BORD = ('<w:top w:val="single" w:color="DDDDDD" w:sz="4"/><w:left w:val="single" w:color="DDDDDD" w:sz="4"/>'
@@ -97,19 +99,19 @@ REGISTERS = [
 ("II","schreibe",
  "",
  ["RWQ 342","RWQ 187","HYGQ 24","KRS 1341"],[
- ("JaS 16",["Bnḥt war hier."]),
- ("HCH 117",["ʾnʿm war hier."]),
- ("HCH 156",["S¹ḫr war hier."]),
- ("HCH 160",["Gḥs² war hier."]),
- ("HCH 158.1",["Gḥs² war hier."]),
- ("HCH 75",["ʿdy war hier."]),
- ("HCH 158.2",["S¹ʿd war hier."]),
- ("HCH 31.1",["ʿṭs¹ war hier."]),
- ("Rees 150",["S¹lf war hier."]),
- ("Rees 151",["ʾḫwn war hier."]),
- ("Rees 155",["S²d war hier."]),
- ("Rees 161 4",["Hnb war hier."]),
- ("Rees 176",["S¹drt war hier."]),
+ ("JaS 16",["Von Bnḥt."]),
+ ("HCH 117",["Von ʾnʿm."]),
+ ("HCH 156",["Von S¹ḫr."]),
+ ("HCH 160",["Von Gḥs²."]),
+ ("HCH 158.1",["Von Gḥs²."]),
+ ("HCH 75",["Von ʿdy."]),
+ ("HCH 158.2",["Von S¹ʿd."]),
+ ("HCH 31.1",["Von ʿṭs¹."]),
+ ("Rees 150",["Von S¹lf."]),
+ ("Rees 151",["Von ʾḫwn."]),
+ ("Rees 155",["Von S²d."]),
+ ("Rees 161 4",["Von Hnb."]),
+ ("Rees 176",["Von S¹drt."]),
 ]),
 ("III","warte",
  "Sehnsucht, die bleibt — Warten auf Regen, auf Familie, auf Rückkehr; im Stein für einen Späteren konserviert.",
@@ -148,61 +150,7 @@ REGISTERS = [
  ("C 1629",["Yalt —","Entkommen vom Bösen","in diesem Jahr."]),
  ("C 1660",["Allat —","dass er sicher sei."]),
 ]),
-("V","klage",
- "Die Trauer als Denkmal — die Klage, dem Moment entzogen; die Namensliste ist die Form des Schmerzes.",
- ["LP 540","KRS 17","AbaNS 361","C 4273"],[
- ("CSNS 781",["Er weinte vor Kummer."]),
- ("WH 1517",["Er weinte vor Kummer."]),
- ("AbaNS 453",["Er weinte vor Kummer."]),
- ("WH 3829",["Er weinte vor Kummer."]),
- ("WH 3029",["Er weinte vor Kummer","um Fly."]),
- ("WH 2825",["Er weinte vor Kummer."]),
- ("HaNSB 319",["Er weinte vor Kummer."]),
- ("HaNS 708",["Er weinte vor Kummer."]),
- ("HaNSB 346",["Er weinte vor Kummer","um seinen Sohn Wlym."]),
- ("HNSD 13",["Er weinte vor Kummer."]),
- ("SIJ 1001",["Sie weinten vor Kummer."]),
- ("SIJ 811",["Er weinte vor Kummer","um ----Gh."]),
- ("SSWS 28",["Er weinte vor Kummer."]),
- ("C 5367",["Er weinte vor Kummer."]),
-]),
-("VI","verfluche",
- "Der Fluch, der nie endet — der performativste Akt: ein gesprochener Fluch verhallt, ein gemeißelter gilt ewig.",
- ["C 4803","RSIS 351","LP 243","C 2775"],[
- ("WH 368",["Diese Schrift.","Allat —","dem, der sie austilgt:","Blindheit und Lähmung,","Stummheit, Krätze und Räude."]),
- ("LP 461",["Er trauerte um Mlk,","um Ḫrg, um Gm, um ʾys¹, um Ẓn.","Allat und Duschara —","Blutrache!","Und blende, wer dies austilgt."]),
- ("KRS 813",["Er trauerte um Ṣʿd.","Allat — blende, wer dies auskratzt,","und werfe ihn aus dem Grab."]),
- ("KRS 941",["Er fand die Spuren des Ṣʿd","und trauerte vor Schmerz —","Verzweiflung denen, die bleiben.","Das Schicksal schlug ihn nieder."]),
- ("Is.Mu 242",["Er trauerte um Mlk,","um Ḫrg, um Gḥmn, um ʾys¹, um Ẓn.","Allat und Duschara —","Blutrache."]),
- ("HCH 85",["Er trauerte um Hnʾ","und um Gls¹.","Allat und Duschara —","Blindheit dem, der dies auskratzt."]),
- ("C 286",["Rudā —","wer dies austilgt,","erblinde."]),
- ("C 1658",["Die beiden Kamele,","Allat und Rudā geweiht.","Yaṯaʿ —","blende, wer dies austilgt."]),
- ("C 1845",["Allat —","blende, wer dies auskratzt."]),
- ("C 2551",["Er erkannte eine weitere der Ritzungen —","Verzweiflung denen, die bleiben.","Allat —","Rache an dem, der die Tat beging."]),
- ("C 3138",["Rudā —","blende, wer dies auskratzt."]),
- ("C 4439",["Er kam zurück zum Wasser","im Jahr, als die Römer S²mt erschlugen.","Allat —","Blindheit dem, der dies auskratzt."]),
- ("C 5299",["Rudā —","blende, wer die Schrift auskratzt."]),
- ("LP 308",["Er trauerte um Mqm,","um ʿqrb, um S¹ḫr,","um Tmʾl, um Mqm, um Ḥml.","Allat —","Blindheit dem, der dies auskratzt."]),
-]),
-("VII","bezeuge",
- "Zeugnis für Unbekannte — die Datierung als Akt: er war dabei, es war dieses Jahr; geschrieben für Fremde, die später kommen.",
- ["HSNS 5","LP 653","C 2670","ISB 57"],[
- ("HSNS 1",["Er zog in die innere Wüste","im Jahr, als Agrippa starb."]),
- ("RQ.D 3",["Er trauerte um den Oheim,","den sie erschlugen,","im Jahr des ʾrm."]),
- ("LP 1291",["Er blieb die späten Regen in diesem Tal,","im Jahr, als der Sturzbach","mit seinen Kamelen vorüberzog."]),
- ("C 2190",["Er zog in die innere Wüste,","im Jahr, als der Oheim starb,","und trauerte um Ks¹ṭ."]),
- ("RQ.D 6",["Er trauerte vor Schmerz","um den getöteten S²rk","und den gefangenen ʿyḏ,","im Jahr der Rm."]),
- ("Is.L 202",["Er weidete auf dem Frühjahrsgras","im Jahr von Taymāʾ."]),
- ("ASFF 267",["Er kam zurück von S¹mwt","im Jahr des Kampfes des Mʿṣ."]),
- ("KRS 1586",["Der Unterstand gehört ʿzgd.","Er kam ans Wasser","im Jahr des ṣh."]),
- ("C 4681",["Er baute den kleinen Unterstand","im Jahr, als die Sturzfluten","in diese Raḥaba kamen.","Allat — Sicherheit;","Blindheit dem, der dies auskratzt."]),
- ("ZN 1",["Er trauerte um den Bruder,","der getötet wurde,","im Jahr des Qbr."]),
- ("RWQ 304",["Er nahm diesen Ort in Besitz","im Jahr des ʾrzʾ."]),
- ("BWM 3",["Er war hier","im Jahr, als Ḥrb und ʾlmn erschlagen wurden,","und zog nach ʾnks¹r."]),
- ("RSIS 324",["Er weidete die Schafe","im Jahr des Krieges gegen die Juden."]),
- ("C 4902",["Er war hier","im Jahr des großen Regens","und jagte auf flachem Land."]),
-]),
-("VIII","schweige",
+("V","schweige",
  "Lücken, die sprechen — nicht jede Lücke ist Zufall; was fehlt, wird durch sein Fehlen bezeichnet.",
  ["RQ.A 5","WH 1867.1","WH 1501.2"],[
  ("JaS 23",["----, Sohn des br,","Sohn des ----,","ʿbkz ----,","vom Stamm ʿmn."]),
@@ -220,16 +168,70 @@ REGISTERS = [
  ("C 1312",["Von Ḥḍg, Sohn des S¹wr ----.","Und er hielt Wache ----"]),
  ("C 1368",["Von Ḫlṣ ----,","Sohn des Qdm,","Sohn des ʾnʿm, Sohn des Rʿ,","vom Stamm ----"]),
 ]),
+("VI","klage",
+ "Die Trauer als Denkmal — die Klage, dem Moment entzogen; die Namensliste ist die Form des Schmerzes.",
+ ["LP 540","KRS 17","AbaNS 361","C 4273"],[
+ ("CSNS 781",["Er weinte vor Kummer."]),
+ ("WH 1517",["Er weinte vor Kummer."]),
+ ("AbaNS 453",["Er weinte vor Kummer."]),
+ ("WH 3829",["Er weinte vor Kummer."]),
+ ("WH 3029",["Er weinte vor Kummer","um Fly."]),
+ ("WH 2825",["Er weinte vor Kummer."]),
+ ("HaNSB 319",["Er weinte vor Kummer."]),
+ ("HaNS 708",["Er weinte vor Kummer."]),
+ ("HaNSB 346",["Er weinte vor Kummer","um seinen Sohn Wlym."]),
+ ("HNSD 13",["Er weinte vor Kummer."]),
+ ("SIJ 1001",["Sie weinten vor Kummer."]),
+ ("SIJ 811",["Er weinte vor Kummer","um ----Gh."]),
+ ("SSWS 28",["Er weinte vor Kummer."]),
+ ("C 5367",["Er weinte vor Kummer."]),
+]),
+("VII","verfluche",
+ "Der Fluch, der nie endet — der performativste Akt: ein gesprochener Fluch verhallt, ein gemeißelter gilt ewig.",
+ ["C 4803","RSIS 351","LP 243","C 2775"],[
+ ("WH 368",["Diese Schrift.","Allat —","dem, der sie austilgt:","Blindheit und Lähmung,","Stummheit, Krätze und Räude."]),
+ ("LP 461",["Er trauerte um Mlk,","um Ḫrg, um Gm, um ʾys¹, um Ẓn.","Allat und Duschara —","Blutrache!","Und blende, wer dies austilgt."]),
+ ("KRS 813",["Er trauerte um Ṣʿd.","Allat — blende, wer dies auskratzt,","und werfe ihn aus dem Grab."]),
+ ("KRS 941",["Er fand die Spuren des Ṣʿd","und trauerte vor Schmerz —","Verzweiflung denen, die bleiben.","Das Schicksal schlug ihn nieder."]),
+ ("Is.Mu 242",["Er trauerte um Mlk,","um Ḫrg, um Gḥmn, um ʾys¹, um Ẓn.","Allat und Duschara —","Blutrache."]),
+ ("HCH 85",["Er trauerte um Hnʾ","und um Gls¹.","Allat und Duschara —","Blindheit dem, der dies auskratzt."]),
+ ("C 286",["Rudā —","wer dies austilgt,","erblinde."]),
+ ("C 1658",["Die beiden Kamele,","Allat und Rudā geweiht.","Yaṯaʿ —","blende, wer dies austilgt."]),
+ ("C 1845",["Allat —","blende, wer dies auskratzt."]),
+ ("C 2551",["Er erkannte eine weitere der Ritzungen —","Verzweiflung denen, die bleiben.","Allat —","Rache an dem, der die Tat beging."]),
+ ("C 3138",["Rudā —","blende, wer dies auskratzt."]),
+ ("C 4439",["Er kam zurück zum Wasser","im Jahr, als die Römer S²mt erschlugen.","Allat —","Blindheit dem, der dies auskratzt."]),
+ ("C 5299",["Rudā —","blende, wer die Schrift auskratzt."]),
+ ("LP 308",["Er trauerte um Mqm,","um ʿqrb, um S¹ḫr,","um Tmʾl, um Mqm, um Ḥml.","Allat —","Blindheit dem, der dies auskratzt."]),
+]),
+("VIII","bezeuge",
+ "Zeugnis für Unbekannte — die Datierung als Akt: er war dabei, es war dieses Jahr; geschrieben für Fremde, die später kommen.",
+ ["HSNS 5","LP 653","C 2670","ISB 57"],[
+ ("HSNS 1",["Er zog in die innere Wüste","im Jahr, als Agrippa starb."]),
+ ("RQ.D 3",["Er trauerte um den Oheim,","den sie erschlugen,","im Jahr des ʾrm."]),
+ ("LP 1291",["Er blieb die späten Regen in diesem Tal,","im Jahr, als der Sturzbach","mit seinen Kamelen vorüberzog."]),
+ ("C 2190",["Er zog in die innere Wüste,","im Jahr, als der Oheim starb,","und trauerte um Ks¹ṭ."]),
+ ("RQ.D 6",["Er trauerte vor Schmerz","um den getöteten S²rk","und den gefangenen ʿyḏ,","im Jahr der Rm."]),
+ ("Is.L 202",["Er weidete auf dem Frühjahrsgras","im Jahr von Taymāʾ."]),
+ ("ASFF 267",["Er kam zurück von S¹mwt","im Jahr des Kampfes des Mʿṣ."]),
+ ("KRS 1586",["Der Unterstand gehört ʿzgd.","Er kam ans Wasser","im Jahr des ṣh."]),
+ ("C 4681",["Er baute den kleinen Unterstand","im Jahr, als die Sturzfluten","in diese Raḥaba kamen.","Allat — Sicherheit;","Blindheit dem, der dies auskratzt."]),
+ ("ZN 1",["Er trauerte um den Bruder,","der getötet wurde,","im Jahr des Qbr."]),
+ ("RWQ 304",["Er nahm diesen Ort in Besitz","im Jahr des ʾrzʾ."]),
+ ("BWM 3",["Er war hier","im Jahr, als Ḥrb und ʾlmn erschlagen wurden,","und zog nach ʾnks¹r."]),
+ ("RSIS 324",["Er weidete die Schafe","im Jahr des Krieges gegen die Juden."]),
+ ("C 4902",["Er war hier","im Jahr des großen Regens","und jagte auf flachem Land."]),
+]),
 ]
 
 VORWORT = [
  "Die meisten sind keine Gedichte. Viele kürzer als ein Satz, manche nur Name. Die Formen - safaitisch - schreiben heißt, an einen Stein zu klopfen, an dem man gerade vorbeikommt — er bleibt, wenn man weitergeht.",
  "Das Verständigen anderer Art, die antiken Beduinen nicht auf die Gleichzeitigkeit von Sender und Empfänger angewiesen. Es schließt Wüste, Hitze und Kälte, Steine als Zeugen ein und kennt Schweigen als eigene Aussage kennt. Im Gegensatz zu modernen Feeds operieren die Inschriften über minimale Zeichenzahl existenzieller Tiefe über lange Dauer.",
- "Jedes der acht Register dieses Bandes eine andere Art, mit dem Stein zu sprechen — vom Stehen in der Ahnenreihe, dem bloßen Dasein über das Warten, Bitten und Klagen bis zum Fluch, bis Zeugnis und zuletzt Verstummen. Die Register eröffnen einige lange Inschriften, es folgen knappere Stimmen.",
- "Texte stehen in der dritten Person, wie ihre Originale (l-Fulān, „Von X“, danach „und er …“). Genealogien sind getilgt — außer in „stehe“ (I), wo die Ahnenreihe selbst der Akt ist, und in „schweige“ (VIII), wo das Fehlen spricht. Lücken werden hier nicht geglättet; die Striche ---- bleiben stehen. Die unregelmäßige Oberfläche des Steins und Erosion oder Beschädigung des Steins bilden eine untrennbare Einheit.",
+ "Jedes der acht Register dieses Bandes eine andere Art, mit dem Stein zu sprechen — vom Stehen in der Ahnenreihe und dem bloßen Dasein über das Warten und Bitten zum Verstummen, weiter zur Klage und zum Fluch bis zuletzt zum Zeugnis. Die Ordnung folgt der Sprechhaltung, nicht einem Lebenslauf: das Verstummen steht bewusst in der Mitte, nicht am Ende. Die Register eröffnen einige lange Inschriften, es folgen knappere Stimmen.",
+ "Texte stehen in der dritten Person, wie ihre Originale (l-Fulān, „Von X“, danach „und er …“). Das safaitische l- (‚von‘) bleibt dabei selbst offen: dieselbe Partikel heißt zugleich ‚für‘ und ‚gehörig zu‘ und lässt Urheber, Adressat und Besitzer in einem unbestimmt. Genealogien sind getilgt — außer in „stehe“ (I), wo die Ahnenreihe selbst der Akt ist, und in „schweige“ (V), wo das Fehlen spricht. Lücken werden hier nicht geglättet; die Striche ---- bleiben stehen. Die unregelmäßige Oberfläche des Steins und Erosion oder Beschädigung des Steins bilden eine untrennbare Einheit.",
 ]
 NOTE = [
- "Der Band schöpft aus dem Vollkorpus der ~31.800 safaitischen Inschriften (OCIANA), die zwischen dem ersten und vierten Jahrhundert n. Chr. in Süden Syriens und in Nordjordanien entstanden sind. Erschlossen sind damit auch rund 18.500 reinen Signaturen und die Minimal-Texte — sie tragen die Register „stehe“ (die Ahnenreihen) und „schreibe“ (die Litanei „X war hier“). Revier- und Präsenzmarkierung, indifferent gegenüber dem konkreten Empfänger. Sie steht im Raum, unabhängig davon, ob und wann sie gelesen wird.",
+ "Der Band schöpft aus dem Vollkorpus der ~31.800 safaitischen Inschriften (OCIANA), die zwischen dem ersten und vierten Jahrhundert n. Chr. in Süden Syriens und in Nordjordanien entstanden sind. Erschlossen sind damit auch rund 18.500 reinen Signaturen und die Minimal-Texte — sie tragen die Register „stehe“ (die Ahnenreihen) und „schreibe“ (die Signaturen „Von X“). Revier- und Präsenzmarkierung, indifferent gegenüber dem konkreten Empfänger. Sie steht im Raum, unabhängig davon, ob und wann sie gelesen wird.",
  "Jedes Register speist aus seinem eigenen Korpus-Material: die Signaturen für „schreibe“ und „stehe“, die Anrufungen für „bitte“, die Fluchformeln für „verfluche“, die fragmentarischen Steine für „schweige“, die datierten für „bezeuge“. Die Auswahl ist kuratiert, nicht repräsentativ; jede Nachdichtung trägt die Sigle ihrer Quelle im Korpus.",
  "Übersetzungskette: gemeißelter Stein → philologische Lesung → englische OCIANA-Edition → deutsche Nachdichtung. Eckige Klammern und Striche ---- der Philologen bleiben im Register „schweige“ sichtbar. Protokolle eines kaum sterblichen sprachlichen Systems.",
 ]
@@ -465,11 +467,11 @@ def main():
             if not lines:
                 raise SystemExit(f"v5-Kopfstück fehlt: {sg}")
             ort = FINDSPOT.get(sg, "Fundort unbekannt")
-            xml += [titel_ueber(f"{ort} · {sg}"), flow(" ".join(lines))]
+            xml += [titel_ueber(f"{ort} · {sg}")] + [line(l) for l in lines]
             total += 1
         for sg, lines in poems:                 # Korpus-Stimmen
             ort = FINDSPOT.get(sg, "Fundort unbekannt")
-            xml += [titel_ueber(f"{ort} · {sg}"), flow(" ".join(lines))]
+            xml += [titel_ueber(f"{ort} · {sg}")] + [line(l) for l in lines]
             total += 1
 
     xml += [PAGEBREAK, head("Nachwort")] + [body(p) for p in VORWORT] + [body(p) for p in NOTE] + [subhead("Zu den Kapiteltiteln")] + [body(p) for p in TITLES]
