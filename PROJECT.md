@@ -44,15 +44,35 @@ Projekt stattdessen als eigenständiger Top-Level-Ordner im Repo
 reale VM kann es unverändert nach `<AOS_ROOT>/projects/Projekte-Claude/` verschoben
 und dort als eigenes Git-Repo initialisiert werden.
 
-## Meetily-Integration — SIMULIERTE ANNAHME, vor Ort zu verifizieren
+## Betriebsstatus (Stand 2026-07-05)
 
-Kein Zugriff auf eine echte Meetily-Installation in dieser Sandbox möglich
-(Tauri-Desktop-App, Audio-Hardware nötig). Die Integration basiert auf einer
-dokumentierten, plausiblen Schema-Annahme (siehe
-`docs/meetily-integration-spike.md`) und wird gegen synthetische
-Fixture-Daten getestet. **Vor Produktivbetrieb zwingend lokal auf der VM zu
-verifizieren:** tatsächlicher SQLite-Pfad/Schema bzw. Export-Format von
-Meetily, danach `MEETILY_SOURCE_*`-Env-Vars entsprechend anpassen.
+**PRODUKTIV** auf `sts-w-0001.zew.local`.
+
+| Komponente | Status |
+|---|---|
+| Dienst | läuft, erreichbar unter `http://192.168.70.143:8000` |
+| Autostart | Windows Scheduled Task `MeetilyGLMBridge` registriert (S4U, startet bei Boot) |
+| Provider | `anthropic` (claude-sonnet-5), ANTHROPIC_API_KEY in `.env` |
+| Meetily | v0.4.0 installiert, `MEETILY_SOURCE_MODE=sqlite` |
+| Login | `admin` / `meetily2026` |
+
+**Architektur-Einschränkung:** Der Dienst liest die lokale Meetily-SQLite-DB auf dem
+VM-Server (`%APPDATA%\com.meetily.ai\meeting_minutes.sqlite`). Remote-Nutzer
+können ihre eigenen Meetily-Transkripte nicht über diesen Dienst abrufen.
+Aktueller Workflow: RDP auf VM → Meetily → Transkript → Browser → Übersetzung/Zusammenfassung.
+
+Diskutierte Erweiterungsoptionen (noch nicht beauftragt): Datei-Upload-Modus
+(einfach) oder Browser-Audio-Streaming mit separatem Whisper-Dienst (komplex).
+
+## Meetily-Integration — VERIFIZIERT (2026-07-04)
+
+Echtes Schema auf der VM bestätigt: Transkript liegt in separater `transcripts`-Tabelle
+(ein Row pro Audiosegment, Speaker `mic`/`system`, `audio_start_time`) — NICHT als
+Blob in `meetings`. `SqliteMeetilySource` entsprechend implementiert.
+Vollständige Dokumentation: `docs/meetily-integration-spike.md`.
+
+**Noch offen:** kein reales Testmeeting aufgezeichnet (Schema durch Migrationsdateien
+sehr sicher belegt, aber noch nicht durch echte Beispieldaten bestätigt).
 
 ## Setup
 

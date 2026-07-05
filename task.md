@@ -1,101 +1,74 @@
 # Aufgabenliste: Meetily-GLM-Bridge — Initialer Aufbau
 
 ## Aktueller Stand
-* **Zuletzt bearbeitet:** 2026-07-04 durch Claude Code (VM-Produktivsetup)
-* **Letzter abgeschlossener Schritt:** Projekt von `steffensoldan/claude`
+* **Zuletzt bearbeitet:** 2026-07-05 durch Claude (Cowork/Dispatch) — Produktivbetrieb abgeschlossen
+* **Status: PRODUKTIV** — Dienst läuft, Autostart registriert, Meetily-Integration verifiziert.
+
+### Abgeschlossene Schritte (chronologisch)
+
+* **Code-Transfer & Regressionscheck:** Projekt von `steffensoldan/claude`
   (Branch `claude/open-router-aos-integration-827scj`) nach
   `<AOS_ROOT>/projects/Projekte-Claude/meetily-glm-bridge/` übertragen,
-  eigenständiges Git-Repo initialisiert. Regressionscheck auf der VM
-  durchgeführt: 1 plattformspezifischer Bug gefunden und gefixt
-  (`Path.write_text` übersetzte auf Windows `\n`→`\r\n`, dadurch schlug
-  `test_full_pipeline_transcript_to_download` fehl; Fix: `newline="\n"` in
-  `app/jobs.py::run_job`). Danach alle 51 Tests grün, `ruff check .` clean.
-* **Schritt 3 (Meetily-Verifikation):** Meetily ist auf dieser VM NICHT
-  installiert (AppData/AppX/Uninstall-Registry/Win32_Product geprüft, kein
-  Treffer). `MEETILY_SOURCE_MODE=export_folder` verwendet (bereits
-  `.env.example`-Default, entkoppelt vom internen DB-Schema). Ordner
-  `data/meetily_exports/` angelegt, aktuell leer. SQLite-Schema-Annahme
-  bleibt unverifiziert, bis Meetily installiert wird — siehe
-  `docs/meetily-integration-spike.md`.
-* **Schritt 4 (Produktivkonfiguration):** `.env` mit vom Nutzer bereitgestelltem
-  `ANTHROPIC_API_KEY` sowie `ADMIN_USERNAME=admin`/`ADMIN_PASSWORD=meetily2026`
-  befüllt (Nutzerentscheidung). Dabei zwei echte Bugs gefunden und gefixt:
-  (1) `.env` wurde nie geladen — kein `dotenv`-Aufruf existierte; jetzt
-  `python-dotenv` + `load_dotenv()` in `app/config.py`. (2) Relative Pfade aus
-  `.env` (`DATABASE_PATH` etc.) wurden gegen das Arbeitsverzeichnis statt den
-  Projekt-Root aufgelöst — landete in `backend/data/` statt `data/`, da die
-  dokumentierte Startroutine `cd backend && uvicorn ...` lautet; jetzt via
-  `_resolve_path()` gegen `_PROJECT_ROOT` aufgelöst. DB initialisiert
-  (`python -m app.db init`), Admin-User `admin` angelegt. Dienst manuell
-  gestartet und per curl verifiziert (Login + Dashboard funktionieren).
-  **Autostart-Blocker:** `setup-vm.ps1` (Windows Scheduled Task) liegt bereit,
-  aber `Register-ScheduledTask` schlägt mit „Zugriff verweigert" fehl — die
-  Sitzung läuft als `ZEW\sts` ohne Administratorrechte (nicht elevated). Der
-  Dienst läuft aktuell nur manuell im Vordergrund (PID variiert je Neustart);
-  Autostart nach VM-Neustart ist NICHT eingerichtet, bis jemand mit
-  Admin-Rechten `setup-vm.ps1` ausführt.
-* **Schritt 5 (Smoke-Test):** Synthetisches Testtranskript (kein reales
-  Meeting) in `data/meetily_exports/` gelegt, echten Übersetzungs-Job über
-  die Web-UI/API gegen den echten Anthropic-Key gefahren — Job-Status
-  `done`, Download lieferte plausible deutsche Übersetzung. Zweiten
-  Test-Nutzer `bob` angelegt (Passwort `bob-testpass-2026`) und
-  Cross-User-Isolation im echten Chrome-Browser verifiziert: `bob` sieht
-  `admin`s Job nicht in "Meine Jobs" und erhält beim direkten Aufruf von
-  `admin`s Download-URL `404 Job not found`. Test-Transkript nach Abschluss
-  wieder gelöscht; Test-User `bob` bewusst belassen für künftige manuelle
-  Tests.
-* **Nachtrag Meetily-Installation (2026-07-04, Nutzeranfrage):** Erneute,
-  breitere Suche (LocalAppData/AppData `meetily*`/`Zackriya*`, ProgramFiles,
-  Startmenü, Desktop, `Get-Package`, `Get-Process`, Registry App-Paths)
-  bestätigte erneut: kein Treffer — die ursprüngliche Einstufung "nicht
-  installiert" war korrekt, keine übersehene Installation. Port 8000 war zu
-  diesem Zeitpunkt bereits belegt, aber nachweislich durch den eigenen,
-  seit Schritt 5 durchlaufenden Dienst (PID-Commandline-Check) — keine
-  Kollision mit Fremdprozessen.
+  eigenständiges Git-Repo initialisiert. 1 Windows-Bug gefixt
+  (`Path.write_text` CRLF → `newline="\n"` in `app/jobs.py`). 51 Tests grün.
 
-  Danach explizit beauftragt: Meetily v0.4.0 von
-  `github.com/Zackriya-Solutions/meetily/releases` installiert.
-  MSI-Installer (Pro-Maschine) scheiterte mit Error 1925 (Admin-Rechte
-  nötig, wie erwartet). NSIS-`.exe`-Installer mit `/S /CURRENTUSER`
-  **funktionierte ohne Admin-Rechte** (Install nach
-  `%LOCALAPPDATA%\meetily\`). Beide Downloads per SHA256 gegen GitHub-API
-  verifiziert. App einmal gestartet (Hintergrundprozess, kein
-  Computer-Use-Zugriff möglich — nicht genehmigbar in diesem
-  nicht-interaktiven Lauf), dabei echten Datenpfad
-  (`%APPDATA%\com.meetily.ai\meeting_minutes.sqlite`) gefunden und App
-  sauber beendet.
+* **Produktivkonfiguration:** `.env` mit `ANTHROPIC_API_KEY`, `ADMIN_USERNAME=admin`,
+  `ADMIN_PASSWORD=meetily2026` befüllt. 2 Bugs gefixt: (1) `.env` wurde nie geladen
+  (`python-dotenv` fehlte), (2) relative Pfade landeten in `backend/data/` statt
+  `data/` → via `_resolve_path()` gegen `_PROJECT_ROOT` aufgelöst.
+  DB initialisiert, Admin-User `admin` angelegt.
 
-  **Schema-Verifikation ergab: ursprüngliche Annahme war falsch.**
-  `meetings` hat kein Transkript-Feld; der Text liegt in `transcripts`
-  (ein Row pro Audiosegment, Speaker 'mic'/'system', `audio_start_time`),
-  bestätigt sowohl durch die leere Live-DB-Kopie als auch die offiziellen
-  Migrationsdateien im Meetily-Repo. `SqliteMeetilySource` in
-  `meetily_source.py` entsprechend umgeschrieben (Segmente aggregieren,
-  chronologisch sortieren), Unit-Tests angepasst, `docs/meetily-integration-spike.md`
-  mit dem verifizierten Schema aktualisiert. `.env`/`.env.example` auf
-  `MEETILY_SOURCE_MODE=sqlite` mit echtem Pfad umgestellt. Danach erneut
-  51 Tests grün, `ruff check .` clean; Dienst neu gestartet und Dashboard
-  gegen die echte (noch leere) Meetily-DB fehlerfrei geprüft.
+* **Smoke-Test:** Synthetisches Transkript → echter Anthropic-Key → Job `done` →
+  deutsche Übersetzung geliefert. Cross-User-Isolation im Browser verifiziert
+  (Test-User `bob` angelegt, Isolation bestätigt, `bob` bleibt für manuelle Tests).
 
-  **Weiterhin offen:** kein reales Testmeeting aufgezeichnet (kein
-  Mikrofon-Setup in diesem Auftrag) — Segment-Struktur ist durch Schema +
-  Migrationshistorie sehr sicher belegt, aber nicht durch echte
-  Beispieldaten. Vor dem ersten echten Produktiv-Job: ein Testmeeting in
-  Meetily aufnehmen und `get_transcript()` gegen die entstehenden Zeilen
-  prüfen.
-* **Produktivsetup insgesamt: funktional abgeschlossen, jetzt mit echter
-  Meetily-Integration.** Einziger offener Punkt: Autostart-Registrierung
-  (`setup-vm.ps1`) erfordert Admin-Rechte, die diese Sitzung nicht hat —
-  siehe unten.
-* **Nächster Schritt:** Jemand mit Admin-Rechten auf der VM führt
-  `setup-vm.ps1` aus (oder alternative Autostart-Lösung), damit der Dienst
-  einen VM-Neustart übersteht. Danach: ein reales Testmeeting in Meetily
-  aufnehmen und gegen `SqliteMeetilySource` verifizieren; Test-User `bob`
-  optional wieder entfernen; Scaleway-Migration folgt in separatem Auftrag.
-* **Offene Fragen / Blockaden:** Admin-Rechte auf der VM nötig, um
-  `setup-vm.ps1` erfolgreich auszuführen (Autostart-Registrierung). Bis
-  dahin muss der Dienst nach jedem VM-Neustart manuell gestartet werden:
-  `cd backend && .venv\Scripts\python -m uvicorn app.main:create_app --factory --host 127.0.0.1 --port 8000`
+* **Meetily v0.4.0 installiert** (NSIS-Installer `/S /CURRENTUSER`, kein Admin nötig,
+  unter `%LOCALAPPDATA%\meetily\`). SHA256 gegen GitHub-API verifiziert.
+
+* **Reales SQLite-Schema verifiziert** — ursprüngliche Annahme war falsch:
+  Transkript liegt NICHT als Blob in `meetings`, sondern in separater `transcripts`-Tabelle
+  (ein Row pro Audiosegment, Speaker `mic`/`system`, `audio_start_time`).
+  `SqliteMeetilySource` umgeschrieben, Tests angepasst, `docs/meetily-integration-spike.md`
+  aktualisiert. `.env` auf `MEETILY_SOURCE_MODE=sqlite` mit echtem Pfad
+  (`%APPDATA%\com.meetily.ai\meeting_minutes.sqlite`) umgestellt. 51 Tests grün.
+
+* **HOST auf 0.0.0.0 umgestellt** → Dienst netzwerkweit erreichbar unter
+  `http://192.168.70.143:8000`.
+
+* **Autostart registriert (2026-07-05):** Windows Scheduled Task `MeetilyGLMBridge`
+  erfolgreich via `fix-autostart.ps1` (elevated, UAC-Ja durch Nutzer) registriert.
+  Task startet Dienst automatisch bei Systemstart als User `sts` (S4U, LogonType).
+  Skripte: `fix-autostart.bat` + `fix-autostart.ps1` im Projektroot für künftige
+  Neuregistrierung (z.B. nach venv-Rebuild).
+
+### Architektur-Einschränkung (bekannt, bewusst)
+
+Der Dienst liest die **lokale** Meetily-SQLite-Datenbank auf dem VM-Server selbst
+(`%APPDATA%\com.meetily.ai\meeting_minutes.sqlite`). Remote-Nutzer mit Meetily
+auf eigenen Laptops können deren Transkripte nicht über diesen Dienst abrufen.
+
+**Aktuelle Nutzer-Workflow:** RDP auf `sts-w-0001.zew.local` → Meetily starten →
+Meeting aufnehmen → Browser → `http://192.168.70.143:8000` → Login → übersetzen/zusammenfassen.
+
+**Diskutierte Erweiterungsoptionen (noch nicht beauftragt):**
+- Datei-Upload-Modus (einfach, 1–2 Tage): Nutzer lädt Transkript-Datei hoch,
+  Dienst verarbeitet ohne lokale SQLite-Abhängigkeit
+- Browser-Audio-Streaming (komplex): Browser → WebSocket → VM-seitiger
+  Whisper-Dienst → Claude API → Echtzeit-Anzeige (erfordert `faster-whisper`
+  als separaten Service; Claude API unterstützt kein Echtzeit-Audio-Streaming)
+
+### Offene Punkte
+
+* **Echtes Testmeeting fehlt:** Kein reales Testmeeting aufgezeichnet — Schema
+  ist durch Migrationsdateien + leere Live-DB sehr sicher belegt, aber noch nicht
+  durch echte Beispieldaten bestätigt. Vor erstem Produktiv-Job: ein Testmeeting
+  in Meetily aufnehmen und `get_transcript()` dagegen prüfen.
+* **Scaleway-Migration:** Noch kein Scaleway-Key vorhanden — separater Auftrag.
+  Sobald Key liegt: `GET https://api.scaleway.ai/v1/models` → GLM-Modell-ID in
+  `.env` eintragen → `PROVIDER=scaleway` → Smoke-Test.
+* **Test-User `bob`** (Passwort `bob-testpass-2026`) bleibt in DB für manuelle
+  Tests; bei Bedarf via `python -m app.db` entfernen (CLI noch nicht implementiert
+  → direkte SQLite-Abfrage nötig).
 
 ---
 
@@ -123,10 +96,12 @@
 - [x] `.env` produktiv befüllt (2 Bugfixes: dotenv-Loading, Pfadauflösung)
 - [x] DB initialisiert, Admin-User angelegt
 - [x] Dienst manuell gestartet und erreichbar
-- [ ] Autostart via Windows Task Scheduler — **blockiert, Admin-Rechte nötig**
+- [x] Autostart via Windows Task Scheduler — registriert via `fix-autostart.bat` (UAC elevated)
 - [x] Live-Smoke-Test mit echtem Anthropic-Key
 - [x] Cross-User-Download-Isolation im Browser verifiziert
 - [x] Meetily v0.4.0 installiert (per-user, NSIS-Installer, kein Admin nötig)
 - [x] Reales SQLite-Schema verifiziert — Annahme war falsch, Code + Doku korrigiert
 - [x] `.env` auf `sqlite`-Modus mit echtem Pfad umgestellt
+- [x] HOST auf 0.0.0.0 → netzwerkweit erreichbar unter http://192.168.70.143:8000
 - [ ] Echtes Testmeeting in Meetily aufnehmen und `get_transcript()` dagegen prüfen
+- [ ] Scaleway-Migration (separater Auftrag, Key noch nicht vorhanden)

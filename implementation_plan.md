@@ -14,8 +14,9 @@ Vollständiges Konzept mit Alternativen-Abwägung:
 * [x] Meetily-Spike wird simuliert (plausible Annahme + Fixtures) statt live
       verifiziert — vom Nutzer bestätigt
 * [x] Reale Inhalte bereits in Anthropic-Phase erlaubt — vom Nutzer bestätigt
-* [ ] Vor Produktivbetrieb mit echten Meeting-Inhalten: lokale Verifikation
-      des Meetily-Schemas durch den Nutzer (siehe `docs/meetily-integration-spike.md`)
+* [x] Vor Produktivbetrieb mit echten Meeting-Inhalten: lokale Verifikation
+      des Meetily-Schemas — abgeschlossen 2026-07-04, Schema war falsch,
+      korrigiert (siehe `docs/meetily-integration-spike.md`)
 
 ---
 

@@ -48,18 +48,16 @@ Aufrufform `TemplateResponse(request=request, name=..., context=...)` — betrif
 
 ## Manuelle Checklistenpunkte (außerhalb der automatisierten Schleife)
 
-- [ ] Live-Smoke-Test mit echtem `ANTHROPIC_API_KEY` gegen ein reales Transkript
+- [x] Live-Smoke-Test mit echtem `ANTHROPIC_API_KEY` gegen ein reales Transkript
+- [x] **Auf der VM:** Meetily v0.4.0 installiert, SQLite-Schema verifiziert,
+      `MEETILY_SOURCE_MODE=sqlite` mit echtem Pfad konfiguriert
+- [x] Cross-User-Download-Isolation manuell im Browser bestätigt (Test-User `bob`)
+- [x] Autostart via Windows Task Scheduler registriert (`fix-autostart.bat` → UAC)
+- [x] Dienst netzwerkweit erreichbar: `http://192.168.70.143:8000`
+- [ ] **Echtes Testmeeting aufnehmen** und `get_transcript()` gegen reale Segmente prüfen
 - [ ] Nach Erhalt eines Scaleway-Keys: `GET https://api.scaleway.ai/v1/models`
-      aufrufen, echten GLM-5.2-Modell-ID-String in `.env` eintragen, Smoke-Test
-      gegen `ScalewayProvider` wiederholen
-- [ ] **Vor Ort auf der VM:** echte Meetily-Installation, SQLite-Pfad/Schema
-      oder Export-Format verifizieren (Schritte in
-      `docs/meetily-integration-spike.md`), `MEETILY_SOURCE_*` in `.env` anpassen
-- [ ] Cross-User-Download-Versuch manuell im Browser mit zwei echten
-      Benutzerkonten bestätigen (automatisierter Test deckt die Logik ab,
-      nicht die tatsächliche Browser-Cookie-Behandlung)
-- [ ] Bei Bedarf: `python -m app.db init` mit `ADMIN_USERNAME`/`ADMIN_PASSWORD`
-      in `.env` ausführen, um den ersten echten Nutzer anzulegen
+      aufrufen, GLM-5.2-Modell-ID-String in `.env` eintragen (`PROVIDER=scaleway`),
+      Smoke-Test wiederholen — separater Auftrag
 
 ## Geänderte/neue Dateien
 
