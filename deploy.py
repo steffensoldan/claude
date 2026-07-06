@@ -55,8 +55,15 @@ def main():
         if password:
             ssh.connect(server, 22, user, password, timeout=15)
         else:
-            # Versuche schlüsselspezifischen SSH-Login aus ~/.ssh/
-            ssh.connect(server, 22, user, timeout=15)
+            try:
+                # 1. Versuche schlüsselspezifischen SSH-Login aus ~/.ssh/
+                ssh.connect(server, 22, user, timeout=15)
+            except paramiko.ssh_exception.AuthenticationException:
+                # 2. Fallback: Sichere Passworteingabe im Terminal
+                import getpass
+                print("SSH-Key fehlgeschlagen oder nicht autorisiert.")
+                password = getpass.getpass(prompt=f"Bitte Passwort für {user}@{server} eingeben: ")
+                ssh.connect(server, 22, user, password, timeout=15)
         print("SSH-Verbindung erfolgreich!")
     except Exception as e:
         print(f"Verbindung fehlgeschlagen: {e}")
