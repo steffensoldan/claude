@@ -266,3 +266,24 @@ Nutzer wählen beim Upload den Ausgabe-Zugang: **Fixes HTML** (unverändert) ode
 ## 2. Verwendung (Switching)
 - **Claude:** `WISSKOMM_LLM_PROVIDER=anthropic` + `ANTHROPIC_API_KEY` setzen.
 - **Scaleway GLM:** `WISSKOMM_LLM_PROVIDER=scaleway` + `SCW_SECRET_KEY` setzen.
+
+---
+
+# Walkthrough (Stand: 06.07.2026) — ZEW-CD-Feinschliff & System-Härtung
+
+Dritte Änderungsrunde durch Antigravity: Behebung von API- und Render-Abbrüchen bei der Integration der ZEW-Hausschriften, Dynamisierung der Grafikgenerierung für beliebige Studien und Anhebung der Dateigrößen-Limits.
+
+## 1. Änderungen
+*   **Schriften-Lokalisierung:** Die ZEW-Hausschriften `LinLibertine` und `Calibri` wurden in ein `fonts/`-Verzeichnis direkt auf der Quarto-Projekt-Wurzelebene verschoben, um die Kompatibilität mit dem internen Dependency-Kopierer von Quarto herzustellen. Die Pfade in `_brand.yml` und `deploy.py` wurden entsprechend angepasst.
+*   **theme/zew.scss:** Bereinigung manueller, redundanter `@font-face`-Deklarationen, um Compiler-Warnungen bei der PDF- und RevealJS-Erstellung zu vermeiden.
+*   **templates/publication.qmd.j2:** Vollständige Dynamisierung der Matplotlib-Diagrammzellen. Die Grafikerstellung ermittelt die abzubildenden Kenngrößen nun dynamisch anhand der extrahierten numerischen Datenspalten, anstatt cba-spezifische Variablen wie `leakage_pct` hart zu codieren. Dies verhindert KeyErrors bei beliebigen Studien.
+*   **prompt.py:**
+    - Lenientes JSON-Parsing (`strict=False`) zur Tolerierung von Sonder-/Steuerzeichen.
+    - Kontext-Kürzung für lange Dokumenttexte (auf die ersten 40.000 und die letzten 10.000 Zeichen), um das 32k-Limit von GLM-5.2 sicher einzuhalten.
+    - Erhöhung von `max_tokens` auf `16384` und Deaktivierung des fehlerhaften JSON-Modus des Providers, um Schleifen oder vorzeitiges Abschneiden der Generierung zu verhindern.
+*   **coop_app/settings.py (Proxy-Projekt `stellar-galaxy`):** Anhebung der Django-Upload-Grenzen (`DATA_UPLOAD_MAX_MEMORY_SIZE` und `FILE_UPLOAD_MAX_MEMORY_SIZE`) von 10 MB auf **50 MB**, gefolgt von einem geordneten Gunicorn-Reload auf der VM.
+
+## 2. Testergebnisse & Verifikation
+1.  **Dateiupload:** Übergroße PDF-Dokumente passieren den Django-Proxy auf Port 8080 nun problemlos und ohne Verbindungsabbrüche.
+2.  **LLM-Weiche:** Die API-Abfragen an den Scaleway-Provider laufen fehlerfrei durch und liefern vollständig parsebares JSON.
+3.  **Visualisierung & Rendering:** Die Generierung aller vier Zielformate läuft ohne KeyError oder Pfad-Fehler durch und wendet das ZEW-Branding korrekt an.
