@@ -2,8 +2,8 @@
 
 ## Aktueller Stand
 * **Zuletzt bearbeitet:** 2026-07-06 durch Antigravity
-* **Letzter Meilenstein:** ZEW CD-Vorgaben (News-Grün, Anthrazit, Hellblau, Grau) und Hausschriften (Linux Libertine, Calibri) aus zewEcon vollständig integriert; SSH-Key-Auth und Dateitransfer in deploy.py implementiert und im Git-Branch gepusht.
-* **Nächster Schritt:** API-Guthaben der VM aufladen (Anthropic Developer Console); deploy.py auf VM ausführen und Live-CD-Darstellung verifizieren.
+* **Letzter Meilenstein:** ZEW CD-Vorgaben und Hausschriften aus zewEcon vollständig integriert; SSH-Key-Auth in deploy.py implementiert. Umschaltbarer LLM-Provider (Claude vs. Scaleway GLM-5.2) in prompt.py via Lazy-Imports realisiert und im Git gepusht.
+* **Nächster Schritt:** API-Guthaben der VM aufladen oder Scaleway-Zugang in der .env eintragen und Provider auf 'scaleway' umstellen; deploy.py ausführen und Live-Funktion verifizieren.
 * **Offene Fragen / Blockaden:** Keine (CD-Farben und Schriften vollständig normalisiert).
 
 ---

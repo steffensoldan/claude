@@ -1,6 +1,5 @@
 import os
 import json
-import anthropic
 
 SYSTEM_PROMPT = """Du bist ein Experte für Wissenschaftskommunikation am ZEW und Datenjournalist.
 Deine Aufgabe ist es, aus dem Rohtext eines wissenschaftlichen Discussion Papers (Stahl-Grenzausgleich / Border Carbon Adjustments) die wesentlichen Kernaussagen, Kennzahlen und Datenreihen zu extrahieren.
@@ -67,25 +66,62 @@ WICHTIG:
 """
 
 async def query_claude(prompt_history: list[dict], api_key: str = None) -> dict:
-    """Sendet den Verlauf an Claude und liefert das extrahierte JSON zurück."""
-    if not api_key:
-        api_key = os.environ.get("ANTHROPIC_API_KEY")
+    """Sendet den Verlauf an den gewählten Provider (Anthropic Claude oder Scaleway GLM).
+
+    Die Auswahl erfolgt über WISSKOMM_LLM_PROVIDER ('anthropic' oder 'scaleway') in .env.
+    """
+    provider = os.environ.get("WISSKOMM_LLM_PROVIDER", "").lower()
     
-    if not api_key:
-        raise ValueError("Anthropic API Key nicht konfiguriert.")
+    # Auto-Erkennung, falls nicht explizit gesetzt
+    if not provider:
+        if os.environ.get("SCW_SECRET_KEY") and not os.environ.get("ANTHROPIC_API_KEY"):
+            provider = "scaleway"
+        else:
+            provider = "anthropic"
+
+    if provider == "scaleway":
+        # Lazy Import, um Fehler zu vermeiden falls openai-Bibliothek nicht installiert ist
+        from openai import AsyncOpenAI
         
-    client = anthropic.AsyncAnthropic(api_key=api_key)
-    
-    # Letzte Nachricht ermitteln oder System-Prompt definieren
-    response = await client.messages.create(
-        model="claude-opus-4-8",
-        max_tokens=8000,
-        system=SYSTEM_PROMPT,
-        messages=prompt_history
-    )
-    
-    content = response.content[0].text.strip()
-    
+        scw_key = api_key or os.environ.get("SCW_SECRET_KEY")
+        if not scw_key:
+            raise ValueError("Scaleway API Key (SCW_SECRET_KEY) nicht konfiguriert.")
+            
+        client = AsyncOpenAI(
+            base_url="https://api.scaleway.ai/v1",
+            api_key=scw_key
+        )
+        
+        # System-Prompt bei OpenAI-kompatiblen Schnittstellen als System-Nachricht einhängen
+        messages = [{"role": "system", "content": SYSTEM_PROMPT}] + prompt_history
+        model_name = os.environ.get("WISSKOMM_LLM_MODEL", "glm-5.2")
+        
+        response = await client.chat.completions.create(
+            model=model_name,
+            max_tokens=8000,
+            messages=messages
+        )
+        content = response.choices[0].message.content.strip()
+        
+    else:  # anthropic
+        # Lazy Import, um Fehler zu vermeiden falls anthropic-Bibliothek nicht installiert ist
+        import anthropic
+        
+        ant_key = api_key or os.environ.get("ANTHROPIC_API_KEY")
+        if not ant_key:
+            raise ValueError("Anthropic API Key (ANTHROPIC_API_KEY) nicht konfiguriert.")
+            
+        client = anthropic.AsyncAnthropic(api_key=ant_key)
+        model_name = os.environ.get("WISSKOMM_LLM_MODEL", "claude-opus-4-8")
+        
+        response = await client.messages.create(
+            model=model_name,
+            max_tokens=8000,
+            system=SYSTEM_PROMPT,
+            messages=prompt_history
+        )
+        content = response.content[0].text.strip()
+
     # JSON-Extraktion aus der Antwort (falls das Modell Markdown drumherum gepackt hat)
     json_start = content.find("{")
     json_end = content.rfind("}") + 1
@@ -96,5 +132,5 @@ async def query_claude(prompt_history: list[dict], api_key: str = None) -> dict:
         data = json.loads(content)
         return data
     except json.JSONDecodeError as e:
-        print("JSON Fehler:", content)
-        raise RuntimeError(f"Ungültige JSON-Antwort von der Claude-API: {e}")
+        print(f"JSON Fehler ({provider}):", content)
+        raise RuntimeError(f"Ungültige JSON-Antwort von der LLM-API ({provider}): {e}")

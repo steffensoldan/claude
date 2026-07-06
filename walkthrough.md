@@ -248,3 +248,21 @@ Nutzer wählen beim Upload den Ausgabe-Zugang: **Fixes HTML** (unverändert) ode
 ## 2. Testergebnisse & Verifikation
 1.  **Lokale Kompilierung:** `py_compile` von `deploy.py` und `build_quarto.py` erfolgreich durchgeführt.
 2.  **Git-Synchronisation:** Alle Änderungen im Branch `claude/wisskomm-viz` auf GitHub gepusht.
+
+---
+
+# Walkthrough (Stand: 06.07.2026) — Umschaltbarer LLM-Provider (Claude vs. Scaleway GLM-5.2)
+
+Änderungsrunde durch Antigravity: Implementierung einer dynamischen Umschaltlogik in Wisskomm-Viz, um flexibel zwischen dem standardmäßigen Anthropic Claude und der Scaleway GLM-5.2 API wechseln zu können.
+
+## 1. Änderungen
+*   **templates/publication.qmd.j2 / prompt.py:** 
+    - Implementierung einer Provider-Weiche über die Umgebungsvariablen `WISSKOMM_LLM_PROVIDER` (Werte: `anthropic` oder `scaleway`) und `WISSKOMM_LLM_MODEL`.
+    - Nutzt **Lazy Imports** für `openai` und `anthropic` in `prompt.py`, sodass kein Importfehler auftritt, wenn eine der Bibliotheken nicht installiert ist.
+    - System-Prompt-Handling für die OpenAI-kompatible Scaleway-Schnittstelle als erste System-Message implementiert.
+*   **requirements.txt:** `openai==1.59.0` hinzugefügt.
+*   **.env.example:** Neue Umgebungsvariablen (`WISSKOMM_LLM_PROVIDER`, `WISSKOMM_LLM_MODEL`, `SCW_SECRET_KEY`) dokumentiert.
+
+## 2. Verwendung (Switching)
+- **Claude:** `WISSKOMM_LLM_PROVIDER=anthropic` + `ANTHROPIC_API_KEY` setzen.
+- **Scaleway GLM:** `WISSKOMM_LLM_PROVIDER=scaleway` + `SCW_SECRET_KEY` setzen.
