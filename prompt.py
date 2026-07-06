@@ -100,7 +100,8 @@ async def query_claude(prompt_history: list[dict], api_key: str = None) -> dict:
         response = await client.chat.completions.create(
             model=model_name,
             max_tokens=8000,
-            messages=messages
+            messages=messages,
+            response_format={"type": "json_object"}
         )
         content = response.choices[0].message.content
         if content is None:
