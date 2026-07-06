@@ -57,24 +57,30 @@ except Exception:
 
 ```{python}
 #| label: fig-signal
-#| fig-cap: "Effektiver Signal-Anteil λ: Anteil des nominalen CO₂-Preises, der an der Grenze wirkt."
-fig, ax = plt.subplots(figsize=(8, 2.8))
-labels = signal["label"].tolist()
-vals = signal["lambda"].tolist()
-for i, (name, val) in enumerate(zip(labels, vals)):
-    col = ZEW["blue2"] if float(val) >= 0.99 else ZEW["grey"]
-    ax.barh(i, 1.0, color=ZEW["eisblau"], alpha=.35, height=.6)
-    ax.barh(i, float(val), color=col, height=.6)
-    ax.text(float(val) + .02, i, f"{float(val)*100:.0f} %", va="center", fontweight="bold")
-ax.set_yticks(range(len(labels)))
-ax.set_yticklabels(labels)
-ax.set_xlim(0, 1.15)
-ax.invert_yaxis()
-ax.set_xticks([])
-ax.spines["left"].set_visible(False)
-ax.spines["bottom"].set_visible(False)
-plt.tight_layout()
-plt.show()
+#| fig-cap: "Effektiver Signal-Anteil λ (Quelle: DP-Daten)."
+# Dynamischer Plot, falls signal-Daten vorhanden
+if 'label' in signal.columns and 'lambda' in signal.columns:
+    fig, ax = plt.subplots(figsize=(8, 2.8))
+    labels = signal["label"].tolist()
+    vals = signal["lambda"].tolist()
+    for i, (name, val) in enumerate(zip(labels, vals)):
+        try:
+            val_f = float(val)
+        except ValueError:
+            val_f = 0.0
+        col = ZEW["blue2"] if val_f >= 0.99 else ZEW["grey"]
+        ax.barh(i, 1.0, color=ZEW["eisblau"], alpha=.35, height=.6)
+        ax.barh(i, val_f, color=col, height=.6)
+        ax.text(val_f + .02, i, f"{val_f*100:.0f} %", va="center", fontweight="bold")
+    ax.set_yticks(range(len(labels)))
+    ax.set_yticklabels(labels)
+    ax.set_xlim(0, 1.15)
+    ax.invert_yaxis()
+    ax.set_xticks([])
+    ax.spines["left"].set_visible(False)
+    ax.spines["bottom"].set_visible(False)
+    plt.tight_layout()
+    plt.show()
 ```
 
 ## Kernbefunde
@@ -96,15 +102,34 @@ plt.show()
 
 ```{python}
 #| label: fig-eu
-#| fig-cap: "Carbon-Leakage-Rate je EU-Szenario (Quelle: DP-Daten)."
-fig, ax = plt.subplots(figsize=(8, 4.0))
-colors = [SCEN_LETTER.get(str(s).strip()[:1], ZEW["blue2"]) for s in eu["scenario"]]
-ax.bar(eu["scenario"], eu["leakage_pct"], color=colors, width=.62)
-for x, v in zip(eu["scenario"], eu["leakage_pct"]):
-    ax.text(x, float(v) + 1, f"{float(v):.1f}".replace(".", ","), ha="center", fontsize=13)
-ax.set_ylabel("Leakage-Rate (%)")
-plt.tight_layout()
-plt.show()
+#| fig-cap: "Szenarien-Vergleich (Quelle: DP-Daten)."
+# Dynamischer Säulenplot, sucht nach der ersten numerischen Spalte neben 'scenario'
+if 'scenario' in eu.columns:
+    numeric_cols = [c for c in eu.columns if c != 'scenario' and pd.api.types.is_numeric_dtype(eu[c])]
+    if not numeric_cols:
+        for c in eu.columns:
+            if c != 'scenario':
+                try:
+                    eu[c] = pd.to_numeric(eu[c])
+                    numeric_cols.append(c)
+                except (ValueError, TypeError):
+                    pass
+    if numeric_cols:
+        y_col = numeric_cols[0]
+        y_label = y_col.replace("_pct", " (%)").replace("_pp", " (pp)").replace("_", " ").title()
+        fig, ax = plt.subplots(figsize=(8, 4.0))
+        colors = [SCEN_LETTER.get(str(s).strip()[:1], ZEW["blue2"]) for s in eu["scenario"]]
+        ax.bar(eu["scenario"], eu[y_col], color=colors, width=.62)
+        for x, v in zip(eu["scenario"], eu[y_col]):
+            try:
+                v_f = float(v)
+            except ValueError:
+                v_f = 0.0
+            offset = 1 if v_f >= 0 else -3
+            ax.text(x, v_f + offset, f"{v_f:.1f}".replace(".", ","), ha="center", fontsize=13)
+        ax.set_ylabel(y_label)
+        plt.tight_layout()
+        plt.show()
 ```
 
 ## [[ section3_title ]]
@@ -117,19 +142,38 @@ plt.show()
 
 ```{python}
 #| label: fig-prices
-#| fig-cap: "Import- und Nutzerpreise Flachstahl (% ggü. Baseline)."
-if prices is not None:
-    x = np.arange(len(prices))
-    w = .38
-    fig, ax = plt.subplots(figsize=(8, 4.0))
-    ax.bar(x - w/2, prices["user_flat_pct"], w, label="Nutzerpreis Flachstahl", color=ZEW["blue2"])
-    ax.bar(x + w/2, prices["import_flat_pct"], w, label="Importpreis Flachstahl", color=ZEW["green_dark"])
-    ax.set_xticks(x)
-    ax.set_xticklabels(prices["scenario"])
-    ax.set_ylabel("% ggü. Baseline")
-    ax.legend(frameon=False, fontsize=12)
-    plt.tight_layout()
-    plt.show()
+#| fig-cap: "Szenarien-Vergleich weiterer Metriken (Quelle: DP-Daten)."
+# Dynamischer Säulenplot, sucht nach numerischen Spalten neben 'scenario'
+if prices is not None and 'scenario' in prices.columns:
+    numeric_cols = [c for c in prices.columns if c != 'scenario' and pd.api.types.is_numeric_dtype(prices[c])]
+    if not numeric_cols:
+        for c in prices.columns:
+            if c != 'scenario':
+                try:
+                    prices[c] = pd.to_numeric(prices[c])
+                    numeric_cols.append(c)
+                except (ValueError, TypeError):
+                    pass
+    if len(numeric_cols) >= 1:
+        fig, ax = plt.subplots(figsize=(8, 4.0))
+        x = np.arange(len(prices))
+        w = .38
+        if len(numeric_cols) >= 2:
+            col1, col2 = numeric_cols[0], numeric_cols[1]
+            label1 = col1.replace("_pct", "").replace("_", " ").title()
+            label2 = col2.replace("_pct", "").replace("_", " ").title()
+            ax.bar(x - w/2, prices[col1], w, label=label1, color=ZEW["blue2"])
+            ax.bar(x + w/2, prices[col2], w, label=label2, color=ZEW["green_dark"])
+            ax.legend(frameon=False, fontsize=12)
+        else:
+            col1 = numeric_cols[0]
+            label1 = col1.replace("_pct", "").replace("_", " ").title()
+            ax.bar(x, prices[col1], w*2, label=label1, color=ZEW["blue2"])
+        ax.set_xticks(x)
+        ax.set_xticklabels(prices["scenario"])
+        ax.set_ylabel("Wert")
+        plt.tight_layout()
+        plt.show()
 ```
 
 ## [[ section5_title ]]
