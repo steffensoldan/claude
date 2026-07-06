@@ -87,8 +87,9 @@ async def query_claude(prompt_history: list[dict], api_key: str = None) -> dict:
         if not scw_key:
             raise ValueError("Scaleway API Key (SCW_SECRET_KEY) nicht konfiguriert.")
             
+        base_url = os.environ.get("SCW_BASE_URL", "https://api.scaleway.ai/v1")
         client = AsyncOpenAI(
-            base_url="https://api.scaleway.ai/v1",
+            base_url=base_url,
             api_key=scw_key
         )
         
