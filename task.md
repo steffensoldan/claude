@@ -2,9 +2,9 @@
 
 ## Aktueller Stand
 * **Zuletzt bearbeitet:** 2026-07-06 durch Antigravity
-* **Letzter Meilenstein:** Übergabefähigkeit nach AOS-Regeln erfolgreich geprüft und Live-Funktion auf der VM verifiziert (HTTP 200 OK für Dashboard und Quarto-Pubs).
-* **Nächster Schritt:** SSH-Key-Auth statt Passwort in deploy.py einbauen; ZEW-Hausschrift und CD-Design abstimmen.
-* **Offene Fragen / Blockaden:** Keine (CD-Farben normalisiert).
+* **Letzter Meilenstein:** ZEW CD-Vorgaben (News-Grün, Anthrazit, Hellblau, Grau) und Hausschriften (Linux Libertine, Calibri) aus zewEcon vollständig integriert; SSH-Key-Auth und Dateitransfer in deploy.py implementiert und im Git-Branch gepusht.
+* **Nächster Schritt:** API-Guthaben der VM aufladen (Anthropic Developer Console); deploy.py auf VM ausführen und Live-CD-Darstellung verifizieren.
+* **Offene Fragen / Blockaden:** Keine (CD-Farben und Schriften vollständig normalisiert).
 
 ---
 
@@ -35,7 +35,7 @@
 - [x] `SPEC-Wisskomm-Viz.md` → `implementation_plan.md` (AOS-Konvention)
 - [x] `.gitignore` angelegt; Repo initialisiert, Push als Branch `claude/wisskomm-viz`
 - [x] VM: `.env` auf `600`, Testartefakte aus `output/` entfernt, Autostart-Kommando per Neustart-Simulation verifiziert (HTTP 200)
-- [ ] SSH-Key-Auth statt Passwort in `deploy.py` (separat vereinbart)
+- [x] SSH-Key-Auth statt Passwort in `deploy.py` (realisiert am 06.07.2026)
 
 ## 5. Quarto-Pilot (Stufe 3, 2026-07-03, Claude Code)
 - [x] Struktur gem. `implementation_plan.md` Teil J: `_quarto.yml`, `_brand.yml`, `theme/zew.scss`
@@ -47,4 +47,4 @@
 - [x] PPTX-Realitätscheck: Text nativ/editierbar, Charts als Standbilder (empirisch bestätigt)
 - [x] Serving unter eigener URL: `app.py` mountet `/wisskomm/pub`, `publish_quarto.py` rendert+veröffentlicht; End-to-End über Proxy verifiziert (HTTP 200)
 - [x] Dashboard-Verlinkung: Sektion „Quarto-Hausdienst" mit Web/PDF/Folien/PPTX-Links; deployed und über Proxy verifiziert
-- [ ] „signal vs. diluted" ohne Marken-Rot final festlegen; ZEW-Hausschrift einbinden
+- [x] „signal vs. diluted" ohne Marken-Rot final festgelegt; ZEW-Hausschrift und CD aus zewEcon integriert (06.07.2026)

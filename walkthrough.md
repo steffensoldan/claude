@@ -231,3 +231,20 @@ Nutzer wählen beim Upload den Ausgabe-Zugang: **Fixes HTML** (unverändert) ode
     synchronisieren. Wisskomm selbst wurde für diesen Fix NICHT geändert.
 *   **Bekannte Rest-Grenze:** Sehr große Paper könnten das 120-s-Timeout (Claude + Render)
     treffen (bewusst nicht angefasst).
+
+---
+
+# Walkthrough (Stand: 06.07.2026) — ZEW-CD-Integration (Integrationstiefe 1)
+
+Änderungsrunde durch Antigravity: Integration der Hausschriften und CD-Farbwerte aus dem `zewEcon`-Vorlagenpaket in den Quarto-Generierungspfad von Wisskomm-Viz sowie Härtung des Deployments.
+
+## 1. Änderungen
+*   **Schrifteinbindung:** ZEW-Hausschriften `LinLibertine` (Serif) und `Calibri` (Sans-Serif) unter `theme/fonts/` abgelegt.
+*   **_brand.yml:** Die Fonts im Quarto-Branding-Schema registriert und die Farbpalette auf die offiziellen Hex-Codes (`#c8d202`, `#35484f`, `#abdadc`, `#9c9e9f`) angepasst.
+*   **theme/zew.scss:** Update aller Farbspezifikationen. `@font-face`-Deklarationen für die lokalen TTF-Schriften hinzugefügt, sodass Linux Libertine (Fließtext) und Calibri (Überschriften) in Web- und RevealJS-Ausgaben nativ gerendert werden.
+*   **templates/publication.qmd.j2:** Matplotlib-Farbwörterbuch und Szenarienzuordnungen aktualisiert. Die Matplotlib-`rcParams` wurden so konfiguriert, dass Diagramme standardmäßig mit der Schriftart `Calibri` gerendert werden.
+*   **deploy.py:** Hinzufügen der neuen Schriftdateien (`theme/fonts/*.ttf`), `_brand.yml`, `_quarto.yml` und `theme/zew.scss` zur SFTP-Uploadliste. Falls kein Passwort in der `.env` hinterlegt ist, versucht das Skript einen schlüsselspezifischen SSH-Login (unter Verwendung von `~/.ssh/id_ed25519`).
+
+## 2. Testergebnisse & Verifikation
+1.  **Lokale Kompilierung:** `py_compile` von `deploy.py` und `build_quarto.py` erfolgreich durchgeführt.
+2.  **Git-Synchronisation:** Alle Änderungen im Branch `claude/wisskomm-viz` auf GitHub gepusht.
