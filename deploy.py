@@ -71,7 +71,7 @@ def main():
         
     # 2. Verzeichnisse auf dem Server vorbereiten
     run_cmd(ssh, f"mkdir -p {remote_dir}/templates {remote_dir}/sessions {remote_dir}/output")
-    run_cmd(ssh, f"mkdir -p {quarto_dir}/templates {quarto_dir}/theme/fonts")
+    run_cmd(ssh, f"mkdir -p {quarto_dir}/templates {quarto_dir}/fonts")
     
     # 3. Dateien per SFTP hochladen
     print("Lade Anwendungsdateien hoch...")
@@ -97,13 +97,13 @@ def main():
         ("templates/reference-zew.pptx", f"{quarto_dir}/templates/reference-zew.pptx"),
         
         # Schriften für Quarto-Projekt
-        ("theme/fonts/calibri.ttf", f"{quarto_dir}/theme/fonts/calibri.ttf"),
-        ("theme/fonts/calibrib.ttf", f"{quarto_dir}/theme/fonts/calibrib.ttf"),
-        ("theme/fonts/calibrii.ttf", f"{quarto_dir}/theme/fonts/calibrii.ttf"),
-        ("theme/fonts/calibriz.ttf", f"{quarto_dir}/theme/fonts/calibriz.ttf"),
-        ("theme/fonts/LinLibertine_R.ttf", f"{quarto_dir}/theme/fonts/LinLibertine_R.ttf"),
-        ("theme/fonts/LinLibertine_RB.ttf", f"{quarto_dir}/theme/fonts/LinLibertine_RB.ttf"),
-        ("theme/fonts/LinLibertine_RI.ttf", f"{quarto_dir}/theme/fonts/LinLibertine_RI.ttf")
+        ("theme/fonts/calibri.ttf", f"{quarto_dir}/fonts/calibri.ttf"),
+        ("theme/fonts/calibrib.ttf", f"{quarto_dir}/fonts/calibrib.ttf"),
+        ("theme/fonts/calibrii.ttf", f"{quarto_dir}/fonts/calibrii.ttf"),
+        ("theme/fonts/calibriz.ttf", f"{quarto_dir}/fonts/calibriz.ttf"),
+        ("theme/fonts/LinLibertine_R.ttf", f"{quarto_dir}/fonts/LinLibertine_R.ttf"),
+        ("theme/fonts/LinLibertine_RB.ttf", f"{quarto_dir}/fonts/LinLibertine_RB.ttf"),
+        ("theme/fonts/LinLibertine_RI.ttf", f"{quarto_dir}/fonts/LinLibertine_RI.ttf")
     ]
     
     for local_path, remote_path in local_files:

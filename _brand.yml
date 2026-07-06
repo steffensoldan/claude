@@ -24,16 +24,16 @@ typography:
     - family: Linux Libertine
       source: file
       files:
-        - theme/fonts/LinLibertine_R.ttf
-        - theme/fonts/LinLibertine_RB.ttf
-        - theme/fonts/LinLibertine_RI.ttf
+        - fonts/LinLibertine_R.ttf
+        - fonts/LinLibertine_RB.ttf
+        - fonts/LinLibertine_RI.ttf
     - family: Calibri
       source: file
       files:
-        - theme/fonts/calibri.ttf
-        - theme/fonts/calibrib.ttf
-        - theme/fonts/calibrii.ttf
-        - theme/fonts/calibriz.ttf
+        - fonts/calibri.ttf
+        - fonts/calibrib.ttf
+        - fonts/calibrii.ttf
+        - fonts/calibriz.ttf
   base:
     family: Linux Libertine
     size: 1.05rem
