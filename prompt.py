@@ -93,15 +93,33 @@ async def query_claude(prompt_history: list[dict], api_key: str = None) -> dict:
             api_key=scw_key
         )
         
-        # System-Prompt bei OpenAI-kompatiblen Schnittstellen als System-Nachricht einhängen
-        messages = [{"role": "system", "content": SYSTEM_PROMPT}] + prompt_history
+        # Truncate paper text in user message if it is too long to stay within 32k context limit
+        truncated_history = []
+        for msg in prompt_history:
+            role = msg["role"]
+            content = msg["content"]
+            if role == "user" and len(content) > 50000:
+                prefix = ""
+                if content.startswith("Hier ist der Text des Discussion Papers:"):
+                    prefix = "Hier ist der Text des Discussion Papers (gekürzt für Context-Limit):\n\n"
+                    paper_content = content.replace("Hier ist der Text des Discussion Papers:\n\n", "", 1)
+                else:
+                    paper_content = content
+                
+                # Keep first 40k and last 10k chars
+                truncated_paper = paper_content[:40000] + "\n\n[... TEXT GEKÜRZT ...]\n\n" + paper_content[-10000:]
+                content = prefix + truncated_paper
+            
+            truncated_history.append({"role": role, "content": content})
+            
+        messages = [{"role": "system", "content": SYSTEM_PROMPT}] + truncated_history
         model_name = os.environ.get("WISSKOMM_LLM_MODEL", "glm-5.2")
         
         response = await client.chat.completions.create(
             model=model_name,
-            max_tokens=8000,
-            messages=messages,
-            response_format={"type": "json_object"}
+            max_tokens=16384,  # Scaleway requires more tokens for byte-level German tokenization
+            messages=messages
+            # response_format is disabled because it loops/truncates on Scaleway GLM-5.2
         )
         content = response.choices[0].message.content
         if content is None:
