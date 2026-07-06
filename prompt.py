@@ -102,7 +102,13 @@ async def query_claude(prompt_history: list[dict], api_key: str = None) -> dict:
             max_tokens=8000,
             messages=messages
         )
-        content = response.choices[0].message.content.strip()
+        content = response.choices[0].message.content
+        if content is None:
+            raise RuntimeError(
+                "Das LLM hat eine leere Antwort (None) zurückgegeben. Bitte prüfen Sie Ihre "
+                "API-Konfiguration, Kontingente oder die Projekt-ID (SCW_BASE_URL) bei Scaleway."
+            )
+        content = content.strip()
         
     else:  # anthropic
         # Lazy Import, um Fehler zu vermeiden falls anthropic-Bibliothek nicht installiert ist
@@ -121,7 +127,10 @@ async def query_claude(prompt_history: list[dict], api_key: str = None) -> dict:
             system=SYSTEM_PROMPT,
             messages=prompt_history
         )
-        content = response.content[0].text.strip()
+        content = response.content[0].text
+        if content is None:
+            raise RuntimeError("Das Anthropic-Modell hat eine leere Antwort (None) zurückgegeben.")
+        content = content.strip()
 
     # JSON-Extraktion aus der Antwort (falls das Modell Markdown drumherum gepackt hat)
     json_start = content.find("{")
