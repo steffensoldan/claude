@@ -140,7 +140,7 @@ async def query_claude(prompt_history: list[dict], api_key: str = None) -> dict:
         content = content[json_start:json_end]
         
     try:
-        data = json.loads(content)
+        data = json.loads(content, strict=False)
         return data
     except json.JSONDecodeError as e:
         print(f"JSON Fehler ({provider}):", content)
