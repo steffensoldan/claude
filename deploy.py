@@ -32,6 +32,7 @@ def main():
     user = os.environ.get("WISSKOMM_VM_USER")
     password = os.environ.get("WISSKOMM_VM_PASSWORD")
     remote_dir = os.environ.get("WISSKOMM_VM_REMOTE_DIR", "/home/sts/wisskomm-viz")
+    quarto_dir = os.environ.get("WISSKOMM_QUARTO_DIR", "/home/sts/wisskomm-quarto-pilot")
     # Bootstrap-Pip einer vorhandenen venv auf der VM, um virtualenv zu installieren.
     bootstrap_pip = os.environ.get(
         "WISSKOMM_VM_BOOTSTRAP_PIP", "/home/sts/stellar-galaxy/venv/bin/pip"
@@ -40,7 +41,6 @@ def main():
     missing = [k for k, v in {
         "WISSKOMM_VM_HOST": server,
         "WISSKOMM_VM_USER": user,
-        "WISSKOMM_VM_PASSWORD": password,
     }.items() if not v]
     if missing:
         print("FEHLER: Fehlende Umgebungsvariablen: " + ", ".join(missing))
@@ -52,7 +52,11 @@ def main():
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     print(f"Verbinde mit {server}...")
     try:
-        ssh.connect(server, 22, user, password, timeout=15)
+        if password:
+            ssh.connect(server, 22, user, password, timeout=15)
+        else:
+            # Versuche schlüsselspezifischen SSH-Login aus ~/.ssh/
+            ssh.connect(server, 22, user, timeout=15)
         print("SSH-Verbindung erfolgreich!")
     except Exception as e:
         print(f"Verbindung fehlgeschlagen: {e}")
@@ -60,12 +64,14 @@ def main():
         
     # 2. Verzeichnisse auf dem Server vorbereiten
     run_cmd(ssh, f"mkdir -p {remote_dir}/templates {remote_dir}/sessions {remote_dir}/output")
+    run_cmd(ssh, f"mkdir -p {quarto_dir}/templates {quarto_dir}/theme/fonts")
     
     # 3. Dateien per SFTP hochladen
     print("Lade Anwendungsdateien hoch...")
     sftp = ssh.open_sftp()
     
     local_files = [
+        # Anwendungsdateien für remote_dir
         ("app.py", f"{remote_dir}/app.py"),
         ("prompt.py", f"{remote_dir}/prompt.py"),
         ("build.py", f"{remote_dir}/build.py"),
@@ -74,7 +80,23 @@ def main():
         ("templates/standalone.html", f"{remote_dir}/templates/standalone.html"),
         ("templates/dashboard.html", f"{remote_dir}/templates/dashboard.html"),
         ("templates/ui.html", f"{remote_dir}/templates/ui.html"),
-        ("templates/publication.qmd.j2", f"{remote_dir}/templates/publication.qmd.j2")
+        ("templates/publication.qmd.j2", f"{remote_dir}/templates/publication.qmd.j2"),
+        
+        # Quarto-Projektdateien für quarto_dir
+        ("_quarto.yml", f"{quarto_dir}/_quarto.yml"),
+        ("_brand.yml", f"{quarto_dir}/_brand.yml"),
+        ("theme/zew.scss", f"{quarto_dir}/theme/zew.scss"),
+        ("templates/publication.qmd.j2", f"{quarto_dir}/templates/publication.qmd.j2"),
+        ("templates/reference-zew.pptx", f"{quarto_dir}/templates/reference-zew.pptx"),
+        
+        # Schriften für Quarto-Projekt
+        ("theme/fonts/calibri.ttf", f"{quarto_dir}/theme/fonts/calibri.ttf"),
+        ("theme/fonts/calibrib.ttf", f"{quarto_dir}/theme/fonts/calibrib.ttf"),
+        ("theme/fonts/calibrii.ttf", f"{quarto_dir}/theme/fonts/calibrii.ttf"),
+        ("theme/fonts/calibriz.ttf", f"{quarto_dir}/theme/fonts/calibriz.ttf"),
+        ("theme/fonts/LinLibertine_R.ttf", f"{quarto_dir}/theme/fonts/LinLibertine_R.ttf"),
+        ("theme/fonts/LinLibertine_RB.ttf", f"{quarto_dir}/theme/fonts/LinLibertine_RB.ttf"),
+        ("theme/fonts/LinLibertine_RI.ttf", f"{quarto_dir}/theme/fonts/LinLibertine_RI.ttf")
     ]
     
     for local_path, remote_path in local_files:

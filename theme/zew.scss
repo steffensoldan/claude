@@ -1,15 +1,70 @@
 /*-- scss:defaults --*/
-// ZEW-CD-Farben (aus RGB normalisiert). Ergänzt die zentralen brand-Werte.
-$zew-intrans:    #394846;
-$zew-eisblau:    #C2DDE1;
-$zew-blue-2:     #80B3C4;
-$zew-green:      #CEDB2D;
-$zew-green-dark: #A2BC0C;
-$zew-grey:       #575756;
+// ZEW-CD-Farben (aus zewEcon). Ergänzt die zentralen brand-Werte.
+$zew-green:      #c8d202;
+$zew-grey:       #9c9e9f;
+$zew-eisblau:    #abdadc;
+$zew-intrans:    #35484f;
+// Fallbacks/Mappings für bestehende CSS-Klassen
+$zew-blue-2:     #abdadc;
+$zew-green-dark: #c8d202;
 
 $body-bg: #ffffff;
 
 /*-- scss:rules --*/
+
+// ---- Schriftarten (Local Web Fonts) ----
+@font-face {
+  font-family: 'Linux Libertine';
+  src: url('fonts/LinLibertine_R.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Linux Libertine';
+  src: url('fonts/LinLibertine_RB.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Linux Libertine';
+  src: url('fonts/LinLibertine_RI.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Calibri';
+  src: url('fonts/calibri.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Calibri';
+  src: url('fonts/calibrib.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Calibri';
+  src: url('fonts/calibrii.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Calibri';
+  src: url('fonts/calibriz.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+body {
+  font-family: 'Linux Libertine', Georgia, serif;
+}
+
+h1, h2, h3, h4, h5, h6, .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+  font-family: 'Calibri', system-ui, sans-serif !important;
+}
+
 
 // ---- Hero / Signature ----
 .hero {

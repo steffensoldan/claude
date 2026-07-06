@@ -10,22 +10,33 @@
 # ---------------------------------------------------------------------------
 color:
   palette:
-    zew-intrans:    "#394846"   # ZEW Intrans (Text/Headings)
-    zew-eisblau:    "#C2DDE1"   # Pantone 318 "Eisblau"
-    zew-blue-1:     "#7FBEC4"   # abgedunkelt I (Grafik-Differenzierung)
-    zew-blue-2:     "#80B3C4"   # abgedunkelt II (Grafik-Differenzierung)
-    zew-green:      "#CEDB2D"   # News Grün
-    zew-green-dark: "#A2BC0C"   # News Grün abgedunkelt
-    zew-grey:       "#575756"   # Grau (80% Schwarz)
+    zew-green:      "#c8d202"   # ZEW Green/Yellow (primary signature color)
+    zew-grey:       "#9c9e9f"   # ZEW Medium Gray (for muted text & secondary data series)
+    zew-eisblau:    "#abdadc"   # ZEW Light/Ice Blue (for third data series/accents)
+    zew-intrans:    "#35484f"   # ZEW Dark Slate/Anthrazit (primary text & dark headings)
   foreground: zew-intrans
   background: "#FFFFFF"
-  primary: zew-blue-2
+  primary: zew-green
   secondary: zew-grey
 
 typography:
+  fonts:
+    - family: Linux Libertine
+      source: file
+      files:
+        - theme/fonts/LinLibertine_R.ttf
+        - theme/fonts/LinLibertine_RB.ttf
+        - theme/fonts/LinLibertine_RI.ttf
+    - family: Calibri
+      source: file
+      files:
+        - theme/fonts/calibri.ttf
+        - theme/fonts/calibrib.ttf
+        - theme/fonts/calibrii.ttf
+        - theme/fonts/calibriz.ttf
   base:
-    family: Segoe UI
+    family: Linux Libertine
     size: 1.05rem
   headings:
-    family: Georgia
+    family: Calibri
     weight: 600
