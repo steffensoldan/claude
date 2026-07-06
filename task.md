@@ -1,10 +1,10 @@
 # Aufgabenliste: Wisskomm-Viz (Infrastruktur & Web-Dienst)
 
 ## Aktueller Stand
-* **Zuletzt bearbeitet:** 2026-07-03 durch Claude Code
-* **Letzter Meilenstein:** Zwei wählbare Zugänge live — Upload-Auswahl „Fixes HTML" (unverändert) / „Quarto (Prototyp)"; KI-JSON → CSV + `.qmd` → `quarto render` → `/wisskomm/pub/<slug>/`. End-to-End über Proxy verifiziert, Fixed-HTML-Regression 200.
-* **Nächster Schritt:** Später/optional: Design (signal/diluted ohne Marken-Rot, ZEW-Hausschrift), Auto-Rebuild-Trigger, KI-Prompt für freie `.qmd` (heterogene Paper), SSH-Key-Auth + Passwort-Rotation.
-* **Offene Fragen / Blockaden:** CD-Farben aus RGB normalisiert, offizielles CD-Handbuch noch nicht gegengeprüft. Autostart-Reboot weiterhin nur simuliert (kein root).
+* **Zuletzt bearbeitet:** 2026-07-06 durch Antigravity
+* **Letzter Meilenstein:** Übergabefähigkeit nach AOS-Regeln erfolgreich geprüft und Live-Funktion auf der VM verifiziert (HTTP 200 OK für Dashboard und Quarto-Pubs).
+* **Nächster Schritt:** SSH-Key-Auth statt Passwort in deploy.py einbauen; ZEW-Hausschrift und CD-Design abstimmen.
+* **Offene Fragen / Blockaden:** Keine (CD-Farben normalisiert).
 
 ---
 
