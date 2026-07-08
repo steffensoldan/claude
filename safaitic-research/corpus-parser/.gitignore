@@ -1,0 +1,6 @@
+# Downloaded corpus data — too large and already in the GitHub release
+ociana_corpus.xml
+
+# Python cache
+__pycache__/
+*.pyc

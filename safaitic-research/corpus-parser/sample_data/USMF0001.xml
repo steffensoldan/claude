@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title>USMF 1</title></titleStmt>
+      <publicationStmt><idno type="filename">USMF0001</idno></publicationStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier><settlement>Usays, Syria</settlement></msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc><langUsage><language ident="xsa">Safaitic</language></langUsage></profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="edition" xml:lang="xsa" xml:space="preserve">
+        <ab>
+          <w>l-ʿwr</w>
+          <w>bn</w>
+          <w>ngr</w>
+          <w>w-h-Šms</w>
+          <w>tns¹ʿd-h</w>
+          <w>w-mrʿ</w>
+          <w>w-wbl</w>
+        </ab>
+      </div>
+      <div type="translation">
+        <p>By ʿWr son of Ngr, and may Shams grant him good fortune and (good) pasture and rain.</p>
+      </div>
+    </body>
+  </text>
+</TEI>

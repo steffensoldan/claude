@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title>HCH 1</title></titleStmt>
+      <publicationStmt><idno type="filename">HCH0001</idno></publicationStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier><settlement>Harrat al-Shamah, Syria</settlement></msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc><langUsage><language ident="xsa">Safaitic</language></langUsage></profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="edition" xml:lang="xsa" xml:space="preserve">
+        <ab>
+          <w>l-wdm</w>
+          <w>bn</w>
+          <w>ʿwn</w>
+          <w>bn</w>
+          <w>s¹ʿd</w>
+          <w>w-h-Rudā</w>
+          <w>ḥmy-h</w>
+          <w>w-ʿwn-h</w>
+        </ab>
+      </div>
+      <div type="translation">
+        <p>By Wdm son of ʿWn son of Sʿd, and may Rudā protect him and help him.</p>
+      </div>
+    </body>
+  </text>
+</TEI>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title>WH 1</title></titleStmt>
+      <publicationStmt><idno type="filename">WH0001</idno></publicationStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier><settlement>Wadi Hauran, Syria</settlement></msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc><langUsage><language ident="xsa">Safaitic</language></langUsage></profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="edition" xml:lang="xsa" xml:space="preserve">
+        <ab>
+          <w>l-ʿbd-</w>
+          <w>Allāt</w>
+          <w>bn</w>
+          <w>s²ʿd</w>
+          <w>bn</w>
+          <w>ġnm</w>
+          <w>w-h-Allāt</w>
+          <w>slm</w>
+          <w>w-ḥmyt</w>
+        </ab>
+      </div>
+      <div type="translation">
+        <p>By ʿbd-Allāt son of Šʿd son of Ġnm, and may Allāt (grant) peace and protection.</p>
+      </div>
+    </body>
+  </text>
+</TEI>

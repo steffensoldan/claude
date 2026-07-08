@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title>HCH 2</title></titleStmt>
+      <publicationStmt><idno type="filename">HCH0002</idno></publicationStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier><settlement>Harrat al-Shamah, Syria</settlement></msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc><langUsage><language ident="xsa">Safaitic</language></langUsage></profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="edition" xml:lang="xsa" xml:space="preserve">
+        <ab>
+          <w>l-s¹ʿd</w>
+          <w>bn</w>
+          <w>ġwt</w>
+          <w>w-rʿy</w>
+          <w>h-ibl</w>
+          <w>w-h-Šms</w>
+          <w>gyt</w>
+          <w>w-mrʿ</w>
+          <w>l-ibl-h</w>
+        </ab>
+      </div>
+      <div type="translation">
+        <p>By Sʿd son of Ġwt, while he pastured the camels, and may Shams (grant) rain and good pasture for his camels.</p>
+      </div>
+    </body>
+  </text>
+</TEI>

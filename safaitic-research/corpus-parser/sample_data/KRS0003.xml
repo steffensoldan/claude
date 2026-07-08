@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title>KRS 3</title></titleStmt>
+      <publicationStmt><idno type="filename">KRS0003</idno></publicationStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier><settlement>Harrat al-Rajil, Jordan</settlement></msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc><langUsage><language ident="xsa">Safaitic</language></langUsage></profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="edition" xml:lang="xsa" xml:space="preserve">
+        <ab>
+          <w>l-ḥry</w>
+          <w>bn</w>
+          <w>ʿmr</w>
+          <w>bn</w>
+          <w>ʿbd</w>
+          <w>w-h-Allāt</w>
+          <w>ḥmyt</w>
+          <w>w-h-Rudā</w>
+          <w>nqm</w>
+          <w>l-h</w>
+          <w>mn</w>
+          <w>ʿdw-h</w>
+          <w>w-h-Šms</w>
+          <w>mrʿ</w>
+        </ab>
+      </div>
+      <div type="translation">
+        <p>By Ḥry son of ʿMr son of ʿBd, and may Allāt (grant) protection, and may Rudā take vengeance for him on his enemy, and may Shams (grant) good pasture.</p>
+      </div>
+    </body>
+  </text>
+</TEI>

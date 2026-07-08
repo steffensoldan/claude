@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title>RSIS 2</title></titleStmt>
+      <publicationStmt><idno type="filename">RSIS0002</idno></publicationStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier><settlement>Ras Siagha, Jordan</settlement></msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc><langUsage><language ident="xsa">Safaitic</language></langUsage></profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="edition" xml:lang="xsa" xml:space="preserve">
+        <ab>
+          <w>l-ʿmrt</w>
+          <w>bn</w>
+          <w>ʿbd</w>
+          <w>bn</w>
+          <w>ḥrm</w>
+          <w>w-h-Rudā</w>
+          <w>nqm</w>
+          <w>mn</w>
+          <w>s²nʾ-h</w>
+        </ab>
+      </div>
+      <div type="translation">
+        <p>By ʿMrt son of ʿBd son of Ḥrm, and may Rudā take vengeance on his enemy.</p>
+      </div>
+    </body>
+  </text>
+</TEI>

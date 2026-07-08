@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title>JDWS 2</title></titleStmt>
+      <publicationStmt><idno type="filename">JDWS0002</idno></publicationStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier><settlement>Jebel Druze West, Syria</settlement></msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc><langUsage><language ident="xsa">Safaitic</language></langUsage></profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="edition" xml:lang="xsa" xml:space="preserve">
+        <ab>
+          <w>l-ʿbd-</w>
+          <w>Šms</w>
+          <w>bn</w>
+          <w>mlk</w>
+          <w>w-rʿy</w>
+          <w>w-h-Šms</w>
+          <w>mrʿ</w>
+          <w>w-wbl</w>
+          <w>w-ks²b</w>
+          <w>w-h-Allāt</w>
+          <w>ḥmyt</w>
+        </ab>
+      </div>
+      <div type="translation">
+        <p>By ʿBd-Šms son of Mlk, while he pastured (flocks), and may Shams (grant) good pasture and rain and gain, and may Allāt (grant) protection.</p>
+      </div>
+    </body>
+  </text>
+</TEI>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title>JDWS 1</title></titleStmt>
+      <publicationStmt><idno type="filename">JDWS0001</idno></publicationStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier><settlement>Jebel Druze West, Syria</settlement></msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc><langUsage><language ident="xsa">Safaitic</language></langUsage></profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="edition" xml:lang="xsa" xml:space="preserve">
+        <ab>
+          <w>l-s²rḥ</w>
+          <w>bn</w>
+          <w>ʿbd</w>
+          <w>w-h-Šms</w>
+          <w>ns²r-h</w>
+          <w>w-slm</w>
+          <w>w-ʿwn</w>
+        </ab>
+      </div>
+      <div type="translation">
+        <p>By Šrḥ son of ʿBd, and may Shams save him and (grant) peace and help.</p>
+      </div>
+    </body>
+  </text>
+</TEI>

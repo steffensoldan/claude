@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title>WH 2</title></titleStmt>
+      <publicationStmt><idno type="filename">WH0002</idno></publicationStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier><settlement>Wadi Hauran, Syria</settlement></msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc><langUsage><language ident="xsa">Safaitic</language></langUsage></profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="edition" xml:lang="xsa" xml:space="preserve">
+        <ab>
+          <w>l-ġnm</w>
+          <w>bn</w>
+          <w>ʿmr</w>
+          <w>w-rʿy</w>
+          <w>w-h-Šms</w>
+          <w>mrʿ</w>
+          <w>w-gyt</w>
+          <w>w-ks²b</w>
+        </ab>
+      </div>
+      <div type="translation">
+        <p>By Ġnm son of ʿMr, while he pastured (flocks), and may Shams (grant) good pasture and rain and gain.</p>
+      </div>
+    </body>
+  </text>
+</TEI>
