@@ -1,6 +1,12 @@
 # Konzept — Sieben Register
 *Vorwort-Entwurf / Framing für ein neues Safaitisch-Band*
 
+> **Realisierung:** Ausgearbeitet im Ordner `../register/` (`wer_dies_liest_register.docx`).
+> Dort inzwischen **acht** Register: das Kapitel „Ich war hier“ ist aufgeteilt in
+> **stehe** (Ahnenreihen) und **schreibe** (Litanei „X war hier“). Überschriften als
+> Ich-Form-Verben, Er-Form-Texte, Fundort-Beizeilen. Dieses Dokument hält den
+> ursprünglichen Konzeptstand fest.
+
 ---
 
 ## Ausgangslage

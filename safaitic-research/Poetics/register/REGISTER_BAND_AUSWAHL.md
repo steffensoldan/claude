@@ -1,6 +1,6 @@
 # Register-Band — Auswahl aus dem Vollkorpus
 
-Stand: 2026-06-28 · Konzept A: eigener Band nach den sieben Sprechakt-Registern (`neues-konzept`)
+Stand: 2026-07-05 · Konzept A: eigener Band nach den acht Sprechakt-Registern · Ordner `register/` · Formfassung **v3** (`…_v3.docx`, ohne Bilder) bzw. **v4** (`…_v4.docx`, mit den 7 Felszeichnungen eingebettet)
 
 ## Idee
 
@@ -10,9 +10,52 @@ Nicht der Jahresbogen der erweiterten Ausgabe, sondern die **Sprechhaltung** ord
 
 Quellen: `neues-konzept/data/safaitic_full_corpus.xlsx` (31.768 safaitische, mit Typ-Spalte) für I + VII; `safaitic_invocations.xlsx` (2.018, thematische Blätter) für III + V; `band1/data/…auswahl.xlsx` (Longlist, 2.448 gerankt) für II, IV, VI. **Ausgeschlossen:** alle 180 bereits in der erweiterten Ausgabe (v5) verbauten Siglen — der Register-Band ist materiell eigenständig (0 Überschneidung).
 
-## Auswahl — 14 je Register (98 gesamt)
+## Stand des Manuskripts (gebaut: `wer_dies_liest_register_v3.docx`)
 
-Englische OCIANA-Glosse; Nachdichtung ins deutsche Er-Form folgt. Genealogien werden (außer in I und VII, wo sie Pointe sind) getilgt.
+Realisiert sind **134 Stücke** in **acht** Registern, gestaltet wie die erweiterte Ausgabe v5 (Georgia). Über die Korpus-Ausgangsauswahl unten hinaus enthält der Band:
+
+**Formfassung v3** — Stand nach mehreren Iterationen (v1 = Verszeilen + „Sigle …“ am Fuß; v2 = Fließtext + Kopfzeile; beide als Historie behalten):
+- **Verszeilen (Absatzformat):** jeder Eintrag steht wieder in Verszeilen — der Fließtext-Block aus v2 ist aus ästhetischen Gründen (Lesbarkeit, Schönheit) zurückgenommen.
+- **Fundort · Sigle als Kopfzeile ÜBER dem Text** (aus v2 beibehalten) — Herkunftsort und Inschriftennummer betiteln jeden Eintrag.
+- **Verbregel:** die finite Er-Form bleibt, wo das Original ein Verb vorsieht; wo keines vorliegt (Genealogien, Anrufungen, Signaturen), bleibt der Eintrag nominal — **kein Infinitiv** (am Original orientiert).
+- **Register II „schreibe“ als „Von X“:** die reinen Signaturen werden nominal wiedergegeben (`l-Fulān` = „Von X“, das *l-* steht im Fels), nicht mehr als Satz „X war hier“ — die früher zugefügte Verbform ist getilgt.
+- **Kapitelordnung strukturell, nicht als Lebenszyklus:** „schweige“ ist von der letzten Position (vormals VIII) auf die **Mitte (V)** gerückt, damit der Band nicht auf das Verstummen zuläuft. Neue Folge: **I stehe · II schreibe · III warte · IV bitte · V schweige · VI klage · VII fluche · VIII bezeuge.**
+
+Das **Nachwort** übernimmt die vom Autor überarbeitete Fassung (hochgeladenes `nachwort.docx`) mit drei umbaubedingten Anpassungen: die Register-Reihung endet jetzt auf „Zeugnis“ (Verstummen in der Mitte) mit einem Satz zur strukturellen (nicht biografischen) Ordnung; „schweige“ ist als **(V)** referenziert; und ein Zusatz erklärt, dass das safaitische *l-* zugleich „von / für / gehörig zu“ heißt und Urheber, Adressat und Besitzer offenlässt. Die Beizeilen-Erklärung nennt die Kopfzeile-Platzierung.
+
+**Kapitelüberschriften** = Verb in der Ich-Form (das einzige Ich im Band): **stehe · schreibe · warte · bitte · schweige · klage · fluche · bezeuge**. Kapitel I „stehe“ (die Ahnenreihen) eröffnet, VIII „bezeuge“ (die Datierung für Fremde) schließt den Band. Unterüberschriften sind vorerst **entfernt** (bis eine bessere Fassung feststeht).
+
+**Zu den Titeln:** Jeder Titel ist der Infinitiv minus End-„n“ (schreiben → schreibe …). Die Form ist bewusst mehrdeutig — zugleich 1. Person Präsens („ich schreibe“), 3. Person Konjunktiv Präsens („er schreibe“), Imperativ („schreibe!“) und teils Nomen (Klage, Bitte); dadurch auf keine Lesart festgelegt und, im Wortspiel mit „Infinitiv“, *infinit*. Erklärt im Nachwort des Manuskripts („Zu den Kapiteltiteln“).
+
+**Aufteilung des alten Kapitels I:** Die Genealogie-Gedichte („Von X, Sohn des Y …“) bilden jetzt das eigene Kapitel **I „stehe“**; die reinen Signaturen („Von X“) werden Kapitel **II „schreibe“**.
+
+**v5-Kopfstücke** je Register (lange Inschriften zuerst, aus der erweiterten Ausgabe — der Band ist dadurch nicht mehr überschneidungsfrei zur erweiterten Ausgabe):
+- I stehe: — (keine; nur Korpus-Genealogien)
+- II schreibe: RWQ 342, RWQ 187, HYGQ 24, KRS 1341
+- III warte: **ASWS 73** (zurück aus VI), RSIS 110, Is.Mu 255, SIJ 30
+- IV bitte: BS 209, MKJS 80, LP 1267, Is.Mu 88
+- V schweige: RQ.A 5, WH 1867.1, WH 1501.2
+- VI klage: LP 540, KRS 17, AbaNS 361, C 4273
+- VII fluche: C 4803, RSIS 351, LP 243, C 2775
+- VIII bezeuge: HSNS 5, LP 653, C 2670, ISB 57
+
+**Kapitel II** als „Von X“-Signaturenreihe: die reinen Signaturen (`l-Fulān`) nominal wiedergegeben — die fünf ursprünglichen + 8 neue (HCH 75/158.2/31.1, Rees 150/151/155/161 4/176) — geografisch dicht (Hani, Km 612, Ḥarrat al-Raǧil). Das früher zugefügte „war hier“ ist getilgt (das Original hat kein Verb, nur das *l-* „von/für/gehörig zu“). **Kapitel III**: Genealogie-Gedicht **LP 1196** (sieben Generationen + Späh-Verb) neu.
+
+**Einleitung + Nachwort** stehen zusammen in einem Schluss-Kapitel „Nachwort“ **nach** den Gedichten, mit zwei Tabellen: **Corpus-Siglen** (Auflösung der Abkürzungen) und **Fundorte** (Erklärung, inkl. generischer Angaben wie „Jordanien“, „Km 612“).
+
+### Fundort-Beizeilen (Normalisierung)
+
+Als Kopfzeile **über** jedem Eintrag steht **zuerst der Fundort, dann die Corpus-Sigle** (das Wort „Sigle“ gestrichen), z. B. „Hani · HCH 117“ (in Fassung v1 stand die Zeile am Fuß). „Cairn of Haniʾ“ ist zu **„Hani“** verkürzt. Regeln: Survey-Apparat (Seitenrefs, Anführungszeichen, „Unknown,“) gestrichen; spezifischster benannter Ort gewählt; zwei Zonen — **NO-Jordanien (Ḥarrah)** / **Süd-Syrien (Ṣafā)**. Mapping als statisches `FINDSPOT`-Dict im Build-Skript. Größte Cluster: Hani (HCH), Km 612 (JaS), Zalaf (C), Wādī Salma, al-ʿĪsāwī, Ḥarrat al-Raǧil, Riǧm Qaʿqūl, Tall aḍ-Ḍabiʿ.
+
+**8 ortlose Korpus-Stimmen → verortete Ersätze aus starken Clustern:** WH 1116→**RSIS 322** (Tall aḍ-Ḍabiʿ) · AWS 379→**AbSWS 15** (Wādī Salma) · WH 1916→**C 2194** (Zalaf) · RVP 1→**AbSWS 42** (Wādī Salma) · ZN 4→**C 2190** (Zalaf) · WH 1851→**RWQ 304** (Wādī Salma) · RVP 10→**C 1146** (Riǧm Qaʿqūl) · WAMS 4→**SIJ 10** (Jathum).
+
+**Bewusst „Fundort unbekannt“ belassen (8):** die vier IV-Klage-Litanei-Verse (Anonymität passt zum Chor), der Fluchkatalog WH 368, die drei v5-Kopfstücke HYGQ 24, WH 1867.1, WH 1501.2.
+
+## Korpus-Ausgangsauswahl — 14 je Register (98)
+
+Die Basis-Auswahl aus dem Vollkorpus (vor v5-Kopfstücken, war-hier-Erweiterung und den 8 Verortungs-Ersätzen oben). Englische OCIANA-Glosse; Genealogien werden (außer in „Er war hier“ und „Er schweigt“, wo sie Pointe sind) getilgt.
+
+**Historischer Stand:** Diese Liste zeigt die *ursprünglichen sieben* Konzept-Register mit ihren damaligen Namen. Im gebauten Band (oben) heißen die Kapitel anders und sind acht: „Er war hier“ ist aufgeteilt in **I stehe** (Genealogien) + **II schreibe** (Litanei „X war hier“); danach **III warte · IV bitte · V klage · VI verfluche · VII bezeuge · VIII schweige**. Acht der hier gelisteten Stimmen wurden später aus Verortungsgründen ersetzt (siehe „Fundort-Beizeilen“ oben).
 
 ### I. Er war hier
 *Präsentativ — Dasein als Akt: der bloße Name (oder die Ahnenkette), kein Verb. Aus den ~19.800 Signaturen + ~6.300 Minimal-Texten des Vollkorpus, die in keinem bisherigen Band vorkamen.*
@@ -140,8 +183,19 @@ Englische OCIANA-Glosse; Nachdichtung ins deutsche Er-Form folgt. Genealogien we
 - **C 1312** — By Ḥḍg son of S¹wr ---- and {he kept watch} ----
 - **C 1368** — By Ḫlṣ ---- son of Qdm son of {ʾnʿm} son of Rʿ of the lineage of ----
 
-## Nächste Schritte
-- [ ] Nachdichtung der 98 Texte ins deutsche Er-Form (Stil wie die erweiterte Ausgabe), je „Sigle …“-Zeile darunter.
-- [ ] Manuskript bauen (`…_register.docx`): Vorwort nach dem Sprechakt-Prinzip, sieben Register, je ein Kopfstück.
-- [ ] Register I (Signaturen) und VII (Fragmente) ggf. erweitern — Material ist praktisch unbegrenzt.
-- [ ] Reihenfolge je Register nach Eignung, damit von hinten kürzbar.
+## Stand & nächste Schritte
+- [x] Nachdichtung ins deutsche Er-Form.
+- [x] Manuskript gebaut (`wer_dies_liest_register_v3.docx`, 134 Stücke): acht Register, v5-Kopfstücke, Einleitung + Nachwort mit zwei Tabellen (Corpus-Siglen, Fundorte) am Bandende.
+- [x] Kapitel II als „Von X“-Signaturenreihe (nominal, ohne „war hier“); Ich-Form-Überschriften.
+- [x] Fundort-Beizeilen normalisiert; 8 ortlose Stimmen verortet ersetzt.
+- [x] **Formfassung v2:** Fließtext je Eintrag, Fundort · Sigle als Kopfzeile über dem Text, Verbregel, überarbeitetes Nachwort übernommen.
+- [x] **Formfassung v3:** Verszeilen (Absatzformat) statt Fließtext zurückgeholt; Kopfzeile beibehalten; Register II auf „Von X“; „schweige“ von VIII auf V (Mitte) gerückt (keine Lebenszyklus-Suggestion); Nachwort an den drei betreffenden Stellen aktualisiert (Reihung endet auf „Zeugnis“, „schweige“ (V), *l-*-Zusatz).
+- [x] **Felszeichnungen ausgewertet** (OCIANA-Feld „Associated Drawings“, alle 134 Seiten): 7 Steine mit Bild — Übersicht in `ROCKART_UEBERSICHT.md`.
+- [x] **Formfassung v4:** die 7 OCIANA-Fotos als Abbildungen neben die jeweilige Inschrift eingebettet (`wer_dies_liest_register_v4.docx`). Bilder in `register/rockart_images/`; reproduzierbar via `build_register.py`. Bildrechte vor Veröffentlichung klären.
+- [x] **Feinschliff:** Bandtitel neu („Antike safaitische Inschriften / nomadischer Beduinen Nordarabiens · 1. Jh. v. Chr. – 4. Jh. n. Chr.“; „Wer dies liest, lebe lang“ als Untertitel); Kapitel VII „fluche“ (statt „verfluche“); Corpus- und Fundort-Tabelle alphabetisch, Einleitungstext über der Fundort-Tabelle entfernt; Abbildungen kleiner und rechts neben dem Gedicht (schwebend); **Bildnachweis** am Ende des Nachworts.
+- [ ] Optional: Fundort-Anhang im Backmatter (alle Stücke nach Zonen/Clustern gruppiert).
+- [ ] Optional: Intra-Register-Clustering (same-site-Stücke benachbart).
+- [ ] Optional: echte Karte via OCIANA-Koordinaten (externer Abruf).
+- [ ] Lektorat der Nachdichtungen gegen die OCIANA-Einträge.
+
+Build: `scripts/build_register.py` (Auswahl, Texte und `FINDSPOT`-Dict inline; rendert je Eintrag Verszeilen + Kopfzeile; liest die v5-Kopfstücke faithful aus `erweitert/…_v5.docx`). Ausgabe: `wer_dies_liest_register_v3.docx`.
