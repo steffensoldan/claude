@@ -1,6 +1,22 @@
 # Register-Band — Auswahl aus dem Vollkorpus
 
-Stand: 2026-07-05 · Konzept A: eigener Band nach den acht Sprechakt-Registern · Ordner `register/` · Formfassung **v3** (`…_v3.docx`, ohne Bilder) bzw. **v4** (`…_v4.docx`, mit den 7 Felszeichnungen eingebettet)
+Stand: 2026-07-18 · Konzept A: eigener Band nach den acht Sprechakt-Registern · Ordner `register/` · Formfassung **v5** (`…_v5.docx`, **bildfrei** — die 7 Steine mit Felszeichnung sind entfernt und durch bildlose Inschriften gleicher Registerfunktion ersetzt). Ältere Fassungen als Historie: v1/v2/v3 (ohne Bilder, frühere Formstände), v4 (mit den 7 Felszeichnungen eingebettet — durch v5 überholt).
+
+## Bildfreie Fassung (v5)
+
+Nur ~5 % der safaitischen Steine tragen überhaupt eine Zeichnung (Befund: 7/134, siehe `ROCKART_UEBERSICHT.md`). Ihre Aufnahme überrepräsentiert eine Ausnahme und ist einem Gedichtband nicht angemessen; darum tragen sie **nicht** in den Band. Die sieben Bildsteine sind durch bildlose Inschriften **gleicher Registerfunktion** ersetzt (Stückzahl bleibt 134):
+
+| raus (mit Bild) | Motiv | rein (bildfrei) | Register · Funktion |
+|---|---|---|---|
+| HYGQ 24 | Löwe | **Is.Mu 484** („schrieb seinen Namen zum ersten Mal“) | II schreibe · Schrift-Akt |
+| KRS 1341 | Löwe | **SIJ 291** („schrieb für den Oheim, für den wahren Freund“) | II schreibe · Schrift-Akt |
+| KRS 3051 | junge Kamelstute | **RWQ 120** (Wache für die Gefährten, Trauer um Yḥy) | III warte · Wache/Warten |
+| HCH 85 | zwei Zeichnungen | **RSIS 132** (Trauer + Blend-Fluch) | VII fluche · Trauer→Fluch |
+| C 286 | Göttin Rḍy | **KRS 2919** (Rudā — blende, wer die Schrift auskratzt) | VII fluche · minimaler Blend-Fluch |
+| C 1658 | zwei Kamele + Krieger | **C 1087** (Beute dem Vorleser, Blindheit dem Tilger) | VII fluche · reziproker Leser-Segen/Fluch |
+| C 2670 | Oryx | **LP 254** (datiert: Stammfehde, Trauer um Ġṯ) | VIII bezeuge · Jahr-Datierung |
+
+**Verifikation (OCIANA „Associated Drawings“):** bildfrei bestätigt — Is.Mu 484, SIJ 291, RSIS 132, C 1087, LP 254. Die zwei zuletzt gewählten Ersätze **RWQ 120** und **KRS 2919** stehen noch unter Vorbehalt des endgültigen OCIANA-Reads (textlich bildunterschrift-frei; Check-Liste `ociana_rockart_check.csv`). Verworfen, weil doch bildtragend: WH 290 (Sonnenscheibe), SIJ 116 (Equide), WFSG 2.1 (ungeprüft, zugunsten des bestätigten SIJ 291 fallen gelassen).
 
 ## Idee
 
@@ -10,7 +26,7 @@ Nicht der Jahresbogen der erweiterten Ausgabe, sondern die **Sprechhaltung** ord
 
 Quellen: `neues-konzept/data/safaitic_full_corpus.xlsx` (31.768 safaitische, mit Typ-Spalte) für I + VII; `safaitic_invocations.xlsx` (2.018, thematische Blätter) für III + V; `band1/data/…auswahl.xlsx` (Longlist, 2.448 gerankt) für II, IV, VI. **Ausgeschlossen:** alle 180 bereits in der erweiterten Ausgabe (v5) verbauten Siglen — der Register-Band ist materiell eigenständig (0 Überschneidung).
 
-## Stand des Manuskripts (gebaut: `wer_dies_liest_register_v3.docx`)
+## Stand des Manuskripts (gebaut: `wer_dies_liest_register_v5.docx`, bildfrei)
 
 Realisiert sind **134 Stücke** in **acht** Registern, gestaltet wie die erweiterte Ausgabe v5 (Georgia). Über die Korpus-Ausgangsauswahl unten hinaus enthält der Band:
 
@@ -31,13 +47,13 @@ Das **Nachwort** übernimmt die vom Autor überarbeitete Fassung (hochgeladenes 
 
 **v5-Kopfstücke** je Register (lange Inschriften zuerst, aus der erweiterten Ausgabe — der Band ist dadurch nicht mehr überschneidungsfrei zur erweiterten Ausgabe):
 - I stehe: — (keine; nur Korpus-Genealogien)
-- II schreibe: RWQ 342, RWQ 187, HYGQ 24, KRS 1341
+- II schreibe: RWQ 342, RWQ 187 (die früheren Löwen-Kopfstücke HYGQ 24, KRS 1341 sind entfernt; als bildfreie Schrift-Öffner stehen Is.Mu 484 und SIJ 291 am Kopf der Signaturenreihe)
 - III warte: **ASWS 73** (zurück aus VI), RSIS 110, Is.Mu 255, SIJ 30
 - IV bitte: BS 209, MKJS 80, LP 1267, Is.Mu 88
 - V schweige: RQ.A 5, WH 1867.1, WH 1501.2
 - VI klage: LP 540, KRS 17, AbaNS 361, C 4273
 - VII fluche: C 4803, RSIS 351, LP 243, C 2775
-- VIII bezeuge: HSNS 5, LP 653, C 2670, ISB 57
+- VIII bezeuge: HSNS 5, LP 653, ISB 57 (das Oryx-Kopfstück C 2670 ist entfernt; als bildfreier datierter Öffner steht LP 254 am Kapitelanfang)
 
 **Kapitel II** als „Von X“-Signaturenreihe: die reinen Signaturen (`l-Fulān`) nominal wiedergegeben — die fünf ursprünglichen + 8 neue (HCH 75/158.2/31.1, Rees 150/151/155/161 4/176) — geografisch dicht (Hani, Km 612, Ḥarrat al-Raǧil). Das früher zugefügte „war hier“ ist getilgt (das Original hat kein Verb, nur das *l-* „von/für/gehörig zu“). **Kapitel III**: Genealogie-Gedicht **LP 1196** (sieben Generationen + Späh-Verb) neu.
 
@@ -49,7 +65,7 @@ Als Kopfzeile **über** jedem Eintrag steht **zuerst der Fundort, dann die Corpu
 
 **8 ortlose Korpus-Stimmen → verortete Ersätze aus starken Clustern:** WH 1116→**RSIS 322** (Tall aḍ-Ḍabiʿ) · AWS 379→**AbSWS 15** (Wādī Salma) · WH 1916→**C 2194** (Zalaf) · RVP 1→**AbSWS 42** (Wādī Salma) · ZN 4→**C 2190** (Zalaf) · WH 1851→**RWQ 304** (Wādī Salma) · RVP 10→**C 1146** (Riǧm Qaʿqūl) · WAMS 4→**SIJ 10** (Jathum).
 
-**Bewusst „Fundort unbekannt“ belassen (8):** die vier IV-Klage-Litanei-Verse (Anonymität passt zum Chor), der Fluchkatalog WH 368, die drei v5-Kopfstücke HYGQ 24, WH 1867.1, WH 1501.2.
+**Bewusst „Fundort unbekannt“ belassen (7):** die vier IV-Klage-Litanei-Verse (Anonymität passt zum Chor), der Fluchkatalog WH 368, die zwei v5-Kopfstücke WH 1867.1, WH 1501.2. (Das ortlose Löwen-Kopfstück HYGQ 24 ist mit der bildfreien Fassung entfallen.)
 
 ## Korpus-Ausgangsauswahl — 14 je Register (98)
 
@@ -78,7 +94,7 @@ Die Basis-Auswahl aus dem Vollkorpus (vor v5-Kopfstücken, war-hier-Erweiterung 
 ### II. Er wartet
 *Expressiv-Deferred — Ausschau, Warten, Sehnsucht; der Augenblick im Stein konserviert.*
 
-- **KRS 3051** — By {Ns²lʾl} son of Wdq son of {Mrʾt} is the young she-camel he went forth [in] the clear and spacious tract of land and he despaired whilst on the loo
+- **KRS 3051** — By {Ns²lʾl} son of Wdq son of {Mrʾt} is the young she-camel he went forth [in] the clear and spacious tract of land and he despaired whilst on the loo · *→ mit Bild (junge Kamelstute); in v5 durch **RWQ 120** ersetzt*
 - **CSNS 796** — By ʿg and he awaited the successful raid
 - **C 2756** — By S¹d son of S²zr son of Rbn and he grieved for the group of men in the look-out post
 - **C 2753** — By {Mġṯ} son of Bhs² son of Kft and he grieved for the group of men in the look-out post
@@ -137,9 +153,9 @@ Die Basis-Auswahl aus dem Vollkorpus (vor v5-Kopfstücken, war-hier-Erweiterung 
 - **KRS 813** — By Drʾl son of ʾnʿm son of Mḥlm son of ʿbdʾl son of Hḏr son of Grmʾl and he grieved for Ṣʿd and O Lt blind whoever scratches out [the writing] and [in
 - **KRS 941** — By Nʿmn son of Ṣʿd son of Ys¹mʿl and he found the traces of Ṣʿd and so he grieved in pain and for those who remain despair and he [Ṣʿd] had been struc
 - **Is.Mu 242** — By Whblh son of Mlk son of Whblh son of Mrʾlh son of ʾḥlm son of Lbṣrh and he grieved for Mlk and for Ḫrg and for Gḥmn and for ʾys¹ and for Ẓn. So, O 
-- **HCH 85** — By ʾs¹lh son of S²rd son of Grm and he grieved for Hnʾ and for Gls¹ and O Lt and Ds²r [inflict] blindness on whoever scratches out [the] writing
-- **C 286** — By Nʿmn son of Mty son of Nʿmn the slave girl so, O Rḍy, may he who would efface go blind.
-- **C 1658** — By {Wqr} son of Yʿl are the two camels which have been dedicated to ʾlt and to Rḍw, so, O Yṯʿ, blind whosoever would efface this [writing].
+- **HCH 85** — By ʾs¹lh son of S²rd son of Grm and he grieved for Hnʾ and for Gls¹ and O Lt and Ds²r [inflict] blindness on whoever scratches out [the] writing · *→ mit Bild (zwei Zeichnungen); in v5 durch **RSIS 132** ersetzt*
+- **C 286** — By Nʿmn son of Mty son of Nʿmn the slave girl so, O Rḍy, may he who would efface go blind. · *→ mit Bild (Göttin Rḍy); in v5 durch **KRS 2919** ersetzt*
+- **C 1658** — By {Wqr} son of Yʿl are the two camels which have been dedicated to ʾlt and to Rḍw, so, O Yṯʿ, blind whosoever would efface this [writing]. · *→ mit Bild (zwei Kamele + Krieger); in v5 durch **C 1087** ersetzt*
 - **C 1845** — By Ns²l son of Mqm son of Ḥml son of Ns²bt and O Lt blind whoever scratches out [the inscription]
 - **C 2551** — By Ṣrmt son of ʿbd son of Ṣʿd son of ʿḏ son of S²rb and he recognized another of {the} carvings {alas} and so despair for those who remain and so O Lt
 - **C 3138** — By S²hyt son of S¹ny son of Ks¹ṭ son of ʿbdhm and O Rḍy blind whoever scratches out
@@ -185,17 +201,19 @@ Die Basis-Auswahl aus dem Vollkorpus (vor v5-Kopfstücken, war-hier-Erweiterung 
 
 ## Stand & nächste Schritte
 - [x] Nachdichtung ins deutsche Er-Form.
-- [x] Manuskript gebaut (`wer_dies_liest_register_v3.docx`, 134 Stücke): acht Register, v5-Kopfstücke, Einleitung + Nachwort mit zwei Tabellen (Corpus-Siglen, Fundorte) am Bandende.
+- [x] Manuskript gebaut (`wer_dies_liest_register_v5.docx`, 134 Stücke, **bildfrei**): acht Register, v5-Kopfstücke, Einleitung + Nachwort mit zwei Tabellen (Corpus-Siglen, Fundorte) am Bandende.
 - [x] Kapitel II als „Von X“-Signaturenreihe (nominal, ohne „war hier“); Ich-Form-Überschriften.
 - [x] Fundort-Beizeilen normalisiert; 8 ortlose Stimmen verortet ersetzt.
 - [x] **Formfassung v2:** Fließtext je Eintrag, Fundort · Sigle als Kopfzeile über dem Text, Verbregel, überarbeitetes Nachwort übernommen.
 - [x] **Formfassung v3:** Verszeilen (Absatzformat) statt Fließtext zurückgeholt; Kopfzeile beibehalten; Register II auf „Von X“; „schweige“ von VIII auf V (Mitte) gerückt (keine Lebenszyklus-Suggestion); Nachwort an den drei betreffenden Stellen aktualisiert (Reihung endet auf „Zeugnis“, „schweige“ (V), *l-*-Zusatz).
 - [x] **Felszeichnungen ausgewertet** (OCIANA-Feld „Associated Drawings“, alle 134 Seiten): 7 Steine mit Bild — Übersicht in `ROCKART_UEBERSICHT.md`.
-- [x] **Formfassung v4:** die 7 OCIANA-Fotos als Abbildungen neben die jeweilige Inschrift eingebettet (`wer_dies_liest_register_v4.docx`). Bilder in `register/rockart_images/`; reproduzierbar via `build_register.py`. Bildrechte vor Veröffentlichung klären.
-- [x] **Feinschliff:** Bandtitel neu („Antike safaitische Inschriften / nomadischer Beduinen Nordarabiens · 1. Jh. v. Chr. – 4. Jh. n. Chr.“; „Wer dies liest, lebe lang“ als Untertitel); Kapitel VII „fluche“ (statt „verfluche“); Corpus- und Fundort-Tabelle alphabetisch, Einleitungstext über der Fundort-Tabelle entfernt; Abbildungen kleiner und rechts neben dem Gedicht (schwebend); **Bildnachweis** am Ende des Nachworts.
+- [x] **Formfassung v4 (überholt):** die 7 OCIANA-Fotos als Abbildungen neben die jeweilige Inschrift eingebettet (`wer_dies_liest_register_v4.docx`). Als Historie behalten; durch die bildfreie v5 abgelöst.
+- [x] **Feinschliff:** Bandtitel neu („Antike safaitische Inschriften / nomadischer Beduinen Nordarabiens · 1. Jh. v. Chr. – 4. Jh. n. Chr.“; „Wer dies liest, lebe lang“ als Untertitel); Kapitel VII „fluche“ (statt „verfluche“); Corpus- und Fundort-Tabelle alphabetisch, Einleitungstext über der Fundort-Tabelle entfernt.
+- [x] **Formfassung v5 (bildfrei):** die 7 Bildsteine entfernt und durch bildlose Inschriften gleicher Registerfunktion ersetzt (Tabelle oben, Abschnitt „Bildfreie Fassung (v5)“); Bildnachweis-Abschnitt aus dem Nachwort gestrichen; `IMG_STONES`/`BILDNACHWEIS`/Bild-Einbettung aus `build_register.py` entfernt.
+- [ ] **Offen:** endgültiger OCIANA-`Associated Drawings`-Read für die zwei zuletzt gewählten Ersätze **RWQ 120** und **KRS 2919** (Netzzugang; Check-Liste `ociana_rockart_check.csv`).
 - [ ] Optional: Fundort-Anhang im Backmatter (alle Stücke nach Zonen/Clustern gruppiert).
 - [ ] Optional: Intra-Register-Clustering (same-site-Stücke benachbart).
 - [ ] Optional: echte Karte via OCIANA-Koordinaten (externer Abruf).
 - [ ] Lektorat der Nachdichtungen gegen die OCIANA-Einträge.
 
-Build: `scripts/build_register.py` (Auswahl, Texte und `FINDSPOT`-Dict inline; rendert je Eintrag Verszeilen + Kopfzeile; liest die v5-Kopfstücke faithful aus `erweitert/…_v5.docx`). Ausgabe: `wer_dies_liest_register_v3.docx`.
+Build: `scripts/build_register.py` (Auswahl, Texte und `FINDSPOT`-Dict inline; rendert je Eintrag Verszeilen + Kopfzeile; liest die v5-Kopfstücke faithful aus `erweitert/…_v5.docx`). Ausgabe: `wer_dies_liest_register_v5.docx` (bildfrei). Das Nachwort separat: `scripts/build_nachwort.py` → `nachwort.docx`.

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Baut den Register-Band (Konzept A, Fassung v3): safaitische Inschriften nach den
-acht Sprechakt-Registern, gestaltet wie die erweiterte Ausgabe v5 (Georgia).
+Baut den Register-Band (Konzept A, Fassung v5 — bildfrei): safaitische Inschriften
+nach den acht Sprechakt-Registern, gestaltet wie die erweiterte Ausgabe v5 (Georgia).
 
 Formfassung v3:
   → Verszeilen (Absatzformat) je Eintrag — der Fließtext-Block aus v2 ist aus
@@ -14,6 +14,17 @@ Formfassung v3:
   → Kapitelordnung strukturell, nicht als Lebenszyklus: „schweige“ ist von der
     letzten Position (VIII) auf die Mitte (V) gerückt, damit der Band nicht auf
     das Verstummen zuläuft.
+  → Bildfrei (Fassung v5): die sieben Steine mit assoziierter Felszeichnung
+    (OCIANA „Associated Drawings“) sind entfernt und durch bildlose Inschriften
+    gleicher Registerfunktion ersetzt — safaitische Inschriften sind ganz
+    überwiegend reiner Text; die Bildbeigabe ist die Ausnahme und wäre im
+    Gedichtband nicht repräsentativ. Ersetzt (raus → rein):
+      HYGQ 24, KRS 1341 → Is.Mu 484, WFSG 2.1   (II schreibe)
+      KRS 3051          → WH 290                 (III warte)
+      HCH 85, C 286, C 1658 → RSIS 132, KRS 2919, C 1087  (VII fluche)
+      C 2670            → LP 254                 (VIII bezeuge)
+    Die sieben Ersatz-Siglen sind textlich bildunterschrift-frei; der endgültige
+    OCIANA-„Associated Drawings“-Read steht (Netzzugang) noch aus.
 
 Kapitelüberschrift = Verb in der Ich-Form (stehe/schreibe/warte/bitte/schweige/
 klage/fluche/bezeuge).
@@ -30,14 +41,12 @@ Aufruf (aus Poetics/):
   python3 register/scripts/build_register.py
 """
 
-import os
-import struct
 import unicodedata
 import zipfile
 import xml.etree.ElementTree as ET
 
 V5 = "erweitert/wer_dies_liest_lebe_lang_erweitert_v5.docx"
-OUT = "register/wer_dies_liest_register_v3.docx"
+OUT = "register/wer_dies_liest_register_v5.docx"
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 GEO = '<w:rFonts w:ascii="Georgia" w:cs="Georgia" w:eastAsia="Georgia" w:hAnsi="Georgia"/>'
 
@@ -64,30 +73,6 @@ def titel_ueber(t):  # Fundort · Sigle als Kopfzeile ÜBER dem Text (klein, bra
                 f'<w:pPr>{sp(before="260", after="40")}</w:pPr>')
 PAGEBREAK = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>'
 
-# --- Felszeichnungen (OCIANA „Associated Drawings“): 7 Steine mit Bild -----------
-IMG_DIR = "register/rockart_images"
-IMG_STONES = {   # Sigle → Bildunterschrift unter der eingebetteten Abbildung
-    "KRS 1341": "Auf dem Stein: Zeichnung eines Löwen.",
-    "HYGQ 24":  "Auf dem Stein: Zeichnung eines Löwen.",
-    "KRS 3051": "Auf dem Stein: Zeichnung einer jungen Kamelstute.",
-    "C 1658":   "Auf dem Stein: zwei Kamele und ein Mann mit Schwert und Schild, in einer Kartusche.",
-    "C 286":    "Auf dem Stein: Bild der Göttin Rḍy als weibliche Gestalt.",
-    "HCH 85":   "Auf dem Stein: zwei Zeichnungen; die Inschrift in einer Kartusche.",
-    "C 2670":   "Auf dem Stein: Umriss eines Oryx.",
-}
-MAXW_FLOAT = 1650000   # max. Bildbreite ~4,6 cm (EMU) — klein, rechts neben dem Gedicht
-
-# Bildnachweis (Sigle, Motiv, OCIANA-Bild-ID, Quelle) — für das Backmatter
-BILDNACHWEIS = [
-    ("KRS 1341", "Löwe",                        "im0015581", "Basalt Desert Rescue Survey (G. M. H. King, 1989)"),
-    ("HYGQ 24",  "Löwe",                        "im0056364", "OCIANA-Survey (HYGQ)"),
-    ("KRS 3051", "junge Kamelstute",            "im0021957", "Basalt Desert Rescue Survey (G. M. H. King, 1989)"),
-    ("HCH 85",   "zwei Zeichnungen",            "im0038237", "G. L. Harding, The Cairn of Hāniʾ (1953)"),
-    ("C 286",    "Göttin Rḍy / weibl. Figuren", "im0027384", "CIS V (Ryckmans 1950); Dunand 1339 a"),
-    ("C 1658",   "zwei Kamele + Krieger",       "im0028730", "CIS V (Ryckmans 1950); Dunand 388"),
-    ("C 2670",   "Oryx",                        "im0029738", "CIS V (Ryckmans 1950); Dunand 207 a; SESP"),
-]
-
 def _alpha(s):
     """Sortierschlüssel: Diakritika/Modifikatoren entfernen, klein, ohne führende Artikel-Striche."""
     k = "".join(c for c in unicodedata.normalize("NFKD", s) if not unicodedata.combining(c))
@@ -95,68 +80,7 @@ def _alpha(s):
         k = k.replace(ch, "")
     return k.lower().lstrip(" -")
 
-def _safe(sg):
-    return sg.replace(" ", "_").replace("/", "-").replace(".", "_")
-
-def _img_for(sg):
-    """(bytes, ext) des ersten Bildes zu einer Sigle: bevorzugt <Sigle>.jpg,
-    sonst das erste <Sigle>__*.jpg/.png in IMG_DIR — oder None."""
-    if not os.path.isdir(IMG_DIR):
-        return None
-    pref = os.path.join(IMG_DIR, _safe(sg) + ".jpg")
-    if os.path.exists(pref):
-        pick = pref
-    else:
-        hits = [fn for fn in sorted(os.listdir(IMG_DIR))
-                if fn.startswith(_safe(sg) + "__") and fn.lower().endswith((".jpg", ".jpeg", ".png"))]
-        if not hits:
-            return None
-        pick = os.path.join(IMG_DIR, hits[0])
-    with open(pick, "rb") as f:
-        return f.read(), os.path.splitext(pick)[1].lower().lstrip(".")
-
-def _dims(b):
-    if b[:8] == b"\x89PNG\r\n\x1a\n":
-        w, h = struct.unpack(">II", b[16:24]); return w, h
-    if b[:2] == b"\xff\xd8":                      # JPEG: SOF-Marker suchen
-        i = 2
-        while i < len(b) - 9:
-            if b[i] != 0xFF:
-                i += 1; continue
-            m = b[i + 1]
-            if 0xC0 <= m <= 0xCF and m not in (0xC4, 0xC8, 0xCC):
-                h, w = struct.unpack(">HH", b[i + 5:i + 9]); return w, h
-            i += 2 + struct.unpack(">H", b[i + 2:i + 4])[0]
-    return 480, 360
-
-def anchor_run(rid, docid, w, h):
-    """Rechts schwebende Abbildung (Text läuft links daneben), ~4,6 cm breit."""
-    cx, cy = int(w * 9525), int(h * 9525)          # px → EMU (96 dpi)
-    if cx > MAXW_FLOAT:
-        cy = int(cy * MAXW_FLOAT / cx); cx = MAXW_FLOAT
-    pic = (f'<pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">'
-           f'<pic:nvPicPr><pic:cNvPr id="{docid}" name="rockart{docid}"/><pic:cNvPicPr/></pic:nvPicPr>'
-           f'<pic:blipFill><a:blip r:embed="{rid}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill>'
-           f'<pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="{cx}" cy="{cy}"/></a:xfrm>'
-           f'<a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic>')
-    return (f'<w:r><w:drawing>'
-            f'<wp:anchor distT="0" distB="0" distL="114300" distR="114300" simplePos="0" '
-            f'relativeHeight="{251658240 + docid}" behindDoc="0" locked="0" layoutInCell="1" allowOverlap="1">'
-            f'<wp:simplePos x="0" y="0"/>'
-            f'<wp:positionH relativeFrom="margin"><wp:align>right</wp:align></wp:positionH>'
-            f'<wp:positionV relativeFrom="paragraph"><wp:posOffset>0</wp:posOffset></wp:positionV>'
-            f'<wp:extent cx="{cx}" cy="{cy}"/><wp:effectExtent l="0" t="0" r="0" b="0"/>'
-            f'<wp:wrapSquare wrapText="left"/><wp:docPr id="{docid}" name="rockart{docid}"/>'
-            f'<wp:cNvGraphicFramePr/>'
-            f'<a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">'
-            f'<a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">{pic}</a:graphicData>'
-            f'</a:graphic></wp:anchor></w:drawing></w:r>')
-
-def titel_ueber_img(t, imgrun):  # Kopfzeile mit rechts schwebender Abbildung
-    return para(imgrun + run(t, '<w:color w:val="7A5C3E"/><w:sz w:val="16"/><w:szCs w:val="16"/>'),
-                f'<w:pPr>{sp(before="260", after="40")}</w:pPr>')
-
-_BORD = ('<w:top w:val="single" w:color="DDDDDD" w:sz="4"/><w:left w:val="single" w:color="DDDDDD" w:sz="4"/>'
+_BORD =('<w:top w:val="single" w:color="DDDDDD" w:sz="4"/><w:left w:val="single" w:color="DDDDDD" w:sz="4"/>'
          '<w:bottom w:val="single" w:color="DDDDDD" w:sz="4"/><w:right w:val="single" w:color="DDDDDD" w:sz="4"/>')
 _TBLB = _BORD + '<w:insideH w:val="single" w:color="DDDDDD" w:sz="4"/><w:insideV w:val="single" w:color="DDDDDD" w:sz="4"/>'
 EMPTY = '<w:p/>'
@@ -193,7 +117,9 @@ REGISTERS = [
 ]),
 ("II","schreibe",
  "",
- ["RWQ 342","RWQ 187","HYGQ 24","KRS 1341"],[
+ ["RWQ 342","RWQ 187"],[
+ ("Is.Mu 484",["Von Nr, Sohn des Qdm —","und er schrieb seinen Namen","zum ersten Mal."]),
+ ("SIJ 291",["Von S²rk —","und er schrieb für den Oheim,","und er schrieb für den wahren Freund."]),
  ("JaS 16",["Von Bnḥt."]),
  ("HCH 117",["Von ʾnʿm."]),
  ("HCH 156",["Von S¹ḫr."]),
@@ -212,7 +138,7 @@ REGISTERS = [
  "Sehnsucht, die bleibt — Warten auf Regen, auf Familie, auf Rückkehr; im Stein für einen Späteren konserviert.",
  ["ASWS 73","RSIS 110","Is.Mu 255","SIJ 30"],[
  ("LP 1196",["Von Ms¹wd, Sohn des Whbn,","Sohn des Hrṯ, Sohn des Ms¹k,","Sohn des Qmr, Sohn des ʿwḏ,","Sohn des Whbʾl —","und er hielt Ausschau","nach dem Reiterzug."]),
- ("KRS 3051",["Die junge Kamelstute.","Er zog hinaus ins weite, offene Land","und verzweifelte","auf der Lauer nach der Raubschar."]),
+ ("RWQ 120",["Er hielt Wache","für seine Gefährten,","während sie am beständigen Wasser lagerten,","und trauerte um Yḥy."]),
  ("CSNS 796",["Er wartete","auf den glückenden Raubzug."]),
  ("C 2756",["Er trauerte","um die Männer","im Späherposten."]),
  ("C 2753",["Um die Männer im Späherposten","trauerte er."]),
@@ -289,9 +215,9 @@ REGISTERS = [
  ("KRS 813",["Er trauerte um Ṣʿd.","Allat — blende, wer dies auskratzt,","und werfe ihn aus dem Grab."]),
  ("KRS 941",["Er fand die Spuren des Ṣʿd","und trauerte vor Schmerz —","Verzweiflung denen, die bleiben.","Das Schicksal schlug ihn nieder."]),
  ("Is.Mu 242",["Er trauerte um Mlk,","um Ḫrg, um Gḥmn, um ʾys¹, um Ẓn.","Allat und Duschara —","Blutrache."]),
- ("HCH 85",["Er trauerte um Hnʾ","und um Gls¹.","Allat und Duschara —","Blindheit dem, der dies auskratzt."]),
- ("C 286",["Rudā —","wer dies austilgt,","erblinde."]),
- ("C 1658",["Die beiden Kamele,","Allat und Rudā geweiht.","Yaṯaʿ —","blende, wer dies austilgt."]),
+ ("RSIS 132",["Er trauerte um Ṣʿd.","Allat —","Blindheit dem, der die Schrift auskratzt."]),
+ ("KRS 2919",["Rudā —","blende, wer die Schrift auskratzt."]),
+ ("C 1087",["Allat —","Beute dem, der dies vorliest,","Lähmung und schändliche Blindheit","dem, der die Worte verletzt."]),
  ("C 1845",["Allat —","blende, wer dies auskratzt."]),
  ("C 2551",["Er erkannte eine weitere der Ritzungen —","Verzweiflung denen, die bleiben.","Allat —","Rache an dem, der die Tat beging."]),
  ("C 3138",["Rudā —","blende, wer dies auskratzt."]),
@@ -301,7 +227,8 @@ REGISTERS = [
 ]),
 ("VIII","bezeuge",
  "Zeugnis für Unbekannte — die Datierung als Akt: er war dabei, es war dieses Jahr; geschrieben für Fremde, die später kommen.",
- ["HSNS 5","LP 653","C 2670","ISB 57"],[
+ ["HSNS 5","LP 653","ISB 57"],[
+ ("LP 254",["Er lagerte am beständigen Wasser","im Jahr, als der Stamm Qmr","dem Stamm Ḥmy Schaden tat,","und trauerte um Ġṯ,","zu früh gestorben, vom Schicksal gebeugt."]),
  ("HSNS 1",["Er zog in die innere Wüste","im Jahr, als Agrippa starb."]),
  ("RQ.D 3",["Er trauerte um den Oheim,","den sie erschlugen,","im Jahr des ʾrm."]),
  ("LP 1291",["Er blieb die späten Regen in diesem Tal,","im Jahr, als der Sturzbach","mit seinen Kamelen vorüberzog."]),
@@ -354,19 +281,17 @@ FINDSPOT = {
     'C 1368': 'Riǧm Qaʿqūl',
     'C 1412': 'Riǧm Qaʿqūl',
     'C 1496': 'Zalaf',
+    'C 1087': 'Rif Dimašq',
     'C 1629': 'Zalaf',
-    'C 1658': 'Zalaf',
     'C 1660': 'Zalaf',
     'C 1845': 'Zalaf',
     'C 218': 'Rif Dimašq',
     'C 2190': 'Zalaf',
     'C 2194': 'Zalaf',
     'C 2551': 'Zalaf',
-    'C 2670': 'Zalaf',
     'C 2753': 'Zalaf',
     'C 2756': 'Zalaf',
     'C 2775': 'Zalaf',
-    'C 286': 'Rif Dimašq',
     'C 3138': 'Zalaf',
     'C 4273': 'Al-Suwaydā',
     'C 4439': 'Al-Suwaydā',
@@ -401,12 +326,10 @@ FINDSPOT = {
     'HCH 31.1': 'Hani',
     'HCH 38': 'Hani',
     'HCH 75': 'Hani',
-    'HCH 85': 'Hani',
     'HCH 99': 'Hani',
     'HNSD 13': 'Jordanien (allg.)',
     'HSNS 1': 'Jordanien (allg.)',
     'HSNS 5': 'Jordanien (allg.)',
-    'HYGQ 24': 'Fundort unbekannt',
     'HaNS 708': 'Cairn 10',
     'HaNSB 319': 'Cairn 9',
     'HaNSB 346': 'Cairn 9',
@@ -414,6 +337,7 @@ FINDSPOT = {
     'Is.L 202': 'al-ʿĪsāwī',
     'Is.Mu 242': 'al-ʿĪsāwī',
     'Is.Mu 255': 'al-ʿĪsāwī',
+    'Is.Mu 484': 'al-ʿĪsāwī',
     'Is.Mu 88': 'al-ʿĪsāwī',
     'JaS 13': 'Km 612',
     'JaS 15': 'Km 612',
@@ -423,10 +347,9 @@ FINDSPOT = {
     'JaS 23': 'Km 612',
     'JaS 4': 'Km 612',
     'JaS 5': 'Km 612',
-    'KRS 1341': 'Al-Mafraq',
     'KRS 1586': 'Al-Mafraq',
     'KRS 17': 'Wādī Salma',
-    'KRS 3051': 'Al-Mafraq',
+    'KRS 2919': 'Al-Mafraq',
     'KRS 813': 'Al-Mafraq',
     'KRS 941': 'Al-Mafraq',
     'KWQ 113': 'Tell 5',
@@ -434,6 +357,7 @@ FINDSPOT = {
     'LP 1267': 'Al-Suwaydā',
     'LP 1291': 'Syrien (allg.)',
     'LP 243': 'Al-Mrōshan',
+    'LP 254': 'Al-Mrōshan',
     'LP 308': 'al-ʿĪsāwī',
     'LP 461': 'al-ʿĪsāwī',
     'LP 540': 'al-ʿĪsāwī',
@@ -443,11 +367,13 @@ FINDSPOT = {
     'RQ.D 3': 'Riǧm Qaʿqūl',
     'RQ.D 6': 'Riǧm Qaʿqūl',
     'RSIS 110': 'Tall aḍ-Ḍabiʿ',
+    'RSIS 132': 'Tall aḍ-Ḍabiʿ',
     'RSIS 322': 'Tall aḍ-Ḍabiʿ',
     'RSIS 324': 'Tall aḍ-Ḍabiʿ',
     'RSIS 351': 'Tall aḍ-Ḍabiʿ',
     'RVP 1': 'Fundort unbekannt',
     'RVP 10': 'Fundort unbekannt',
+    'RWQ 120': 'Wādī Salma',
     'RWQ 187': 'Wādī Salma',
     'RWQ 304': 'Wādī Salma',
     'RWQ 342': 'Wādī Salma',
@@ -459,6 +385,7 @@ FINDSPOT = {
     'SIJ 10': 'Jathum',
     'SIJ 1001': 'bei Ruwayshid',
     'SIJ 14': 'Jathum',
+    'SIJ 291': 'Jawa',
     'SIJ 30': 'Jathum',
     'SIJ 323': 'Jawa',
     'SIJ 811': 'Tell al-ʿAbd',
@@ -553,26 +480,9 @@ def main():
            tsub("»Wer dies liest, lebe lang« — in deutscher Nachdichtung", 20),
            tsub("Acht Register · nach Sprechakten geordnet", 20)]
 
-    media = []          # (rId, arcname, bytes) der eingebetteten Abbildungen
-    seq = [9000]        # Zähler für rId/docPr-Id
-
-    def img_anchor(sg):
-        """Rechts schwebende Abbildung als Run (in die Kopfzeile), oder '' ohne Bild."""
-        got = _img_for(sg)
-        if not got:
-            return ""
-        b, ext = got
-        w, h = _dims(b)
-        seq[0] += 1
-        rid, docid = f"rId{seq[0]}", seq[0]
-        arc = f"rockart{docid}." + ("png" if ext == "png" else "jpg")
-        media.append((rid, arc, b))
-        return anchor_run(rid, docid, w, h)
-
     def entry(sg, lines):
         ort = FINDSPOT.get(sg, "Fundort unbekannt")
-        ar = img_anchor(sg) if sg in IMG_STONES else ""
-        head_par = titel_ueber_img(f"{ort} · {sg}", ar) if ar else titel_ueber(f"{ort} · {sg}")
+        head_par = titel_ueber(f"{ort} · {sg}")
         return [head_par] + [line(l) for l in lines]
 
     total = 0
@@ -595,32 +505,16 @@ def main():
             table(sorted(CORPUS, key=lambda r: _alpha(r[0]))), EMPTY,
             subhead("Die Fundorte"),
             table(sorted(FINDORT, key=lambda r: _alpha(r[0]))), EMPTY]
-    xml += [subhead("Bildnachweis"),
-            body("Sieben Steine tragen eine assoziierte Felszeichnung (OCIANA-Feld „Associated Drawings“); "
-                 "sie stehen als Abbildung neben der jeweiligen Nachdichtung. Alle Bilder: OCIANA (Online Corpus "
-                 "of the Inscriptions of Ancient North Arabia), krc.orient.ox.ac.uk — Wiedergabe für diese "
-                 "Arbeitsfassung; vor einer Veröffentlichung sind die Bildrechte zu klären."),
-            table([(sg, f"{motiv} · OCIANA {imid} · {src}") for sg, motiv, imid, src in BILDNACHWEIS]), EMPTY]
     doc = decl + root_open + "<w:body>" + "".join(xml) + sect + "</w:body></w:document>"
-
-    imgrels = "".join(
-        f'<Relationship Id="{rid}" '
-        f'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" '
-        f'Target="media/{arc}"/>' for rid, arc, _ in media)
-    out_path = OUT.replace("_v3", "_v4") if media else OUT
 
     with zipfile.ZipFile(V5) as zin:
         items = [(i, zin.read(i.filename)) for i in zin.infolist()]
-    with zipfile.ZipFile(out_path, "w", zipfile.ZIP_DEFLATED) as zout:
+    with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED) as zout:
         for info, data in items:
             if info.filename == "word/document.xml":
                 data = doc.encode("utf-8")
-            elif info.filename == "word/_rels/document.xml.rels" and imgrels:
-                data = data.decode("utf-8").replace("</Relationships>", imgrels + "</Relationships>").encode("utf-8")
             zout.writestr(info, data)
-        for rid, arc, b in media:
-            zout.writestr("word/media/" + arc, b)
-    print(f"geschrieben: {out_path}  ({total} Stücke, {len(media)} Abbildungen)")
+    print(f"geschrieben: {OUT}  ({total} Stücke, bildfrei)")
 
 if __name__ == "__main__":
     main()

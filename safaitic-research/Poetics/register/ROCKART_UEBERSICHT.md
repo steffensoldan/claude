@@ -2,6 +2,8 @@
 
 Stand: 2026-07-05 · Quelle: OCIANA-Feld **„Associated Drawings"** je Inschrift, ergänzt um Text-/Commentary-Belege. Alle 134 Seiten wurden erfolgreich geladen (HTTP 200), die Auswertung ist daher **vollständig**, keine Untergrenze.
 
+> **Editorische Entscheidung (2026-07-18): Der Band ist bildfrei.** Weil nur ~5 % der Steine überhaupt eine Zeichnung tragen, überrepräsentiert ihre Aufnahme eine Ausnahme und ist einem Gedichtband nicht angemessen. Die sieben unten dokumentierten Bildsteine sind aus dem Manuskript **entfernt** und durch bildlose Inschriften **gleicher Registerfunktion** ersetzt (v5, Stückzahl bleibt 134). Ersetzungen: HYGQ 24→Is.Mu 484 · KRS 1341→SIJ 291 · KRS 3051→RWQ 120 · HCH 85→RSIS 132 · C 286→KRS 2919 · C 1658→C 1087 · C 2670→LP 254 (Details: `REGISTER_BAND_AUSWAHL.md`, Abschnitt „Bildfreie Fassung (v5)“). Diese Übersicht bleibt als **Korpus-Befund** und Begründung der Entscheidung stehen; die Abschnitte zum Bild-Einbau sind damit historisch.
+
 ## Kernbefund
 
 **7 von 134** Steinen (≈ 5 %) tragen ein assoziiertes grafisches Element. Das entspricht der Realität des Korpus: safaitische Inschriften sind ganz überwiegend reiner Text; Bildbeigaben sind die Ausnahme.
@@ -53,9 +55,11 @@ Vier der sieben Fälle (KRS 1341, HYGQ 24, KRS 3051, C 1658) sind **Bilduntersch
 
 Datengrundlage: `ociana_rockart_result.csv` (alle 134), Rohseiten in `ociana_pages.zip`.
 
-## Einbau der Abbildungen in den Band
+## Einbau der Abbildungen in den Band (historisch — in v5 rückgängig gemacht)
 
-`build_register.py` bettet die 7 Zeichnungen als **rechts schwebende Abbildungen** (~4,6 cm, Text läuft links daneben) neben die jeweilige Inschrift ein; die Herkunft steht gesammelt im **Bildnachweis** am Ende des Nachworts. Ablauf:
+> Diese Mechanik gehörte zur Fassung **v4**. In der aktuellen bildfreien **v5** ist sie entfernt: `build_register.py` bettet keine Bilder mehr ein, der Bildnachweis ist aus dem Nachwort gestrichen, und die sieben Bildsteine sind ersetzt (siehe Kopfnotiz). Der folgende Ablauf ist als Historie dokumentiert (die v4-Datei und die Bilddaten bleiben im Ordner erhalten).
+
+`build_register.py` (v4) bettete die 7 Zeichnungen als **rechts schwebende Abbildungen** (~4,6 cm, Text läuft links daneben) neben die jeweilige Inschrift ein; die Herkunft stand gesammelt im **Bildnachweis** am Ende des Nachworts. Ablauf:
 
 1. **Bilder holen** (Netz nötig, z. B. Cowork): `python3 register/scripts/download_rockart_images.py` lädt die 18 OCIANA-JPGs aus `rockart_images_manifest.csv` nach `register/rockart_images/`.
 2. **Bauen**: `python3 register/scripts/build_register.py` bettet je Stein automatisch das erste vorhandene Bild ein und schreibt `wer_dies_liest_register_v4.docx` (mit Abbildungen); liegt kein Bild vor, entsteht wie bisher `…_v3.docx` (ohne). Zum gezielten Auswählen eines Motivs: das gewünschte Bild als `register/rockart_images/<Sigle>.jpg` ablegen (hat Vorrang, z. B. `C_286.jpg`).
