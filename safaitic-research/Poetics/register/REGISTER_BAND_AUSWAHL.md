@@ -16,7 +16,7 @@ Nur ~5 % der safaitischen Steine tragen überhaupt eine Zeichnung (Befund: 7/134
 | C 1658 | zwei Kamele + Krieger | **C 1087** (Beute dem Vorleser, Blindheit dem Tilger) | VII fluche · reziproker Leser-Segen/Fluch |
 | C 2670 | Oryx | **LP 254** (datiert: Stammfehde, Trauer um Ġṯ) | VIII bezeuge · Jahr-Datierung |
 
-**Verifikation (OCIANA „Associated Drawings“):** bildfrei bestätigt — Is.Mu 484, SIJ 291, RSIS 132, C 1087, LP 254. Die zwei zuletzt gewählten Ersätze **RWQ 120** und **KRS 2919** stehen noch unter Vorbehalt des endgültigen OCIANA-Reads (textlich bildunterschrift-frei; Check-Liste `ociana_rockart_check.csv`). Verworfen, weil doch bildtragend: WH 290 (Sonnenscheibe), SIJ 116 (Equide), WFSG 2.1 (ungeprüft, zugunsten des bestätigten SIJ 291 fallen gelassen).
+**Verifikation (OCIANA „Associated Drawings“):** alle sieben Ersätze bildfrei bestätigt — Is.Mu 484, SIJ 291, RWQ 120, RSIS 132, KRS 2919, C 1087, LP 254 (Check-Liste `ociana_rockart_check.csv`). Verworfen, weil doch bildtragend: WH 290 (Sonnenscheibe), SIJ 116 (Equide), WFSG 2.1 (ungeprüft, zugunsten des bestätigten SIJ 291 fallen gelassen).
 
 ## Idee
 
@@ -210,7 +210,7 @@ Die Basis-Auswahl aus dem Vollkorpus (vor v5-Kopfstücken, war-hier-Erweiterung 
 - [x] **Formfassung v4 (überholt):** die 7 OCIANA-Fotos als Abbildungen neben die jeweilige Inschrift eingebettet (`wer_dies_liest_register_v4.docx`). Als Historie behalten; durch die bildfreie v5 abgelöst.
 - [x] **Feinschliff:** Bandtitel neu („Antike safaitische Inschriften / nomadischer Beduinen Nordarabiens · 1. Jh. v. Chr. – 4. Jh. n. Chr.“; „Wer dies liest, lebe lang“ als Untertitel); Kapitel VII „fluche“ (statt „verfluche“); Corpus- und Fundort-Tabelle alphabetisch, Einleitungstext über der Fundort-Tabelle entfernt.
 - [x] **Formfassung v5 (bildfrei):** die 7 Bildsteine entfernt und durch bildlose Inschriften gleicher Registerfunktion ersetzt (Tabelle oben, Abschnitt „Bildfreie Fassung (v5)“); Bildnachweis-Abschnitt aus dem Nachwort gestrichen; `IMG_STONES`/`BILDNACHWEIS`/Bild-Einbettung aus `build_register.py` entfernt.
-- [ ] **Offen:** endgültiger OCIANA-`Associated Drawings`-Read für die zwei zuletzt gewählten Ersätze **RWQ 120** und **KRS 2919** (Netzzugang; Check-Liste `ociana_rockart_check.csv`).
+- [x] **OCIANA-`Associated Drawings`-Read** für alle sieben Ersätze abgeschlossen — durchweg bildfrei bestätigt (inkl. der zuletzt gewählten RWQ 120 und KRS 2919).
 - [ ] Optional: Fundort-Anhang im Backmatter (alle Stücke nach Zonen/Clustern gruppiert).
 - [ ] Optional: Intra-Register-Clustering (same-site-Stücke benachbart).
 - [ ] Optional: echte Karte via OCIANA-Koordinaten (externer Abruf).

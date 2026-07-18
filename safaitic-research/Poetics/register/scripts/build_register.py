@@ -23,8 +23,8 @@ Formfassung v3:
       KRS 3051          → WH 290                 (III warte)
       HCH 85, C 286, C 1658 → RSIS 132, KRS 2919, C 1087  (VII fluche)
       C 2670            → LP 254                 (VIII bezeuge)
-    Die sieben Ersatz-Siglen sind textlich bildunterschrift-frei; der endgültige
-    OCIANA-„Associated Drawings“-Read steht (Netzzugang) noch aus.
+    Alle sieben Ersatz-Siglen sind per OCIANA-„Associated Drawings“-Read als
+    bildfrei bestätigt.
 
 Kapitelüberschrift = Verb in der Ich-Form (stehe/schreibe/warte/bitte/schweige/
 klage/fluche/bezeuge).
