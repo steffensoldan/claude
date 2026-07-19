@@ -30,10 +30,19 @@ Kapitelüberschrift = Verb in der Ich-Form (stehe/schreibe/warte/bitte/schweige/
 klage/fluche/bezeuge).
 
 Aufbau je Register:
-  → Kopfstücke aus der erweiterten Ausgabe v5 (1 Kopfstein + weitere; lange
-    Inschriften zuerst), faithful aus v5 übernommen
-  → knappe Stimmen aus dem Vollkorpus (Auswahl: REGISTER_BAND_AUSWAHL.md;
-    Kapitel II als „Von X“-Signaturenreihe)
+  → Kopfstücke aus der erweiterten Ausgabe v5 (faithful übernommen) und knappe
+    Stimmen aus dem Vollkorpus (Auswahl: REGISTER_BAND_AUSWAHL.md; Kapitel II als
+    „Von X“-Signaturenreihe) werden zu einer Liste vereint und dann geordnet.
+  → Ordnung (order_chapter): nach Fundort gruppiert (Reihenfolge des ersten
+    Auftretens), innerhalb eines Fundorts nach der Nummerierung (z. B. RWQ 187 vor
+    RWQ 342); Inschriften mit unbekanntem Fundort ans Kapitelende.
+  → Kapitel I „stehe“ hat drei Fundort-Ketten: Km 612 (JaS), Hani (HCH) und
+    Qāʿ Fahadah (AAEK/ASFF) — Letztere eine verknüpfte Ahnenreihe (derselbe Mann
+    in zwei Lesarten, zwei Brüder derselben Linie).
+
+Front-/Backmatter: ein Vorwort (Frontmatter) und ein Nachwort (Backmatter, drei
+Abschnitte: OCIANA-Korpus, editorische Siglen, Fundorte). Das Nachwort steht auch
+separat als nachwort.docx (scripts/build_nachwort.py).
 
 Lücken (----) bleiben in Register V („schweige“) offen.
 
@@ -41,6 +50,7 @@ Aufruf (aus Poetics/):
   python3 register/scripts/build_register.py
 """
 
+import re
 import unicodedata
 import zipfile
 import xml.etree.ElementTree as ET
@@ -114,6 +124,13 @@ REGISTERS = [
  ("HCH 99",["Von ʿrb, Sohn des Hrs¹.","Und er trauerte um Hnʾ."]),
  ("HCH 22",["Von Tm, Sohn des Ḫlṣ,","Sohn des Tm, Sohn des S²ʿ.","Und er trauerte um Hnʾ."]),
  ("HCH 38",["Von S¹ʿd, Sohn des Ẓn, Sohn des Ṯlm.","Und er trauerte um Hnʾ."]),
+ # Dritter Ort: Qāʿ Fahadah — eine verknüpfte Ahnenreihe (tiefe Kette, derselbe
+ # Mann in zwei Lesarten, zwei Brüder derselben Linie)
+ ("AAEK 102",["Von Dʾyt,","Sohn des Mʿdʾl, Sohn des ʾḏnt,","Sohn des Hs¹m, Sohn des Gḥs²t,","Sohn des S¹dy, Sohn des Wṭy,","Sohn des Byq, Sohn des Ngrt,","Sohn des Qnfḏ."]),
+ ("AAEK 120",["Von ʾzr, Sohn des Ftn,","Sohn des Gṯ, Sohn des S²ʿr,","Sohn des Rḥmʾl,","Sohn des Mrʾt, Sohn des Gryt."]),
+ ("ASFF 244",["Von ʾzr, Sohn des Ftn,","Sohn des Mṯn, Sohn des S²ʿhm,","Sohn des Rḥhl,","Sohn des Mrʾt, Sohn des Gryt."]),
+ ("ASFF 390",["Von Hnʾt, Sohn des S¹lmt,","Sohn des Lḏn, Sohn des S¹krn,","Sohn des Ndbn, Sohn des Ṣrm."]),
+ ("ASFF 392",["Von Kmn, Sohn des S¹lmt,","Sohn des Lḏn, Sohn des S¹krn,","Sohn des Ndbn, Sohn des Ṣrm."]),
 ]),
 ("II","schreibe",
  "",
@@ -246,24 +263,48 @@ REGISTERS = [
 ]),
 ]
 
+# --- Vorwort (Frontmatter) -------------------------------------------------
 VORWORT = [
- "Die meisten sind keine Gedichte. Viele kürzer als ein Satz, manche nur Name. Die Formen - safaitisch - schreiben heißt, an einen Stein zu klopfen, an dem man gerade vorbeikommt — er bleibt, wenn man weitergeht.",
- "Das Verständigen anderer Art, die antiken Beduinen nicht auf die Gleichzeitigkeit von Sender und Empfänger angewiesen. Es schließt Wüste, Hitze und Kälte, Steine als Zeugen ein und kennt Schweigen als eigene Aussage kennt. Im Gegensatz zu modernen Feeds operieren die Inschriften über minimale Zeichenzahl existenzieller Tiefe über lange Dauer.",
- "Jedes der acht Register dieses Bandes eine andere Art, mit dem Stein zu sprechen — vom Stehen in der Ahnenreihe und dem bloßen Dasein über das Warten und Bitten zum Verstummen, weiter zur Klage und zum Fluch bis zuletzt zum Zeugnis. Die Ordnung folgt der Sprechhaltung, nicht einem Lebenslauf: das Verstummen steht bewusst in der Mitte, nicht am Ende. Die Register eröffnen einige lange Inschriften, es folgen knappere Stimmen.",
- "Texte stehen in der dritten Person, wie ihre Originale (l-Fulān, „Von X“, danach „und er …“). Das safaitische l- (‚von‘) bleibt dabei selbst offen: dieselbe Partikel heißt zugleich ‚für‘ und ‚gehörig zu‘ und lässt Urheber, Adressat und Besitzer in einem unbestimmt. Genealogien sind getilgt — außer in „stehe“ (I), wo die Ahnenreihe selbst der Akt ist, und in „schweige“ (V), wo das Fehlen spricht. Lücken werden hier nicht geglättet; die Striche ---- bleiben stehen. Die unregelmäßige Oberfläche des Steins und Erosion oder Beschädigung des Steins bilden eine untrennbare Einheit.",
-]
-NOTE = [
- "Der Band schöpft aus dem Vollkorpus der ~31.800 safaitischen Inschriften (OCIANA), die zwischen dem ersten und vierten Jahrhundert n. Chr. in Süden Syriens und in Nordjordanien entstanden sind. Erschlossen sind damit auch rund 18.500 reinen Signaturen und die Minimal-Texte — sie tragen die Register „stehe“ (die Ahnenreihen) und „schreibe“ (die Signaturen „Von X“). Revier- und Präsenzmarkierung, indifferent gegenüber dem konkreten Empfänger. Sie steht im Raum, unabhängig davon, ob und wann sie gelesen wird.",
- "Jedes Register speist aus seinem eigenen Korpus-Material: die Signaturen für „schreibe“ und „stehe“, die Anrufungen für „bitte“, die Fluchformeln für „fluche“, die fragmentarischen Steine für „schweige“, die datierten für „bezeuge“. Die Auswahl ist kuratiert, nicht repräsentativ; jede Nachdichtung trägt die Sigle ihrer Quelle im Korpus.",
- "Übersetzungskette: gemeißelter Stein → philologische Lesung → englische OCIANA-Edition → deutsche Nachdichtung. Eckige Klammern und Striche ---- der Philologen bleiben im Register „schweige“ sichtbar. Protokolle eines kaum sterblichen sprachlichen Systems.",
+ "Der Band basiert auf der Sammlung nomadischer Inschriften des ersten bis vierten Jahrhunderts nach Christus. Beduinen ritzten sie in safaitischer Schrift in den Basalt der Wüste im Süden Syriens und in Nordjordanien.",
+ "Der Stein konservierte die Markierungen der Hirten und Händler, ihre Inschriften überdauerten die Jahrtausende in extremer Hitze und Kälte. Ihr Reiz beruht wenig auf Handlung oder Drama, sondern auf dem Akt des Schreibens allein oder mit Tieren reisender Männer.",
+ "Die von Erosion gezeichnete Flächen des Basalts machen einzelne Zeichen manchmal unleserlich oder zerstört sie – es bleiben sichtbare Lücken dieser Schädigung. Mancherorts ist eine Aufzählung der Ahnen selbst die Markierung, fehlende Namen artikulieren sich über ihre Leerstelle.",
+ "Zu etwa 1.500 der 31.800 Inschriften gehören Zeichnungen die zum Teil direkt in die Schrift integriert sind – eine Art antiker Comic. Zeichnungen bleiben diesem Band außen vor, dies markiert ihn als auf verdichtete Schrift fokussierten Band.",
+ "Die Anordnung der Kapitel durchläuft verschiedene Akte und Haltungen: vom Stehen am Stein über Wünsche und Flüche hin zu Entzug und Zeugnis. Safaitisch, eine nordarabische Konsonantenschrift ohne Vokale, lässt Modus und Person mehrdeutig, diese sprachliche Unbestimmtheit nur aus Kontexten zu erschließen.",
 ]
 
-TITLES = [
- "Die acht Titel sind jeweils der Infinitiv des Verbs ohne das End-„n“ (schreiben → schreibe, stehen → stehe, …). Diese verkürzte Form ist absichtlich mehrdeutig: Sie ist zugleich erste Person Singular Präsens („ich schreibe“ — die aneignende Stimme), dritte Person Konjunktiv Präsens („er schreibe“ — der Wunsch, der die dritte Person und die Bitten und Flüche der Originale trifft), Imperativ („schreibe!“ — der Befehl an den späteren Leser oder die Gottheit) und mitunter Nomen (die Klage, die Bitte). Weil das Wort auf keine dieser Lesarten festgelegt ist, wird es — im Wortspiel mit „Infinitiv“ — infinit: unbegrenzt, in mehrere Richtungen zugleich offen. Das entspricht dem Gegenstand des Bandes: der aufgeschobenen Inschrift ohne festen Sender und Empfänger, die Aussage, Wunsch und Befehl in einem ist. Im Safaitischen (einer nordarabischen Konsonantenschrift) sind Vokale und damit exakte grammatische Modi oft hochgradig mehrdeutig oder aus dem Kontext zu erschließen. Die Reduktion auf die wurzelhafte Stammform im Deutschen bildet diese semantische Offenheit präzise ab.",
+# --- Nachwort (Backmatter) -------------------------------------------------
+NW_OCIANA = [
+ "Sämtliche Textgrundlagen, Siglen und Ortsbestimmungen dieses Bandes beziehen sich auf das Online Corpus of the Inscriptions of Ancient North Arabia (OCIANA), das an der Universität Oxford entwickelte digitale Referenzkorpus für die epigraphischen Zeugnisse des antiken Nordarabiens. OCIANA erfasst, ediert und systematisiert zehntausende Inschriften – darunter das gesamte bekannte safaitische Korpus – und stellt die wissenschaftliche Nomenklatur, Lesarten sowie Geodaten bereit. Das System dient in diesem Band als philologische Datenbasis und Ausgangspunkt für die poetische Verdichtung und Reduktion.",
+]
+NW_SIGLEN_INTRO = ("Die im Band verwendeten dreistelligen Buchstabencodes (z. B. KRS, HCH, WH) verweisen auf die "
+ "wissenschaftlichen Standard-Editionen und historischen Entdecker-Korpora, in denen die Inschriften erstmals "
+ "dokumentiert wurden. Sie dienen im Online Corpus of the Inscriptions of Ancient North Arabia (OCIANA) als "
+ "eindeutige Identifikatoren:")
+NW_SIGLEN = [
+ ("HCH", "Inscriptions in the Harra Collection – Das von G. L. Harding 1953 in der jordanischen Basaltwüste dokumentierte Korpus."),
+ ("KRS", "King Ramadan Survey – Funde aus den systematischen archäologischen Surveys in Nordostjordanien."),
+ ("LP", "Littmann, Safaitic Inscriptions – Die frühen, grundlegenden Editionen der Enno-Littmann-Expeditionen vom Beginn des 20. Jahrhunderts."),
+ ("WH", "Winnett & Harding, Inscriptions from Fifty Safaitic Cairns – Die umfassende Dokumentation von fünfzig Steinhügeln, die als strukturelles Rückgrat der modernen safaitischen Epigraphik gilt."),
+]
+NW_FUNDORT_INTRO = ("Die Toponyme wurden auf den spezifischsten benannten Ort normalisiert und ordnen sich zwei "
+ "geografischen Zonen zu: der nordostjordanischen Ḥarrah und der südsyrischen Ṣafā.")
+NW_FUNDORTE = [
+ ("Hani", "Steinhügel (Cairn) des Ḥāniʾ, nordostjordanische Ḥarrah; 1953 von G. L. Harding ausgegraben (Sammlung HCH)."),
+ ("Km 612", "Kilometerstein 612 (ca. 32 km westlich von Badana) an der alten Pipeline-Piste. Ein Survey-Fundpunkt in Nordostjordanien."),
+ ("Wādī Salma / Wādī Sārah", "Trockentäler in der Provinz Al-Mafraq, Nordostjordanien."),
+ ("Ḥarrat al-Raǧil", "Basaltwüste im Grenzgebiet von Nordostjordanien und dem nördlichen Saudi-Arabien."),
+ ("Jathum / Jawa / Wādī Miqāṭ / Qāʿ al-Maḥfūr / Qāʿ Fahadah / Zimlet Nāṣir", "Fundpunkte und archäologische Surveys innerhalb der nordostjordanischen Basaltwüste (Regionen Safawi und Ruwayshid)."),
+ ("Zalaf", "Region um Zalaf am Wādī al-Shām, südsyrische Ṣafā."),
+ ("al-ʿĪsāwī / Riǧm Qaʿqūl", "Fundplätze im Gouvernement Rif Dimašq, innerhalb der südsyrischen Basaltlandschaft."),
 ]
 
 FINDSPOT = {
+    'AAEK 102': 'Qāʿ Fahadah',
+    'AAEK 120': 'Qāʿ Fahadah',
+    'ASFF 244': 'Qāʿ Fahadah',
     'ASFF 267': 'Al-Mafraq',
+    'ASFF 390': 'Qāʿ Fahadah',
+    'ASFF 392': 'Qāʿ Fahadah',
     'ASWS 183': 'Wādī Sārah',
     'ASWS 73': 'Wādī Sārah',
     'AWS 379': 'Fundort unbekannt',
@@ -407,42 +448,6 @@ FINDSPOT = {
     'ZN 4': 'Fundort unbekannt',
 }
 
-CORPUS = [
- ("C", "Corpus Inscriptionum Semiticarum, Pars V — safaitische Inschriften (u. a. Dussaud & Macler; Ryckmans 1950)."),
- ("LP", "E. Littmann, Safāʾitic Inscriptions (Leiden 1943)."),
- ("WH", "F. V. Winnett & G. L. Harding, Inscriptions from Fifty Safaitic Cairns (Toronto 1978)."),
- ("KRS", "Basalt Desert Rescue Survey (G. M. H. King, 1989) — NO-jordanische Ḥarrah."),
- ("HCH", "G. L. Harding, The Cairn of Hāniʾ (1953)."),
- ("SIJ", "F. V. Winnett, Safaitic Inscriptions from Jordan (Toronto 1957)."),
- ("ISB", "W. G. Oxtoby, Some Inscriptions of the Safaitic Bedouin (New Haven 1968)."),
- ("CSNS", "V. A. Clark, A Study of New Safaitic Inscriptions from Jordan (1979)."),
- ("Rees", "L. W. B. Rees, frühe Aufnahmen aus der Ḥarrat al-Raǧil (1920er)."),
- ("Is.L / Is.Mu", "Sammlungen aus al-ʿĪsāwī (Rif Dimašq); Nachweis im OCIANA-Eintrag."),
- ("RQ.A / RQ.D", "Aufnahmen aus Riǧm Qaʿqūl (Rif Dimašq); OCIANA."),
- ("RSIS / ASWS / SSWS / AbSWS / RWQ", "Surveys der Wādī-Sārah-/Salma-Region (Al-Mafraq); OCIANA."),
- ("AbaNS / HaNSB / HaNS / HNSD / HSNS", "nordjordanische Safaitic-Surveys; OCIANA."),
- ("JaS / KWQ / CEDS / GSSH / MKJS / BS / HYGQ / WAMS / RVP / BWM / ASFF / ZN", "weitere OCIANA-Survey-Siglen; vollständiger Editionsnachweis jeweils im OCIANA-Eintrag."),
-]
-FINDORT = [
- ("Hani", "Steinhügel (Cairn) des Ḥāniʾ, NO-jordanische Ḥarrah; 1953 von Harding ergraben (Sammlung HCH)."),
- ("Km 612", "Kilometerstein 612 (≈ 32 km westl. Badana) an der Pipeline-Piste — Survey-Fundpunkt, NO-Jordanien."),
- ("Wādī Salma", "Wādī Salma, Provinz Al-Mafraq, NO-Jordanien."),
- ("Wādī Sārah", "Wādī Sārah, Provinz Al-Mafraq, NO-Jordanien."),
- ("Ḥarrat al-Raǧil", "Basaltwüste al-Raǧil, NO-Jordanien / nördl. Saudi-Arabien."),
- ("Jathum", "Jathum, NO-Jordanien."),
- ("Jawa / Wādī Miqāṭ / Qāʿ al-Maḥfūr / Zimlet Nāṣir / bei Safawi / bei Ruwayshid", "weitere Fundpunkte der NO-jordanischen Ḥarrah."),
- ("Zalaf", "Gegend um Zalaf am Wādī al-Shām, südsyrische Ṣafā."),
- ("al-ʿĪsāwī", "al-ʿĪsāwī, Rif Dimašq, südsyrische Ṣafā."),
- ("Riǧm Qaʿqūl", "Riǧm Qaʿqūl, Rif Dimašq, Süd-Syrien."),
- ("Ǧabal Says", "Ǧabal Says (Basaltmassiv), Rif Dimašq, Süd-Syrien."),
- ("Tall aḍ-Ḍabiʿ", "Tall aḍ-Ḍabiʿ / Wādī as-Samin, Süd-Syrien."),
- ("Khirbat al-Hubayrīyah / al-Umbāšī / Al-Mrōshan", "Fundpunkte in Al-Suwaydā, Süd-Syrien."),
- ("Al-Mafraq", "Provinz Al-Mafraq (NO-Jordanien) — genauer Fundpunkt nicht angegeben."),
- ("Rif Dimašq / Al-Suwaydā", "südsyrische Provinzen — genauer Fundpunkt nicht angegeben."),
- ("Jordanien / Syrien (allg.)", "nur das Land überliefert (Ḥarrah bzw. Ṣafā)."),
- ("Site / Tell / EDS / Cairn / WH Cairn + Nr.", "interne Survey-Codes — Fundpunkt ohne benannten Ort."),
- ("Fundort unbekannt", "keine Ortsangabe im OCIANA-Eintrag."),
-]
 
 def v5_poem_lines(raw):
     """Aus der v5-document.xml: Sigle -> Verszeilen (Prosa >90 Zeichen ausgefiltert)."""
@@ -468,6 +473,38 @@ def v5_poem_lines(raw):
             buf.append(t)
     return out
 
+UNKNOWN_FS = "Fundort unbekannt"
+
+def num_key(sg):
+    """Sortierschlüssel einer Sigle: (Präfix, Zahlenfolge) — für die Ordnung
+    nach Nummerierung innerhalb eines Fundorts (z. B. RWQ 187 vor RWQ 342)."""
+    m = re.match(r"^(.*?)(\d.*)$", sg)
+    prefix = (m.group(1) if m else sg).strip()
+    nums = tuple(int(x) for x in re.findall(r"\d+", sg)) if m else ()
+    return (prefix, nums)
+
+def order_chapter(entries):
+    """Ordnet die Einträge eines Kapitels: nach Fundort gruppiert (in der
+    Reihenfolge des ersten Auftretens), innerhalb eines Fundorts nach der
+    Nummerierung; Inschriften mit unbekanntem Fundort ans Kapitelende."""
+    groups, order = {}, []
+    for sg, lines in entries:
+        fs = FINDSPOT.get(sg, UNKNOWN_FS)
+        if fs not in groups:
+            groups[fs] = []; order.append(fs)
+        groups[fs].append((sg, lines))
+    known = [fs for fs in order if fs != UNKNOWN_FS]
+    result = []
+    for fs in known + ([UNKNOWN_FS] if UNKNOWN_FS in groups else []):
+        result += sorted(groups[fs], key=lambda e: num_key(e[0]))
+    return result
+
+def defitem(term, desc):
+    """Ein Eintrag einer Definitionsliste (Nachwort): fetter Term + Erklärung."""
+    return para(run(term, '<w:b/><w:sz w:val="22"/><w:szCs w:val="22"/>')
+                + run(": " + desc, '<w:sz w:val="22"/><w:szCs w:val="22"/>'),
+                f'<w:pPr>{sp(after="120", line="300")}</w:pPr>')
+
 def main():
     raw = zipfile.ZipFile(V5).read("word/document.xml").decode("utf-8")
     decl = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
@@ -475,36 +512,39 @@ def main():
     sect = raw[raw.find("<w:sectPr"):raw.find("</w:body>")]
     v5lines = v5_poem_lines(raw)
 
+    # Frontmatter: Titel + Vorwort
     xml = [title("Antike safaitische Inschriften"),
            tsub("nomadischer Beduinen Nordarabiens · 1. Jh. v. Chr. – 4. Jh. n. Chr.", 22, "7A5C3E"),
            tsub("»Wer dies liest, lebe lang« — in deutscher Nachdichtung", 20),
            tsub("Acht Register · nach Sprechakten geordnet", 20)]
+    xml += [PAGEBREAK, head("Vorwort")] + [body(p) for p in VORWORT]
 
     def entry(sg, lines):
-        ort = FINDSPOT.get(sg, "Fundort unbekannt")
-        head_par = titel_ueber(f"{ort} · {sg}")
-        return [head_par] + [line(l) for l in lines]
+        ort = FINDSPOT.get(sg, UNKNOWN_FS)
+        return [titel_ueber(f"{ort} · {sg}")] + [line(l) for l in lines]
 
     total = 0
     for rom, name, sub, v5head, poems in REGISTERS:
         xml.append(PAGEBREAK)
         xml += [roman(rom), regname(name)]
-        for sg in v5head:                       # Kopfstücke aus v5
+        merged = []                             # v5-Kopfstücke + Korpus-Stimmen
+        for sg in v5head:
             lines = v5lines.get(sg)
             if not lines:
                 raise SystemExit(f"v5-Kopfstück fehlt: {sg}")
-            xml += entry(sg, lines)
-            total += 1
-        for sg, lines in poems:                 # Korpus-Stimmen
+            merged.append((sg, lines))
+        merged += poems
+        for sg, lines in order_chapter(merged): # nach Fundort/Nummer, Unbekannte ans Ende
             xml += entry(sg, lines)
             total += 1
 
-    xml += [PAGEBREAK, head("Nachwort")] + [body(p) for p in VORWORT] + [body(p) for p in NOTE] + [subhead("Zu den Kapiteltiteln")] + [body(p) for p in TITLES]
-    xml += [subhead("Die Corpus-Siglen"),
-            body("Jede Nachdichtung trägt als Kopfzeile zuerst den Fundort, dann die Corpus-Sigle. Die Siglen bezeichnen die Sammlung oder Edition, in der die Inschrift zuerst erfasst wurde:"),
-            table(sorted(CORPUS, key=lambda r: _alpha(r[0]))), EMPTY,
-            subhead("Die Fundorte"),
-            table(sorted(FINDORT, key=lambda r: _alpha(r[0]))), EMPTY]
+    # Backmatter: Nachwort
+    xml += [PAGEBREAK, head("Nachwort"),
+            subhead("Das OCIANA-Korpus")] + [body(p) for p in NW_OCIANA]
+    xml += [subhead("Die editorischen Siglen (Ergänzung)"), body(NW_SIGLEN_INTRO)]
+    xml += [defitem(t, d) for t, d in NW_SIGLEN] + [EMPTY]
+    xml += [subhead("Die Fundorte"), body(NW_FUNDORT_INTRO)]
+    xml += [defitem(t, d) for t, d in NW_FUNDORTE] + [EMPTY]
     doc = decl + root_open + "<w:body>" + "".join(xml) + sect + "</w:body></w:document>"
 
     with zipfile.ZipFile(V5) as zin:

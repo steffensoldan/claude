@@ -1,10 +1,10 @@
 # Register-Band — Auswahl aus dem Vollkorpus
 
-Stand: 2026-07-18 · Konzept A: eigener Band nach den acht Sprechakt-Registern · Ordner `register/` · Formfassung **v5** (`…_v5.docx`, **bildfrei** — die 7 Steine mit Felszeichnung sind entfernt und durch bildlose Inschriften gleicher Registerfunktion ersetzt). Ältere Fassungen als Historie: v1/v2/v3 (ohne Bilder, frühere Formstände), v4 (mit den 7 Felszeichnungen eingebettet — durch v5 überholt).
+Stand: 2026-07-19 · Konzept A: eigener Band nach den acht Sprechakt-Registern · Ordner `register/` · Formfassung **v5** (`…_v5.docx`, **bildfrei**, 139 Stücke, nach Fundort/Nummer geordnet, mit Vor- und Nachwort — die 7 Steine mit Felszeichnung sind entfernt und durch bildlose Inschriften gleicher Registerfunktion ersetzt). Ältere Fassungen als Historie: v1/v2/v3 (ohne Bilder, frühere Formstände), v4 (mit den 7 Felszeichnungen eingebettet — durch v5 überholt).
 
 ## Bildfreie Fassung (v5)
 
-Nur ~5 % der safaitischen Steine tragen überhaupt eine Zeichnung (Befund: 7/134, siehe `ROCKART_UEBERSICHT.md`). Ihre Aufnahme überrepräsentiert eine Ausnahme und ist einem Gedichtband nicht angemessen; darum tragen sie **nicht** in den Band. Die sieben Bildsteine sind durch bildlose Inschriften **gleicher Registerfunktion** ersetzt (Stückzahl bleibt 134):
+Nur ~5 % der safaitischen Steine tragen überhaupt eine Zeichnung (Befund: 7/134, siehe `ROCKART_UEBERSICHT.md`). Ihre Aufnahme überrepräsentiert eine Ausnahme und ist einem Gedichtband nicht angemessen; darum tragen sie **nicht** in den Band. Die sieben Bildsteine sind durch bildlose Inschriften **gleicher Registerfunktion** ersetzt (je 1:1):
 
 | raus (mit Bild) | Motiv | rein (bildfrei) | Register · Funktion |
 |---|---|---|---|
@@ -18,6 +18,14 @@ Nur ~5 % der safaitischen Steine tragen überhaupt eine Zeichnung (Befund: 7/134
 
 **Verifikation (OCIANA „Associated Drawings“):** alle sieben Ersätze bildfrei bestätigt — Is.Mu 484, SIJ 291, RWQ 120, RSIS 132, KRS 2919, C 1087, LP 254 (Check-Liste `ociana_rockart_check.csv`). Verworfen, weil doch bildtragend: WH 290 (Sonnenscheibe), SIJ 116 (Equide), WFSG 2.1 (ungeprüft, zugunsten des bestätigten SIJ 291 fallen gelassen).
 
+## Ordnung, Genealogie-Kette & Rahmen (Update 2026-07-19)
+
+- **Kapitelordnung nach Fundort:** In jedem Kapitel sind die Einträge nach Fundort gruppiert (in der Reihenfolge des ersten Auftretens), innerhalb eines Fundorts nach der **Nummerierung** sortiert (z. B. RWQ 187 vor RWQ 342). Inschriften mit **unbekanntem Fundort** stehen am **Kapitelende**. Implementiert als `order_chapter()` in `build_register.py`; v5-Kopfstücke und Korpus-Stimmen werden dafür zu einer Liste vereint.
+- **Kapitel I „stehe“ — dritter Ort:** neben Km 612 (JaS) und Hani (HCH) jetzt eine **verknüpfte Ahnenreihe aus Qāʿ Fahadah**: **AAEK 102** (zehn Generationen), **AAEK 120 / ASFF 244** (*derselbe Mann* ʾzr, Sohn des Ftn … Sohn des Mrʾt, Sohn des Gryt — in zwei Lesart-Varianten), **ASFF 390 / ASFF 392** (*zwei Brüder* Hnʾt und Kmn, gleiche Linie). Die numerische Ordnung stellt Variant-Paar und Brüder-Paar jeweils benachbart.
+- **Kapitel II „schreibe“:** das zweite Stück steht jetzt vor dem ersten — RWQ 187 vor RWQ 342 (folgt aus der numerischen Ordnung innerhalb des Fundorts Wādī Salma).
+- **Vor- & Nachwort:** neues **Vorwort** im Frontmatter; **Nachwort** im Backmatter mit drei Abschnitten — *Das OCIANA-Korpus*, *Die editorischen Siglen (Ergänzung)* (HCH/KRS/LP/WH), *Die Fundorte* (nach Zonen). Das Nachwort liegt zusätzlich separat als `nachwort.docx`. Der frühere Backmatter (Auto-Einleitung, „Zu den Kapiteltiteln“, die vollständigen Corpus-/Fundort-Tabellen) ist durch diese kuratierte Fassung ersetzt.
+- **Umfang:** durch die fünf Qāʿ-Fahadah-Stücke jetzt **139 Stücke** (vorher 134).
+
 ## Idee
 
 Nicht der Jahresbogen der erweiterten Ausgabe, sondern die **Sprechhaltung** ordnet: jedes Kapitel ein anderer Akt am Stein (Searles Illokutionsklassen, eigene Prägungen). Anders als beim Umsortieren der erweiterten Ausgabe (wo drei Register überfüllt, drei fast leer blieben) wird **jedes Register gezielt aus dem Vollkorpus gespeist** — darum tragen jetzt alle sieben.
@@ -28,7 +36,7 @@ Quellen: `neues-konzept/data/safaitic_full_corpus.xlsx` (31.768 safaitische, mit
 
 ## Stand des Manuskripts (gebaut: `wer_dies_liest_register_v5.docx`, bildfrei)
 
-Realisiert sind **134 Stücke** in **acht** Registern, gestaltet wie die erweiterte Ausgabe v5 (Georgia). Über die Korpus-Ausgangsauswahl unten hinaus enthält der Band:
+Realisiert sind **139 Stücke** in **acht** Registern, gestaltet wie die erweiterte Ausgabe v5 (Georgia). Über die Korpus-Ausgangsauswahl unten hinaus enthält der Band:
 
 **Formfassung v3** — Stand nach mehreren Iterationen (v1 = Verszeilen + „Sigle …“ am Fuß; v2 = Fließtext + Kopfzeile; beide als Historie behalten):
 - **Verszeilen (Absatzformat):** jeder Eintrag steht wieder in Verszeilen — der Fließtext-Block aus v2 ist aus ästhetischen Gründen (Lesbarkeit, Schönheit) zurückgenommen.
@@ -201,7 +209,7 @@ Die Basis-Auswahl aus dem Vollkorpus (vor v5-Kopfstücken, war-hier-Erweiterung 
 
 ## Stand & nächste Schritte
 - [x] Nachdichtung ins deutsche Er-Form.
-- [x] Manuskript gebaut (`wer_dies_liest_register_v5.docx`, 134 Stücke, **bildfrei**): acht Register, v5-Kopfstücke, Einleitung + Nachwort mit zwei Tabellen (Corpus-Siglen, Fundorte) am Bandende.
+- [x] Manuskript gebaut (`wer_dies_liest_register_v5.docx`, 139 Stücke, **bildfrei**): acht Register, nach Fundort/Nummer geordnet; Vorwort (Frontmatter) + Nachwort (Backmatter: OCIANA-Korpus, editorische Siglen, Fundorte); Nachwort auch separat als `nachwort.docx`.
 - [x] Kapitel II als „Von X“-Signaturenreihe (nominal, ohne „war hier“); Ich-Form-Überschriften.
 - [x] Fundort-Beizeilen normalisiert; 8 ortlose Stimmen verortet ersetzt.
 - [x] **Formfassung v2:** Fließtext je Eintrag, Fundort · Sigle als Kopfzeile über dem Text, Verbregel, überarbeitetes Nachwort übernommen.
