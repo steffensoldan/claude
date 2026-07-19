@@ -285,6 +285,17 @@ NW_SIGLEN = [
  ("KRS", "King Ramadan Survey – Funde aus den systematischen archäologischen Surveys in Nordostjordanien."),
  ("LP", "Littmann, Safaitic Inscriptions – Die frühen, grundlegenden Editionen der Enno-Littmann-Expeditionen vom Beginn des 20. Jahrhunderts."),
  ("WH", "Winnett & Harding, Inscriptions from Fifty Safaitic Cairns – Die umfassende Dokumentation von fünfzig Steinhügeln, die als strukturelles Rückgrat der modernen safaitischen Epigraphik gilt."),
+ ("C", "Corpus Inscriptionum Semiticarum, Pars V – die safaitischen Inschriften (u. a. Dussaud & Macler; Ryckmans 1950)."),
+ ("SIJ", "Winnett, Safaitic Inscriptions from Jordan (Toronto 1957)."),
+ ("ISB", "Oxtoby, Some Inscriptions of the Safaitic Bedouin (New Haven 1968)."),
+ ("CSNS", "Clark, A Study of New Safaitic Inscriptions from Jordan (1979)."),
+ ("Rees", "L. W. B. Rees, frühe Aufnahmen aus der Ḥarrat al-Raǧil (1920er Jahre)."),
+ ("Is.L / Is.Mu", "Sammlungen aus al-ʿĪsāwī (Rif Dimašq); Editionsnachweis jeweils im OCIANA-Eintrag."),
+ ("RQ.A / RQ.D", "Aufnahmen aus Riǧm Qaʿqūl (Rif Dimašq)."),
+ ("RSIS / ASWS / SSWS / AbSWS / RWQ", "Surveys der Wādī-Sārah- und Wādī-Salma-Region (Provinz Al-Mafraq)."),
+ ("AbaNS / HaNS / HaNSB / HNSD / HSNS", "nordjordanische Safaitic-Surveys."),
+ ("AAEK / ASFF", "Surveys von Qāʿ Fahadah (Provinz Al-Mafraq)."),
+ ("JaS / KWQ / CEDS / GSSH / MKJS / BS / WAMS / BWM / ZN", "weitere OCIANA-Survey-Siglen aus der nordostjordanischen Ḥarrah; vollständiger Editionsnachweis jeweils im OCIANA-Eintrag."),
 ]
 NW_FUNDORT_INTRO = ("Die Toponyme wurden auf den spezifischsten benannten Ort normalisiert und ordnen sich zwei "
  "geografischen Zonen zu: der nordostjordanischen Ḥarrah und der südsyrischen Ṣafā.")
@@ -293,9 +304,18 @@ NW_FUNDORTE = [
  ("Km 612", "Kilometerstein 612 (ca. 32 km westlich von Badana) an der alten Pipeline-Piste. Ein Survey-Fundpunkt in Nordostjordanien."),
  ("Wādī Salma / Wādī Sārah", "Trockentäler in der Provinz Al-Mafraq, Nordostjordanien."),
  ("Ḥarrat al-Raǧil", "Basaltwüste im Grenzgebiet von Nordostjordanien und dem nördlichen Saudi-Arabien."),
- ("Jathum / Jawa / Wādī Miqāṭ / Qāʿ al-Maḥfūr / Qāʿ Fahadah / Zimlet Nāṣir", "Fundpunkte und archäologische Surveys innerhalb der nordostjordanischen Basaltwüste (Regionen Safawi und Ruwayshid)."),
+ ("Qāʿ Fahadah", "Fundplatz in der Provinz Al-Mafraq, Nordostjordanien (Ahnenreihen in Kapitel I)."),
+ ("Jathum / Jawa / Wādī Miqāṭ / Qāʿ al-Maḥfūr / Zimlet Nāṣir / bei Safawi / bei Ruwayshid", "weitere Fundpunkte und Surveys innerhalb der nordostjordanischen Basaltwüste."),
  ("Zalaf", "Region um Zalaf am Wādī al-Shām, südsyrische Ṣafā."),
  ("al-ʿĪsāwī / Riǧm Qaʿqūl", "Fundplätze im Gouvernement Rif Dimašq, innerhalb der südsyrischen Basaltlandschaft."),
+ ("Ǧabal Says", "Basaltmassiv im Gouvernement Rif Dimašq, südsyrische Ṣafā."),
+ ("Tall aḍ-Ḍabiʿ", "Tall aḍ-Ḍabiʿ am Wādī as-Samin, Süd-Syrien."),
+ ("Al-Mrōshan / Khirbat al-Hubayrīyah / Khirbat al-Umbāšī", "Fundpunkte im Gouvernement Al-Suwaydā, Süd-Syrien."),
+ ("Al-Mafraq", "Provinz Al-Mafraq (Nordostjordanien) – genauer Fundpunkt nicht angegeben."),
+ ("Rif Dimašq / Al-Suwaydā", "südsyrische Gouvernements (Ṣafā) – genauer Fundpunkt nicht angegeben."),
+ ("Jordanien (allg.) / Syrien (allg.)", "nur das Land überliefert (Ḥarrah bzw. Ṣafā)."),
+ ("Site 4 / Site 12 / Site 13 · Tell 5 · Tell al-ʿAbd · Cairn 9 / Cairn 10 · WH Cairn 7 · EDS 80-5 · Km 910", "interne Survey-Codes und Fundpunkte ohne näher benannten Ort (Nordostjordanien)."),
+ ("Fundort unbekannt", "keine Ortsangabe im OCIANA-Eintrag."),
 ]
 
 FINDSPOT = {
