@@ -78,8 +78,9 @@ Alle übrigen Diakritika (ṯ ḫ ḍ ṣ ṭ ẓ ġ ḥ) bleiben **bewusst unan
 
 ## Offene Punkte / Feinschliff
 
-- [ ] **Zählung im Vorwort:** der Text nennt „**134** Inschriften", tatsächlich enthält der Band **139**. Angleichen (Text auf 139) oder Auswahl auf 134 zurückkürzen.
-- [ ] Lektorat der Nachdichtungen gegen die OCIANA-Einträge (insb. die neuen v5-Stücke: AAEK/ASFF-Reihen, RWQ 187/342, Is.Mu 484, SIJ 291, RWQ 120, RSIS 132, KRS 2919, C 1087, LP 254).
+- [x] **Zählung im Vorwort** auf **139** angeglichen.
+- [x] **Lektorat der neuen v5-Stücke** gegen die OCIANA-Editionen (Vollkorpus `neues-konzept/data/safaitic_full_corpus.xlsx`, Spalte *Full Translation*): AAEK 102/120, ASFF 244/390/392, RWQ 187/342, Is.Mu 484, SIJ 291, RWQ 120, RSIS 132, KRS 2919, C 1087, LP 254 — **alle 14 inhaltlich getreu** (Namen, Reihenfolge, Sprechakt korrekt; Genealogien registerkonform getilgt bzw. in „stehe" vollständig). Zwei Randnotizen: bei **Is.Mu 484** ist die Ahnenkette auf eine Generation gekürzt und die OCIANA-Lesungsunsicherheit `[?]` (bei „schrieb seinen Namen zum ersten Mal") nicht markiert — beides registerkonform, kein Fehler.
+- [ ] Lektorat der übrigen (aus v3/v4 übernommenen) Nachdichtungen gegen OCIANA steht noch aus.
 - [ ] Optional: Fundort-Anhang / Intra-Register-Clustering / echte Karte via OCIANA-Koordinaten.
 - [ ] Falls die Felszeichnungen zurück sollen: Bild-Einbettung aus der v4-Historie (Skript-Stand `af27eff`) reaktivieren; Bildrechte klären.
 
