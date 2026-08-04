@@ -1,11 +1,14 @@
 # Konzept — Sieben Register
 *Vorwort-Entwurf / Framing für ein neues Safaitisch-Band*
 
-> **Realisierung:** Ausgearbeitet im Ordner `../register/` (`wer_dies_liest_register.docx`).
-> Dort inzwischen **acht** Register: das Kapitel „Ich war hier“ ist aufgeteilt in
-> **stehe** (Ahnenreihen) und **schreibe** (Litanei „X war hier“). Überschriften als
-> Ich-Form-Verben, Er-Form-Texte, Fundort-Beizeilen. Dieses Dokument hält den
-> ursprünglichen Konzeptstand fest.
+> **Realisierung:** Ausgearbeitet im Ordner `../register/` — aktuelle Fassung
+> `wer_dies_liest_register_v5.docx`, reproduzierbar über `scripts/build_register.py`.
+> Dort inzwischen **acht** Register mit Ich-Form-Titeln:
+> **I stehe · II ritze · III warte · IV bitte · V schweige · VI klage · VII fluche · VIII bezeuge**
+> — das ursprüngliche „Ich war hier“ ist aufgeteilt in **stehe** (die Ahnenreihen)
+> und **ritze** (die Signaturen „Von X“; früher „schreibe“ genannt). Er-Form-Texte,
+> Fundort-Kopfzeilen. Dieses Dokument hält den **ursprünglichen** Konzeptstand fest;
+> der ausgearbeitete Stand steht in `../register/REGISTER_BAND_AUSWAHL.md`.
 
 ---
 

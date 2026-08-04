@@ -1,6 +1,8 @@
 # Grafische Elemente (Felszeichnungen) im Register-Band
 
-Stand: 2026-07-05 · Quelle: OCIANA-Feld **„Associated Drawings"** je Inschrift, ergänzt um Text-/Commentary-Belege. Alle 134 Seiten wurden erfolgreich geladen (HTTP 200), die Auswertung ist daher **vollständig**, keine Untergrenze.
+> **Status (2026-08-04):** Die aktuelle Handfassung **v5** enthält **keine Felszeichnungen** mehr — der Band ist rein typografisch (und damit ohne offene Bildrechte-Frage). Das umgeschriebene `build_register.py` bettet keine Bilder mehr ein. Dieses Dokument bleibt als **Auswertung** der Rock-Art im Korpus und als **Anleitung zur Reaktivierung** erhalten (Bilder liegen weiter in `rockart_images/`; die Einbau-Mechanik ist im Skript-Stand `af27eff` verzeichnet). Registernamen unten im damaligen Stand — Register II heißt jetzt **„ritze“** (vormals „schreibe“).
+
+Stand der Auswertung: 2026-07-05 · Quelle: OCIANA-Feld **„Associated Drawings"** je Inschrift, ergänzt um Text-/Commentary-Belege. Alle 134 Seiten wurden erfolgreich geladen (HTTP 200), die Auswertung ist daher **vollständig**, keine Untergrenze.
 
 ## Kernbefund
 
@@ -20,7 +22,7 @@ Stand: 2026-07-05 · Quelle: OCIANA-Feld **„Associated Drawings"** je Inschrif
 | Register | mit Zeichnung |
 |----------|---------------|
 | I stehe | 0 |
-| II schreibe | 2 (KRS 1341, HYGQ 24) |
+| II ritze | 2 (KRS 1341, HYGQ 24) |
 | III warte | 1 (KRS 3051) |
 | IV bitte | 0 |
 | V schweige | 0 |
@@ -32,8 +34,8 @@ Stand: 2026-07-05 · Quelle: OCIANA-Feld **„Associated Drawings"** je Inschrif
 
 | Register | Sigle | Fundort | Motiv | Quelle (OCIANA) | im Band benannt? |
 |----------|-------|---------|-------|-----------------|:----------------:|
-| II schreibe | **KRS 1341** | Al-Mafraq | Löwe | Associated Drawings (d/1) + Text „drawing of the lion" | ja („Die Zeichnung des Löwen") |
-| II schreibe | **HYGQ 24** | unbek. | Löwe | Text ist Bildunterschrift „is [the drawing of] the lion" | ja („Der Löwe") |
+| II ritze | **KRS 1341** | Al-Mafraq | Löwe | Associated Drawings (d/1) + Text „drawing of the lion" | ja („Die Zeichnung des Löwen") |
+| II ritze | **HYGQ 24** | unbek. | Löwe | Text ist Bildunterschrift „is [the drawing of] the lion" | ja („Der Löwe") |
 | III warte | **KRS 3051** | Al-Mafraq | junge Kamelstute | Associated Drawings (d/1) + Text „is the young she-camel" | ja („Die junge Kamelstute") |
 | VII fluche | **C 1658** | Zalaf | Szene: zwei Kamele + Mann mit Schwert und Schild (in Kartusche) | Associated Drawings | ja („Die beiden Kamele …") |
 | VII fluche | **C 286** | Rif Dimašq | Göttin Rḍy / nackte weibliche Figur, dazu eine zweite Frau | Associated Drawings | nein |
@@ -53,7 +55,9 @@ Vier der sieben Fälle (KRS 1341, HYGQ 24, KRS 3051, C 1658) sind **Bilduntersch
 
 Datengrundlage: `ociana_rockart_result.csv` (alle 134), Rohseiten in `ociana_pages.zip`.
 
-## Einbau der Abbildungen in den Band
+## Einbau der Abbildungen in den Band  *(historisch — v4-Stand, in v5 entfernt)*
+
+> Der folgende Ablauf beschreibt den **v3/v4-Stand** des Skripts. Das heutige `build_register.py` (v5-Generator) bindet **keine** Bilder mehr ein; zur Reaktivierung siehe den Skript-Stand `af27eff`.
 
 `build_register.py` bettet die 7 Zeichnungen als **rechts schwebende Abbildungen** (~4,6 cm, Text läuft links daneben) neben die jeweilige Inschrift ein; die Herkunft steht gesammelt im **Bildnachweis** am Ende des Nachworts. Ablauf:
 
