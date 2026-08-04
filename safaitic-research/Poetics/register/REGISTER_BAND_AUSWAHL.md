@@ -64,6 +64,18 @@ python3 register/scripts/build_register.py
 
 Das Skript enthält den vollständigen Textbestand als Datenblock (`TITLE`, `VORWORT`, `REGISTERS`, `NACHWORT_INTRO`, `SIGLEN`, `FUNDORTE`) und die Format-Bausteine (Titelzeile 13 pt zentriert · Register-Ziffer 20 pt braun · Register-Name 15 pt · Kopfzeile 8 pt braun · Verszeile 11 pt · Nachwort-Listeneintrag „**Marke**: Text"). Es ersetzt nur `word/document.xml`; alles Übrige (styles.xml, Theme, `sectPr`) stammt aus der vorhandenen v5. **Textänderungen erfolgen im Datenblock des Skripts** (dann neu bauen), Formatänderungen in den Bausteinfunktionen.
 
+### Leseform der Transliteration (`readable()` / `READABLE`)
+
+Der Datenblock hält die **exakte philologische Transliteration** (OCIANA: s-Sibilanten als `s¹`/`s²`, Diakritika). Für bessere Lesbarkeit nimmt das Skript beim Bau drei minimale Ersetzungen vor — **still, ohne Erklärung im Vor- oder Nachwort**:
+
+| von | nach | Begründung |
+|---|---|---|
+| `˥` (U+02E5) | `ʿ` | Vereinheitlichung — `˥` ist durchgängig ein verunglücktes `ʿ`; dieselben Namen standen im Korpus in beiden Schreibungen (`S¹˥d`/`S¹ʿd`, `ʾn˥m`/`ʾnʿm`). Reine Fehlerbereinigung (14 Stellen). |
+| `s¹` | `s` | Auflösung der hochgestellten Ziffer (dezent). |
+| `s²` | `š` | Auflösung als Einzelglyph statt „sch" — fügt sich ins übrige Diakritika-Bild ein. |
+
+Alle übrigen Diakritika (ṯ ḫ ḍ ṣ ṭ ẓ ġ ḥ) bleiben **bewusst unangetastet** — es entsteht ein tragbares Mischsystem (`Šdt` neben `Mḥlm`, `Ḫlṣ`). Einzige s-Kollision: `Ms¹k`→`Msk` fällt mit dem schon ziffernlosen `Msk` zusammen (dieselbe Person, kein Verlust). Der Transform steckt in der Funktion `readable()`; `READABLE = False` liefert die rein wissenschaftliche Fassung. Die Datenquelle bleibt unverändert — die Leseform ist jederzeit umkehrbar.
+
 ## Offene Punkte / Feinschliff
 
 - [ ] **Zählung im Vorwort:** der Text nennt „**134** Inschriften", tatsächlich enthält der Band **139**. Angleichen (Text auf 139) oder Auswahl auf 134 zurückkürzen.

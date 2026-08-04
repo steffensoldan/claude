@@ -36,13 +36,38 @@ TEMPLATE = "register/wer_dies_liest_register_v5.docx"
 OUT      = "register/wer_dies_liest_register_v5.docx"
 
 # --------------------------------------------------------------------------
+# Leseform der Transliteration
+# --------------------------------------------------------------------------
+# Der Datenblock unten haelt die exakte philologische Transliteration
+# (OCIANA-Konvention: s-Sibilanten als s1/s2, Diakritika). Fuer bessere
+# Lesbarkeit werden beim Bau drei minimale Ersetzungen vorgenommen — still,
+# ohne Erklaerung im Vor- oder Nachwort:
+#   *  ˥ (U+02E5)  ->  ʿ   Vereinheitlichung: ˥ ist durchgaengig ein
+#                          verungluecktes ʿ (dieselben Namen stehen im Korpus
+#                          in beiden Schreibungen: S¹˥d/S¹ʿd, ʾn˥m/ʾnʿm).
+#   *  s¹          ->  s   Aufloesung der hochgestellten Ziffer (dezent).
+#   *  s²          ->  š   Aufloesung als Einzelglyph (fuegt sich ins
+#                          uebrige Diakritika-Bild, statt "sch").
+# Alle uebrigen Diakritika (ṯ ḫ ḍ ṣ ṭ ẓ ġ ḥ) bleiben bewusst unangetastet.
+# Wer die rein wissenschaftliche Fassung will, setzt READABLE = False.
+READABLE = True
+
+def readable(t):
+    if not READABLE:
+        return t
+    t = t.replace("˥", "ʿ")
+    t = t.replace("S²", "Š").replace("s²", "š")
+    t = t.replace("S¹", "S").replace("s¹", "s")
+    return t
+
+# --------------------------------------------------------------------------
 # Format-Bausteine (entsprechen exakt der bereinigten Handfassung v5)
 # --------------------------------------------------------------------------
 def esc(s):
     return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 def _run(t, rpr=""):
-    return f'<w:r>{("<w:rPr>"+rpr+"</w:rPr>") if rpr else ""}<w:t xml:space="preserve">{esc(t)}</w:t></w:r>'
+    return f'<w:r>{("<w:rPr>"+rpr+"</w:rPr>") if rpr else ""}<w:t xml:space="preserve">{esc(readable(t))}</w:t></w:r>'
 
 def _p(runs, ppr=""):
     return f'<w:p>{ppr}{runs}</w:p>'
