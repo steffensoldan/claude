@@ -2,7 +2,7 @@
 
 Stand: 2026-08-19 · Konzept A: eigener Band nach Sprechakt-Registern · Ordner `register/` · **maßgebliche Fassung: Handfassung v6** (`wer_dies_liest_register_v6.docx`)
 
-> **Fassungsgeschichte kurz:** v1–v4 (generierte Linie, siehe „Historie" unten) → **v5** eine vom Autor händisch überarbeitete Fassung, die die v3/v4-Linie ablöste und über `scripts/build_register.py` reproduzierbar ist → **v6** eine weitere, **direkt in der docx** gepflegte Handfassung mit Übersetzungs-Feinschliff und geänderter Registerfolge. Ab v6 ist die **docx die Quelle** (nicht mehr das Skript). `build_register.py` erzeugt weiterhin den **v5-Strukturstand** (idempotent, aus eingebettetem Datenblock) und dient als reproduzierbarer Bezugspunkt; ein Nachziehen des Skripts auf v6 steht aus (offener Punkt unten).
+> **Fassungsgeschichte kurz:** v1–v4 (generierte Linie, siehe „Historie" unten) → **v5** eine vom Autor händisch überarbeitete Fassung, die die v3/v4-Linie ablöste → **v6** eine weitere Handfassung mit Übersetzungs-Feinschliff, geänderter Registerfolge und neu gefasstem Vor-/Nachwort. `scripts/build_register.py` ist **auf v6 nachgezogen**: es bettet den kompletten v6-Textbestand als Datenblock ein und schreibt daraus `word/document.xml` neu; das Docx-Skelett (Georgia-styles, `sectPr`) stammt aus der bestehenden v6 selbst. Idempotent. Die committete v6-docx ist die **Skript-Ausgabe** (saubere Einzel-Runs, zwei Vorwort-Tippfehler korrigiert) — inhaltsgleich zur Handfassung des Autors.
 
 ## Idee
 
@@ -62,38 +62,36 @@ C 1845, C 2551, C 2775, C 3138, C 4803, RSIS 132, RSIS 351, LP 243, Is.Mu 242, L
 **VIII bezeuge** (17) — Datierung als Akt, Zeugnis für Fremde:
 HSNS 1, HSNS 5, C 4681, C 4902, LP 653, ISB 57, LP 254, RQ.D 3, RQ.D 6, LP 1291, C 2190, Is.L 202, ASFF 267, KRS 1586, ZN 1, RWQ 304, BWM 3.
 
-## Reproduktion (Skript = v5-Strukturstand)
+## Reproduktion (Skript = v6)
 
 ```bash
 # aus Poetics/
 python3 register/scripts/build_register.py
-# -> register/wer_dies_liest_register_v5.docx  (139 Stücke, 8 Register, Reihenfolge …warte…schweige…)
+# -> register/wer_dies_liest_register_v6.docx  (138 Stücke, 8 Register)
 ```
 
-Das Skript enthält den v5-Textbestand als Datenblock (`TITLE`, `VORWORT`, `REGISTERS`, `NACHWORT_INTRO`, `SIGLEN`, `FUNDORTE`) und die Format-Bausteine (Titelzeile 13 pt zentriert · Register-Ziffer 20 pt braun · Register-Name 15 pt · Kopfzeile 8 pt braun · Verszeile 11 pt · Nachwort-Listeneintrag „**Marke**: Text"). Es ersetzt nur `word/document.xml`; alles Übrige stammt aus der vorhandenen v5.
+Das Skript enthält den v6-Textbestand als Datenblock (`TITLE`, `VORWORT`, `REGISTERS`, `NACHWORT_INTRO`, `ERSTAUSGABEN_LABEL`, `SIGLEN`, `FUNDORTE_HEAD`, `FUNDORTE`) und die Format-Bausteine (Titelzeile 13 pt zentriert, Zeile 1 **kursiv** · Register-Ziffer 20 pt braun · Register-Name 15 pt · Kopfzeile 8 pt braun · Verszeile 11 pt · Nachwort-Listeneintrag „**Marke**: Text" · „Die Fundorte" 12 pt fett). Es ersetzt nur `word/document.xml`; alles Übrige stammt aus der vorhandenen v6. **Textänderungen erfolgen im Datenblock** (dann neu bauen), Formatänderungen in den Bausteinfunktionen.
 
-> **Hinweis:** Das Skript spiegelt **v5**, nicht v6 (andere Registernamen/-folge, 139 statt 138 Stücke, älterer Übersetzungsstand). Die maßgebliche Fassung ist die **docx v6**; wer den Band ändert, ändert die **docx**. Ein Nachziehen des Skripts auf v6 ist ein offener Punkt.
+### Leseform der Transliteration
 
-### Leseform der Transliteration (`readable()` / `READABLE`)
-
-Der Datenblock des Skripts hält die **exakte philologische Transliteration** (OCIANA: s-Sibilanten als `s¹`/`s²`, Diakritika). Für bessere Lesbarkeit nimmt das Skript beim Bau drei minimale Ersetzungen vor — **still, ohne Erklärung im Vor- oder Nachwort** (in v6 sind sie bereits angewandt):
+Die Leseform (`˥`→`ʿ`, `s¹`→`s`, `s²`→`š`) ist im v6-Datenblock **bereits angewandt** — der Datenblock hält also die Lesefassung, nicht mehr die philologische Rohform. Die Ersetzungsregeln und die Rohform (`s¹`/`s²`/`˥` samt der Funktion `readable()`) sind im **v5-Stand des Skripts** (Git-Historie) erhalten:
 
 | von | nach | Begründung |
 |---|---|---|
-| `˥` (U+02E5) | `ʿ` | Vereinheitlichung — `˥` ist durchgängig ein verunglücktes `ʿ`; dieselben Namen standen im Korpus in beiden Schreibungen (`S¹˥d`/`S¹ʿd`, `ʾn˥m`/`ʾnʿm`). Reine Fehlerbereinigung (14 Stellen). |
+| `˥` (U+02E5) | `ʿ` | Vereinheitlichung — `˥` war durchgängig ein verunglücktes `ʿ` (dieselben Namen in beiden Schreibungen: `S¹˥d`/`S¹ʿd`). Fehlerbereinigung. |
 | `s¹` | `s` | Auflösung der hochgestellten Ziffer (dezent). |
-| `s²` | `š` | Auflösung als Einzelglyph statt „sch" — fügt sich ins übrige Diakritika-Bild ein. |
+| `s²` | `š` | Auflösung als Einzelglyph statt „sch". |
 
-Alle übrigen Diakritika (ṯ ḫ ḍ ṣ ṭ ẓ ġ ḥ) bleiben **bewusst unangetastet** — es entsteht ein tragbares Mischsystem (`Šdt` neben `Mḥlm`, `Ḫlṣ`). Einzige s-Kollision: `Ms¹k`→`Msk` fällt mit dem schon ziffernlosen `Msk` zusammen (dieselbe Person, kein Verlust).
+Alle übrigen Diakritika (ṯ ḫ ḍ ṣ ṭ ẓ ġ ḥ) bleiben **bewusst unangetastet** — tragbares Mischsystem (`Šdt` neben `Mḥlm`).
 
 ## Offene Punkte / Feinschliff
 
 - [x] **Zählung im Vorwort** stimmt mit dem Bandumfang überein (v6: **138**).
 - [x] **Lektorat der neuen Stücke** gegen die OCIANA-Editionen (AAEK/ASFF-Reihen, RWQ 187/342, Is.Mu 484, SIJ 291, RWQ 120, RSIS 132, KRS 2919, C 1087, LP 254) — inhaltlich getreu.
 - [x] **Einzel-Feinschliff** vieler Stücke gegen OCIANA (siehe „Was v6 ändert").
+- [x] **Vorwort-Tippfehler** korrigiert („konservierten sie."; „beruht **nicht** auf Handlung … sondern auf …").
+- [x] **Build-Skript auf v6 nachgezogen** (Registernamen/-folge, 138 Stücke, kursiver Titel, neue Nachwort-Struktur; committete v6 = Skript-Ausgabe).
 - [ ] **RSIS 351:** trägt aus Konsistenz „blind macht", obwohl die Strafe dort Krätze/Grab ist (kein Blind-Payoff) — bewusst so; ggf. auf schlichtes „austilgt/auslöscht" zurücksetzen.
-- [ ] **Vorwort-Tippfehler** (händisch): u. a. „konservierten si." (→ „sie"), „beruht auf wenig Handlung … sondern auf …" (Grammatik) — Korrekturlesen empfohlen.
-- [ ] **Build-Skript auf v6 nachziehen** (Registernamen/-folge, 138 Stücke, neuer Textstand) — oder Skript bewusst als v5-Snapshot belassen.
 - [ ] Lektorat der übrigen (aus v3/v4 übernommenen) Nachdichtungen gegen OCIANA.
 - [ ] Optional: Fundort-Anhang / Intra-Register-Clustering / echte Karte via OCIANA-Koordinaten.
 
