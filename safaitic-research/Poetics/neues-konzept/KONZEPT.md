@@ -2,13 +2,14 @@
 *Vorwort-Entwurf / Framing für ein neues Safaitisch-Band*
 
 > **Realisierung:** Ausgearbeitet im Ordner `../register/` — aktuelle Fassung
-> `wer_dies_liest_register_v5.docx`, reproduzierbar über `scripts/build_register.py`.
-> Dort inzwischen **acht** Register mit Ich-Form-Titeln:
-> **I stehe · II ritze · III warte · IV bitte · V schweige · VI klage · VII fluche · VIII bezeuge**
+> `wer_dies_liest_register_v6.docx`. Dort inzwischen **acht** Register mit Ich-Form-Titeln:
+> **I stehe · II ritze · III harre · IV fehle · V bitte · VI klage · VII fluche · VIII bezeuge**
 > — das ursprüngliche „Ich war hier“ ist aufgeteilt in **stehe** (die Ahnenreihen)
-> und **ritze** (die Signaturen „Von X“; früher „schreibe“ genannt). Er-Form-Texte,
-> Fundort-Kopfzeilen. Dieses Dokument hält den **ursprünglichen** Konzeptstand fest;
-> der ausgearbeitete Stand steht in `../register/REGISTER_BAND_AUSWAHL.md`.
+> und **ritze** (die Signaturen „Von X“; früher „schreibe“). „harre“ hieß früher
+> „warte“, „fehle“ früher „schweige“ (und steht nun als Akt der Leerstelle auf IV).
+> Er-Form-Texte, Fundort-Kopfzeilen. Dieses Dokument hält den **ursprünglichen**
+> Konzeptstand fest; der ausgearbeitete Stand steht in
+> `../register/REGISTER_BAND_AUSWAHL.md`.
 
 ---
 

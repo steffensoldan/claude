@@ -1,6 +1,6 @@
 # Grafische Elemente (Felszeichnungen) im Register-Band
 
-> **Status (2026-08-04):** Die aktuelle Handfassung **v5** enthält **keine Felszeichnungen** mehr — der Band ist rein typografisch (und damit ohne offene Bildrechte-Frage). Das umgeschriebene `build_register.py` bettet keine Bilder mehr ein. Dieses Dokument bleibt als **Auswertung** der Rock-Art im Korpus und als **Anleitung zur Reaktivierung** erhalten (Bilder liegen weiter in `rockart_images/`; die Einbau-Mechanik ist im Skript-Stand `af27eff` verzeichnet). Registernamen unten im damaligen Stand — Register II heißt jetzt **„ritze“** (vormals „schreibe“).
+> **Status (2026-08-19):** Die aktuelle Handfassung **v6** enthält **keine Felszeichnungen** mehr — der Band ist rein typografisch (und damit ohne offene Bildrechte-Frage). Das `build_register.py` (v5-Stand) bettet keine Bilder mehr ein. Dieses Dokument bleibt als **Auswertung** der Rock-Art im Korpus und als **Anleitung zur Reaktivierung** erhalten (Bilder liegen weiter in `rockart_images/`; die Einbau-Mechanik ist im Skript-Stand `af27eff` verzeichnet). Registerbezüge unten auf den v6-Stand nachgezogen (Umbenennungen gegenüber früher: **II „ritze“** ← „schreibe“, **III „harre“** ← „warte“, **IV „fehle“** ← „schweige“; die 7 Bild-Zuordnungen selbst — II, III, VII, VIII — sind inhaltlich unverändert).
 
 Stand der Auswertung: 2026-07-05 · Quelle: OCIANA-Feld **„Associated Drawings"** je Inschrift, ergänzt um Text-/Commentary-Belege. Alle 134 Seiten wurden erfolgreich geladen (HTTP 200), die Auswertung ist daher **vollständig**, keine Untergrenze.
 
@@ -23,9 +23,9 @@ Stand der Auswertung: 2026-07-05 · Quelle: OCIANA-Feld **„Associated Drawings
 |----------|---------------|
 | I stehe | 0 |
 | II ritze | 2 (KRS 1341, HYGQ 24) |
-| III warte | 1 (KRS 3051) |
-| IV bitte | 0 |
-| V schweige | 0 |
+| III harre | 1 (KRS 3051) |
+| IV fehle | 0 |
+| V bitte | 0 |
 | VI klage | 0 |
 | VII fluche | 3 (C 1658, C 286, HCH 85) |
 | VIII bezeuge | 1 (C 2670) |
@@ -36,7 +36,7 @@ Stand der Auswertung: 2026-07-05 · Quelle: OCIANA-Feld **„Associated Drawings
 |----------|-------|---------|-------|-----------------|:----------------:|
 | II ritze | **KRS 1341** | Al-Mafraq | Löwe | Associated Drawings (d/1) + Text „drawing of the lion" | ja („Die Zeichnung des Löwen") |
 | II ritze | **HYGQ 24** | unbek. | Löwe | Text ist Bildunterschrift „is [the drawing of] the lion" | ja („Der Löwe") |
-| III warte | **KRS 3051** | Al-Mafraq | junge Kamelstute | Associated Drawings (d/1) + Text „is the young she-camel" | ja („Die junge Kamelstute") |
+| III harre | **KRS 3051** | Al-Mafraq | junge Kamelstute | Associated Drawings (d/1) + Text „is the young she-camel" | ja („Die junge Kamelstute") |
 | VII fluche | **C 1658** | Zalaf | Szene: zwei Kamele + Mann mit Schwert und Schild (in Kartusche) | Associated Drawings | ja („Die beiden Kamele …") |
 | VII fluche | **C 286** | Rif Dimašq | Göttin Rḍy / nackte weibliche Figur, dazu eine zweite Frau | Associated Drawings | nein |
 | VII fluche | **HCH 85** | Hani | zwei Zeichnungen (Motiv nicht benannt); Inschrift in einer Kartusche | Commentary | nein |

@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 """
+STATUS (ab v6): Die maßgebliche Fassung ist die handgepflegte
+`wer_dies_liest_register_v6.docx` (andere Registernamen/-folge — III harre,
+IV fehle, V bitte —, 138 Stücke, überarbeiteter Übersetzungsstand). Dieses
+Skript erzeugt weiterhin den **v5-Strukturstand** und dient als reproduzierbarer
+Snapshot; ein Nachziehen auf v6 steht aus. Siehe REGISTER_BAND_AUSWAHL.md.
+
 Baut den Register-Band in der Handfassung v5:
 »Wer dies liest, lebe lang« — nomadische Inschriften des antiken Arabien.
 
