@@ -6,7 +6,19 @@ Stand: 2026-08-20 · Fassung: `wer_dies_liest_register_v6.docx` (138 Stücke)
 
 **Gesamtbefund.** Der Band ist überwiegend quellentreu. Die Litaneien („Er weinte vor Kummer" ×; „dass er sicher sei"; das ʿwr-Wortspiel „blind macht" ×14) sind in sich stimmig; historische Namen (Germanicus, Agrippa, Herodes, Rabbel, Taymāʾ) sind korrekt identifiziert; Genealogie- und Lücken-Regeln werden eingehalten. Die Vorschläge betreffen **zwei echte Fehler**, eine **systematische Götternamen-Uneinheitlichkeit** und einige **Wortlaut-Konsistenzen**.
 
-> **Umsetzungsstand (2026-08-20):** Punkte **1–11 umgesetzt** (A + B + C, mit s¹lm → „Sicherheit"), v6 neu gebaut. **D + E** noch offen (zur Entscheidung). Die untenstehenden A/B/C-Zeilen dokumentieren den vorherigen Stand als Nachweis.
+> **Umsetzungsstand (2026-08-20):** Punkte **1–17 umgesetzt** — A + B + C (mit s¹lm → „Sicherheit"), D (Diakritika 12–13) und E (14–17) vollständig eingearbeitet, v6 neu gebaut. Die Tabellen unten dokumentieren den Befund; die Spalte „Aktuell" beschreibt den Stand *vor* der jeweiligen Korrektur.
+>
+> **Punkt 17 (Oheim) — aufgelöst.** „Oheim" kam 5× vor und stand undifferenziert für zwei verschiedene Verwandtschaftsgrade. Jetzt nach dem Original getrennt:
+>
+> | Sigle | Original | Gloss | neu im Band |
+> |---|---|---|---|
+> | ritze · SIJ 291 | `ḫzʾ` / Var. `ḫl` | mütterlicher Onkel | **Mutterbruder** |
+> | fluche · RSIS 351 | `dd -h` | väterlicher Onkel | **Vaterbruder** |
+> | fluche · LP 243 | `dd -h` | väterlicher Onkel | **Vaterbruder** |
+> | bezeuge · C 2190 | `{d}{d} -h` | väterlicher Onkel | **Vaterbruder** |
+> | bezeuge · RQ.D 3 | `ʾm -h qtlt` (fem.) | Mutter | **Mutter** (Punkt 14) |
+>
+> „Oheim" steht danach 0× im Band; HSNS 5 („Mutterbrüder" für `ʾḫwl`) bleibt unverändert korrekt.
 
 ---
 
@@ -64,6 +76,24 @@ Einige Namen droppen einen emphatischen Punkt, den die **Transliteration** führ
 - **Genealogie-Kürzungen** in „ritze"/„harre"/„bitte" (nur Erstname o. „…") — registerkonform.
 - **`nqmt`=„Beute"** (C 2194) und **`s²ml`=„sah…Nordseite"** (RWQ 187): folgen der OCIANA-Glosse, wie vom Band-Prinzip vorgesehen.
 - **`[?]`-Unsicherheiten** (Is.Mu 484) nicht markiert — registerkonform (Klammern nur, wo Lücke).
+
+## Ausschnitte — welche Inschriften nicht vollständig wiedergegeben sind
+
+Zwei Ebenen der Verknappung sind zu unterscheiden:
+
+**1. Genealogie-Kürzung (registerkonform, kein inhaltlicher Ausschnitt).** 116 der 138 Originale tragen eine Namenskette (`bn … bn …`). In „ritze/harre/bitte" u. a. wird sie regelhaft auf den Erstnamen oder „…" verknappt. Das ist das Bauprinzip des Bandes und gilt nicht als inhaltlicher Ausschnitt.
+
+**2. Inhaltlicher Ausschnitt (eine Sachaussage des Originals fehlt).** Nach Einarbeitung von Punkt 9, 10 und 15 (Is.Mu 242, KRS 941, LP 243 → jetzt vollständig) verbleiben **5 Stücke**, bei denen bewusst eine inhaltliche Klausel getilgt ist:
+
+| # | Register · Sigle | Was fehlt | Original |
+|---|---|---|---|
+| 1 | harre · **RSIS 110** | Schluss-Anrufung (Lt — Sicherheit & Fülle für den, der die Inschrift achtet) | `h lt s¹lm w ṯrwt l- ḏ yʿwr …` |
+| 2 | harre · **RSIS 322** | Schluss-Anrufung (O Lt — Schutz) | `f h lt ġnmt / s¹lm` |
+| 3 | harre · **LP 1196** | Schluss-Anrufung (Lt — Sicherheit & Beute vom Feind) | `f h lt s¹lm w ġnmt m- ʿdw` |
+| 4 | klage · **KRS 17** | zweite Trauer-Namensliste (Rb, Yʿly, ----ḥ) | `w wgm ʿl- rb w ʿl- yʿly w ʿl- ----ḥ` |
+| 5 | fluche · **C 2551** | Schluss-Fluch (Blindheit dem, der auskratzt) — nur die Rache-Anrufung bleibt | `w ʿwr l- ḏ ys¹ḥq` |
+
+**Befund: 133 von 138 Stücken geben den inhaltlichen Kern vollständig wieder; 5 sind bewusste Ausschnitte.** Alle fünf stehen in Registern, deren Fokus (Harren, Klage, Fluch) durch die Kürzung geschärft, nicht verfälscht wird — die getilgten Teile sind formelhafte Anrufungen bzw. eine Doppelung. Kuratorisch vertretbar; keine Faktenänderung.
 
 ## Empfohlene Umsetzungs-Reihenfolge
 

@@ -279,7 +279,7 @@ REGISTERS = [
     [
     'Km 612 · JaS 15',
     [
-    'Von Ḥmr, Sohn des Bnġdw,',
+    'Von Ḥmr, Sohn des Bnġḍw,',
     'Sohn des Sfʾ, Sohn des Ḥnf.',
 ],
 ],
@@ -398,7 +398,7 @@ REGISTERS = [
     'Jawa · SIJ 291',
     [
     'Von Šrk —',
-    'und er schrieb für den Oheim,',
+    'und er schrieb für den Mutterbruder,',
     'und er schrieb für den wahren Freund.',
 ],
 ],
@@ -715,7 +715,7 @@ REGISTERS = [
     [
     'Von ʾšym, Sohn des Drʾl,',
     'Sohn des ʾšym, Sohn des Drʾl,',
-    'Sohn des Kst, Sohn des ʿbd …',
+    'Sohn des Ksṭ, Sohn des ʿbd …',
     'Sohn des Šrk —',
     'ḫrs ----ḫl----',
 ],
@@ -1131,7 +1131,7 @@ REGISTERS = [
     'Tall aḍ-Ḍabiʿ · RSIS 351',
     [
     'Er gedachte des Ḍr',
-    'und weinte um den Vater, um ʿbd, um den Oheim,',
+    'und weinte um den Vater, um ʿbd, um den Vaterbruder,',
     'und verstörte sich über die,',
     'die zu Schaden kamen und verloren gingen.',
     'Und er überwinterte abermals in der Ḥarrah',
@@ -1146,7 +1146,8 @@ REGISTERS = [
     [
     'Er weinte, er trauerte',
     'um den Vater, den sie ermordeten.',
-    'Er sehnte sich nach dem Oheim',
+    'Lh — Blutrache!',
+    'Er sehnte sich nach dem Vaterbruder',
     'und allen Gefährten.',
     'Wer dies blind macht: erblinde.',
 ],
@@ -1326,8 +1327,8 @@ REGISTERS = [
     [
     'Riǧm Qaʿqūl · RQ.D 3',
     [
-    'Er trauerte um den Oheim,',
-    'den sie erschlugen,',
+    'Er trauerte um die Mutter,',
+    'die getötet wurde,',
     'im Jahr des ʾrm.',
 ],
 ],
@@ -1337,7 +1338,7 @@ REGISTERS = [
     'Er trauerte vor Schmerz',
     'um den getöteten Šrk',
     'und den gefangenen ʿyḏ,',
-    'im Jahr der Rm.',
+    'im Jahr der Römer.',
 ],
 ],
     [
@@ -1352,7 +1353,7 @@ REGISTERS = [
     'Zalaf · C 2190',
     [
     'Er zog tief in die Wüste,',
-    'im Jahr, als der Oheim starb,',
+    'im Jahr, als der Vaterbruder starb,',
     'und trauerte um Ksṭ.',
 ],
 ],
