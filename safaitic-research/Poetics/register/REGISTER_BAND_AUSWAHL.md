@@ -28,7 +28,7 @@ Nicht der Jahresbogen der erweiterten Ausgabe, sondern die **Sprechhaltung** ord
 
 ## Aufbau
 
-Titelblatt (2 Zeilen) → Vorwort → **acht Register** → Nachwort (Siglen + Fundorte).
+Titelblatt (2 Zeilen) → Vorwort → **acht Register** → Nachwort (Siglen + Fundorte) → **„Zur Aussprache"** (Sonderzeichen-Übersicht mit Aussprachehilfe, ganz am Bandende).
 
 **Kapitelüberschriften** = Verb in der Ich-Form (das einzige Ich im Band), infinit-mehrdeutig (zugleich 1. Ps. Präsens, 3. Ps. Konjunktiv, Imperativ, teils Nomen):
 
@@ -70,7 +70,7 @@ python3 register/scripts/build_register.py
 # -> register/wer_dies_liest_register_v6.docx  (138 Stücke, 8 Register)
 ```
 
-Das Skript enthält den v6-Textbestand als Datenblock (`TITLE`, `VORWORT`, `REGISTERS`, `NACHWORT_INTRO`, `ERSTAUSGABEN_LABEL`, `SIGLEN`, `FUNDORTE_HEAD`, `FUNDORTE`) und die Format-Bausteine (Titelzeile 13 pt zentriert, Zeile 1 **kursiv** · Register-Ziffer 20 pt braun · Register-Name 15 pt · Kopfzeile 8 pt braun · Verszeile 11 pt · Nachwort-Listeneintrag „**Marke**: Text" · „Die Fundorte" 12 pt fett). Es ersetzt nur `word/document.xml`; alles Übrige stammt aus der vorhandenen v6. **Textänderungen erfolgen im Datenblock** (dann neu bauen), Formatänderungen in den Bausteinfunktionen.
+Das Skript enthält den v6-Textbestand als Datenblock (`TITLE`, `VORWORT`, `REGISTERS`, `NACHWORT_INTRO`, `ERSTAUSGABEN_LABEL`, `SIGLEN`, `FUNDORTE_HEAD`, `FUNDORTE`, `ZEICHEN_HEAD`, `ZEICHEN_INTRO`, `ZEICHEN`) und die Format-Bausteine (Titelzeile 13 pt zentriert, Zeile 1 **kursiv** · Register-Ziffer 20 pt braun · Register-Name 15 pt · Kopfzeile 8 pt braun · Verszeile 11 pt · Nachwort-Listeneintrag „**Marke**: Text" · „Die Fundorte" 12 pt fett). Es ersetzt nur `word/document.xml`; alles Übrige stammt aus der vorhandenen v6. **Textänderungen erfolgen im Datenblock** (dann neu bauen), Formatänderungen in den Bausteinfunktionen.
 
 ### Leseform der Transliteration
 

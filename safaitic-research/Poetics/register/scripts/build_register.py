@@ -245,6 +245,60 @@ FUNDORTE = [
 ],
 ]
 
+ZEICHEN_HEAD = 'Zur Aussprache'
+
+ZEICHEN_INTRO = [
+    'Die Namen und Wörter dieses Bandes bewahren die Sonderzeichen der wissenschaftlichen Umschrift. Sie halten Laute fest, die das deutsche Alphabet nicht kennt. Die folgende Übersicht nennt zu jedem Zeichen den Laut und eine Aussprachehilfe. Großbuchstaben (Ḥ, Ṣ, Š …) klingen wie ihre kleinen Formen; die Punkte und Striche gehören zum Buchstaben und werden nicht eigens gesprochen.',
+]
+
+# ZEICHEN: [ Zeichen, Aussprachehilfe ] — Sonderzeichen der Umschrift
+ZEICHEN = [
+    [
+    'ʾ',
+    ' — Stimmabsatz (Hamza): der harte Stimmeinsatz wie zwischen den Silben von „be·achten"; ein Knacklaut, kein Buchstabe im deutschen Sinn.',
+],
+    [
+    'ʿ',
+    ' — Kehllaut (ʿAin): ein stimmhafter Presslaut tief im Rachen, ohne deutsche Entsprechung; wie ein gepresstes „a".',
+],
+    [
+    'ḥ',
+    ' — scharf gehauchtes „h": aus dem Rachen gepresst, kräftiger und rauer als das deutsche h.',
+],
+    [
+    'ḫ',
+    ' — Reibe-„ch": wie das ch in „Bach" oder „Buch".',
+],
+    [
+    'ġ',
+    ' — Reibe-„g/r" (Ġain): ein gerolltes Zäpfchen-r, ähnlich dem französischen „r" in „Paris".',
+],
+    [
+    'š',
+    ' — „sch": wie in „Schrift".',
+],
+    [
+    'ǧ',
+    ' — weiches „dsch": wie das englische j in „jump" (in Ortsnamen, z. B. Riǧm, Raǧil).',
+],
+    [
+    'ṯ',
+    ' — stimmloses englisches „th": wie in „think".',
+],
+    [
+    'ḏ',
+    ' — stimmhaftes englisches „th": wie in „this".',
+],
+    [
+    'ṣ · ḍ · ṭ · ẓ',
+    ' — nachdrückliche (emphatische) Laute: s, d, t und der „th"-/z-Laut, dunkel und mit gespannter Zunge gesprochen. Der Punkt unter dem Buchstaben markiert diese Nachdrücklichkeit.',
+],
+    [
+    'ā · ī · ū · ō',
+    ' — lange Vokale: langes a, i, u, o. Sie erscheinen nur in den eingedeutschten Fund- und Personennamen (z. B. Taymāʾ, al-ʿĪsāwī, Al-Mrōshan), nicht in den vokallosen Inschriften selbst.',
+],
+]
+
 # REGISTERS: [ [Ziffer, Name, [ [Kopfzeile 'Fundort . Sigle', [Verszeilen...]], ... ]], ... ]
 REGISTERS = [
     [
@@ -1440,6 +1494,11 @@ def main():
     xml.append(EMPTY)
     xml.append(subhead(FUNDORTE_HEAD))
     xml += [listitem(a, b) for a, b in FUNDORTE]
+    xml.append(EMPTY)
+
+    xml.append(subhead(ZEICHEN_HEAD))
+    xml += [body(p) for p in ZEICHEN_INTRO]
+    xml += [listitem(a, b) for a, b in ZEICHEN]
     xml.append(EMPTY)
 
     raw = zipfile.ZipFile(TEMPLATE).read("word/document.xml").decode("utf-8")
