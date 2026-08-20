@@ -1136,7 +1136,7 @@ REGISTERS = [
     'die zu Schaden kamen und verloren gingen.',
     'Und er überwinterte abermals in der Ḥarrah',
     'und lagerte an diesem Ort.',
-    'Wer diese Schrift blind macht:',
+    'Wer diese Schrift auslöscht:',
     'den befalle die Krätze,',
     'und man werfe ihn aus dem Grab.',
 ],

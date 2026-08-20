@@ -19,7 +19,7 @@ Nicht der Jahresbogen der erweiterten Ausgabe, sondern die **Sprechhaltung** ord
 **Vorwort & Nachwort** neu gefasst: Vorwort in acht nummerierten Absätzen; Nachwort mit überarbeitetem OCIANA-Absatz und Zwischentitel „Die Erstausgaben". Titelzeile ohne Guillemets (»«), Untertitel „…**im** antiken Arabien".
 
 **Übersetzungs-Feinschliff** (im Chat einzeln gegen die OCIANA-Editionen geprüft):
-- **VII fluche — Wortspiel `ʿwr`:** das defacierende Verb ist im Original durchweg `ʿwr` „blenden", identisch mit der Strafe. Statt „auskratzt/austilgt" nun **„blind macht"** an 14 Stellen → „blende/Blindheit … blind macht" bildet das Talions-Wortspiel des Steins nach. **RSIS 351** ausgenommen — dort ist die Strafe Krätze/Grab (keine Blindheit).
+- **VII fluche — Wortspiel `ʿwr`:** das defacierende Verb ist im Original durchweg `ʿwr` „blenden", identisch mit der Strafe. Statt „auskratzt/austilgt" nun **„blind macht"** an 14 Stellen → „blende/Blindheit … blind macht" bildet das Talions-Wortspiel des Steins nach. **RSIS 351** trägt stattdessen **„auslöscht"** — dort ist die Strafe Krätze/Grab (keine Blindheit), also kein Blind-Wortspiel.
 - **LP 653: `Grmnqṣ` → „Germanicus"** (der röm. Feldherr; datiert ~18–19 n. Chr.).
 - **„innere Wüste" → „tief in die Wüste"** (4×; `ʾs²rq`, geografisch, nicht seelisch).
 - **MSTY → „an jenem Ort"** (unübersetzbares `h-ms¹ty` neutralisiert); **Raḥaba → „weite Senke"**.
@@ -91,7 +91,7 @@ Alle übrigen Diakritika (ṯ ḫ ḍ ṣ ṭ ẓ ġ ḥ) bleiben **bewusst unan
 - [x] **Einzel-Feinschliff** vieler Stücke gegen OCIANA (siehe „Was v6 ändert").
 - [x] **Vorwort-Tippfehler** korrigiert („konservierten sie."; „beruht **nicht** auf Handlung … sondern auf …").
 - [x] **Build-Skript auf v6 nachgezogen** (Registernamen/-folge, 138 Stücke, kursiver Titel, neue Nachwort-Struktur; committete v6 = Skript-Ausgabe).
-- [ ] **RSIS 351:** trägt aus Konsistenz „blind macht", obwohl die Strafe dort Krätze/Grab ist (kein Blind-Payoff) — bewusst so; ggf. auf schlichtes „austilgt/auslöscht" zurücksetzen.
+- [x] **RSIS 351** auf „auslöscht" zurückgesetzt (dort keine Blind-Strafe, daher kein Wortspiel).
 - [ ] Lektorat der übrigen (aus v3/v4 übernommenen) Nachdichtungen gegen OCIANA.
 - [ ] Optional: Fundort-Anhang / Intra-Register-Clustering / echte Karte via OCIANA-Koordinaten.
 
