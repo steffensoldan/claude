@@ -512,9 +512,12 @@ REGISTERS = [
     [
     'Tall aḍ-Ḍabiʿ · RSIS 110',
     [
-    'Er war an diesem Ort',
+    'Er trauerte um den Vater',
+    'und blieb an diesem Ort',
     'und hielt Ausschau nach den Brüdern.',
     'Sie fehlten ihm.',
+    'Allat —',
+    'Sicherheit und Fülle dem, der die Schrift achtet.',
 ],
 ],
     [
@@ -522,6 +525,7 @@ REGISTERS = [
     [
     'Er hielt Wache,',
     'auf der Lauer nach dem Löwen.',
+    'Allat — Schutz.',
 ],
 ],
     [
@@ -556,6 +560,8 @@ REGISTERS = [
     'Sohn des Whbʾl —',
     'und er hielt Ausschau',
     'nach dem Reiterzug.',
+    'Yalt —',
+    'Sicherheit und Beute, dem Feind abgenommen.',
 ],
 ],
     [
@@ -964,6 +970,8 @@ REGISTERS = [
     'und weinte,',
     'und die Trauer legte sich über ihn.',
     'Er dachte an den Bruder, den sie fortführten,',
+    'im Jahr des Kampfes des Mʿṣ,',
+    'und trauerte um Rb, um Yʿly, um ----ḥ,',
     'und wurde schwer.',
 ],
 ],
@@ -1088,7 +1096,8 @@ REGISTERS = [
     'Er erkannte eine weitere Ritzung —',
     'wer überlebt, verzweifelt. ',
     'Allat —',
-    'Rache an dem, der die Tat beging.',
+    'Rache an dem, der die Tat beging,',
+    'und blende, wer dies blind macht.',
 ],
 ],
     [

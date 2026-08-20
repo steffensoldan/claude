@@ -72,7 +72,6 @@ Einige Namen droppen einen emphatischen Punkt, den die **Transliteration** führ
 
 ## Bewusst NICHT beanstandet (kuratorisch vertretbar)
 
-- **Gekürzte Anrufungen/Namenslisten** in einigen Langstücken (RSIS 110, RSIS 322, LP 1196 lassen die Schluss-Anrufung weg; KRS 17 kürzt die Zweit-Namensliste; C 2551 endet auf „Rache" statt Blindheit). Verknappung ist das Prinzip des Bandes — solange nichts *falsch* wird, keine Beanstandung.
 - **Genealogie-Kürzungen** in „ritze"/„harre"/„bitte" (nur Erstname o. „…") — registerkonform.
 - **`nqmt`=„Beute"** (C 2194) und **`s²ml`=„sah…Nordseite"** (RWQ 187): folgen der OCIANA-Glosse, wie vom Band-Prinzip vorgesehen.
 - **`[?]`-Unsicherheiten** (Is.Mu 484) nicht markiert — registerkonform (Klammern nur, wo Lücke).
@@ -83,17 +82,17 @@ Zwei Ebenen der Verknappung sind zu unterscheiden:
 
 **1. Genealogie-Kürzung (registerkonform, kein inhaltlicher Ausschnitt).** 116 der 138 Originale tragen eine Namenskette (`bn … bn …`). In „ritze/harre/bitte" u. a. wird sie regelhaft auf den Erstnamen oder „…" verknappt. Das ist das Bauprinzip des Bandes und gilt nicht als inhaltlicher Ausschnitt.
 
-**2. Inhaltlicher Ausschnitt (eine Sachaussage des Originals fehlt).** Nach Einarbeitung von Punkt 9, 10 und 15 (Is.Mu 242, KRS 941, LP 243 → jetzt vollständig) verbleiben **5 Stücke**, bei denen bewusst eine inhaltliche Klausel getilgt ist:
+**2. Inhaltlicher Ausschnitt (eine Sachaussage des Originals fehlt).** Nach Einarbeitung von Punkt 9, 10, 15 (Is.Mu 242, KRS 941, LP 243) **und der Vollausführung der zuvor gekürzten fünf Stücke** verbleibt **kein inhaltlicher Ausschnitt** mehr. Die folgenden fünf waren die letzten und sind jetzt vollständig ausgeführt:
 
-| # | Register · Sigle | Was fehlt | Original |
+| # | Register · Sigle | Ergänzt | Original |
 |---|---|---|---|
-| 1 | harre · **RSIS 110** | Schluss-Anrufung (Lt — Sicherheit & Fülle für den, der die Inschrift achtet) | `h lt s¹lm w ṯrwt l- ḏ yʿwr …` |
-| 2 | harre · **RSIS 322** | Schluss-Anrufung (O Lt — Schutz) | `f h lt ġnmt / s¹lm` |
-| 3 | harre · **LP 1196** | Schluss-Anrufung (Lt — Sicherheit & Beute vom Feind) | `f h lt s¹lm w ġnmt m- ʿdw` |
-| 4 | klage · **KRS 17** | zweite Trauer-Namensliste (Rb, Yʿly, ----ḥ) | `w wgm ʿl- rb w ʿl- yʿly w ʿl- ----ḥ` |
-| 5 | fluche · **C 2551** | Schluss-Fluch (Blindheit dem, der auskratzt) — nur die Rache-Anrufung bleibt | `w ʿwr l- ḏ ys¹ḥq` |
+| 1 | harre · **RSIS 110** | Vatertrauer + Schluss-Anrufung („Allat — Sicherheit und Fülle dem, der die Schrift achtet") | `w wgm ʿl- ʾb -h … f y ʾlt s¹lm w ġnyt l- ḏ s²ws¹` |
+| 2 | harre · **RSIS 322** | Schluss-Anrufung („Allat — Schutz") | `f h lt wqyt` |
+| 3 | harre · **LP 1196** | Schluss-Anrufung („Yalt — Sicherheit und Beute, dem Feind abgenommen") | `f h ylt s¹lm w ġnmt m- s²nʾ` |
+| 4 | klage · **KRS 17** | Jahresformel + zweite Trauer-Namensliste (Rb, Yʿly, ----ḥ) | `s¹nt ws¹q ʾl mʿṣ w wgm ʿl- rb w ʿl- yʿly w ʿl- ----ḥ` |
+| 5 | fluche · **C 2551** | Schluss-Fluch („und blende, wer dies blind macht") | `w ʿwr l- ḏ yʿwr` |
 
-**Befund: 133 von 138 Stücken geben den inhaltlichen Kern vollständig wieder; 5 sind bewusste Ausschnitte.** Alle fünf stehen in Registern, deren Fokus (Harren, Klage, Fluch) durch die Kürzung geschärft, nicht verfälscht wird — die getilgten Teile sind formelhafte Anrufungen bzw. eine Doppelung. Kuratorisch vertretbar; keine Faktenänderung.
+**Befund: alle 138 Stücke geben den inhaltlichen Kern des Originals jetzt vollständig wieder.** Es verbleibt nur die registerkonforme Genealogie-Kürzung (Ebene 1), die kein inhaltlicher Ausschnitt ist.
 
 ## Empfohlene Umsetzungs-Reihenfolge
 
