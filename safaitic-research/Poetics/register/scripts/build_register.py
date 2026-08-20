@@ -308,7 +308,7 @@ REGISTERS = [
     [
     'Hani · HCH 38',
     [
-    'Von Sʿd, Sohn des Ẓn, Sohn des Ṯlm.',
+    'Von ʾsd, Sohn des Ẓn, Sohn des Ṯlm.',
     'Und er trauerte um Hnʾ.',
 ],
 ],
@@ -529,7 +529,7 @@ REGISTERS = [
     [
     'Er hielt Ausschau',
     'nach der Geliebten.',
-    'Jaʾlat — gib Sicherheit.',
+    'Yalt — Sicherheit.',
 ],
 ],
     [
@@ -819,7 +819,7 @@ REGISTERS = [
     [
     'Nasr —',
     'hilf dem, der liebt,',
-    'und nimm die Not.',
+    'und errette aus der Not.',
 ],
 ],
     [
@@ -843,7 +843,7 @@ REGISTERS = [
     'Wādī Salma · AbSWS 42',
     [
     'Er blieb die Trockenzeit.',
-    'Allat — gib Sicherheit.',
+    'Allat — Sicherheit.',
 ],
 ],
     [
@@ -857,14 +857,14 @@ REGISTERS = [
     'Ǧabal Says · C 64',
     [
     'Allat —',
-    'gib Sicherheit.',
+    'Sicherheit.',
 ],
 ],
     [
     'Ǧabal Says · C 134',
     [
     'Rudā —',
-    'schenke Befreiung.',
+    'schenk Errettung.',
 ],
 ],
     [
@@ -885,14 +885,14 @@ REGISTERS = [
     'Rif Dimašq · C 1086',
     [
     'Allat —',
-    'dass er sicher sei.',
+    'Sicherheit.',
 ],
 ],
     [
     'Riǧm Qaʿqūl · C 1412',
     [
     'Allat —',
-    'dass er sicher sei,',
+    'Sicherheit,',
     'Allat —',
 ],
 ],
@@ -900,21 +900,21 @@ REGISTERS = [
     'Khirbat al-Umbāšī · C 885',
     [
     'Rudā —',
-    'dass er sicher sei.',
+    'Sicherheit.',
 ],
 ],
     [
     'Khirbat al-Hubayrīyah · C 898',
     [
     'Er weidete die Esel.',
-    'Allat — dass er sicher sei.',
+    'Allat — Sicherheit.',
 ],
 ],
     [
     'Khirbat al-Hubayrīyah · C 907',
     [
     'Er war auf der Reise.',
-    'Allat — dass er sicher sei.',
+    'Allat — Sicherheit.',
 ],
 ],
     [
@@ -937,7 +937,7 @@ REGISTERS = [
     'Zalaf · C 1660',
     [
     'Allat —',
-    'dass er sicher sei.',
+    'Sicherheit.',
 ],
 ],
 ],
@@ -1110,10 +1110,10 @@ REGISTERS = [
     [
     'Zalaf · C 4803',
     [
-    'Von ʾlwhb, Sohn des Zmr, Sohn des Ḍkr.',
+    'Von ʾlwhb, Sohn des Zmr, Sohn des Ḏkr.',
     'Und er dachte an sein Lamm,',
     'das der Wolf geschlagen hatte.',
-    'Bʿlsmn — gib Sicherheit,',
+    'Baalschamin — gib Sicherheit,',
     'dass das Lagern leicht werde.',
     'Und wer diese Schrift blind macht, erblinde.',
     'Wer sie liest, lebe lang.',
@@ -1158,6 +1158,7 @@ REGISTERS = [
     'um Ḫrg, um Gḥmn, um ʾys, um Ẓn.',
     'Allat und Duschara —',
     'Blutrache.',
+    'Und blende, wer dies blind macht.',
 ],
 ],
     [
@@ -1195,6 +1196,8 @@ REGISTERS = [
     'den das Schicksal bezwungen hatte, ',
     'und trauerte vor Schmerz —',
     'wer überlebt, verzweifelt.',
+    'Allat —',
+    'blende, wer die Schrift blind macht.',
 ],
 ],
     [
@@ -1265,7 +1268,7 @@ REGISTERS = [
     'vom Stamm ʾšll —',
     'Tm und Grmʾ und ʾḥwḍ und Zbd —',
     'und trauerte vor Schmerz.',
-    'Dšry und Lt:',
+    'Duschara und Allat:',
     'Beute dem, der die Schrift unversehrt lässt,',
     'Leid dem, der sie zerstört.',
 ],

@@ -6,7 +6,7 @@ Stand: 2026-08-20 · Fassung: `wer_dies_liest_register_v6.docx` (138 Stücke)
 
 **Gesamtbefund.** Der Band ist überwiegend quellentreu. Die Litaneien („Er weinte vor Kummer" ×; „dass er sicher sei"; das ʿwr-Wortspiel „blind macht" ×14) sind in sich stimmig; historische Namen (Germanicus, Agrippa, Herodes, Rabbel, Taymāʾ) sind korrekt identifiziert; Genealogie- und Lücken-Regeln werden eingehalten. Die Vorschläge betreffen **zwei echte Fehler**, eine **systematische Götternamen-Uneinheitlichkeit** und einige **Wortlaut-Konsistenzen**.
 
-> Dies sind **Vorschläge** — nichts ist am Band geändert. Nach deiner Freigabe setze ich die gewählten Punkte im Datenblock des Skripts um und baue neu.
+> **Umsetzungsstand (2026-08-20):** Punkte **1–11 umgesetzt** (A + B + C, mit s¹lm → „Sicherheit"), v6 neu gebaut. **D + E** noch offen (zur Entscheidung). Die untenstehenden A/B/C-Zeilen dokumentieren den vorherigen Stand als Nachweis.
 
 ---
 
