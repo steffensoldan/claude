@@ -14,7 +14,7 @@ Danach:  Ordner register/rockart_images/ zippen und hochladen. Der Band-Build
 neben die Inschrift ein (v4). Zum gezielten Auswählen kann man das gewünschte
 Bild zusätzlich als <Sigle>.jpg ablegen (hat Vorrang).
 
-Nur Standardbibliothek. Aufruf (aus Poetics/):
+Nur Standardbibliothek. Aufruf (aus safaitic-research/):
   python3 register/scripts/download_rockart_images.py
 """
 
@@ -37,7 +37,7 @@ def safe(name):
 
 def main():
     if not os.path.exists(CSV_IN):
-        raise SystemExit(f"Manifest fehlt: {CSV_IN} (aus Poetics/ starten).")
+        raise SystemExit(f"Manifest fehlt: {CSV_IN} (aus safaitic-research/ starten).")
     os.makedirs(OUT_DIR, exist_ok=True)
     rows = list(csv.DictReader(open(CSV_IN, encoding="utf-8")))
     ok = 0

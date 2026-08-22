@@ -1,7 +1,7 @@
 # Proof of Concept — Sieben Register
 *21 Gedichte · minimaler Eingriff · Vollkorpusbasis*
 
-> **Realisierung:** Der ausgearbeitete Band liegt in `../register/` (134 Stücke,
+> **Realisierung:** Der ausgearbeitete Band liegt in `../../register/` (134 Stücke,
 > inzwischen acht Register — Kapitel „Ich war hier“ aufgeteilt in „stehe“ und
 > „schreibe“). Dies ist die frühe Strukturprobe.
 

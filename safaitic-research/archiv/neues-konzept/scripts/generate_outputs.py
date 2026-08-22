@@ -8,7 +8,7 @@ Generates all output files for neues-konzept from the full OCIANA corpus:
   - safaitic_full_corpus.xlsx   (all Safaitic, all lengths, for chapter I material)
 
 Run from safaitic-research/:
-  python3 Poetics/neues-konzept/scripts/generate_outputs.py --xml ociana_corpus.xml
+  python3 archiv/neues-konzept/scripts/generate_outputs.py --xml ociana_corpus.xml
 """
 
 import re
@@ -127,7 +127,7 @@ def _write_sheet(ws, rows, columns, header_colour, col_widths):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--xml", required=True, metavar="FILE")
-    ap.add_argument("--out", default="Poetics/neues-konzept/data")
+    ap.add_argument("--out", default="archiv/neues-konzept/data")
     args = ap.parse_args()
 
     out = Path(args.out)

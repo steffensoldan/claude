@@ -65,7 +65,7 @@ HSNS 1, HSNS 5, C 4681, C 4902, LP 653, ISB 57, LP 254, RQ.D 3, RQ.D 6, LP 1291,
 ## Reproduktion (Skript = v6)
 
 ```bash
-# aus Poetics/
+# aus safaitic-research/
 python3 register/scripts/build_register.py
 # -> register/wer_dies_liest_register_v6.docx  (138 Stücke, 8 Register)
 ```
@@ -101,7 +101,11 @@ Alle übrigen Diakritika (ṯ ḫ ḍ ṣ ṭ ẓ ġ ḥ) bleiben **bewusst unan
 
 Die generierte Linie vor den Handfassungen. Der detaillierte Stand samt Korpus-Ausgangsauswahl (14 Stimmen je Register mit englischen OCIANA-Glossen) und den Formfassungs-Iterationen ist in der Git-Historie dieses Dokuments erhalten; hier nur die Eckpunkte.
 
-- **Konzept:** Ordnung nach acht Sprechakt-Registern, materiell aus dem Vollkorpus gespeist, ursprünglich überschneidungsfrei zur erweiterten Ausgabe (v5-Kopfstücke hoben das später auf). Datengrundlage: `neues-konzept/data/safaitic_full_corpus.xlsx`, `corpus-parser/…invocations`, `band1/data/…auswahl.xlsx`.
+- **Konzept:** Ordnung nach acht Sprechakt-Registern, materiell aus dem Vollkorpus gespeist, ursprünglich überschneidungsfrei zur erweiterten Ausgabe (v5-Kopfstücke hoben das später auf). Datengrundlage: `../archiv/neues-konzept/data/safaitic_full_corpus.xlsx`, `../archiv/corpus-parser/…invocations`, `../archiv/band1/data/…auswahl.xlsx`.
 - **Formfassungen:** v1 Verszeilen + „Sigle …" am Fuß → v2 Fließtext + Kopfzeile → **v3** Verszeilen zurück, Kopfzeile „Fundort · Sigle", Register II als „Von X", „schweige" von VIII in die Mitte → **v4** = v3 + 7 eingebettete Felszeichnungen (`rockart_images/`, `ROCKART_UEBERSICHT.md`).
 - **Kapiteltitel-Notiz** (Infinitiv minus „n", bewusst mehrdeutig/„infinit") und das *l-*-Argument („von / für / gehörig zu") stammen aus dieser Phase und leben in Vor-/Nachwort weiter.
-- Das damalige Build-Skript baute die Kopfstücke faithful aus `erweitert/…_v5.docx` und trug die Rock-Art-Einbettung; die v5-Fassung des Skripts hat beides abgelöst.
+- Das damalige Build-Skript baute die Kopfstücke faithful aus `../archiv/erweitert/…_v5.docx` und trug die Rock-Art-Einbettung; die v5-Fassung des Skripts hat beides abgelöst.
+
+## Frühere Entwicklungsstufen (archiviert)
+
+`band1/`, `corpus-parser/`, `erweitert/` und `neues-konzept/` sind abgelöste Vorstufen des Bandes und liegen unter `../archiv/`. Details und Zeitachse siehe `../README.md`.

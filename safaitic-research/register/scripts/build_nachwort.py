@@ -5,7 +5,7 @@ Baut nur das Nachwort des Register-Bands als eigenes Word-Dokument
 und Texte aus build_register.py wieder (Einleitung + Nachwort-Text, Notiz
 „Zu den Kapiteltiteln“, Tabellen Corpus-Siglen und Fundorte).
 
-Aufruf (aus Poetics/):
+Aufruf (aus safaitic-research/):
   python3 register/scripts/build_nachwort.py
 """
 

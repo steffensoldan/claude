@@ -6,7 +6,7 @@ Muster: Register III „warte" mit allen drei Formvorschlägen zugleich —
 (3) Fundort · Sigle als Titel ÜBER dem Text.
 Nur zur Ansicht; greift NICHT in den Hauptband ein.
 
-Aufruf (aus Poetics/):
+Aufruf (aus safaitic-research/):
   python3 register/scripts/build_muster.py
 """
 

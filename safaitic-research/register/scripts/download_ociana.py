@@ -16,7 +16,7 @@ Zwei Stufen (damit die Auswertungs-Intelligenz bei Claude bleibt):
 
 Nur Python-Standardbibliothek — keine Installation nötig.
 
-Aufruf (aus Poetics/):
+Aufruf (aus safaitic-research/):
   python3 register/scripts/download_ociana.py
 Ergebnis:
   register/ociana_pages/<Sigle>.html   (je Inschrift eine Seite)
@@ -49,7 +49,7 @@ def fetch(url):
 
 def main():
     if not os.path.exists(CSV_IN):
-        raise SystemExit(f"Eingabeliste fehlt: {CSV_IN} (aus Poetics/ starten).")
+        raise SystemExit(f"Eingabeliste fehlt: {CSV_IN} (aus safaitic-research/ starten).")
     os.makedirs(OUT_DIR, exist_ok=True)
     rows = list(csv.DictReader(open(CSV_IN, encoding="utf-8")))
     status = []

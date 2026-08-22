@@ -1,7 +1,7 @@
 # Konzept — Sieben Register
 *Vorwort-Entwurf / Framing für ein neues Safaitisch-Band*
 
-> **Realisierung:** Ausgearbeitet im Ordner `../register/` — aktuelle Fassung
+> **Realisierung:** Ausgearbeitet im Ordner `../../register/` — aktuelle Fassung
 > `wer_dies_liest_register_v6.docx`. Dort inzwischen **acht** Register mit Ich-Form-Titeln:
 > **I stehe · II ritze · III harre · IV fehle · V bitte · VI klage · VII fluche · VIII bezeuge**
 > — das ursprüngliche „Ich war hier“ ist aufgeteilt in **stehe** (die Ahnenreihen)
@@ -9,7 +9,7 @@
 > „warte“, „fehle“ früher „schweige“ (und steht nun als Akt der Leerstelle auf IV).
 > Er-Form-Texte, Fundort-Kopfzeilen. Dieses Dokument hält den **ursprünglichen**
 > Konzeptstand fest; der ausgearbeitete Stand steht in
-> `../register/REGISTER_BAND_AUSWAHL.md`.
+> `../../register/REGISTER_BAND_AUSWAHL.md`.
 
 ---
 

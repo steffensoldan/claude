@@ -70,6 +70,8 @@ aus `ociana_corpus.xml` (Laufzeit ca. 60–90 s).
 
 ## 5. Struktur des Poetics-Ordners
 
+> *Hinweis (nachträglich):* Der folgende Baum zeigt den Stand zum Zeitpunkt dieses Dokuments. `band1/`, `erweitert/` und `neues-konzept/` liegen inzwischen unter `archiv/`; `register/` blieb an der Wurzel des Projekts (jetzt `safaitic-research/`, ohne die frühere `Poetics/`-Zwischenebene). Siehe `../../README.md`.
+
 ```
 Poetics/
 ├── band1/           Erstausgabe "Wer dies liest, lebe lang"

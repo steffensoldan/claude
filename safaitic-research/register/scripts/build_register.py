@@ -22,7 +22,7 @@ Funktion `readable()`) dokumentiert.
 Nur word/document.xml wird neu geschrieben; das Docx-Skelett (Georgia-styles,
 sectPr) stammt aus der bestehenden v6 selbst. Idempotent.
 
-Aufruf (aus Poetics/):  python3 register/scripts/build_register.py
+Aufruf (aus safaitic-research/):  python3 register/scripts/build_register.py
 Ausgabe: register/wer_dies_liest_register_v6.docx
 """
 
