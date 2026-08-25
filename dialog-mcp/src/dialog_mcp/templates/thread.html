@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}{{ status.topic }} — AOS Agent-Dialog{% endblock %}
+{% block content %}
+<h1>{{ status.topic }}</h1>
+<p class="lede"><code>{{ status.slug }}</code> ·
+  <span class="state state-{{ status.state }}">{{ status.state }}</span> ·
+  Runde {{ status.round }}/{{ status.max_rounds }} ·
+  Profil {{ status.profile }} ·
+  {% if status.turn %}am Zug: <strong>{{ status.turn }}</strong>{% else %}niemand am Zug{% endif %}
+</p>
+
+{% if status.state == 'probing' %}
+  <section class="card">
+    <h2>Sondenphase</h2>
+    <p>Verdeckt, bis alle Sonden vorliegen. Es fehlen: <strong>{{ status.probes_missing|join(', ') }}</strong></p>
+    {% if my_probe_missing %}
+    <form method="post" action="/t/{{ status.slug }}/probe">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <label for="artifact">Dein Artefakt <span class="hint">Datei und Zeile, Testfall, konkrete Entscheidung, Zahl — keine Prosa</span></label>
+      <textarea id="artifact" name="artifact" rows="5" required></textarea>
+      <label for="evidence">Berührte Evidenz <span class="hint">eine Zeile je Fundstelle: <code>pfad — stelle</code></span></label>
+      <textarea id="evidence" name="evidence" rows="4" placeholder="src/app.py — Zeile 120–134"></textarea>
+      <button type="submit">Sonde einreichen</button>
+    </form>
+    {% elif me.id in status.probers %}
+      <p class="muted">Deine Sonde liegt vor.</p>
+    {% endif %}
+  </section>
+{% elif probes %}
+  <section class="card">
+    <h2>Sonden</h2>
+    {% if results and results.convergence_blocked_because %}
+      <p class="note">Konvergenz nicht möglich: {{ results.convergence_blocked_because }}</p>
+    {% elif results %}
+      <p class="note ok">Artefakte stimmen überein und jede Sonde hat unabhängig Evidenz berührt — <code>converged</code> wäre zulässig.</p>
+    {% endif %}
+    {% for p in probes %}
+      <article class="probe">
+        <h3>{{ p.participant }}{% if p.is_human %} <span class="tag">Mensch</span>{% endif %}
+            <span class="muted">Sondenrunde {{ p.probe_round }}</span></h3>
+        <pre>{{ p.artifact }}</pre>
+        <ul class="evidence">{% for e in p.evidence %}<li><code>{{ e.path }}</code> — {{ e.locator }}</li>{% endfor %}</ul>
+      </article>
+    {% endfor %}
+  </section>
+{% endif %}
+
+{% for post in posts %}
+  <article class="post">
+    <h3>{{ post.participant }} <span class="muted">Runde {{ post.round }} · {{ post.created_at }}</span></h3>
+    <div class="body">{{ post.body }}</div>
+    {% if post.objections %}
+      <h4>Einwände</h4>
+      <ul>{% for o in post.objections %}
+        <li>{{ o.claim }}<br><span class="muted">{{ o.reasoning }}</span>
+        {% if o.retract_if %}<br><span class="retract">Ich ziehe das zurück, wenn: {{ o.retract_if }}</span>{% endif %}</li>
+      {% endfor %}</ul>
+    {% endif %}
+    {% if post.clearances %}
+      <h4>Entwarnungen</h4>
+      <ul>{% for c in post.clearances %}
+        <li>{{ c.field }}<br><span class="muted">{{ c.reasoning }}</span>
+        {% if c.retract_if %}<br><span class="retract">Diese Entwarnung fällt, wenn: {{ c.retract_if }}</span>{% endif %}</li>
+      {% endfor %}</ul>
+    {% endif %}
+    {% if post.priorities %}
+      <p class="prio"><strong>Priorisierung:</strong> {{ post.priorities.dimensions|join(', ') }} —
+      geopfert wird: {{ post.priorities.sacrifice }}</p>
+    {% endif %}
+    {% if post.matrix %}
+      <table class="matrix"><thead><tr><th>Dimension</th><th>Bewertung</th><th>Anmerkung</th></tr></thead><tbody>
+      {% for dim, cell in post.matrix.items() %}
+        <tr><td>{{ dim }}</td><td>{{ cell.rating }}</td>
+        <td>{% if cell.gate %}Gate: {{ cell.gate }}. {% endif %}{{ cell.note }}</td></tr>
+      {% endfor %}</tbody></table>
+    {% endif %}
+    {% if post.residual %}
+      <div class="residual">
+        <h4>Ungelöste Restdifferenz</h4>
+        <p>{{ post.residual.difference }}</p>
+        <p class="muted">{{ post.residual.why_unresolvable }}</p>
+        <p><strong>Messung:</strong> {{ post.residual.measurement }}</p>
+      </div>
+    {% endif %}
+    {% if post.evidence %}
+      <ul class="evidence">{% for e in post.evidence %}<li><code>{{ e.path }}</code> — {{ e.locator }}</li>{% endfor %}</ul>
+    {% endif %}
+    {% if post.extension %}<p class="note">Verlängerung empfohlen: {{ post.extension }}</p>{% endif %}
+  </article>
+{% endfor %}
+
+{% if me.role == 'owner' and status.state != 'done' %}
+<section class="card owner">
+  <h2>Steuerung</h2>
+  <p class="hint">Die Entscheidungen, die das Advisory-Modell dem Menschen vorbehält (§4).</p>
+  <form method="post" action="/t/{{ status.slug }}/extend" class="row">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <input type="number" name="extra_rounds" min="1" max="10" value="1" aria-label="Runden">
+    <input type="text" name="reason" placeholder="Begründung" required>
+    <button type="submit">Verlängern</button>
+  </form>
+  <form method="post" action="/t/{{ status.slug }}/repeat-probes" class="row">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <input type="text" name="reason" placeholder="Warum erneut sondieren?" required>
+    <button type="submit">Sonden wiederholen</button>
+  </form>
+  <form method="post" action="/t/{{ status.slug }}/close" class="row">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <input type="text" name="summary" placeholder="Ergebnis in einem Satz" required>
+    <button type="submit">Schließen</button>
+  </form>
+</section>
+{% endif %}
+
+<script>
+  // Live nachziehen, ohne zu pollen: ein Ereignis genuegt als Anlass zum Neuladen.
+  const es = new EventSource("/events/{{ status.slug }}?last={{ last_event }}");
+  es.onmessage = () => { es.close(); location.reload(); };
+</script>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Anmelden — AOS Agent-Dialog{% endblock %}
+{% block content %}
+<h1>Anmelden</h1>
+<p class="lede">Dasselbe Token, mit dem sich auch die Agenten am MCP-Endpunkt anmelden.</p>
+{% if error %}<p class="error">{{ error }}</p>{% endif %}
+<form method="post" action="/login" class="card narrow">
+  <label for="token">Token</label>
+  <input id="token" name="token" type="password" autocomplete="off" autofocus required>
+  <button type="submit">Anmelden</button>
+</form>
+{% endblock %}

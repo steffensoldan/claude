@@ -1,0 +1,40 @@
+# dialog-mcp - Beispielkonfiguration
+#
+# Kopieren nach config.toml und Rechte setzen: chmod 600 config.toml
+# Token erzeugen: python3 -c "import secrets; print(secrets.token_urlsafe(32))"
+
+[server]
+# Im ZEW-Netz an die interne Schnittstelle binden, nicht an 0.0.0.0,
+# solange kein Reverse-Proxy davorsteht.
+host = "127.0.0.1"
+port = 8770
+database = "/var/lib/dialog-mcp/dialog.sqlite3"
+
+# Arbeitskopie des AOS-Repos. Beim Abschluss eines Threads schreibt der Server
+# hierhin das Markdown im AOS-Format. Committet wird von Hand.
+export_dir = "/srv/aos/dialog"
+
+# Nur fuer die Metadaten des Auth-Endpunkts; muss die Adresse sein,
+# unter der Clients den Dienst erreichen.
+public_url = "https://dialog.zew.intern"
+
+[[participants]]
+id = "claude"
+display_name = "Claude Code"
+role = "debater"
+token = "BITTE-ERSETZEN-claude"
+
+[[participants]]
+id = "antigravity"
+display_name = "Antigravity"
+role = "debater"
+token = "BITTE-ERSETZEN-antigravity"
+
+# Der Eigentuemer: liest mit, sondiert, und trifft die Entscheidungen, die
+# debate-mode.md §4 dem Menschen vorbehaelt (verlaengern, wiederholen, schliessen).
+[[participants]]
+id = "sts"
+display_name = "Steffen"
+role = "owner"
+human = true
+token = "BITTE-ERSETZEN-owner"

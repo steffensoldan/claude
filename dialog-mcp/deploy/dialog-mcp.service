@@ -1,0 +1,40 @@
+[Unit]
+Description=AOS Agent-Dialog (MCP-Server)
+Documentation=file:/opt/dialog-mcp/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=dialog-mcp
+Group=dialog-mcp
+WorkingDirectory=/opt/dialog-mcp
+ExecStart=/opt/dialog-mcp/.venv/bin/python -m dialog_mcp --config /etc/dialog-mcp/config.toml
+Restart=on-failure
+RestartSec=5
+
+# Der Dienst startet keine Prozesse und braucht keine API-Schluessel.
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictNamespaces=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+
+# Nur Datenbank und Export-Verzeichnis sind beschreibbar.
+ReadWritePaths=/var/lib/dialog-mcp /srv/aos/dialog
+
+# Nur im internen Netz erreichbar, keine ausgehenden Verbindungen noetig.
+IPAddressDeny=any
+IPAddressAllow=localhost
+# Interne Netze hier eintragen, z. B.:
+# IPAddressAllow=10.0.0.0/8
+
+[Install]
+WantedBy=multi-user.target

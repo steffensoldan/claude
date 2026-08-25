@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Threads</h1>
+{% if not threads %}
+  <p class="lede">Noch kein Dialog angelegt. Threads entstehen über das Werkzeug <code>dialog_open</code>.</p>
+{% endif %}
+<table class="grid">
+  <thead><tr><th>Thema</th><th>Zustand</th><th>Runde</th><th>Am Zug</th><th>Aktualisiert</th></tr></thead>
+  <tbody>
+  {% for t in threads %}
+    <tr>
+      <td><a href="/t/{{ t.slug }}">{{ t.topic }}</a><span class="slug">{{ t.slug }}</span></td>
+      <td><span class="state state-{{ t.state }}">{{ t.state }}</span>
+          {% if t.profile == 'light' %}<span class="tag">light</span>{% endif %}</td>
+      <td class="num">{{ t.round }}/{{ t.max_rounds }}</td>
+      <td>{% if t.state == 'probing' %}<span class="muted">Sonden fehlen: {{ t.probes_missing|join(', ') }}</span>
+          {% elif t.turn %}{{ t.turn }}{% else %}<span class="muted">—</span>{% endif %}</td>
+      <td class="muted">{{ t.updated_at }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

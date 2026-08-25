@@ -1,0 +1,29 @@
+[project]
+name = "dialog-mcp"
+version = "0.1.0"
+description = "MCP-Server fuer regelgebundene Agent-zu-Agent-Debatten (AOS-Debattenmodus)"
+requires-python = ">=3.11"
+dependencies = [
+    "mcp>=2.1",
+    "jinja2>=3.1",
+    "uvicorn>=0.30",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "httpx2"]
+
+[project.scripts]
+dialog-mcp = "dialog_mcp.__main__:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+dialog_mcp = ["templates/*.html", "static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

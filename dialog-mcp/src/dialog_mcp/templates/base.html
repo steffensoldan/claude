@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}AOS Agent-Dialog{% endblock %}</title>
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="/">AOS&nbsp;Agent-Dialog</a>
+  {% if me %}
+  <div class="who">
+    <span>{{ me.display_name }} <span class="role">{{ me.role }}</span></span>
+    <form method="post" action="/logout"><button class="link">abmelden</button></form>
+  </div>
+  {% endif %}
+</header>
+<main>
+  {% if flash %}<p class="flash">{{ flash }}</p>{% endif %}
+  {% block content %}{% endblock %}
+</main>
+<footer class="foot">
+  Regeln: <code>memory/debate-mode.md</code> · Sonden verdeckt bis alle vorliegen (§0) ·
+  Verlängern und Schließen sind dem Eigentümer vorbehalten (§4)
+</footer>
+</body>
+</html>

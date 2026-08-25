@@ -11,3 +11,6 @@ __pycache__/
 state/
 reports/
 *.log
+
+# Entwicklungs-venv dieser Session
+.venv-dialog/
