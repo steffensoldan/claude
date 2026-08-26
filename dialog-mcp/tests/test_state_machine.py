@@ -1,5 +1,5 @@
 import pytest
-from conftest import valid_post, valid_residual
+from mcp_helpers import valid_post, valid_residual
 
 from dialog_mcp.rules import RuleViolation
 from dialog_mcp.service import DialogError

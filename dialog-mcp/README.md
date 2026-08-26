@@ -114,3 +114,10 @@ Runden, Abschluss — plus die Gegenprobe, dass konvergente Sonden den Thread oh
   Prozesse und braucht deshalb keine API-Schlüssel auf dem Host.
 - **Anpassung von `dialog/README.md` und `commands/dialog-reply.md`** im AOS, damit die Agenten
   die Werkzeuge statt der Dateien nutzen.
+
+## Die einfache Variante
+
+Wer keinen Dienst betreiben will, findet unter [`../dialog-lite/`](../dialog-lite/) dieselbe
+Idee im Kleinstformat: stdio statt HTTP, eine HTML-Datei je Thema statt SQLite, drei Regeln
+statt des vollen Debattenmodus. Sie verzichtet auf nachgewiesene Identität und erzwungene
+Blindheit — dafür braucht sie weder Port noch Token noch systemd.

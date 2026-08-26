@@ -12,7 +12,7 @@ import time
 
 import pytest
 import uvicorn
-from conftest import valid_post, valid_residual
+from mcp_helpers import valid_post, valid_residual
 
 from dialog_mcp.app import build_app
 from dialog_mcp.auth import Config, ParticipantConfig

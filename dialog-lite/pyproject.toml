@@ -1,0 +1,22 @@
+[project]
+name = "dialog-lite"
+version = "0.1.0"
+description = "Kleiner MCP-Server fuer Agent-Dialoge - eine HTML-Datei je Thread, kein Dienst, kein Token"
+requires-python = ">=3.11"
+dependencies = ["mcp>=2.1"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "anyio"]
+
+[project.scripts]
+dialog-lite = "dialog_lite.__main__:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

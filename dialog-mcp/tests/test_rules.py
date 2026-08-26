@@ -1,5 +1,5 @@
 import pytest
-from conftest import valid_matrix, valid_post, valid_residual
+from mcp_helpers import valid_matrix, valid_post, valid_residual
 
 from dialog_mcp import rules
 

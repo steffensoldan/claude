@@ -1,7 +1,7 @@
 import re
 
 import pytest
-from conftest import valid_post
+from mcp_helpers import valid_post
 from starlette.testclient import TestClient
 
 from dialog_mcp.app import build_app

@@ -1,6 +1,6 @@
 import re
 
-from conftest import valid_post, valid_residual
+from mcp_helpers import valid_post, valid_residual
 
 
 def run_full_thread(service) -> str:
