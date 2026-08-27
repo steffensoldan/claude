@@ -1,8 +1,37 @@
 # Register-Band — Auswahl aus dem Vollkorpus
 
-Stand: 2026-08-19 · Konzept A: eigener Band nach Sprechakt-Registern · Ordner `register/` · **maßgebliche Fassung: Handfassung v6** (`wer_dies_liest_register_v6.docx`)
+Stand: 2026-08-23 · Konzept A: eigener Band nach Sprechakt-Registern · Ordner `register/` · **maßgebliche Fassung: Handfassung v8** (`wer_dies_liest_register_v8.docx`)
 
-> **Fassungsgeschichte kurz:** v1–v4 (generierte Linie, siehe „Historie" unten) → **v5** eine vom Autor händisch überarbeitete Fassung, die die v3/v4-Linie ablöste → **v6** eine weitere Handfassung mit Übersetzungs-Feinschliff, geänderter Registerfolge und neu gefasstem Vor-/Nachwort. `scripts/build_register.py` ist **auf v6 nachgezogen**: es bettet den kompletten v6-Textbestand als Datenblock ein und schreibt daraus `word/document.xml` neu; das Docx-Skelett (Georgia-styles, `sectPr`) stammt aus der bestehenden v6 selbst. Idempotent. Die committete v6-docx ist die **Skript-Ausgabe** (saubere Einzel-Runs, zwei Vorwort-Tippfehler korrigiert) — inhaltsgleich zur Handfassung des Autors.
+> **Fassungsgeschichte kurz:** v1–v4 (generierte Linie, siehe „Historie" unten) → **v5** eine vom Autor händisch überarbeitete Fassung, die die v3/v4-Linie ablöste → **v6** eine weitere Handfassung mit Übersetzungs-Feinschliff, geänderter Registerfolge und neu gefasstem Vor-/Nachwort → **v8** eine Handfassung mit sprachlicher Überarbeitung von Vorwort und Nachwort (s. u.). `scripts/build_register.py` ist jeweils **auf die maßgebliche Fassung nachgezogen**: es bettet deren kompletten Textbestand als Datenblock ein und schreibt daraus `word/document.xml` neu; das Docx-Skelett (Georgia-styles, `sectPr`) stammt aus der Fassung selbst. Idempotent. Die committete Docx ist die **Skript-Ausgabe** (saubere Einzel-Runs) — inhaltsgleich zur Handfassung des Autors.
+>
+> **v7 war ein Versuch, kein Zwischenschritt:** ein erzählender Rahmen um den Band („Die Sache", Ordner `../rahmen/`), der Vorwort und Nachwort verdrängte. Er trug nicht und wurde verworfen; v8 setzt bei v6 an, nicht bei v7. Der Ordner bleibt zur Nachvollziehbarkeit liegen.
+
+## Was v8 gegenüber v6 ändert
+
+Kein Eingriff in die 138 Stücke — sie sind **zeichengleich**. Geändert sind nur Vorwort, Registernamen und Nachwort.
+
+**Das Wort „Band" kommt nicht mehr vor** (9 Vorkommen). Es klang zu wissenschaftlich, und in sechs der neun Fälle trug es keine Bedeutung, sondern nur die Geste, mit der das Werk auf sich selbst zeigt. Wo es Bedeutung trug, steht jetzt **„hier"** — ein Wort, das die Inschriften selbst führen (RWQ 342: „Hier. / Und der Himmel regnete…"); an den übrigen Stellen ist der Selbstbezug ersatzlos gestrichen.
+
+**Vorwort** in acht Gedankenstrich-Absätzen statt Ziffern, neu geschnitten. Museums- und Verwaltungssprache aufgelöst:
+
+| von | nach | warum |
+|---|---|---|
+| „Die Autoren: Mitglieder von Nomadengruppen – Hirten, Händler, Viehzüchter." | „Geschrieben haben Hirten, Händler, Viehzüchter." | „Autor" unterstellt Werk und Publikum; diese Männer ritzten ihren Namen, damit ihn überhaupt jemand nennt. |
+| „Die in safaitischer Schrift verfassten **Artefakte**" | „Die safaitische Schrift" | Vitrinenwort — macht aus einer Handlung ein Fundstück. |
+| „**konservierten** die Markierungen" | „haben die **Ritzungen gehalten**" | Konservatorensprache; „Markierungen" ist zudem vage. |
+| „Ihr **Reiz beruht** nicht auf Handlung oder Drama, sondern auf einer **faktisch permanent gemachten** Schrift." | „Nicht Handlung, nicht Drama – eine Schrift, die dauern sollte. Und gedauert hat." | Katalogtext plus Ingenieurssprache an der wichtigsten Stelle. Die Pointe war verschenkt: dass sie dauern *sollte*, ist Absicht; dass sie gedauert *hat*, ist das Wunder. |
+| „Die **Inhalte** der Inschriften" | „**Was da steht**" | Redaktionssprache. |
+| „sind Zeichnungen … **integriert**" | „**stehen** Zeichnungen **daneben**" | Technik. |
+| „hin zu **Entzug** und Zeugnis" | „hin zum **Fehlen** und zum Zeugnis" | Abstraktum; „Fehlen" ist zugleich der Registername. |
+| „Hinweise zu Fundort und **Sammlung** leiten jeden **Eintrag** ein." | „Über jeder steht, wo sie liegt und wer sie zuerst gedruckt hat." | Datenbanksprache — und der neue Satz beschreibt genauer, was in den Kopfzeilen wirklich steht. |
+
+**Registernamen im Infinitiv:** stehen · ritzen · harren · fehlen · bitten · klagen · fluchen · bezeugen (v6: stehe · ritze · …).
+
+**Nachwort** gestrafft, ebenfalls mit Gedankenstrichen; „befinden sich **Codes**" → „stehen **Kürzel**". Überschriften „Erstausgaben", „Fundorte", „Sonderzeichen"; die frühere Aussprache-Einleitung ist entfallen, ihr Inhalt steht jetzt im Vorwort.
+
+Der **Apparat bleibt bewusst nüchtern** — „Referenzkorpus", „ediert", „systematisiert", „Erstausgaben": Ein Verzeichnis darf so reden. Würde auch dort alles weich, verlöre das Vorwort seinen Kontrast.
+
+Zusätzlich drei Versehen der Handfassung stillschweigend behoben: fehlender Genitiv („des antiken Nordarabien**s**") und zwei fehlende Leerzeichen nach dem Halbgeviertstrich (LP, WH).
 
 ## Idee
 
@@ -28,13 +57,13 @@ Nicht der Jahresbogen der erweiterten Ausgabe, sondern die **Sprechhaltung** ord
 
 ## Aufbau
 
-Titelblatt (2 Zeilen) → Vorwort → **acht Register** → Nachwort (Siglen + Fundorte) → **„Zur Aussprache"** (Sonderzeichen-Übersicht mit Aussprachehilfe, ganz am Bandende).
+Titelblatt (2 Zeilen) → Vorwort → **acht Register** → Nachwort (Erstausgaben + Fundorte) → **„Sonderzeichen"** (Übersicht mit Aussprachehilfe, ganz am Ende).
 
-**Kapitelüberschriften** = Verb in der Ich-Form (das einzige Ich im Band), infinit-mehrdeutig (zugleich 1. Ps. Präsens, 3. Ps. Konjunktiv, Imperativ, teils Nomen):
+**Kapitelüberschriften** = Verb im **Infinitiv** (seit v8; bis v6 die Ich-Form „stehe · ritze · …"). Der Infinitiv nennt den Akt, ohne ihn jemandem zuzuschreiben — passend zu einer Schrift, die keinen Sprecher benennt:
 
-**I stehe · II ritze · III harre · IV fehle · V bitte · VI klage · VII fluche · VIII bezeuge.**
+**I stehen · II ritzen · III harren · IV fehlen · V bitten · VI klagen · VII fluchen · VIII bezeugen.**
 
-„fehle" (die Leerstelle/das Verstummen) steht bewusst zentral (IV), damit der Band nicht auf das Fehlen zuläuft. Jeder Eintrag: Kopfzeile **„Fundort · Sigle"** (8 pt braun) über Verszeilen (Georgia 11 pt). Genealogien bleiben, wo sie der Akt sind (I „stehe"; IV „fehle"); sonst getilgt. Lücken (`----`) bleiben in IV offen.
+„fehlen" (die Leerstelle/das Verstummen) steht bewusst zentral (IV), damit das Ganze nicht auf das Fehlen zuläuft. Jeder Eintrag: Kopfzeile **„Fundort · Sigle"** (8 pt braun) über Verszeilen (Georgia 11 pt). Genealogien bleiben, wo sie der Akt sind (I „stehen"; IV „fehlen"); sonst getilgt. Lücken (`----`) bleiben in IV offen.
 
 ## Die 138 Stücke je Register
 
@@ -62,15 +91,17 @@ C 1845, C 2551, C 2775, C 3138, C 4803, RSIS 132, RSIS 351, LP 243, Is.Mu 242, L
 **VIII bezeuge** (17) — Datierung als Akt, Zeugnis für Fremde:
 HSNS 1, HSNS 5, C 4681, C 4902, LP 653, ISB 57, LP 254, RQ.D 3, RQ.D 6, LP 1291, C 2190, Is.L 202, ASFF 267, KRS 1586, ZN 1, RWQ 304, BWM 3.
 
-## Reproduktion (Skript = v6)
+## Reproduktion (Skript = v8)
 
 ```bash
 # aus safaitic-research/
 python3 register/scripts/build_register.py
-# -> register/wer_dies_liest_register_v6.docx  (138 Stücke, 8 Register)
+# -> register/wer_dies_liest_register_v8.docx  (138 Stücke, 8 Register)
 ```
 
-Das Skript enthält den v6-Textbestand als Datenblock (`TITLE`, `VORWORT`, `REGISTERS`, `NACHWORT_INTRO`, `ERSTAUSGABEN_LABEL`, `SIGLEN`, `FUNDORTE_HEAD`, `FUNDORTE`, `ZEICHEN_HEAD`, `ZEICHEN_INTRO`, `ZEICHEN`) und die Format-Bausteine (Titelzeile 13 pt zentriert, Zeile 1 **kursiv** · Register-Ziffer 20 pt braun · Register-Name 15 pt · Kopfzeile 8 pt braun · Verszeile 11 pt · Nachwort-Listeneintrag „**Marke**: Text" · „Die Fundorte" 12 pt fett). Es ersetzt nur `word/document.xml`; alles Übrige stammt aus der vorhandenen v6. **Textänderungen erfolgen im Datenblock** (dann neu bauen), Formatänderungen in den Bausteinfunktionen.
+Das Skript enthält den v8-Textbestand als Datenblock (`TITLE`, `VORWORT`, `REGISTERS`, `NACHWORT`, `ERSTAUSGABEN_LABEL`, `SIGLEN`, `FUNDORTE_HEAD`, `FUNDORTE`, `ZEICHEN_HEAD`, `ZEICHEN`) und die Format-Bausteine (Titelzeile 13 pt zentriert, Zeile 1 **kursiv** · Register-Ziffer 20 pt braun · Register-Name 15 pt · Kopfzeile 8 pt braun · Verszeile 11 pt · Listeneintrag „**Marke**: Text" · „Fundorte"/„Sonderzeichen" 12 pt fett). Es ersetzt nur `word/document.xml`; alles Übrige stammt aus der vorhandenen v8. **Textänderungen erfolgen im Datenblock** (dann neu bauen), Formatänderungen in den Bausteinfunktionen.
+
+Vorwort- und Nachwort-Absätze sind Paare `('bullet'|'body', Text)`: `bullet` setzt den Gedankenstrich als eigenen kursiven 13-pt-Run voran, wie in der Handfassung; `body` läuft ohne. Der frühere Block `ZEICHEN_INTRO` ist entfallen.
 
 ### Leseform der Transliteration
 

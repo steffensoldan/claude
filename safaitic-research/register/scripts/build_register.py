@@ -1,38 +1,46 @@
 #!/usr/bin/env python3
 """
-Baut den Register-Band in der Handfassung v6:
+Baut den Register-Band in der Handfassung v8:
 Wer dies liest, lebe lang — nomadische Inschriften im antiken Arabien.
 
-v6 loest die v5-Linie ab (siehe REGISTER_BAND_AUSWAHL.md):
-  * Titel kursiv, keine »«-Guillemets; Untertitel „…im antiken Arabien".
-  * KEINE „Vorwort"/„Nachwort"-Ueberschriften mehr; Vorwort = acht
-    nummerierte Absaetze direkt nach dem Titel.
-  * Registerfolge: I stehe . II ritze . III harre . IV fehle . V bitte .
-    VI klage . VII fluche . VIII bezeuge  (III war „warte", IV war „schweige"
-    und stand auf V; „bitte" auf V).
-  * 138 Stuecke (RSIS 324 entfernt).
-  * Nachwort: 3 Fliesstext-Absaetze, fette Marke „Die Erstausgaben" +
-    Sigle-Liste, Zwischentitel „Die Fundorte" (12 pt) + Fundort-Liste.
+v8 loest v6 ab. Was sich gegenueber v6 aendert:
+  * Das Wort „Band" kommt nicht mehr vor. Wo es Bedeutung trug, steht jetzt
+    „hier"; an den uebrigen Stellen ist der Selbstbezug ersatzlos gestrichen.
+  * Vorwort in acht Gedankenstrich-Absaetzen (statt Ziffern), neu geschnitten;
+    Museums- und Verwaltungssprache aufgeloest: „Die Autoren" -> „Geschrieben
+    haben"; „Artefakte" -> „die safaitische Schrift"; „konservierten die
+    Markierungen" -> „haben die Ritzungen gehalten"; „Ihr Reiz beruht … auf
+    einer faktisch permanent gemachten Schrift" -> „eine Schrift, die dauern
+    sollte. Und gedauert hat."; „Die Inhalte der Inschriften" -> „Was da
+    steht"; „sind Zeichnungen … integriert" -> „stehen Zeichnungen daneben";
+    „Entzug" -> „Fehlen"; „Hinweise zu Fundort und Sammlung leiten jeden
+    Eintrag ein" -> „Ueber jeder steht, wo sie liegt und wer sie zuerst
+    gedruckt hat."
+  * Registernamen im Infinitiv: stehen . ritzen . harren . fehlen . bitten .
+    klagen . fluchen . bezeugen.
+  * Nachwort gestrafft, ebenfalls mit Gedankenstrichen; „befinden sich Codes"
+    -> „stehen Kuerzel". Ueberschriften: „Erstausgaben", „Fundorte",
+    „Sonderzeichen"; die fruehere Aussprache-Einleitung ist entfallen (ihr
+    Inhalt steht jetzt im Vorwort).
+  * 138 Stuecke, unveraendert gegenueber v6.
 
 Transliteration: Die Leseform (˥→ʿ, s¹→s, s²→š) ist im Datenblock unten
-BEREITS ANGEWANDT. Regeln und die rein philologische Rohform (s¹/s²/˥) sind
-in REGISTER_BAND_AUSWAHL.md und im v5-Stand dieses Skripts (Git-Historie,
-Funktion `readable()`) dokumentiert.
+BEREITS ANGEWANDT. Regeln und Rohform siehe REGISTER_BAND_AUSWAHL.md.
 
 Nur word/document.xml wird neu geschrieben; das Docx-Skelett (Georgia-styles,
-sectPr) stammt aus der bestehenden v6 selbst. Idempotent.
+sectPr) stammt aus der bestehenden v8 selbst. Idempotent.
 
 Aufruf (aus safaitic-research/):  python3 register/scripts/build_register.py
-Ausgabe: register/wer_dies_liest_register_v6.docx
+Ausgabe: register/wer_dies_liest_register_v8.docx
 """
 
 import zipfile
 
-TEMPLATE = "register/wer_dies_liest_register_v6.docx"
-OUT      = "register/wer_dies_liest_register_v6.docx"
+TEMPLATE = "register/wer_dies_liest_register_v8.docx"
+OUT      = "register/wer_dies_liest_register_v8.docx"
 
 # --------------------------------------------------------------------------
-# Format-Bausteine (entsprechen exakt der Handfassung v6)
+# Format-Bausteine (entsprechen exakt der Handfassung v8)
 # --------------------------------------------------------------------------
 def esc(s):
     return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
@@ -46,6 +54,8 @@ def _p(runs, ppr=""):
 PAGEBREAK = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>'
 EMPTY     = '<w:p/>'
 _SZ26 = '<w:sz w:val="26"/><w:szCs w:val="26"/>'
+_DASH = '<w:i/><w:iCs/>' + _SZ26          # Gedankenstrich: kursiv, 13 pt
+_BODY_PPR = '<w:pPr><w:spacing w:after="200" w:line="320" w:lineRule="auto"/></w:pPr>'
 
 def title1(t):      # Titelzeile 1: 13 pt, zentriert, KURSIV
     return _p(_run(t, '<w:i/><w:iCs/>'+_SZ26), f'<w:pPr><w:jc w:val="center"/><w:rPr>{_SZ26}</w:rPr></w:pPr>')
@@ -56,8 +66,11 @@ def title2(t):      # Untertitel: 13 pt, zentriert
 def title_spacer():
     return _p("", f'<w:pPr><w:jc w:val="center"/><w:rPr>{_SZ26}</w:rPr></w:pPr>')
 
-def body(t):        # Fliesstext (Vorwort-Absaetze, Nachwort-Intro)
-    return _p(_run(t), '<w:pPr><w:spacing w:after="200" w:line="320" w:lineRule="auto"/></w:pPr>')
+def bullet(t):      # Gedankenstrich-Absatz (Vorwort, Nachwort)
+    return _p(_run("— ", _DASH) + _run(t), _BODY_PPR)
+
+def body(t):        # Fliesstext ohne Gedankenstrich
+    return _p(_run(t), _BODY_PPR)
 
 def roman(t):       # Register-Ziffer, 20 pt fett braun
     return _p(_run(t, '<w:b/><w:color w:val="7A5C3E"/><w:sz w:val="40"/><w:szCs w:val="40"/>'),
@@ -74,20 +87,23 @@ def header(t):      # Fundort . Sigle, 8 pt braun
 def line(t):        # Verszeile (Georgia 11 pt via Default)
     return _p(_run(t), '<w:pPr><w:spacing w:after="40"/></w:pPr>')
 
-def bold_head(t):   # „Die Erstausgaben" — fett, Normalgroesse, Listen-Abstand
+def bold_head(t):   # „Erstausgaben" — fett, Normalgroesse
     return _p(_run(t, '<w:b/>'),
               '<w:pPr><w:spacing w:after="120" w:line="300" w:lineRule="auto"/></w:pPr>')
 
-def subhead(t):     # „Die Fundorte" — 12 pt fett
+def subhead(t):     # „Fundorte" / „Sonderzeichen" — 12 pt fett
     return _p(_run(t, '<w:b/><w:sz w:val="24"/><w:szCs w:val="24"/>'),
               '<w:pPr><w:spacing w:before="200" w:after="80"/></w:pPr>')
 
-def listitem(label, rest):   # Sigle-/Fundort-Eintrag: fette Marke + Erklaerung
+def listitem(label, rest):   # Eintrag: fette Marke + Erklaerung
     return _p(_run(label, '<w:b/>') + _run(rest),
               '<w:pPr><w:spacing w:after="120" w:line="300" w:lineRule="auto"/></w:pPr>')
 
+def para(kind, t):
+    return bullet(t) if kind == 'bullet' else body(t)
+
 # --------------------------------------------------------------------------
-# INHALT (aus der Handfassung v6 extrahiert; Vorwort-Tippfehler korrigiert)
+# INHALT (aus der Handfassung v8 extrahiert)
 # --------------------------------------------------------------------------
 TITLE = [
     'Wer dies liest, lebe lang — ',
@@ -95,215 +111,23 @@ TITLE = [
 ]
 
 VORWORT = [
-    '1. Inschriften arabischer Nomaden. Beduinen ritzten sie zwischen dem ersten vor und dem vierten Jahrhundert nach Christus in den Basalt der Wüsten Harra und Ṣafā.',
-    '2. Viele tausend Steine auf dem Gebiet des heutigen Syrien, Saudi-Arabien, Jordanien und des Irak tragen Markierungen und konservierten sie. Ihr Reiz beruht nicht auf Handlung oder Drama, sondern auf einer faktisch permanent gemachten Schrift.',
-    '3. Die Autoren waren Mitglieder von Nomadengruppen: Hirten, Händler und Viehzüchter. Meist Männer während alltäglicher Arbeiten abseits der zentralen Zeltlager – Hüten, Warten, Wachehalten. ',
-    '4. Die in safaitischer Schrift verfassten Artefakte führen keinen Dialog, tragen keine Vokale, nur die Konsonanten. Der vorliegende Band ist auf diese verdichtete Form aus, auf Sprache als Akte der Schrift in den Stein. ',
-    '5. Einem kleinen Teil der Inschriften sind Zeichnungen von Tieren, Menschen und Gegenständen integriert, eine Art antikes Graffiti. Diese müssen in einem anderen Band behandelt werden.  ',
-    '6. 138 ausgewählte Inschriften durchlaufen in diesem Band Schriftakte vom Stehen am Stein, über Wünsche, Flüche, hin zu Entzug und Zeugnis. Fundort und Sammlung leiten jeden Eintrag ein. ',
-    '7. Die acht Register umreißen eine nomadische Grammatik. Lachen, Freude, Dank gehören (vermutlich) zum gemeinsamen Leben in den Zelten. Hier, draußen, allein, beim Schreiben, gibt es das nicht. Fragen oder Zweifel ebenfalls nicht. Akte des Lebens gegen das Verschwinden. Es steht geschrieben, worüber Anwesende schweigen.',
-    '8. Die Analyse, das Übertragen und Sortieren der Inschriften übernahm Claude Code Opus 5. Die sprachliche Ausarbeitung und Zuordnung zu Registern erfolgte durch menschliche Hand, dem jeweils dominanten Schriftakt folgend.',
+    ('bullet', 'Inschriften arabischer Nomaden. Beduinen ritzten sie in den Basalt der Wüsten Harra und Ṣafā, zwischen dem ersten vor und dem vierten Jahrhundert nach Christus.'),
+    ('bullet', 'Geschrieben haben Hirten, Händler, Viehzüchter. Meist Männer während ihrer alltäglichen Arbeiten abseits der zentralen Zeltlager – Warten, Hüten, Wachehalten. '),
+    ('bullet', 'Viele tausend Steine auf dem Gebiet des heutigen Syrien, Saudi-Arabien, Jordanien und des Irak haben die Ritzungen gehalten. Die safaitische Schrift führt keinen Dialog, trägt keine Vokale, nur Konsonanten.'),
+    ('bullet', 'Nicht Handlung, nicht Drama – eine Schrift, die dauern sollte. Und gedauert hat. Sie ist auf verdichtete Form aus, auf Sprache als Akte in den Stein. '),
+    ('bullet', 'Was da steht, wird gesprochen worden sein (von wem?). Namen und Orte tragen deshalb an einigen Stellen Sonderzeichen. Für Laute, die das deutsche Alphabet nicht kennt. '),
+    ('bullet', 'Bei einem kleinen Teil der Inschriften stehen Zeichnungen daneben – Tiere, Menschen, Gegenstände, eine Art antikes Graffiti. Diese gehören nicht hierher.  '),
+    ('bullet', '138 ausgewählte Inschriften durchlaufen hier Schriftakte vom Stehen am Stein, über Wünsche, Flüche, hin zum Fehlen und zum Zeugnis. Über jeder steht, wo sie liegt und wer sie zuerst gedruckt hat. '),
+    ('bullet', 'Die acht Register umreißen eine nomadische Grammatik. Lachen, Freude, Dank gehören (vermutlich) zum gemeinsamen Leben in den Zelten. Hier, draußen, allein, beim Schreiben, gibt es das nicht. Auch Fragen oder Zweifel nicht. Geschrieben steht, worüber Anwesende schweigen. Akte im Verschwinden.'),
 ]
 
-NACHWORT_INTRO = [
-    'Sämtliche Textgrundlagen, Siglen und Ortsbestimmungen dieses Bandes beziehen sich auf den an der Universität Oxford entwickelten digitalen Referenzkorpus für die epigraphischen Zeugnisse des antiken Nordarabiens (OCIANA). ',
-    'OCIANA erfasst, ediert und systematisiert zehntausende Inschriften – darunter das gesamten Korpus safaitischer Inschriften, aus dem sich dieser Band speist. OCIANA stellt dessen wissenschaftliche Nomenklatur, Geodaten sowie englisch-sprachige Übersetzungen bereit. ',
-    'Die im Band verwendeten Buchstabencodes verweisen auf die wissenschaftlichen Editionen und historischen Korpora, in denen die Inschriften erstmals dokumentiert wurden. Sie dienen OCIANA als eindeutige Identifikatoren, ebenso wie die Fundorte und Geodaten der Inschriften.',
-]
-
-ERSTAUSGABEN_LABEL = 'Die Erstausgaben'
-
-SIGLEN = [
-    [
-    'HCH',
-    ': Inscriptions in the Harra Collection – Das von G. L. Harding 1953 in der jordanischen Basaltwüste dokumentierte Korpus.',
-],
-    [
-    'KRS',
-    ': King Ramadan Survey – Funde aus den systematischen archäologischen Surveys in Nordostjordanien.',
-],
-    [
-    'LP',
-    ': Littmann, Safaitic Inscriptions – Die frühen, grundlegenden Editionen der Enno-Littmann-Expeditionen vom Beginn des 20. Jahrhunderts.',
-],
-    [
-    'WH',
-    ': Winnett & Harding, Inscriptions from Fifty Safaitic Cairns – Die umfassende Dokumentation von fünfzig Steinhügeln, die als strukturelles Rückgrat der modernen safaitischen Epigraphik gilt.',
-],
-    [
-    'C',
-    ': Corpus Inscriptionum Semiticarum, Pars V – die safaitischen Inschriften (u. a. Dussaud & Macler; Ryckmans 1950).',
-],
-    [
-    'SIJ',
-    ': Winnett, Safaitic Inscriptions from Jordan (Toronto 1957).',
-],
-    [
-    'ISB',
-    ': Oxtoby, Some Inscriptions of the Safaitic Bedouin (New Haven 1968).',
-],
-    [
-    'CSNS',
-    ': Clark, A Study of New Safaitic Inscriptions from Jordan (1979).',
-],
-    [
-    'Rees',
-    ': L. W. B. Rees, frühe Aufnahmen aus der Ḥarrat al-Raǧil (1920er Jahre).',
-],
-    [
-    'Is.L / Is.Mu',
-    ': Sammlungen aus al-ʿĪsāwī (Rif Dimašq); Editionsnachweis jeweils im OCIANA-Eintrag.',
-],
-    [
-    'RQ.A / RQ.D',
-    ': Aufnahmen aus Riǧm Qaʿqūl (Rif Dimašq).',
-],
-    [
-    'RSIS / ASWS / SSWS / AbSWS / RWQ',
-    ': Surveys der Wādī-Sārah- und Wādī-Salma-Region (Provinz Al-Mafraq).',
-],
-    [
-    'AbaNS / HaNS / HaNSB / HNSD / HSNS',
-    ': nordjordanische Safaitic-Surveys.',
-],
-    [
-    'AAEK / ASFF',
-    ': Surveys von Qāʿ Fahadah (Provinz Al-Mafraq).',
-],
-    [
-    'JaS / KWQ / CEDS / GSSH / MKJS / BS / WAMS / BWM / ZN',
-    ': weitere OCIANA-Survey-Siglen aus der nordostjordanischen Ḥarrah; vollständiger Editionsnachweis jeweils im OCIANA-Eintrag.',
-],
-]
-
-FUNDORTE_HEAD = 'Die Fundorte'
-
-FUNDORTE = [
-    [
-    'Hani',
-    ': Steinhügel (Cairn) des Ḥāniʾ, nordostjordanische Ḥarrah; 1953 von G. L. Harding ausgegraben (Sammlung HCH).',
-],
-    [
-    'Km 612',
-    ': Kilometerstein 612 (ca. 32 km westlich von Badana) an der alten Pipeline-Piste. Ein Survey-Fundpunkt in Nordostjordanien.',
-],
-    [
-    'Wādī Salma / Wādī Sārah',
-    ': Trockentäler in der Provinz Al-Mafraq, Nordostjordanien.',
-],
-    [
-    'Ḥarrat al-Raǧil',
-    ': Basaltwüste im Grenzgebiet von Nordostjordanien und dem nördlichen Saudi-Arabien.',
-],
-    [
-    'Qāʿ Fahadah',
-    ': Fundplatz in der Provinz Al-Mafraq, Nordostjordanien (Ahnenreihen in Kapitel I).',
-],
-    [
-    'Jathum / Jawa / Wādī Miqāṭ / Qāʿ al-Maḥfūr / Zimlet Nāṣir / bei Safawi / bei Ruwayshid',
-    ': weitere Fundpunkte und Surveys innerhalb der nordostjordanischen Basaltwüste.',
-],
-    [
-    'Zalaf',
-    ': Region um Zalaf am Wādī al-Shām, südsyrische Ṣafā.',
-],
-    [
-    'al-ʿĪsāwī / Riǧm Qaʿqūl',
-    ': Fundplätze im Gouvernement Rif Dimašq, innerhalb der südsyrischen Basaltlandschaft.',
-],
-    [
-    'Ǧabal Says',
-    ': Basaltmassiv im Gouvernement Rif Dimašq, südsyrische Ṣafā.',
-],
-    [
-    'Tall aḍ-Ḍabiʿ',
-    ': Tall aḍ-Ḍabiʿ am Wādī as-Samin, Süd-Syrien.',
-],
-    [
-    'Al-Mrōshan / Khirbat al-Hubayrīyah / Khirbat al-Umbāšī',
-    ': Fundpunkte im Gouvernement Al-Suwaydā, Süd-Syrien.',
-],
-    [
-    'Al-Mafraq',
-    ': Provinz Al-Mafraq (Nordostjordanien) – genauer Fundpunkt nicht angegeben.',
-],
-    [
-    'Rif Dimašq / Al-Suwaydā',
-    ': südsyrische Gouvernements (Ṣafā) – genauer Fundpunkt nicht angegeben.',
-],
-    [
-    'Jordanien (allg.) / Syrien (allg.)',
-    ': nur das Land überliefert (Ḥarrah bzw. Ṣafā).',
-],
-    [
-    'Site 4 / Site 12 / Site 13 · Tell 5 · Tell al-ʿAbd · Cairn 9 / Cairn 10 · WH Cairn 7 · EDS 80-5 · Km 910',
-    ': interne Survey-Codes und Fundpunkte ohne näher benannten Ort (Nordostjordanien).',
-],
-    [
-    'Fundort unbekannt',
-    ': keine Ortsangabe im OCIANA-Eintrag.',
-],
-]
-
-ZEICHEN_HEAD = 'Zur Aussprache'
-
-ZEICHEN_INTRO = [
-    'Die Namen und Wörter dieses Bandes bewahren die Sonderzeichen der wissenschaftlichen Umschrift. Sie halten Laute fest, die das deutsche Alphabet nicht kennt. Die folgende Übersicht nennt zu jedem Zeichen den Laut und eine Aussprachehilfe. Großbuchstaben (Ḥ, Ṣ, Š …) klingen wie ihre kleinen Formen; die Punkte und Striche gehören zum Buchstaben und werden nicht eigens gesprochen.',
-]
-
-# ZEICHEN: [ Zeichen, Aussprachehilfe ] — Sonderzeichen der Umschrift
-ZEICHEN = [
-    [
-    'ʾ',
-    ' — Stimmabsatz (Hamza): der harte Stimmeinsatz wie zwischen den Silben von „be·achten"; ein Knacklaut, kein Buchstabe im deutschen Sinn.',
-],
-    [
-    'ʿ',
-    ' — Kehllaut (ʿAin): ein stimmhafter Presslaut tief im Rachen, ohne deutsche Entsprechung; wie ein gepresstes „a".',
-],
-    [
-    'ḥ',
-    ' — scharf gehauchtes „h": aus dem Rachen gepresst, kräftiger und rauer als das deutsche h.',
-],
-    [
-    'ḫ',
-    ' — Reibe-„ch": wie das ch in „Bach" oder „Buch".',
-],
-    [
-    'ġ',
-    ' — Reibe-„g/r" (Ġain): ein gerolltes Zäpfchen-r, ähnlich dem französischen „r" in „Paris".',
-],
-    [
-    'š',
-    ' — „sch": wie in „Schrift".',
-],
-    [
-    'ǧ',
-    ' — weiches „dsch": wie das englische j in „jump" (in Ortsnamen, z. B. Riǧm, Raǧil).',
-],
-    [
-    'ṯ',
-    ' — stimmloses englisches „th": wie in „think".',
-],
-    [
-    'ḏ',
-    ' — stimmhaftes englisches „th": wie in „this".',
-],
-    [
-    'ṣ · ḍ · ṭ · ẓ',
-    ' — nachdrückliche (emphatische) Laute: s, d, t und der „th"-/z-Laut, dunkel und mit gespannter Zunge gesprochen. Der Punkt unter dem Buchstaben markiert diese Nachdrücklichkeit.',
-],
-    [
-    'ā · ī · ū · ō',
-    ' — lange Vokale: langes a, i, u, o. Sie erscheinen nur in den eingedeutschten Fund- und Personennamen (z. B. Taymāʾ, al-ʿĪsāwī, Al-Mrōshan), nicht in den vokallosen Inschriften selbst.',
-],
-]
-
-# REGISTERS: [ [Ziffer, Name, [ [Kopfzeile 'Fundort . Sigle', [Verszeilen...]], ... ]], ... ]
+# --------------------------------------------------------------------------
+# DIE 138 STUECKE (Registernamen im Infinitiv)
+# --------------------------------------------------------------------------
 REGISTERS = [
     [
     'I',
-    'stehe',
+    'stehen',
     [
     [
     'Km 612 · JaS 4',
@@ -422,7 +246,7 @@ REGISTERS = [
 ],
     [
     'II',
-    'ritze',
+    'ritzen',
     [
     [
     'Wādī Salma · RWQ 187',
@@ -538,7 +362,7 @@ REGISTERS = [
 ],
     [
     'III',
-    'harre',
+    'harren',
     [
     [
     'Wādī Sārah · ASWS 73',
@@ -704,7 +528,7 @@ REGISTERS = [
 ],
     [
     'IV',
-    'fehle',
+    'fehlen',
     [
     [
     'Riǧm Qaʿqūl · C 1146',
@@ -865,7 +689,7 @@ REGISTERS = [
 ],
     [
     'V',
-    'bitte',
+    'bitten',
     [
     [
     'Al-Mafraq · BS 209',
@@ -1004,7 +828,7 @@ REGISTERS = [
 ],
     [
     'VI',
-    'klage',
+    'klagen',
     [
     [
     'al-ʿĪsāwī · LP 540',
@@ -1135,7 +959,7 @@ REGISTERS = [
 ],
     [
     'VII',
-    'fluche',
+    'fluchen',
     [
     [
     'Zalaf · C 1845',
@@ -1310,7 +1134,7 @@ REGISTERS = [
 ],
     [
     'VIII',
-    'bezeuge',
+    'bezeugen',
     [
     [
     'Jordanien (allg.) · HSNS 1',
@@ -1471,9 +1295,76 @@ REGISTERS = [
 
 
 # --------------------------------------------------------------------------
+
+NACHWORT = [
+    ('bullet', 'Texte der aufgeführten Inschriften entstammen dem an der Universität Oxford entwickelten digitalen Referenzkorpus für die epigraphischen Zeugnisse des antiken Nordarabiens (OCIANA). '),
+    ('bullet', 'OCIANA erfasst, ediert und systematisiert zehntausende nomadischer Inschriften – darunter die 138 safaitischen Inschriften hier.'),
+    ('bullet', 'Nomenklatur, Geodaten und englisch-sprachige Übersetzungen kommen aus OCIANA. Analyse, Übertragen und Sortieren der Inschriften übernahm Claude Code Opus 5. Sprachliche Ausarbeitungen sowie die Zuordnung zu Registern erfolgte durch menschliche Hand, dem jeweils dominanten Schriftakt folgend.'),
+    ('body', 'Über den einzelnen Inschriften stehen Kürzel, die einerseits auf die historischen Editionen verweisen, in denen die Inschriften erstmals dokumentiert wurden, und andererseits die Fundorte der Inschriften markieren.'),
+    ('body', 'Hier die Legende von Erstausgaben, Fundorten und Sonderzeichen.'),
+]
+
+ERSTAUSGABEN_LABEL = 'Erstausgaben'
+
+SIGLEN = [
+    ['HCH', ': Inscriptions in the Harra Collection – Das von G. L. Harding 1953 in der jordanischen Basaltwüste dokumentierte Korpus.'],
+    ['KRS', ': King Ramadan Survey – Funde aus den systematischen archäologischen Surveys in Nordostjordanien.'],
+    ['LP', ': Littmann, Safaitic Inscriptions – frühe, grundlegende Editionen der Enno-Littmann-Expeditionen vom Beginn des 20. Jahrhunderts.'],
+    ['WH', ': Winnett & Harding, Inscriptions from Fifty Safaitic Cairns – Dokumentation von fünfzig Steinhügeln mit safaitischen Inschriften.'],
+    ['C', ': Corpus Inscriptionum Semiticarum, Pars V – die safaitischen Inschriften (u. a. Dussaud & Macler; Ryckmans 1950).'],
+    ['SIJ', ': Winnett, Safaitic Inscriptions from Jordan (Toronto 1957).'],
+    ['ISB', ': Oxtoby, Some Inscriptions of the Safaitic Bedouin (New Haven 1968).'],
+    ['CSNS', ': Clark, A Study of New Safaitic Inscriptions from Jordan (1979).'],
+    ['Rees', ': L. W. B. Rees, frühe Aufnahmen aus der Ḥarrat al-Raǧil (1920er Jahre).'],
+    ['Is.L / Is.Mu', ': Sammlungen aus al-ʿĪsāwī (Rif Dimašq); Editionsnachweis jeweils im OCIANA-Eintrag.'],
+    ['RQ.A / RQ.D', ': Aufnahmen aus Riǧm Qaʿqūl (Rif Dimašq).'],
+    ['RSIS / ASWS / SSWS / AbSWS / RWQ', ': Surveys der Wādī-Sārah- und Wādī-Salma-Region (Provinz Al-Mafraq).'],
+    ['AbaNS / HaNS / HaNSB / HNSD / HSNS', ': nordjordanische Safaitic-Surveys.'],
+    ['AAEK / ASFF', ': Surveys von Qāʿ Fahadah (Provinz Al-Mafraq).'],
+    ['JaS / KWQ / CEDS / GSSH / MKJS / BS / WAMS / BWM / ZN', ': weitere Survey-Daten aus der nordostjordanischen Ḥarrah; genaue Nachweise im OCIANA-Eintrag.'],
+]
+
+FUNDORTE_HEAD = 'Fundorte'
+
+FUNDORTE = [
+    ['Hani', ': Steinhügel (Cairn) des Ḥāni, nordostjordanische Ḥarrah; 1953 von G. L. Harding dokumentiert.'],
+    ['Km 612', ': Kilometerstein 612 (ca. 32 km westlich von Badana, Nordostjordanien) an der alten Pipeline-Piste.'],
+    ['Wādī Salma / Wādī Sārah', ': Trockentäler in der Provinz Al-Mafraq, Nordostjordanien.'],
+    ['Ḥarrat al-Raǧil', ': Basaltwüste im Grenzgebiet von Nordostjordanien und dem nördlichen Saudi-Arabien.'],
+    ['Qāʿ Fahadah', ': Fundplatz in der Provinz Al-Mafraq, Nordostjordanien.'],
+    ['Jathum / Jawa / Wādī Miqāṭ / Qāʿ al-Maḥfūr / Zimlet Nāṣir / bei Safawi / bei Ruwayshid', ': weitere nordostjordanische Fundorte.'],
+    ['Zalaf', ': Region um Zalaf am Wādī al-Shām, südsyrische Ṣafā.'],
+    ['al-ʿĪsāwī / Riǧm Qaʿqūl', ': Fundplätze im südsyrischen Rif Dimašq („Damaskus-Landschaft“).'],
+    ['Ǧabal Says', ': Basaltmassiv im Gouvernement Rif Dimašq, südsyrische Ṣafā.'],
+    ['Tall aḍ-Ḍabiʿ', ': Tall aḍ-Ḍabiʿ am Wādī as-Samin, Süd-Syrien.'],
+    ['Al-Mrōshan / Khirbat al-Hubayrīyah / Khirbat al-Umbāšī', ': Fundpunkte im Gouvernement Al-Suwaydā, Süd-Syrien.'],
+    ['Al-Mafraq', ': Provinz Al-Mafraq (Nordostjordanien) – genauer Fundpunkt nicht angegeben.'],
+    ['Rif Dimašq / Al-Suwaydā', ': südsyrische Gouvernements (Ṣafā) – genauer Fundpunkt nicht angegeben.'],
+    ['Jordanien (allg.) / Syrien (allg.)', ': nur das Land überliefert (Ḥarrah bzw. Ṣafā).'],
+    ['Site 4 / Site 12 / Site 13 · Tell 5 · Tell al-ʿAbd · Cairn 9 / Cairn 10 · WH Cairn 7 · EDS 80-5 · Km 910', ': interne OCIANA-Codes und Fundpunkte ohne näher benannten Ort (Nordostjordanien).'],
+    ['Fundort unbekannt', ': keine Ortsangabe im OCIANA-Eintrag.'],
+]
+
+ZEICHEN_HEAD = 'Sonderzeichen'
+
+ZEICHEN = [
+    ['ʾ', ' — Stimmabsatz (Hamza): der harte Stimmeinsatz wie zwischen den Silben von „be·achten"; ein Knacklaut.'],
+    ['ʿ', ' — Kehllaut (ʿAin): ein stimmhafter Presslaut tief im Rachen, wie ein gepresstes „a".'],
+    ['ḥ', ' — scharf gehauchtes aus dem Rachen gepresstes „h", rauer als das deutsche „h“.'],
+    ['ḫ', ' — Reibe-„ch": wie das ch in „Bach" oder „Buch".'],
+    ['ġ', ' — Reibe-„g/r": ein gerolltes Zäpfchen-r, ähnlich dem französischen „r" in „Paris".'],
+    ['š', ' — „sch": wie in „Schrift".'],
+    ['ǧ', ' — weiches „dsch": wie das englische j in „jump".'],
+    ['ṯ', ' — stimmloses englisches „th": wie in „think".'],
+    ['ḏ', ' — stimmhaftes englisches „th": wie in „this".'],
+    ['ṣ · ḍ · ṭ · ẓ', ' — nachdrückliche (emphatische) Laute: s, d, t und der „th"-/z-Laut, dunkel und mit gespannter Zunge gesprochen. Der Punkt unter dem Buchstaben markiert diese Nachdrücklichkeit.'],
+    ['ā · ī · ū · ō', ' — lange Vokale in den eingedeutschten Orten/Personen (nicht in den vokallosen Inschriften selbst).'],
+]
+
+# --------------------------------------------------------------------------
 def main():
     xml = [title1(TITLE[0]), title2(TITLE[1]), title_spacer(), PAGEBREAK]
-    xml += [body(p) for p in VORWORT]
+    xml += [para(k, t) for k, t in VORWORT]
     xml.append(EMPTY)
 
     total = 0
@@ -1487,7 +1378,7 @@ def main():
 
     xml.append(EMPTY)
     xml.append(PAGEBREAK)
-    xml += [body(p) for p in NACHWORT_INTRO]
+    xml += [para(k, t) for k, t in NACHWORT]
     xml.append(EMPTY)
     xml.append(bold_head(ERSTAUSGABEN_LABEL))
     xml += [listitem(a, b) for a, b in SIGLEN]
@@ -1495,9 +1386,7 @@ def main():
     xml.append(subhead(FUNDORTE_HEAD))
     xml += [listitem(a, b) for a, b in FUNDORTE]
     xml.append(EMPTY)
-
     xml.append(subhead(ZEICHEN_HEAD))
-    xml += [body(p) for p in ZEICHEN_INTRO]
     xml += [listitem(a, b) for a, b in ZEICHEN]
     xml.append(EMPTY)
 
