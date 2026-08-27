@@ -19,19 +19,23 @@ Kein Eingriff in die 138 Stücke — sie sind **zeichengleich**. Geändert sind 
 | „Die Autoren: Mitglieder von Nomadengruppen – Hirten, Händler, Viehzüchter." | „Geschrieben haben Hirten, Händler, Viehzüchter." | „Autor" unterstellt Werk und Publikum; diese Männer ritzten ihren Namen, damit ihn überhaupt jemand nennt. |
 | „Die in safaitischer Schrift verfassten **Artefakte**" | „Die safaitische Schrift" | Vitrinenwort — macht aus einer Handlung ein Fundstück. |
 | „**konservierten** die Markierungen" | „haben die **Ritzungen gehalten**" | Konservatorensprache; „Markierungen" ist zudem vage. |
-| „Ihr **Reiz beruht** nicht auf Handlung oder Drama, sondern auf einer **faktisch permanent gemachten** Schrift." | „Nicht Handlung, nicht Drama – eine Schrift, die dauern sollte. Und gedauert hat." | Katalogtext plus Ingenieurssprache an der wichtigsten Stelle. Die Pointe war verschenkt: dass sie dauern *sollte*, ist Absicht; dass sie gedauert *hat*, ist das Wunder. |
-| „Die **Inhalte** der Inschriften" | „**Was da steht**" | Redaktionssprache. |
-| „sind Zeichnungen … **integriert**" | „**stehen** Zeichnungen **daneben**" | Technik. |
+| „Ihr **Reiz beruht** nicht auf Handlung oder Drama, sondern auf einer **faktisch permanent gemachten** Schrift." | „Nicht Handlung, nicht Dialog, nicht Drama – sondern Schrift, die dauern sollte." | Katalogtext plus Ingenieurssprache an der wichtigsten Stelle. Die Dreifach-Verneinung gibt dem Satz zudem einen Takt. |
+| „Die **Inhalte** der Inschriften werden gesprochen worden sein (von wem?)" | „**Wie die Inschriften klangen, weiß niemand genau.** Welche Laute unterschieden wurden, lässt sich erschließen – dafür sind Sonderzeichen mit ins Deutsche übertragen." | Das „deshalb" trug nicht: Dass etwas gesprochen wurde, begründet keine Sonderzeichen. Der Absatz sagt jetzt, wo das Wissen aufhört — und wozu die Übersicht am Ende dient. |
+| „sind Zeichnungen … **integriert**" | „**Neben** … **stehen** Zeichnungen" | Technik. |
 | „hin zu **Entzug** und Zeugnis" | „hin zum **Fehlen** und zum Zeugnis" | Abstraktum; „Fehlen" ist zugleich der Registername. |
-| „Hinweise zu Fundort und **Sammlung** leiten jeden **Eintrag** ein." | „Über jeder steht, wo sie liegt und wer sie zuerst gedruckt hat." | Datenbanksprache — und der neue Satz beschreibt genauer, was in den Kopfzeilen wirklich steht. |
+| „Hinweise zu Fundort und **Sammlung** leiten jeden **Eintrag** ein." | „Über jeder steht, wo sie zu finden ist und wer sie zuerst veröffentlicht hat." | Datenbanksprache — und der neue Satz beschreibt genauer, was in den Kopfzeilen wirklich steht. |
 
 **Registernamen im Infinitiv:** stehen · ritzen · harren · fehlen · bitten · klagen · fluchen · bezeugen (v6: stehe · ritze · …).
 
-**Nachwort** gestrafft, ebenfalls mit Gedankenstrichen; „befinden sich **Codes**" → „stehen **Kürzel**". Überschriften „Erstausgaben", „Fundorte", „Sonderzeichen"; die frühere Aussprache-Einleitung ist entfallen, ihr Inhalt steht jetzt im Vorwort.
+**Nachwort** gestrafft, durchgehend mit Gedankenstrichen; „befinden sich **Codes**" → „stehen **Kürzel**". Die frühere Aussprache-Einleitung ist entfallen, ihr Inhalt steht jetzt im Vorwort.
+
+**Anhang** in der Reihenfolge, die das Nachwort ankündigt: **Fundorte → Erstausgaben → Sonderzeichen**, alle drei Überschriften einheitlich 12 pt. (Bis dahin stand „Erstausgaben" voran und trug einen kleineren Stil; beim Umstellen von Hand war er mitgewandert und klebte am letzten Fundort-Eintrag.)
+
+**Langvokal-Eintrag richtiggestellt.** Er behauptete, lange Vokale kämen „nicht in den vokallosen Inschriften selbst" vor. Die Gegenprobe am Bestand zeigt das Gegenteil: `Rudā` steht neunmal und `Taymāʾ` einmal mitten in den Gedichten. Richtig ist, dass die Längen **nie aus dem Safaitischen** stammen, sondern von außen — aus heutigen arabischen Fundortnamen (Arabisch schreibt Langvokale; die Länge ist abgelesen, nicht rekonstruiert) und aus Namen, die in vokalschreibenden Nachbarüberlieferungen bezeugt sind. Das Safaitische liefert ausschließlich Konsonantengerüste.
 
 Der **Apparat bleibt bewusst nüchtern** — „Referenzkorpus", „ediert", „systematisiert", „Erstausgaben": Ein Verzeichnis darf so reden. Würde auch dort alles weich, verlöre das Vorwort seinen Kontrast.
 
-Zusätzlich drei Versehen der Handfassung stillschweigend behoben: fehlender Genitiv („des antiken Nordarabien**s**") und zwei fehlende Leerzeichen nach dem Halbgeviertstrich (LP, WH).
+Zusätzlich behoben: fehlender Genitiv („des antiken Nordarabien**s**"), zwei fehlende Leerzeichen nach dem Halbgeviertstrich (LP, WH), und im Vorwort „Nicht Handlung, Dialog und Drama – **aber** Schrift" → „nicht … nicht … – **sondern**" (nach Verneinung steht *sondern*, nicht *aber*) sowie „Ihre safaitischen **Schriftzeichen** führen keine Vokale" → „Die safaitische **Schrift** führt keine Vokale" (ein einzelnes Zeichen kann keine Vokale führen, nur ein Schriftsystem).
 
 ## Idee
 

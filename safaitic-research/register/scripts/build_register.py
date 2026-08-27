@@ -18,10 +18,14 @@ v8 loest v6 ab. Was sich gegenueber v6 aendert:
     gedruckt hat."
   * Registernamen im Infinitiv: stehen . ritzen . harren . fehlen . bitten .
     klagen . fluchen . bezeugen.
-  * Nachwort gestrafft, ebenfalls mit Gedankenstrichen; „befinden sich Codes"
-    -> „stehen Kuerzel". Ueberschriften: „Erstausgaben", „Fundorte",
-    „Sonderzeichen"; die fruehere Aussprache-Einleitung ist entfallen (ihr
-    Inhalt steht jetzt im Vorwort).
+  * Nachwort gestrafft, ebenfalls durchgehend mit Gedankenstrichen. Der Anhang
+    folgt der Reihenfolge, die das Nachwort ankuendigt: „Fundorte" ->
+    „Erstausgaben" -> „Sonderzeichen", alle drei Ueberschriften einheitlich
+    12 pt (frueher stand „Erstausgaben" voran und trug einen kleineren Stil).
+    Die fruehere Aussprache-Einleitung ist entfallen; ihr Inhalt steht im
+    Vorwort. Der Langvokal-Eintrag ist sachlich richtiggestellt: Lange Vokale
+    stehen sehr wohl in den Gedichten (Rudā 9x, Taymāʾ 1x); sie stammen nur
+    nicht aus der safaitischen Schrift.
   * 138 Stuecke, unveraendert gegenueber v6.
 
 Transliteration: Die Leseform (˥→ʿ, s¹→s, s²→š) ist im Datenblock unten
@@ -87,11 +91,8 @@ def header(t):      # Fundort . Sigle, 8 pt braun
 def line(t):        # Verszeile (Georgia 11 pt via Default)
     return _p(_run(t), '<w:pPr><w:spacing w:after="40"/></w:pPr>')
 
-def bold_head(t):   # „Erstausgaben" — fett, Normalgroesse
-    return _p(_run(t, '<w:b/>'),
-              '<w:pPr><w:spacing w:after="120" w:line="300" w:lineRule="auto"/></w:pPr>')
-
-def subhead(t):     # „Fundorte" / „Sonderzeichen" — 12 pt fett
+def subhead(t):     # Anhang-Ueberschriften „Fundorte" / „Erstausgaben" /
+                    # „Sonderzeichen" — einheitlich 12 pt fett
     return _p(_run(t, '<w:b/><w:sz w:val="24"/><w:szCs w:val="24"/>'),
               '<w:pPr><w:spacing w:before="200" w:after="80"/></w:pPr>')
 
@@ -103,7 +104,7 @@ def para(kind, t):
     return bullet(t) if kind == 'bullet' else body(t)
 
 # --------------------------------------------------------------------------
-# INHALT (aus der Handfassung v8 extrahiert)
+# INHALT (aus der Handfassung v8 extrahiert; drei Korrekturen eingearbeitet)
 # --------------------------------------------------------------------------
 TITLE = [
     'Wer dies liest, lebe lang — ',
@@ -113,12 +114,20 @@ TITLE = [
 VORWORT = [
     ('bullet', 'Inschriften arabischer Nomaden. Beduinen ritzten sie in den Basalt der Wüsten Harra und Ṣafā, zwischen dem ersten vor und dem vierten Jahrhundert nach Christus.'),
     ('bullet', 'Geschrieben haben Hirten, Händler, Viehzüchter. Meist Männer während ihrer alltäglichen Arbeiten abseits der zentralen Zeltlager – Warten, Hüten, Wachehalten. '),
-    ('bullet', 'Viele tausend Steine auf dem Gebiet des heutigen Syrien, Saudi-Arabien, Jordanien und des Irak haben die Ritzungen gehalten. Die safaitische Schrift führt keinen Dialog, trägt keine Vokale, nur Konsonanten.'),
-    ('bullet', 'Nicht Handlung, nicht Drama – eine Schrift, die dauern sollte. Und gedauert hat. Sie ist auf verdichtete Form aus, auf Sprache als Akte in den Stein. '),
-    ('bullet', 'Was da steht, wird gesprochen worden sein (von wem?). Namen und Orte tragen deshalb an einigen Stellen Sonderzeichen. Für Laute, die das deutsche Alphabet nicht kennt. '),
-    ('bullet', 'Bei einem kleinen Teil der Inschriften stehen Zeichnungen daneben – Tiere, Menschen, Gegenstände, eine Art antikes Graffiti. Diese gehören nicht hierher.  '),
-    ('bullet', '138 ausgewählte Inschriften durchlaufen hier Schriftakte vom Stehen am Stein, über Wünsche, Flüche, hin zum Fehlen und zum Zeugnis. Über jeder steht, wo sie liegt und wer sie zuerst gedruckt hat. '),
-    ('bullet', 'Die acht Register umreißen eine nomadische Grammatik. Lachen, Freude, Dank gehören (vermutlich) zum gemeinsamen Leben in den Zelten. Hier, draußen, allein, beim Schreiben, gibt es das nicht. Auch Fragen oder Zweifel nicht. Geschrieben steht, worüber Anwesende schweigen. Akte im Verschwinden.'),
+    ('bullet', 'Viele tausend Steine auf dem Gebiet des heutigen Syrien, Saudi-Arabien, Jordanien und des Irak haben die Ritzungen gehalten. Die safaitische Schrift führt keine Vokale, nur Konsonanten.'),
+    ('bullet', 'Nicht Handlung, nicht Dialog, nicht Drama – sondern Schrift, die dauern sollte. Sie ist auf verdichtete Form aus, auf Sprache als Akte in den Stein. Vor dem Verschwinden.'),
+    ('bullet', 'Wie die Inschriften klangen, weiß niemand genau. Welche Laute unterschieden wurden, lässt sich erschließen – dafür sind Sonderzeichen mit ins Deutsche übertragen.'),
+    ('bullet', 'Neben einem kleinen Teil der safaitischen Inschriften stehen Zeichnungen – Tiere, Menschen, Gegenstände, eine Art antikes Graffiti. Diese gehören nicht hierher.  '),
+    ('bullet', '138 ausgewählte Inschriften durchlaufen Schriftakte vom Stehen am Stein, über Wünsche, Flüche, hin zum Fehlen und zum Zeugnis. Über jeder steht, wo sie zu finden ist und wer sie zuerst veröffentlicht hat. '),
+    ('bullet', 'Die acht Register umreißen eine nomadische Grammatik. Lachen, Freude, Dank gehören (vermutlich) zum gemeinsamen Leben in den Zelten. Hier, draußen, allein, beim Schreiben, nicht. Auch Fragen oder Zweifel fehlen. Geschrieben steht, worüber man zusammen schweigt.'),
+]
+
+NACHWORT = [
+    ('bullet', 'Texte der aufgeführten Inschriften entstammen dem an der Universität Oxford entwickelten digitalen Referenzkorpus für die epigraphischen Zeugnisse des antiken Nordarabiens (OCIANA). '),
+    ('bullet', 'OCIANA erfasst, ediert und systematisiert zehntausende nomadischer Inschriften – darunter die 138 safaitischen Inschriften hier.'),
+    ('bullet', 'Nomenklatur, Geodaten und englisch-sprachige Übersetzungen kommen aus OCIANA. Analyse, Übertragen und Sortieren der Inschriften übernahm Claude Code Opus 5. Sprachliche Ausarbeitungen sowie die Zuordnung zu Registern erfolgte durch menschliche Hand, dem jeweils dominanten Schriftakt folgend.'),
+    ('bullet', 'Kürzel über den Inschriften verweisen auf deren Fundorte und auf die historischen Editionen, in denen die Inschriften erstmals dokumentiert wurden.'),
+    ('bullet', 'Hier die Legende von Fundorten und Erstausgaben, außerdem die Auflösung der in der deutschen Übertragung enthaltenen Sonderzeichen:'),
 ]
 
 # --------------------------------------------------------------------------
@@ -1293,37 +1302,7 @@ REGISTERS = [
 ],
 ]
 
-
-# --------------------------------------------------------------------------
-
-NACHWORT = [
-    ('bullet', 'Texte der aufgeführten Inschriften entstammen dem an der Universität Oxford entwickelten digitalen Referenzkorpus für die epigraphischen Zeugnisse des antiken Nordarabiens (OCIANA). '),
-    ('bullet', 'OCIANA erfasst, ediert und systematisiert zehntausende nomadischer Inschriften – darunter die 138 safaitischen Inschriften hier.'),
-    ('bullet', 'Nomenklatur, Geodaten und englisch-sprachige Übersetzungen kommen aus OCIANA. Analyse, Übertragen und Sortieren der Inschriften übernahm Claude Code Opus 5. Sprachliche Ausarbeitungen sowie die Zuordnung zu Registern erfolgte durch menschliche Hand, dem jeweils dominanten Schriftakt folgend.'),
-    ('body', 'Über den einzelnen Inschriften stehen Kürzel, die einerseits auf die historischen Editionen verweisen, in denen die Inschriften erstmals dokumentiert wurden, und andererseits die Fundorte der Inschriften markieren.'),
-    ('body', 'Hier die Legende von Erstausgaben, Fundorten und Sonderzeichen.'),
-]
-
-ERSTAUSGABEN_LABEL = 'Erstausgaben'
-
-SIGLEN = [
-    ['HCH', ': Inscriptions in the Harra Collection – Das von G. L. Harding 1953 in der jordanischen Basaltwüste dokumentierte Korpus.'],
-    ['KRS', ': King Ramadan Survey – Funde aus den systematischen archäologischen Surveys in Nordostjordanien.'],
-    ['LP', ': Littmann, Safaitic Inscriptions – frühe, grundlegende Editionen der Enno-Littmann-Expeditionen vom Beginn des 20. Jahrhunderts.'],
-    ['WH', ': Winnett & Harding, Inscriptions from Fifty Safaitic Cairns – Dokumentation von fünfzig Steinhügeln mit safaitischen Inschriften.'],
-    ['C', ': Corpus Inscriptionum Semiticarum, Pars V – die safaitischen Inschriften (u. a. Dussaud & Macler; Ryckmans 1950).'],
-    ['SIJ', ': Winnett, Safaitic Inscriptions from Jordan (Toronto 1957).'],
-    ['ISB', ': Oxtoby, Some Inscriptions of the Safaitic Bedouin (New Haven 1968).'],
-    ['CSNS', ': Clark, A Study of New Safaitic Inscriptions from Jordan (1979).'],
-    ['Rees', ': L. W. B. Rees, frühe Aufnahmen aus der Ḥarrat al-Raǧil (1920er Jahre).'],
-    ['Is.L / Is.Mu', ': Sammlungen aus al-ʿĪsāwī (Rif Dimašq); Editionsnachweis jeweils im OCIANA-Eintrag.'],
-    ['RQ.A / RQ.D', ': Aufnahmen aus Riǧm Qaʿqūl (Rif Dimašq).'],
-    ['RSIS / ASWS / SSWS / AbSWS / RWQ', ': Surveys der Wādī-Sārah- und Wādī-Salma-Region (Provinz Al-Mafraq).'],
-    ['AbaNS / HaNS / HaNSB / HNSD / HSNS', ': nordjordanische Safaitic-Surveys.'],
-    ['AAEK / ASFF', ': Surveys von Qāʿ Fahadah (Provinz Al-Mafraq).'],
-    ['JaS / KWQ / CEDS / GSSH / MKJS / BS / WAMS / BWM / ZN', ': weitere Survey-Daten aus der nordostjordanischen Ḥarrah; genaue Nachweise im OCIANA-Eintrag.'],
-]
-
+# Reihenfolge im Anhang: Fundorte -> Erstausgaben -> Sonderzeichen
 FUNDORTE_HEAD = 'Fundorte'
 
 FUNDORTE = [
@@ -1345,6 +1324,26 @@ FUNDORTE = [
     ['Fundort unbekannt', ': keine Ortsangabe im OCIANA-Eintrag.'],
 ]
 
+ERSTAUSGABEN_HEAD = 'Erstausgaben'
+
+SIGLEN = [
+    ['HCH', ': Inscriptions in the Harra Collection – Das von G. L. Harding 1953 in der jordanischen Basaltwüste dokumentierte Korpus.'],
+    ['KRS', ': King Ramadan Survey – Funde aus den systematischen archäologischen Surveys in Nordostjordanien.'],
+    ['LP', ': Littmann, Safaitic Inscriptions – frühe, grundlegende Editionen der Enno-Littmann-Expeditionen vom Beginn des 20. Jahrhunderts.'],
+    ['WH', ': Winnett & Harding, Inscriptions from Fifty Safaitic Cairns – Dokumentation von fünfzig Steinhügeln mit safaitischen Inschriften.'],
+    ['C', ': Corpus Inscriptionum Semiticarum, Pars V – die safaitischen Inschriften (u. a. Dussaud & Macler; Ryckmans 1950).'],
+    ['SIJ', ': Winnett, Safaitic Inscriptions from Jordan (Toronto 1957).'],
+    ['ISB', ': Oxtoby, Some Inscriptions of the Safaitic Bedouin (New Haven 1968).'],
+    ['CSNS', ': Clark, A Study of New Safaitic Inscriptions from Jordan (1979).'],
+    ['Rees', ': L. W. B. Rees, frühe Aufnahmen aus der Ḥarrat al-Raǧil (1920er Jahre).'],
+    ['Is.L / Is.Mu', ': Sammlungen aus al-ʿĪsāwī (Rif Dimašq); Editionsnachweis jeweils im OCIANA-Eintrag.'],
+    ['RQ.A / RQ.D', ': Aufnahmen aus Riǧm Qaʿqūl (Rif Dimašq).'],
+    ['RSIS / ASWS / SSWS / AbSWS / RWQ', ': Surveys der Wādī-Sārah- und Wādī-Salma-Region (Provinz Al-Mafraq).'],
+    ['AbaNS / HaNS / HaNSB / HNSD / HSNS', ': nordjordanische Safaitic-Surveys.'],
+    ['AAEK / ASFF', ': Surveys von Qāʿ Fahadah (Provinz Al-Mafraq).'],
+    ['JaS / KWQ / CEDS / GSSH / MKJS / BS / WAMS / BWM / ZN', ': weitere Survey-Daten aus der nordostjordanischen Ḥarrah; genaue Nachweise im OCIANA-Eintrag.'],
+]
+
 ZEICHEN_HEAD = 'Sonderzeichen'
 
 ZEICHEN = [
@@ -1358,7 +1357,7 @@ ZEICHEN = [
     ['ṯ', ' — stimmloses englisches „th": wie in „think".'],
     ['ḏ', ' — stimmhaftes englisches „th": wie in „this".'],
     ['ṣ · ḍ · ṭ · ẓ', ' — nachdrückliche (emphatische) Laute: s, d, t und der „th"-/z-Laut, dunkel und mit gespannter Zunge gesprochen. Der Punkt unter dem Buchstaben markiert diese Nachdrücklichkeit.'],
-    ['ā · ī · ū · ō', ' — lange Vokale in den eingedeutschten Orten/Personen (nicht in den vokallosen Inschriften selbst).'],
+    ['ā · ī · ū · ō', ' — lange Vokale. Sie entstammen nicht der safaitischen Schrift (die keine kennt), sondern Namen, die anderswo mit Vokalen überliefert sind: heutige Fundorte, Götter, Städte.'],
 ]
 
 # --------------------------------------------------------------------------
@@ -1379,15 +1378,14 @@ def main():
     xml.append(EMPTY)
     xml.append(PAGEBREAK)
     xml += [para(k, t) for k, t in NACHWORT]
-    xml.append(EMPTY)
-    xml.append(bold_head(ERSTAUSGABEN_LABEL))
-    xml += [listitem(a, b) for a, b in SIGLEN]
-    xml.append(EMPTY)
-    xml.append(subhead(FUNDORTE_HEAD))
-    xml += [listitem(a, b) for a, b in FUNDORTE]
-    xml.append(EMPTY)
-    xml.append(subhead(ZEICHEN_HEAD))
-    xml += [listitem(a, b) for a, b in ZEICHEN]
+
+    # Anhang in der Reihenfolge, die das Nachwort ankuendigt.
+    for head, items in ((FUNDORTE_HEAD, FUNDORTE),
+                        (ERSTAUSGABEN_HEAD, SIGLEN),
+                        (ZEICHEN_HEAD, ZEICHEN)):
+        xml.append(EMPTY)
+        xml.append(subhead(head))
+        xml += [listitem(a, b) for a, b in items]
     xml.append(EMPTY)
 
     raw = zipfile.ZipFile(TEMPLATE).read("word/document.xml").decode("utf-8")
