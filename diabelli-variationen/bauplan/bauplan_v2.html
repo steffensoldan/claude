@@ -1,0 +1,313 @@
+<title>Dreiunddreißig Eingriffe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Spectral:ital,wght@0,300;0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --ground:#E6E7E1; --surface:#F2F3EF; --sunk:#DBDDD5;
+  --ink:#16191B; --ink-mid:#3E4544; --ink-mute:#616764;
+  --rule:#C6C9BF; --rule-soft:#D6D8CF;
+  --verd:#2F6B5C; --verd-soft:#DCE7E2;
+  --brass:#7E6320; --brass-soft:#EBE4CD;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#14171A; --surface:#1B1F22; --sunk:#0F1214;
+    --ink:#E4E6E0; --ink-mid:#B9BEBA; --ink-mute:#8C9391;
+    --rule:#2E3438; --rule-soft:#242A2D;
+    --verd:#79C0AA; --verd-soft:#1D2E2A;
+    --brass:#CBA857; --brass-soft:#2A2519;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#14171A; --surface:#1B1F22; --sunk:#0F1214;
+  --ink:#E4E6E0; --ink-mid:#B9BEBA; --ink-mute:#8C9391;
+  --rule:#2E3438; --rule-soft:#242A2D;
+  --verd:#79C0AA; --verd-soft:#1D2E2A;
+  --brass:#CBA857; --brass-soft:#2A2519;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);
+  font-family:"Spectral",Georgia,serif;font-size:17px;line-height:1.62;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:58rem;margin:0 auto;padding:0 1.75rem 6rem}
+
+.masthead{padding:4.5rem 0 2rem;border-bottom:2px solid var(--ink)}
+.kicker{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--verd);margin:0 0 1.3rem}
+h1{font-family:"Bodoni Moda",Didot,serif;font-weight:400;
+  font-size:clamp(2.5rem,7vw,4.2rem);line-height:1.03;margin:0;text-wrap:balance}
+.subtitle{font-family:"Bodoni Moda",Didot,serif;font-style:italic;
+  font-size:clamp(1.1rem,2.5vw,1.4rem);color:var(--ink-mid);
+  margin:.85rem 0 0;max-width:40ch;line-height:1.34}
+.standfirst{max-width:63ch;margin:1.9rem 0 0;color:var(--ink-mid)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));
+  gap:0;margin:2.3rem 0 0;border-top:1px solid var(--rule)}
+.fact{padding:.95rem 1rem .95rem 0;border-right:1px solid var(--rule-soft)}
+.fact:last-child{border-right:0}
+.fact dt{font-family:"IBM Plex Mono",monospace;font-size:.65rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-mute);margin:0 0 .3rem}
+.fact dd{margin:0;font-size:1rem;font-variant-numeric:tabular-nums}
+
+h2{font-family:"Bodoni Moda",Didot,serif;font-weight:400;
+  font-size:clamp(1.55rem,3.4vw,2.05rem);line-height:1.13;margin:0 0 .45rem;text-wrap:balance}
+h3{font-family:"Spectral",Georgia,serif;font-weight:600;font-size:1.02rem;margin:1.9rem 0 .45rem}
+p{margin:0 0 1rem;max-width:64ch}
+strong{font-weight:600}
+.section{margin-top:4.2rem}
+.section-head{border-top:1px solid var(--rule);padding-top:1.4rem;margin-bottom:1.6rem}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--ink-mute);margin:0 0 .75rem}
+
+/* Kernsatz */
+.core{background:var(--surface);border:1px solid var(--rule);padding:1.6rem 1.7rem;margin:1.4rem 0 0}
+.core .satz{font-family:"Bodoni Moda",Didot,serif;font-size:clamp(1.3rem,3vw,1.8rem);
+  line-height:1.3;margin:.2rem 0 1rem;color:var(--ink);text-wrap:balance}
+.core .alt{font-family:"Bodoni Moda",Didot,serif;font-style:italic;font-size:1.05rem;
+  color:var(--ink-mid);margin:.15rem 0}
+.crit{list-style:none;padding:0;margin:1.1rem 0 0;display:grid;gap:.4rem}
+.crit li{padding-left:1.7rem;position:relative;font-size:.95rem;color:var(--ink-mid);max-width:62ch}
+.crit li::before{content:attr(data-n);position:absolute;left:0;top:0;
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--verd)}
+
+/* Regeln */
+.rules{display:grid;gap:0;margin:1.4rem 0 0;border-top:1px solid var(--rule)}
+.rule-row{display:grid;grid-template-columns:11rem 1fr;gap:1.4rem;padding:.95rem 0;
+  border-bottom:1px solid var(--rule-soft);align-items:start}
+.rule-row dt{font-weight:600}
+.rule-row dd{margin:0;color:var(--ink-mid);max-width:58ch}
+@media(max-width:640px){.rule-row{grid-template-columns:1fr;gap:.2rem}}
+
+.thesis{margin:1.3rem 0 0;padding:.85rem 0 .85rem 1.1rem;border-left:2px solid var(--verd);
+  max-width:60ch}
+.thesis .lbl{font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--verd);display:block;margin-bottom:.28rem}
+
+/* Kurven */
+.curve{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:1.5rem;margin:1.4rem 0 0}
+.curve section{border-top:2px solid var(--verd);padding-top:.8rem}
+.curve h4{margin:0 0 .5rem;font-family:"Spectral",serif;font-size:1rem;font-weight:600}
+.curve ul{list-style:none;padding:0;margin:0;display:grid;gap:.35rem;font-size:.93rem}
+.curve li{color:var(--ink-mid)}
+.curve code{font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--verd)}
+
+/* Tabelle 33 */
+.tablewrap{overflow-x:auto;margin:1.4rem 0 0;border-top:1px solid var(--rule)}
+table{border-collapse:collapse;width:100%;min-width:40rem;font-size:.93rem}
+th,td{text-align:left;padding:.6rem .85rem .6rem 0;vertical-align:top;
+  border-bottom:1px solid var(--rule-soft)}
+th{font-family:"IBM Plex Mono",monospace;font-size:.63rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-mute);font-weight:500;border-bottom:1px solid var(--rule)}
+td.nr{font-family:"IBM Plex Mono",monospace;color:var(--verd);white-space:nowrap;
+  font-variant-numeric:tabular-nums;width:3.2rem}
+td.op{font-weight:600;white-space:nowrap}
+td.vg{color:var(--ink-mid);min-width:20rem}
+tr.pillar td{background:var(--verd-soft)}
+tr.pillar td.op{color:var(--ink)}
+.tag{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.08em;
+  text-transform:uppercase;padding:.1rem .38rem;border:1px solid var(--rule);
+  color:var(--ink-mute);white-space:nowrap;display:inline-block}
+.tag.b{border-color:var(--verd);color:var(--verd)}
+.legend{display:flex;gap:1.2rem;flex-wrap:wrap;margin:.9rem 0 0;font-size:.86rem;color:var(--ink-mute)}
+
+/* Schritte */
+.steps{list-style:none;padding:0;margin:1.3rem 0 0;counter-reset:s}
+.steps li{counter-increment:s;display:grid;grid-template-columns:2.1rem 1fr;gap:.85rem;
+  padding:.6rem 0;border-bottom:1px solid var(--rule-soft);max-width:66ch}
+.steps li::before{content:counter(s,decimal-leading-zero);font-family:"IBM Plex Mono",monospace;
+  font-size:.77rem;color:var(--verd);padding-top:.22em}
+.steps li:last-child{border-bottom:0}
+
+/* Risiken */
+.risk{border-left:2px solid var(--brass);background:var(--brass-soft);padding:1.2rem 1.35rem;margin:1.3rem 0 0}
+.risk dl{margin:0;display:grid;gap:.85rem}
+.risk dt{font-weight:600;margin-bottom:.12rem}
+.risk dd{margin:0;color:var(--ink-mid);max-width:62ch;font-size:.95rem}
+
+footer{margin-top:4.5rem;padding-top:1.4rem;border-top:2px solid var(--ink);
+  font-size:.88rem;color:var(--ink-mute);max-width:62ch}
+:focus-visible{outline:2px solid var(--verd);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="masthead">
+  <p class="kicker">Bauplan · Zweite Fassung · 09/2026</p>
+  <h1>Dreiunddreißig Eingriffe</h1>
+  <p class="subtitle">Ein Gedichtband, der einen dürftigen Satz dreiunddreißigmal behandelt — nach dem Verlauf von Beethovens op.&nbsp;120</p>
+  <p class="standfirst">Jedes Stück benennt seinen Eingriff in der Überschrift und vollzieht ihn im Text. Der Band ist ohne Musikkenntnis lesbar und übernimmt die Zeitgestalt, die sonst das Klavier trägt. Beethoven steht nicht auf dem Titel, sondern im Nachsatz.</p>
+  <dl class="facts">
+    <div class="fact"><dt>Umfang</dt><dd>60–90 S.</dd></div>
+    <div class="fact"><dt>Stücke</dt><dd>33</dd></div>
+    <div class="fact"><dt>Zuordnung</dt><dd>1:1, in Reihenfolge</dd></div>
+    <div class="fact"><dt>Maß</dt><dd>frei</dd></div>
+    <div class="fact"><dt>Apparat</dt><dd>Nachsatz, 4–6 S.</dd></div>
+  </dl>
+</header>
+
+<section class="section">
+  <div class="section-head">
+    <p class="eyebrow">Das Feste</p>
+    <h2>Der Kernsatz</h2>
+  </div>
+  <p>Drei Größen variieren in diesem Band: Länge, Stimme, Grad der Selbstauskunft. Damit das als Variation und nicht als bloße Verschiedenheit gelesen wird, muss etwas physisch gleich bleiben. Der Kernsatz ist dieses Etwas — Diabellis Walzer in Sprache: sequenziell gebaut, wiederholungsgesättigt, semantisch fast leer.</p>
+  <div class="core">
+    <p class="kicker" style="margin-bottom:.4rem">Vorschlag</p>
+    <p class="satz">„Und dann noch einmal, und dann noch einmal, und dann nicht mehr.“</p>
+    <p style="font-size:.95rem;color:var(--ink-mid);margin-bottom:1.1rem;max-width:60ch">Wiederholte Anfangsfigur, eine Sequenz aus zwei gleichen Gliedern, eine dritte Wendung, die den Bau bricht — das strukturelle Äquivalent zum Walzer mit seiner Tonrepetition, seiner Rosalie und seiner Kadenz. Laut sprechbar, rhythmisch prägnant, inhaltlich nahezu wertlos.</p>
+    <p class="kicker" style="margin-bottom:.4rem">Alternativen</p>
+    <p class="alt">„Es ist noch etwas Zeit, es ist noch etwas Zeit, dann nicht.“</p>
+    <p class="alt">„Man nimmt es, man legt es hin, man nimmt es wieder.“</p>
+    <ul class="crit">
+      <li data-n="01">Semantisch arm — er darf nichts bedeuten, was interessanter wäre als seine Behandlung.</li>
+      <li data-n="02">Sequenziell gebaut — enthält eine Wiederholung mit Verschiebung.</li>
+      <li data-n="03">Kurz — höchstens zwölf Wörter, damit er in jedes Stück passt.</li>
+      <li data-n="04">Kadenzierend — die letzte Wendung bricht den Bau, den die ersten beiden aufgebaut haben.</li>
+      <li data-n="05">Sprechbar — der Band ersetzt die Musik in der Zeit; was stumm nicht trägt, fällt weg.</li>
+    </ul>
+  </div>
+  <div class="thesis">
+    <span class="lbl">Bedingung</span>
+    Der Kernsatz ist in jedem Stück physisch anwesend — gedehnt, zerlegt, überwuchert, verdunkelt, aber auffindbar. Genau einmal fehlt er: in Stück XIII, dem Pausenstück. Dieses Fehlen ist die stärkste Stelle des Bandes und nur möglich, wenn die Regel sonst ausnahmslos gilt.
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <p class="eyebrow">Verfahren</p>
+    <h2>Fünf Regeln</h2>
+  </div>
+  <dl class="rules">
+    <div class="rule-row"><dt>Überschrift</dt><dd>Jedes Stück trägt den Namen seines Eingriffs, ohne Ausnahme. Das ist die zweite Invariante und sichert die Erkennbarkeit des Zyklus, auch wenn ein Stück selbst nichts über sich verrät.</dd></div>
+    <div class="rule-row"><dt>Selbstauskunft</dt><dd>Variabel ist nur, wie weit der <em>Text</em> seine eigene Überschrift einholt. Vier Grade, siehe unten. Damit ist der Widerspruch aufgelöst, den „nur spürbar“ und „explizit ausgestellt“ sonst erzeugen.</dd></div>
+    <div class="rule-row"><dt>Länge</dt><dd>Kein festes Maß, aber auch kein Zufall: Die Längen folgen der Kurve des Zyklus. Kurz in den schnellen Gruppen, ausgedehnt bei XIV, XX und XXXI, am kürzesten bei XIII und XXXIII.</dd></div>
+    <div class="rule-row"><dt>Stimme</dt><dd>Die Stimme ist selbst variierte Größe, wechselt aber nicht beliebig, sondern an dramaturgisch begründeten Stellen — siehe Stimmenkurve.</dd></div>
+    <div class="rule-row"><dt>Erklärung</dt><dd>Kein Stück erklärt etwas. Alle Erklärung nimmt der Nachsatz auf sich: Quelle, Verfahren, Kernsatz, Zuordnungsliste. Vier bis sechs Seiten, nicht mehr.</dd></div>
+  </dl>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <p class="eyebrow">Die beiden variablen Kurven</p>
+    <h2>Selbstauskunft und Stimme</h2>
+  </div>
+  <div class="curve">
+    <section>
+      <h4>Grade der Selbstauskunft</h4>
+      <ul>
+        <li><code>A</code> Der Text vollzieht und benennt seinen Eingriff.</li>
+        <li><code>B</code> Der Text vollzieht, sagt nichts darüber. <strong>Normalfall.</strong></li>
+        <li><code>C</code> Der Text vollzieht und verleugnet — er behauptet das Gegenteil dessen, was die Überschrift sagt.</li>
+        <li><code>D</code> Der Text ist reine Anweisung und vollzieht nicht. Höchstens zweimal im Band.</li>
+      </ul>
+    </section>
+    <section>
+      <h4>Stimmenkurve</h4>
+      <ul>
+        <li><strong>Unpersönlich</strong> — Grundstimme, trägt zwei Drittel des Bandes.</li>
+        <li><strong>Anweisend</strong> — bei I, weil die Eröffnung eine Korrektur ist, und bei den beiden <code>D</code>-Stücken.</li>
+        <li><strong>Ein Ich</strong> — erscheint zuerst bei IX, der ersten Verdunkelung, kehrt in der dunklen Gruppe XXIX–XXXI zurück und spricht das letzte Stück.</li>
+        <li><strong>Fremde Stimme</strong> — nur bei XXII, wo Beethoven Mozart zitiert.</li>
+      </ul>
+    </section>
+  </div>
+  <div class="thesis">
+    <span class="lbl">Begründung</span>
+    Die Stimme wechselt entlang der Dramaturgie des Zyklus, nicht nach Belieben. Damit bleibt sie variierte Größe, ohne den Band in eine Sammlung ungleicher Gedichte zu zerlegen.
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <p class="eyebrow">Kurzbriefings</p>
+    <h2>Die dreiunddreißig Stücke</h2>
+  </div>
+  <p>Eine Zeile je Stück: die Operation, die zugleich die Überschrift ist, und die Vorgabe. Die grün unterlegten Zeilen sind die Pfeiler des Zyklus — Stellen, an denen die Charakteristik der Variation gesichert ist und die Zuordnung feststeht.</p>
+  <div class="legend">
+    <span><span class="tag b">belegt</span> Charakteristik der Variation gesichert</span>
+    <span><span class="tag">Vorschlag</span> Zuordnung von mir gesetzt, am Notentext zu prüfen</span>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Nr.</th><th>Operation</th><th>Vorgabe für das Stück</th><th>Stand</th></tr></thead>
+      <tbody>
+        <tr class="pillar"><td class="nr">I</td><td class="op">Umtaktung</td><td class="vg">Der Satz gegen seine eigene Betonung gelesen. Aus dem Wiegen wird ein Schritt. Anweisende Stimme, Grad A — die Eröffnung behauptet, der Satz sei bisher falsch gesprochen worden.</td><td><span class="tag b">belegt</span></td></tr>
+        <tr><td class="nr">II</td><td class="op">Beschleunigung</td><td class="vg">Dreimal derselbe Satz, jedesmal schneller; unterwegs fallen Wörter weg, ohne dass der Bau nachgibt.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr><td class="nr">III</td><td class="op">Ausdünnung</td><td class="vg">Nur die Konjunktionen und die Zäsuren bleiben stehen. Das Gerüst ohne Füllung.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr><td class="nr">IV</td><td class="op">Kanon</td><td class="vg">Der Satz gegen sich selbst, um eine halbe Zeile versetzt. Zwei Spalten oder zwei Schriftgrade.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr><td class="nr">V</td><td class="op">Stauchung</td><td class="vg">Alles in eine einzige Zeile gepresst. Das kürzeste Stück der ersten Hälfte.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr><td class="nr">VI</td><td class="op">Registerspreizung</td><td class="vg">Derselbe Satz in gehobener und in niedrigster Sprache unmittelbar nebeneinander, ohne Vermittlung.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr><td class="nr">VII</td><td class="op">Überwucherung</td><td class="vg">Der Satz unter Einschüben, Nebensätzen und Beifügungen fast unauffindbar. Grad C: der Text behauptet, sich kurz zu fassen.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr><td class="nr">VIII</td><td class="op">Glättung</td><td class="vg">Der Satz so lange begradigt, bis nichts mehr hakt — und nichts mehr da ist.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr class="pillar"><td class="nr">IX</td><td class="op">Verdunkelung</td><td class="vg">Erstes Auftreten des Ich. Derselbe Satz, aus dem alles Helle entfernt ist. Kein neues Wort, nur Auslassung.</td><td><span class="tag b">belegt</span></td></tr>
+        <tr><td class="nr">X</td><td class="op">Abriss</td><td class="vg">Beschleunigung bis zur Unlesbarkeit, dann Ende mitten im Wort.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr><td class="nr">XI</td><td class="op">Zerlegung</td><td class="vg">Der Satz in Silben aufgelöst, die Silben in ihrer Reihenfolge belassen.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr><td class="nr">XII</td><td class="op">Umkehrung</td><td class="vg">Der Satz von hinten. Die Kadenz steht am Anfang, die Wiederholung am Schluss.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr class="pillar"><td class="nr">XIII</td><td class="op">Auslassung</td><td class="vg">Das einzige Stück ohne den Kernsatz. Nur seine Zäsuren stehen auf der Seite. Kürzestes Stück des Bandes. Grad D denkbar.</td><td><span class="tag b">belegt</span></td></tr>
+        <tr class="pillar"><td class="nr">XIV</td><td class="op">Dehnung</td><td class="vg">Der Satz über mehrere Seiten, ein Wort je Zeile, mit wachsenden Abständen. Das längste Stück der ersten Hälfte.</td><td><span class="tag b">belegt</span></td></tr>
+        <tr><td class="nr">XV</td><td class="op">Verkleinerung</td><td class="vg">Der ganze Satz, aber in seinen kleinsten möglichen Wörtern. Nichts fehlt, alles ist geschrumpft.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr><td class="nr">XVI</td><td class="op">Verdopplung</td><td class="vg">Jedes Element zweimal. Der Bau bleibt erkennbar, die Geduld nicht.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr><td class="nr">XVII</td><td class="op">Härtung</td><td class="vg">Nur die Konsonanten tragen. Der Satz wird geräuschhaft, bleibt aber rekonstruierbar.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr><td class="nr">XVIII</td><td class="op">Verschiebung</td><td class="vg">Sequenz im strengen Sinn: derselbe Bau, jedesmal um ein Wort weitergerückt. Der Schusterfleck als Verfahren.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr><td class="nr">XIX</td><td class="op">Verschränkung</td><td class="vg">Zwei Durchgänge des Satzes ineinandergeschoben, sodass beide lesbar bleiben.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr class="pillar"><td class="nr">XX</td><td class="op">Stillstand</td><td class="vg">Der Satz, der nicht weitergeht. Kein Verb, keine Bewegung, große Abstände. Zweites langes Stück, rätselhaft und unaufgelöst.</td><td><span class="tag b">belegt</span></td></tr>
+        <tr><td class="nr">XXI</td><td class="op">Bruch</td><td class="vg">Zwei unvereinbare Hälften, hart aneinandergesetzt. Beide enthalten den Satz, keine erklärt die andere.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr class="pillar"><td class="nr">XXII</td><td class="op">Einschleusung</td><td class="vg">Fremde Stimme. Ein Klagen über die Arbeit tritt in den Satz und wird nicht assimiliert. Es muss fremd bleiben — Beethoven zitiert hier Leporello.</td><td><span class="tag b">belegt</span></td></tr>
+        <tr><td class="nr">XXIII</td><td class="op">Mechanisierung</td><td class="vg">Der Satz als Übungsstück, tonlos durchgespielt. (Die häufig genannte Etüden-Anspielung der Variation ist Deutung, kein Befund.)</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr class="pillar"><td class="nr">XXIV</td><td class="op">Fughetta</td><td class="vg">Vier Stimmen, jede beginnt mit dem Satz, keine kommt zu Ende. Leise, nicht virtuos.</td><td><span class="tag b">belegt</span></td></tr>
+        <tr><td class="nr">XXV</td><td class="op">Aufhellung</td><td class="vg">Gegenstück zu IX. Derselbe Eingriff, umgekehrtes Vorzeichen — und deshalb weniger überzeugend. Das darf man sehen.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr><td class="nr">XXVI</td><td class="op">Kreisen</td><td class="vg">Der Satz schließt an sich selbst an, ohne Anfang und Ende. Ein einziger Umlauf, dann Abbruch.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr><td class="nr">XXVII</td><td class="op">Zerstäubung</td><td class="vg">Die Wörter über die Seite verteilt, die Reihenfolge intakt. Der Leser stellt die Zeit selbst her.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr><td class="nr">XXVIII</td><td class="op">Hämmern</td><td class="vg">Nur die Wiederholungsfigur des Satzes, ohne die Kadenz. Es hört nicht auf, weil der Schluss fehlt.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr class="pillar"><td class="nr">XXIX</td><td class="op">Verdunkelung II</td><td class="vg">Das Ich kehrt zurück. Beginn der dunklen Dreiergruppe. Kürzer und härter als IX.</td><td><span class="tag b">belegt</span></td></tr>
+        <tr class="pillar"><td class="nr">XXX</td><td class="op">Klage</td><td class="vg">Der Satz ohne Widerstand. Nichts wird ihm angetan; er trägt sich selbst nicht mehr.</td><td><span class="tag b">belegt</span></td></tr>
+        <tr class="pillar"><td class="nr">XXXI</td><td class="op">Rückdatierung</td><td class="vg">Der Satz in einer älteren Sprache, überreich verziert, jede Wendung ausgeschmückt. Drittes langes Stück, der Höhepunkt der dunklen Gruppe.</td><td><span class="tag b">belegt</span></td></tr>
+        <tr class="pillar"><td class="nr">XXXII</td><td class="op">Vervielfachung und Abbruch</td><td class="vg">Höchste Dichte des Bandes: der Satz gegen sich selbst in mehreren Schichten — und dann Ende mitten im Satz, unaufgelöst. Kein Schluss, ein Übergang.</td><td><span class="tag b">belegt</span></td></tr>
+        <tr class="pillar"><td class="nr">XXXIII</td><td class="op">Rückzug</td><td class="vg">Der Satz zum ersten und einzigen Mal ganz einfach gesagt, in einer älteren, milderen Form, leiser werdend. Kein Triumph, kein Fazit. Das Ich spricht, kurz.</td><td><span class="tag b">belegt</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <p class="eyebrow">Reihenfolge der Arbeit</p>
+    <h2>Sieben Schritte</h2>
+  </div>
+  <ol class="steps">
+    <li>Kernsatz endgültig festlegen — laut sprechen, gegen die fünf Kriterien prüfen. Alles Weitere hängt daran.</li>
+    <li>Notentext oder Aufnahme durchgehen und die als Vorschlag markierten Zuordnungen bestätigen, tauschen oder ersetzen. Die elf Pfeiler stehen fest.</li>
+    <li>Längen-, Stimmen- und Selbstauskunftskurve über alle 33 Positionen eintragen — als eine Tabelle, bevor ein Stück geschrieben wird.</li>
+    <li>Drei Probestücke: I, XIII, XXXIII. Die Extreme zuerst — Korrektur, Leerstelle, Rückzug. Erst wenn diese drei tragen, trägt das Verfahren.</li>
+    <li>Die übrigen dreißig in der Reihenfolge des Zyklus schreiben, nicht nach Lust. Die Reihenfolge ist die Form.</li>
+    <li>Ein vollständiger Durchgang laut. Was stumm funktioniert und gesprochen nicht, fällt weg — der Band ersetzt die Musik in der Zeit.</li>
+    <li>Nachsatz zuletzt: Quelle, Verfahren, Kernsatz, Zuordnungsliste. Vier bis sechs Seiten.</li>
+  </ol>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <p class="eyebrow">Wo es scheitern kann</p>
+    <h2>Vier Risiken</h2>
+  </div>
+  <div class="risk">
+    <dl>
+      <dt>Der Kernsatz nutzt sich ab</dt>
+      <dd>Nach zwölf Stücken kann der Leser ihn nicht mehr hören. Gegenmittel: Die Stücke XI, XVII und XXVII lassen ihn nur noch als Rest erkennbar; XIII lässt ihn ganz weg. Die Abnutzung wird zum Material, statt bekämpft zu werden.</dd>
+      <dt>Selbstbezüglichkeit</dt>
+      <dd>Dreiunddreißig Gedichte über das Gedichtemachen wären unerträglich. Gegenmittel: Die Eingriffe greifen an <em>einem Satz</em>, nicht an „der Sprache“. Die vier Ich-Stücke bringen Welt herein und sind die einzigen, in denen etwas außerhalb des Verfahrens vorkommt.</dd>
+      <dt>Erklärungsgestus</dt>
+      <dd>Die Versuchung, im Stück selbst zu sagen, was gerade geschieht. Gegenmittel: Grad A ist auf höchstens fünf Stücke begrenzt; die Erklärung ist im Nachsatz konzentriert.</dd>
+      <dt>Gleichförmigkeit ohne festes Maß</dt>
+      <dd>Ohne Maßvorgabe geraten alle Stücke gleich lang. Gegenmittel: Die Längenkurve wird in Schritt 3 geplant und ist verbindlich, bevor geschrieben wird.</dd>
+    </dl>
+  </div>
+</section>
+
+<footer>
+  Zweite Fassung, ersetzt den Aufriss vom Vortag. Die elf Pfeiler beruhen auf gesicherten Charakteristika der Variationen I, IX, XIII, XIV, XX, XXII, XXIV, XXIX–XXXIII. Die übrigen zweiundzwanzig Zuordnungen sind gesetzt und am Notentext zu prüfen; sie sind so gewählt, dass ein Tausch innerhalb der Gruppen die Dramaturgie nicht beschädigt.
+</footer>
+
+</div>
