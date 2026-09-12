@@ -81,12 +81,31 @@ Selected by the `model:` HTTP header (`model=` kwarg in the SDK), not by a body 
 - Audio playback helpers need the extra: `pip install "fish-audio-sdk[utils]"` (and a system player; a missing one raises `DependencyError`).
 - Legacy `fish_audio_sdk` package (`Session`, `WebSocketSession`) still ships in the same distribution but gets no updates — new code uses `fishaudio`.
 
+## Key handling
+
+- The key lives in the environment: `FISH_API_KEY`. Both SDKs read it automatically; never
+  hardcode it in source, notebooks, prompts or commit messages.
+- If a JSON config is required, keep the key out of the tracked one: `config.example.json`
+  holds the shape and points at the env var; the real values go into `fish-audio.local.json`
+  (matched by the repo's `*.local.json` ignore rule) or into `.env`.
+
+  ```python
+  import json, os
+  cfg = json.load(open("fish-audio.local.json"))["fish_audio"]
+  client = FishAudio(api_key=os.environ[cfg["api_key_env"]], base_url=cfg["base_url"])
+  ```
+- Never echo the key into logs or error output; `APIError.body` can contain request context —
+  scrub before pasting it anywhere.
+- A key that has been pasted into a chat, ticket, screenshot or shared file counts as
+  compromised: rotate it at fish.audio/app/api-keys and update the environment.
+
 ## References
 
 - `references/http-api.md` — raw endpoint contracts, request/response fields, websocket protocol, error mapping.
 - `references/python-sdk.md` — full method signatures, `TTSConfig` field table, options, exceptions.
 - `references/typescript-sdk.md` — `FishAudioClient` usage.
 - `scripts/tts_example.py` — runnable TTS/ASR/clone example.
+- `config.example.json` — config shape; copy to `fish-audio.local.json` for real values.
 
 ## Provenance and limits
 

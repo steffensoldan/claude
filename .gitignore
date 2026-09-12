@@ -11,3 +11,10 @@ __pycache__/
 state/
 reports/
 *.log
+
+# Secrets (lokale Konfigurationen mit Schlüsseln)
+.env.*
+!.env.example
+*.local.json
+secrets*.json
+*.secret.json

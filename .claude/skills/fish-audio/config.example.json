@@ -1,0 +1,11 @@
+{
+  "_comment": "Vorlage. Echten Key NICHT hier eintragen, sondern in fish-audio.local.json (gitignored) oder als Umgebungsvariable FISH_API_KEY.",
+  "fish_audio": {
+    "api_key_env": "FISH_API_KEY",
+    "base_url": "https://api.fish.audio",
+    "model": "s2-pro",
+    "format": "mp3",
+    "latency": "balanced",
+    "reference_id": null
+  }
+}
