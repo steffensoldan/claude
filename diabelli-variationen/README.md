@@ -32,6 +32,7 @@ Ausdrücklich nicht beabsichtigt — jeder dieser Punkte hat die verworfene erst
 | [`bauplan/ARBEITSPLAN.md`](bauplan/ARBEITSPLAN.md) | maßgeblich | Sieben Arbeitsschritte, vier Risiken, offene Entscheidungen. |
 | [`bauplan/VORLAEUFER.md`](bauplan/VORLAEUFER.md) | Referenz | Vergleichbare Ansätze, Abgrenzung, Quellen. |
 | [`bauplan/bauplan_v2.html`](bauplan/bauplan_v2.html) | Referenz | Quelltext der veröffentlichten Bauplan-Seite. |
+| [`varianten/`](varianten/) | **offen** | Parallele, unentschiedene Entwicklungslinien. Weder Arbeitsstand noch Archiv. |
 | [`archiv/`](archiv/) | abgelöst | Fassung 1, aus Nachvollziehbarkeit erhalten. Nicht mehr in Bearbeitung. |
 
 ## Zeitachse
@@ -40,13 +41,15 @@ Ausdrücklich nicht beabsichtigt — jeder dieser Punkte hat die verworfene erst
 
 **Fassung 2 — „Dreiunddreißig Eingriffe" (aktuell).** Schmaler Gedichtband, 60–90 Seiten. Entstanden aus zehn gezielten Festlegungen (dokumentiert in [`bauplan/KONZEPT.md`](bauplan/KONZEPT.md), Abschnitt „Festgelegte Parameter"). Der Apparat der ersten Fassung ist bis auf einen vierseitigen Nachsatz entfallen.
 
+**Offene Variante — „Ruhe und Ordnung".** Betrifft nur Kernsatz und Zeitbezug: der Kernsatz wäre die Leitformel der Restauration statt eines beliebigen dürftigen Satzes. Grundlage ist eine belegbare Gleichzeitigkeit — 1819 verschickt Diabelli seinen Walzer, im August/September desselben Jahres werden die Karlsbader Beschlüsse gefasst. **Nicht entschieden.** Siehe [`varianten/ruhe-und-ordnung/`](varianten/ruhe-und-ordnung/).
+
 ## Aktueller Stand
 
 - Bauplan vollständig, alle Formparameter festgelegt.
 - Elf der 33 Zuordnungen beruhen auf gesicherten Charakteristika der Variationen; 22 sind gesetzte Vorschläge und am Notentext zu prüfen.
 - Kein Stück geschrieben.
 
-**Nächster Schritt:** Kernsatz endgültig festlegen (drei Kandidaten und fünf Kriterien in `bauplan/KONZEPT.md`). Alles Weitere hängt daran.
+**Nächster Schritt:** Kernsatz endgültig festlegen. Drei Kandidaten und fünf Kriterien in `bauplan/KONZEPT.md`; ein Trockentest hat dort drei Leerläufe und eine Kollision ergeben. Ein vierter Kandidat liegt als offene Variante unter `varianten/ruhe-und-ordnung/`. Alles Weitere hängt an dieser Entscheidung.
 
 ## Veröffentlichte Fassung
 

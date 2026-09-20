@@ -38,6 +38,7 @@ Vor Arbeiten in `aos/` diese Datei lesen. Bei Arbeiten in den übrigen Projekten
 
 - **`README.md`** mit Kurzbeschreibung, Zielen, einer Tabelle „Wo ist was" (welcher Ordner ist aktuell, welcher abgelöst) und einer **Zeitachse** der Konzeptstufen.
 - **Ein aktiver Arbeitsordner** (`register/`, `bauplan/`) — nur hier wird gearbeitet.
+- **`varianten/`** für parallele, **unentschiedene** Linien — weder aktiver Stand noch Archiv. Eine Variante liegt dort, solange offen ist, ob sie verfolgt wird; wird sie übernommen, wandert sie in den Arbeitsordner, wird sie verworfen, ins Archiv. Der maßgebliche Stand bleibt in jedem Fall der Arbeitsordner.
 - **`archiv/`** für abgelöste Entwicklungsstufen. Nicht löschen: Vorstufen bleiben aus Nachvollziehbarkeit erhalten, mit einer `README.md`, die begründet, warum die Stufe verworfen wurde und was in die Nachfolgefassung überging.
 - **Belegstatus ausweisen.** Wo Zuordnungen oder Deutungen gesetzt und nicht belegt sind, ist das je Eintrag zu markieren (siehe `diabelli-variationen/bauplan/STUECKE.md`, Spalte „Stand"). Nichts als gesichert ausgeben, was Interpretation ist.
 
