@@ -34,25 +34,61 @@ Zehn Entscheidungen, in drei Runden getroffen. Sie determinieren die Form vollst
 
 Das sprachliche Äquivalent zu Diabellis Walzer: sequenziell gebaut, wiederholungsgesättigt, semantisch fast leer.
 
-**Vorschlag:**
+**Noch nicht entschieden.** Der erste Vorschlag ist geprüft und hat den Test nur teilweise bestanden; daraus sind drei zusätzliche Kriterien entstanden. Eine vierte Kandidatenlinie liegt als offene Variante unter [`../varianten/ruhe-und-ordnung/`](../varianten/ruhe-und-ordnung/).
+
+### Erster Vorschlag und sein Testbefund
 
 > „Und dann noch einmal, und dann noch einmal, und dann nicht mehr."
 
-Wiederholte Anfangsfigur, eine Sequenz aus zwei gleichen Gliedern, eine dritte Wendung, die den Bau bricht — strukturell dasselbe wie Tonrepetition, Rosalie und Kadenz beim Walzer. Laut sprechbar, rhythmisch prägnant, inhaltlich nahezu wertlos.
+Wiederholte Anfangsfigur, eine Sequenz aus zwei gleichen Gliedern, eine dritte Wendung, die den Bau bricht — strukturell dasselbe wie Tonrepetition, Rosalie und Kadenz beim Walzer.
 
-**Alternativen:**
+Der Trockentest gegen die härtesten Operationen fällt gemischt aus.
 
-> „Es ist noch etwas Zeit, es ist noch etwas Zeit, dann nicht."
->
-> „Man nimmt es, man legt es hin, man nimmt es wieder."
+**Trägt:**
 
-**Kriterien für die endgültige Wahl:**
+| Position | Ergebnis |
+|---|---|
+| XVIII Verschiebung | „Und dann noch einmal, und noch einmal dann, und einmal dann noch." — erzeugt die Rosalie tatsächlich. |
+| XXII Einschleusung | „Und dann noch einmal, **und Tag und Nacht mich plagen**, und dann nicht mehr." — das Fremde bleibt fremd, das Gerüst hält. |
+| XXXI Rückdatierung | „Und abermals, und aber und abermals, und dann nimmermehr." |
+| XXXIII Rückzug | „Noch einmal. Dann nicht mehr." — das *und dann*-Gerüst fällt weg. |
+| XVII Härtung | „nd dnn nch nml, nd dnn nch nml, nd dnn ncht mhr." — bleibt rekonstruierbar. |
+
+**Trägt nicht — drei Leerläufe und eine Kollision:**
+
+| Position | Befund |
+|---|---|
+| XI Zerlegung | Läuft leer. Dreizehn von vierzehn Wörtern sind einsilbig; nur *einmal* zerfällt. |
+| XV Verkleinerung | Läuft leer. Der Satz ist bereits minimal. |
+| XX Stillstand | Läuft leer. Die Vorgabe lautet „kein Verb" — der Satz hat keines. |
+| III / IX | **Kollision.** Ausdünnung ergibt „Und dann, und dann, und dann.", Verdunkelung „Und dann. Und dann. Nicht mehr." Beide lassen dasselbe Skelett übrig; die Stücke wären nicht unterscheidbar. IX ist aber das erste Ich-Stück und darf nicht wie eine Wiederholung von III klingen. |
+
+### Kriterien für die endgültige Wahl
 
 1. **Semantisch arm** — er darf nichts bedeuten, was interessanter wäre als seine Behandlung.
 2. **Sequenziell gebaut** — enthält eine Wiederholung mit Verschiebung.
 3. **Kurz** — höchstens zwölf Wörter, damit er in jedes Stück passt.
 4. **Kadenzierend** — die letzte Wendung bricht den Bau, den die ersten beiden aufgebaut haben.
 5. **Sprechbar** — der Band ersetzt die Musik in der Zeit; was stumm nicht trägt, fällt weg.
+6. **Mindestens zwei mehrsilbige Wörter** — sonst laufen XI Zerlegung und XV Verkleinerung leer.
+7. **Ein Verb** — sonst hat XX Stillstand nichts wegzunehmen.
+8. **Ein entfernbares Element außerhalb des Gerüsts** — etwas, das die Verdunkelung entfernen kann, ohne dabei dasselbe zu tun wie die Ausdünnung.
+
+**Spannung zwischen 1 und 8.** Ein Satz ohne jeden inhaltlichen Halt bietet der Verdunkelung nichts zum Verdunkeln. Der Kernsatz braucht genau so viel Bedeutung, wie nötig ist, um sie ihm entziehen zu können — und nicht mehr. Diese Grenze ist bei jedem Kandidaten einzeln zu ziehen.
+
+### Nachgebesserter Vorschlag
+
+> „Der Morgen kommt noch einmal, der Morgen kommt noch einmal, und dann nicht mehr."
+
+*Morgen* und *einmal* sind mehrsilbig (6), *kommt* ist das Verb, das XX einfriert (7), *der Morgen* ist das helle Element, das IX entfernt, ohne das Gerüst *noch einmal / und dann* anzutasten (8). Bau und Kadenz bleiben. Der Preis ist ein leichter Verlust an Armut — er ist nötig.
+
+**Weitere Kandidaten:**
+
+> „Es ist noch etwas Zeit, es ist noch etwas Zeit, dann nicht."
+>
+> „Man nimmt es, man legt es hin, man nimmt es wieder."
+
+Beide noch nicht gegen die Kriterien 6–8 geprüft.
 
 **Bedingung.** Der Kernsatz ist in jedem Stück physisch anwesend — gedehnt, zerlegt, überwuchert, verdunkelt, aber auffindbar. Genau einmal fehlt er: in Stück XIII, dem Pausenstück. Dieses Fehlen ist die stärkste Stelle des Bandes und nur möglich, wenn die Regel sonst ausnahmslos gilt.
 

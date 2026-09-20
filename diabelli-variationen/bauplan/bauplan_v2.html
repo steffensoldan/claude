@@ -71,6 +71,13 @@ strong{font-weight:600}
 .crit li::before{content:attr(data-n);position:absolute;left:0;top:0;
   font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--verd)}
 
+.findings{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1.4rem;
+  margin:1.1rem 0 0;padding-top:1.1rem;border-top:1px solid var(--rule)}
+.findings h5{margin:0 0 .5rem;font-family:"IBM Plex Mono",monospace;font-size:.64rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--verd);font-weight:500}
+.findings ul{list-style:none;padding:0;margin:0;display:grid;gap:.35rem;font-size:.9rem;color:var(--ink-mid)}
+.findings b{font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--ink);font-weight:500}
+
 /* Regeln */
 .rules{display:grid;gap:0;margin:1.4rem 0 0;border-top:1px solid var(--rule)}
 .rule-row{display:grid;grid-template-columns:11rem 1fr;gap:1.4rem;padding:.95rem 0;
@@ -154,10 +161,33 @@ footer{margin-top:4.5rem;padding-top:1.4rem;border-top:2px solid var(--ink);
   </div>
   <p>Drei Größen variieren in diesem Band: Länge, Stimme, Grad der Selbstauskunft. Damit das als Variation und nicht als bloße Verschiedenheit gelesen wird, muss etwas physisch gleich bleiben. Der Kernsatz ist dieses Etwas — Diabellis Walzer in Sprache: sequenziell gebaut, wiederholungsgesättigt, semantisch fast leer.</p>
   <div class="core">
-    <p class="kicker" style="margin-bottom:.4rem">Vorschlag</p>
+    <p class="kicker" style="margin-bottom:.4rem">Erster Vorschlag — geprüft</p>
     <p class="satz">„Und dann noch einmal, und dann noch einmal, und dann nicht mehr.“</p>
-    <p style="font-size:.95rem;color:var(--ink-mid);margin-bottom:1.1rem;max-width:60ch">Wiederholte Anfangsfigur, eine Sequenz aus zwei gleichen Gliedern, eine dritte Wendung, die den Bau bricht — das strukturelle Äquivalent zum Walzer mit seiner Tonrepetition, seiner Rosalie und seiner Kadenz. Laut sprechbar, rhythmisch prägnant, inhaltlich nahezu wertlos.</p>
-    <p class="kicker" style="margin-bottom:.4rem">Alternativen</p>
+    <p style="font-size:.95rem;color:var(--ink-mid);margin-bottom:1.1rem;max-width:60ch">Wiederholte Anfangsfigur, eine Sequenz aus zwei gleichen Gliedern, eine dritte Wendung, die den Bau bricht — das strukturelle Äquivalent zum Walzer mit seiner Tonrepetition, seiner Rosalie und seiner Kadenz. Der Trockentest gegen die härtesten Operationen fällt allerdings gemischt aus.</p>
+    <div class="findings">
+      <div>
+        <h5>Trägt</h5>
+        <ul>
+          <li><b>XVIII</b> „und noch einmal dann, und einmal dann noch“ — erzeugt die Rosalie.</li>
+          <li><b>XXII</b> „und <i>Tag und Nacht mich plagen</i>“ — das Fremde bleibt fremd.</li>
+          <li><b>XXXI</b> „Und abermals, und aber und abermals, und dann nimmermehr.“</li>
+          <li><b>XXXIII</b> „Noch einmal. Dann nicht mehr.“ — das Gerüst fällt weg.</li>
+        </ul>
+      </div>
+      <div>
+        <h5>Trägt nicht</h5>
+        <ul>
+          <li><b>XI</b> läuft leer — dreizehn von vierzehn Wörtern sind einsilbig.</li>
+          <li><b>XV</b> läuft leer — der Satz ist bereits minimal.</li>
+          <li><b>XX</b> läuft leer — die Vorgabe verlangt „kein Verb“, der Satz hat keines.</li>
+          <li><b>III / IX</b> kollidieren — beide lassen dasselbe Skelett übrig.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="kicker" style="margin:1.3rem 0 .4rem">Nachgebessert</p>
+    <p class="satz" style="font-size:clamp(1.15rem,2.6vw,1.5rem)">„Der Morgen kommt noch einmal, der Morgen kommt noch einmal, und dann nicht mehr.“</p>
+    <p style="font-size:.95rem;color:var(--ink-mid);margin-bottom:1.1rem;max-width:60ch"><i>Morgen</i> und <i>einmal</i> sind mehrsilbig, <i>kommt</i> ist das Verb, das XX einfriert, <i>der Morgen</i> das helle Element, das IX entfernt, ohne das Gerüst anzutasten. Der Preis ist ein leichter Verlust an Armut — er ist nötig.</p>
+    <p class="kicker" style="margin-bottom:.4rem">Weitere Kandidaten — noch nicht gegen 6–8 geprüft</p>
     <p class="alt">„Es ist noch etwas Zeit, es ist noch etwas Zeit, dann nicht.“</p>
     <p class="alt">„Man nimmt es, man legt es hin, man nimmt es wieder.“</p>
     <ul class="crit">
@@ -166,7 +196,11 @@ footer{margin-top:4.5rem;padding-top:1.4rem;border-top:2px solid var(--ink);
       <li data-n="03">Kurz — höchstens zwölf Wörter, damit er in jedes Stück passt.</li>
       <li data-n="04">Kadenzierend — die letzte Wendung bricht den Bau, den die ersten beiden aufgebaut haben.</li>
       <li data-n="05">Sprechbar — der Band ersetzt die Musik in der Zeit; was stumm nicht trägt, fällt weg.</li>
+      <li data-n="06">Mindestens zwei mehrsilbige Wörter — sonst laufen XI und XV leer.</li>
+      <li data-n="07">Ein Verb — sonst hat XX nichts wegzunehmen.</li>
+      <li data-n="08">Ein entfernbares Element außerhalb des Gerüsts — damit IX nicht dasselbe tut wie III.</li>
     </ul>
+    <p style="font-size:.95rem;color:var(--ink-mid);margin:1rem 0 0;max-width:60ch"><b>Spannung zwischen 1 und 8.</b> Ein Satz ohne jeden inhaltlichen Halt bietet der Verdunkelung nichts zum Verdunkeln. Der Kernsatz braucht genau so viel Bedeutung, wie nötig ist, um sie ihm entziehen zu können — und nicht mehr.</p>
   </div>
   <div class="thesis">
     <span class="lbl">Bedingung</span>
@@ -226,8 +260,9 @@ footer{margin-top:4.5rem;padding-top:1.4rem;border-top:2px solid var(--ink);
   </div>
   <p>Eine Zeile je Stück: die Operation, die zugleich die Überschrift ist, und die Vorgabe. Die grün unterlegten Zeilen sind die Pfeiler des Zyklus — Stellen, an denen die Charakteristik der Variation gesichert ist und die Zuordnung feststeht.</p>
   <div class="legend">
-    <span><span class="tag b">belegt</span> Charakteristik der Variation gesichert</span>
-    <span><span class="tag">Vorschlag</span> Zuordnung von mir gesetzt, am Notentext zu prüfen</span>
+    <span><span class="tag b">belegt</span> Charakteristik gesichert — 11 Pfeiler</span>
+    <span><span class="tag">Vorschlag ●</span> behauptet etwas über die Musik, kann am Notentext scheitern — 6</span>
+    <span><span class="tag">Vorschlag</span> rein sprachlich, Position austauschbar — 16</span>
   </div>
   <div class="tablewrap">
     <table>
@@ -236,7 +271,7 @@ footer{margin-top:4.5rem;padding-top:1.4rem;border-top:2px solid var(--ink);
         <tr class="pillar"><td class="nr">I</td><td class="op">Umtaktung</td><td class="vg">Der Satz gegen seine eigene Betonung gelesen. Aus dem Wiegen wird ein Schritt. Anweisende Stimme, Grad A — die Eröffnung behauptet, der Satz sei bisher falsch gesprochen worden.</td><td><span class="tag b">belegt</span></td></tr>
         <tr><td class="nr">II</td><td class="op">Beschleunigung</td><td class="vg">Dreimal derselbe Satz, jedesmal schneller; unterwegs fallen Wörter weg, ohne dass der Bau nachgibt.</td><td><span class="tag">Vorschlag</span></td></tr>
         <tr><td class="nr">III</td><td class="op">Ausdünnung</td><td class="vg">Nur die Konjunktionen und die Zäsuren bleiben stehen. Das Gerüst ohne Füllung.</td><td><span class="tag">Vorschlag</span></td></tr>
-        <tr><td class="nr">IV</td><td class="op">Kanon</td><td class="vg">Der Satz gegen sich selbst, um eine halbe Zeile versetzt. Zwei Spalten oder zwei Schriftgrade.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr><td class="nr">IV</td><td class="op">Kanon</td><td class="vg">Der Satz gegen sich selbst, um eine halbe Zeile versetzt. Zwei Spalten oder zwei Schriftgrade.</td><td><span class="tag">Vorschlag ●</span></td></tr>
         <tr><td class="nr">V</td><td class="op">Stauchung</td><td class="vg">Alles in eine einzige Zeile gepresst. Das kürzeste Stück der ersten Hälfte.</td><td><span class="tag">Vorschlag</span></td></tr>
         <tr><td class="nr">VI</td><td class="op">Registerspreizung</td><td class="vg">Derselbe Satz in gehobener und in niedrigster Sprache unmittelbar nebeneinander, ohne Vermittlung.</td><td><span class="tag">Vorschlag</span></td></tr>
         <tr><td class="nr">VII</td><td class="op">Überwucherung</td><td class="vg">Der Satz unter Einschüben, Nebensätzen und Beifügungen fast unauffindbar. Grad C: der Text behauptet, sich kurz zu fassen.</td><td><span class="tag">Vorschlag</span></td></tr>
@@ -251,14 +286,14 @@ footer{margin-top:4.5rem;padding-top:1.4rem;border-top:2px solid var(--ink);
         <tr><td class="nr">XVI</td><td class="op">Verdopplung</td><td class="vg">Jedes Element zweimal. Der Bau bleibt erkennbar, die Geduld nicht.</td><td><span class="tag">Vorschlag</span></td></tr>
         <tr><td class="nr">XVII</td><td class="op">Härtung</td><td class="vg">Nur die Konsonanten tragen. Der Satz wird geräuschhaft, bleibt aber rekonstruierbar.</td><td><span class="tag">Vorschlag</span></td></tr>
         <tr><td class="nr">XVIII</td><td class="op">Verschiebung</td><td class="vg">Sequenz im strengen Sinn: derselbe Bau, jedesmal um ein Wort weitergerückt. Der Schusterfleck als Verfahren.</td><td><span class="tag">Vorschlag</span></td></tr>
-        <tr><td class="nr">XIX</td><td class="op">Verschränkung</td><td class="vg">Zwei Durchgänge des Satzes ineinandergeschoben, sodass beide lesbar bleiben.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr><td class="nr">XIX</td><td class="op">Verschränkung</td><td class="vg">Zwei Durchgänge des Satzes ineinandergeschoben, sodass beide lesbar bleiben.</td><td><span class="tag">Vorschlag ●</span></td></tr>
         <tr class="pillar"><td class="nr">XX</td><td class="op">Stillstand</td><td class="vg">Der Satz, der nicht weitergeht. Kein Verb, keine Bewegung, große Abstände. Zweites langes Stück, rätselhaft und unaufgelöst.</td><td><span class="tag b">belegt</span></td></tr>
-        <tr><td class="nr">XXI</td><td class="op">Bruch</td><td class="vg">Zwei unvereinbare Hälften, hart aneinandergesetzt. Beide enthalten den Satz, keine erklärt die andere.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr><td class="nr">XXI</td><td class="op">Bruch</td><td class="vg">Zwei unvereinbare Hälften, hart aneinandergesetzt. Beide enthalten den Satz, keine erklärt die andere.</td><td><span class="tag">Vorschlag ●</span></td></tr>
         <tr class="pillar"><td class="nr">XXII</td><td class="op">Einschleusung</td><td class="vg">Fremde Stimme. Ein Klagen über die Arbeit tritt in den Satz und wird nicht assimiliert. Es muss fremd bleiben — Beethoven zitiert hier Leporello.</td><td><span class="tag b">belegt</span></td></tr>
-        <tr><td class="nr">XXIII</td><td class="op">Mechanisierung</td><td class="vg">Der Satz als Übungsstück, tonlos durchgespielt. (Die häufig genannte Etüden-Anspielung der Variation ist Deutung, kein Befund.)</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr><td class="nr">XXIII</td><td class="op">Mechanisierung</td><td class="vg">Der Satz als Übungsstück, tonlos durchgespielt. (Die häufig genannte Etüden-Anspielung der Variation ist Deutung, kein Befund.)</td><td><span class="tag">Vorschlag ●</span></td></tr>
         <tr class="pillar"><td class="nr">XXIV</td><td class="op">Fughetta</td><td class="vg">Vier Stimmen, jede beginnt mit dem Satz, keine kommt zu Ende. Leise, nicht virtuos.</td><td><span class="tag b">belegt</span></td></tr>
-        <tr><td class="nr">XXV</td><td class="op">Aufhellung</td><td class="vg">Gegenstück zu IX. Derselbe Eingriff, umgekehrtes Vorzeichen — und deshalb weniger überzeugend. Das darf man sehen.</td><td><span class="tag">Vorschlag</span></td></tr>
-        <tr><td class="nr">XXVI</td><td class="op">Kreisen</td><td class="vg">Der Satz schließt an sich selbst an, ohne Anfang und Ende. Ein einziger Umlauf, dann Abbruch.</td><td><span class="tag">Vorschlag</span></td></tr>
+        <tr><td class="nr">XXV</td><td class="op">Aufhellung</td><td class="vg">Gegenstück zu IX. Derselbe Eingriff, umgekehrtes Vorzeichen — und deshalb weniger überzeugend. Das darf man sehen.</td><td><span class="tag">Vorschlag ●</span></td></tr>
+        <tr><td class="nr">XXVI</td><td class="op">Kreisen</td><td class="vg">Der Satz schließt an sich selbst an, ohne Anfang und Ende. Ein einziger Umlauf, dann Abbruch.</td><td><span class="tag">Vorschlag ●</span></td></tr>
         <tr><td class="nr">XXVII</td><td class="op">Zerstäubung</td><td class="vg">Die Wörter über die Seite verteilt, die Reihenfolge intakt. Der Leser stellt die Zeit selbst her.</td><td><span class="tag">Vorschlag</span></td></tr>
         <tr><td class="nr">XXVIII</td><td class="op">Hämmern</td><td class="vg">Nur die Wiederholungsfigur des Satzes, ohne die Kadenz. Es hört nicht auf, weil der Schluss fehlt.</td><td><span class="tag">Vorschlag</span></td></tr>
         <tr class="pillar"><td class="nr">XXIX</td><td class="op">Verdunkelung II</td><td class="vg">Das Ich kehrt zurück. Beginn der dunklen Dreiergruppe. Kürzer und härter als IX.</td><td><span class="tag b">belegt</span></td></tr>
@@ -277,10 +312,10 @@ footer{margin-top:4.5rem;padding-top:1.4rem;border-top:2px solid var(--ink);
     <h2>Sieben Schritte</h2>
   </div>
   <ol class="steps">
-    <li>Kernsatz endgültig festlegen — laut sprechen, gegen die fünf Kriterien prüfen. Alles Weitere hängt daran.</li>
-    <li>Notentext oder Aufnahme durchgehen und die als Vorschlag markierten Zuordnungen bestätigen, tauschen oder ersetzen. Die elf Pfeiler stehen fest.</li>
+    <li>Kernsatz endgültig festlegen — laut sprechen, gegen die acht Kriterien prüfen, dann gegen alle 33 Positionen durchspielen. Kein Notenzugriff nötig. Alles Weitere hängt daran.</li>
+    <li>Nur die sechs mit ● markierten Stücke am Notentext prüfen — IV, XIX, XXI, XXIII, XXV, XXVI. Die übrigen sechzehn Vorschläge sind rein sprachlich und innerhalb der Gruppen austauschbar.</li>
     <li>Längen-, Stimmen- und Selbstauskunftskurve über alle 33 Positionen eintragen — als eine Tabelle, bevor ein Stück geschrieben wird.</li>
-    <li>Drei Probestücke: I, XIII, XXXIII. Die Extreme zuerst — Korrektur, Leerstelle, Rückzug. Erst wenn diese drei tragen, trägt das Verfahren.</li>
+    <li>Drei Probestücke: I, XIII, XXXIII. Die Extreme zuerst — Korrektur, Leerstelle, Rückzug. Alle drei sind Pfeiler; Schritt 2 ist für sie keine Voraussetzung. Erst wenn diese drei tragen, trägt das Verfahren.</li>
     <li>Die übrigen dreißig in der Reihenfolge des Zyklus schreiben, nicht nach Lust. Die Reihenfolge ist die Form.</li>
     <li>Ein vollständiger Durchgang laut. Was stumm funktioniert und gesprochen nicht, fällt weg — der Band ersetzt die Musik in der Zeit.</li>
     <li>Nachsatz zuletzt: Quelle, Verfahren, Kernsatz, Zuordnungsliste. Vier bis sechs Seiten.</li>
@@ -307,7 +342,7 @@ footer{margin-top:4.5rem;padding-top:1.4rem;border-top:2px solid var(--ink);
 </section>
 
 <footer>
-  Zweite Fassung, ersetzt den Aufriss vom Vortag. Die elf Pfeiler beruhen auf gesicherten Charakteristika der Variationen I, IX, XIII, XIV, XX, XXII, XXIV, XXIX–XXXIII. Die übrigen zweiundzwanzig Zuordnungen sind gesetzt und am Notentext zu prüfen; sie sind so gewählt, dass ein Tausch innerhalb der Gruppen die Dramaturgie nicht beschädigt.
+  Zweite Fassung, Stand 20.09.2026. Kernsatz noch nicht entschieden; eine vierte Kandidatenlinie liegt als offene Variante („Ruhe und Ordnung“) im Projektverzeichnis. Die elf Pfeiler beruhen auf gesicherten Charakteristika der Variationen I, IX, XIII, XIV, XX, XXII, XXIV, XXIX–XXXIII. Die übrigen zweiundzwanzig Zuordnungen sind gesetzt und am Notentext zu prüfen; sie sind so gewählt, dass ein Tausch innerhalb der Gruppen die Dramaturgie nicht beschädigt.
 </footer>
 
 </div>
