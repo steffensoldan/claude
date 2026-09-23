@@ -1,0 +1,276 @@
+<title>Dreimal dreiunddreißig</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Spectral:ital,wght@0,300;0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --ground:#E6E7E1; --surface:#F2F3EF; --sunk:#DCDED6;
+  --ink:#16191B; --ink-mid:#3E4544; --ink-mute:#616764;
+  --rule:#C6C9BF; --rule-soft:#D6D8CF;
+  --verd:#2F6B5C; --brass:#7E6320;
+  --lit:#2F6B5C; --pol:#8A3A2E; --arch:#3A5480;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#14171A; --surface:#1B1F22; --sunk:#0F1214;
+    --ink:#E4E6E0; --ink-mid:#B9BEBA; --ink-mute:#8C9391;
+    --rule:#2E3438; --rule-soft:#242A2D;
+    --verd:#79C0AA; --brass:#CBA857;
+    --lit:#79C0AA; --pol:#D98A78; --arch:#8FAEDC;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#14171A; --surface:#1B1F22; --sunk:#0F1214;
+  --ink:#E4E6E0; --ink-mid:#B9BEBA; --ink-mute:#8C9391;
+  --rule:#2E3438; --rule-soft:#242A2D;
+  --verd:#79C0AA; --brass:#CBA857;
+  --lit:#79C0AA; --pol:#D98A78; --arch:#8FAEDC;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);
+  font-family:"Spectral",Georgia,serif;font-size:17px;line-height:1.6;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:66rem;margin:0 auto;padding:0 1.75rem 6rem}
+
+.masthead{padding:4rem 0 1.8rem;border-bottom:2px solid var(--ink)}
+.kicker{font-family:"IBM Plex Mono",monospace;font-size:.69rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--verd);margin:0 0 1.2rem}
+h1{font-family:"Bodoni Moda",Didot,serif;font-weight:400;
+  font-size:clamp(2.3rem,6.5vw,4rem);line-height:1.04;margin:0;text-wrap:balance}
+.subtitle{font-family:"Bodoni Moda",Didot,serif;font-style:italic;
+  font-size:clamp(1.05rem,2.4vw,1.35rem);color:var(--ink-mid);
+  margin:.8rem 0 0;max-width:44ch;line-height:1.35}
+.standfirst{max-width:64ch;margin:1.7rem 0 0;color:var(--ink-mid)}
+
+/* Genotypen */
+.genos{display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));
+  gap:0;margin:2.6rem 0 0;border-top:1px solid var(--rule)}
+.geno{padding:1.2rem 1.3rem 1.3rem 0;border-right:1px solid var(--rule-soft)}
+.geno:last-child{border-right:0}
+.geno .field{font-family:"IBM Plex Mono",monospace;font-size:.65rem;letter-spacing:.14em;
+  text-transform:uppercase;margin:0 0 .5rem;font-weight:500}
+.geno.l .field{color:var(--lit)} .geno.p .field{color:var(--pol)} .geno.a .field{color:var(--arch)}
+.geno .satz{font-family:"Bodoni Moda",Didot,serif;font-size:1.06rem;line-height:1.4;
+  margin:0 0 .7rem;color:var(--ink)}
+.geno .meta{font-size:.85rem;color:var(--ink-mute);margin:0}
+.geno .zeit{font-weight:600;color:var(--ink-mid)}
+
+h2{font-family:"Bodoni Moda",Didot,serif;font-weight:400;
+  font-size:clamp(1.5rem,3.3vw,2rem);line-height:1.12;margin:0 0 .35rem}
+p{margin:0 0 1rem}
+
+/* Positionen */
+.pos{margin-top:3.6rem;border-top:1px solid var(--rule);padding-top:1.5rem}
+.pos-head{display:flex;gap:1rem;align-items:baseline;flex-wrap:wrap;margin-bottom:.5rem}
+.pos-nr{font-family:"IBM Plex Mono",monospace;font-size:.9rem;color:var(--verd);
+  letter-spacing:.06em}
+.pos-brief{color:var(--ink-mid);max-width:62ch;font-size:.97rem;margin:0 0 1.7rem}
+.pos-brief b{font-family:"IBM Plex Mono",monospace;font-size:.76rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-mute);font-weight:500}
+
+.trio{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:2.2rem}
+.cell{}
+.cell .field{font-family:"IBM Plex Mono",monospace;font-size:.63rem;letter-spacing:.14em;
+  text-transform:uppercase;margin:0 0 .9rem;padding-bottom:.45rem;font-weight:500;
+  border-bottom:1px solid var(--rule-soft)}
+.cell.l .field{color:var(--lit);border-color:var(--lit)}
+.cell.p .field{color:var(--pol);border-color:var(--pol)}
+.cell.a .field{color:var(--arch);border-color:var(--arch)}
+.poem{white-space:pre-line;font-size:1.02rem;line-height:1.72;margin:0;
+  font-variant-numeric:oldstyle-nums}
+.poem .late{display:block;margin-left:3.5rem;margin-top:1.4rem}
+.poem .fremd{font-style:italic}
+.void{font-size:1.6rem;line-height:2.6;color:var(--ink-mute);letter-spacing:.3em}
+
+.note{background:var(--surface);border-left:2px solid var(--brass);
+  padding:1.1rem 1.25rem;margin:3.5rem 0 0;font-size:.94rem;color:var(--ink-mid);
+  max-width:66ch}
+.note b{color:var(--ink)}
+
+footer{margin-top:4rem;padding-top:1.3rem;border-top:2px solid var(--ink);
+  font-size:.87rem;color:var(--ink-mute);max-width:64ch}
+:focus-visible{outline:2px solid var(--verd);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="masthead">
+  <p class="kicker">Proof of Concept · Vollmatrix 3 × 33 · Fünf Positionen</p>
+  <h1>Dreimal dreiunddreißig</h1>
+  <p class="subtitle">Dieselbe Operation an drei Sätzen aus drei Welten — fünfzehn Stücke als Probe auf das Verfahren</p>
+  <p class="standfirst">Die Umwelt ist für alle drei identisch: dieselbe Operation, dieselbe Position im Zyklus. Verschieden ist allein das Material. Was sich unterscheidet, steckte also im Satz — und war vorher nicht zu sehen.</p>
+
+  <div class="genos">
+    <div class="geno l">
+      <p class="field">Literatur</p>
+      <p class="satz">„Fremd bin ich eingezogen, fremd zieh ich wieder aus."</p>
+      <p class="meta"><span class="zeit">Durchgang.</span> Wilhelm Müller, „Gute Nacht", Eröffnung der <i>Winterreise</i>. Erstdruck <i>Urania. Taschenbuch auf das Jahr 1823</i>. Gesichertes Zitat.</p>
+    </div>
+    <div class="geno p">
+      <p class="field">Politik</p>
+      <p class="satz">„Es ist Ruhe und Ordnung, es ist Ruhe und Ordnung, und so bleibt es."</p>
+      <p class="meta"><span class="zeit">Stillstand.</span> Aus der belegten Leitformel des Metternich-Systems konstruiert. Kein Zitat.</p>
+    </div>
+    <div class="geno a">
+      <p class="field">Architektur</p>
+      <p class="satz">„Sechs Säulen vorn, zehn zur Seite, und ein Dach darüber."</p>
+      <p class="meta"><span class="zeit">Maß.</span> Aus den Maßen des Theseustempels konstruiert, Wien, Pietro Nobile, 1819–1823. Kein Zitat.</p>
+    </div>
+  </div>
+</header>
+
+<section class="pos">
+  <div class="pos-head"><span class="pos-nr">I</span><h2>Umtaktung</h2></div>
+  <p class="pos-brief">Der Satz gegen seine eigene Betonung gelesen. Aus dem Wiegen wird ein Schritt. <b>Stimme anweisend · Grad A</b> — die Eröffnung behauptet, der Satz sei bisher falsch gesprochen worden.</p>
+  <div class="trio">
+    <div class="cell l"><p class="field">Literatur</p><p class="poem">Nicht: fremd bin ich eingezogen.
+Sondern: Fremd. Bin. Ich.
+Ein-ge-zo-gen.
+
+Und auf den ersten Schlag:
+Fremd zieh ich wieder aus.
+
+Nicht traurig. Gezählt.
+So hat es immer geheißen.
+Ihr habt es nur gesungen.</p></div>
+    <div class="cell p"><p class="field">Politik</p><p class="poem">Nicht: es ist Ruhe und Ordnung.
+Sondern: Ruhe. Und Ordnung.
+Ruhe. Und Ordnung.
+
+Und so bleibt es. Auf eins.
+
+So war es gemeint.
+Von Anfang an.</p></div>
+    <div class="cell a"><p class="field">Architektur</p><p class="poem">Nicht: sechs Säulen vorn, zehn zur Seite.
+Sondern: Sechs. Vorn.
+Zehn. Zur Seite.
+Und ein Dach darüber. Auf eins.
+
+Das ist keine Ansicht.
+Das ist eine Aufstellung.</p></div>
+  </div>
+</section>
+
+<section class="pos">
+  <div class="pos-head"><span class="pos-nr">XIII</span><h2>Auslassung</h2></div>
+  <p class="pos-brief">Das einzige Stück ohne den Kernsatz. Nur seine Zäsuren bleiben stehen, dazu eine Zeile, die nicht zu ihm gehört. <b>Grad D</b> — in der Matrix dreimal derselbe Verzicht und drei verschiedene Stillen.</p>
+  <div class="trio">
+    <div class="cell l"><p class="field">Literatur</p><p class="poem"><span class="void">,</span>
+
+<span class="void">,</span>
+
+Der Mai war mir gewogen.</p></div>
+    <div class="cell p"><p class="field">Politik</p><p class="poem"><span class="void">,</span>
+
+<span class="void">,</span>
+
+Niemand hat widersprochen.</p></div>
+    <div class="cell a"><p class="field">Architektur</p><p class="poem"><span class="void">,</span>
+
+<span class="void">,</span>
+
+Nichts steht.</p></div>
+  </div>
+</section>
+
+<section class="pos">
+  <div class="pos-head"><span class="pos-nr">XIV</span><h2>Dehnung</h2></div>
+  <p class="pos-brief">Dieselbe Struktur bei radikal verändertem Zeitmaß. <b>Unpersönlich · Grad B</b> — jeder Satz wird nach seiner eigenen Logik gedehnt: der eine nach Silben, der zweite nach Wiederholungen, der dritte nach Stückzahl.</p>
+  <div class="trio">
+    <div class="cell l"><p class="field">Literatur</p><p class="poem">Fremd
+
+bin
+
+ich
+
+ein
+
+ge
+
+zo
+
+gen<span class="late">fremd zieh ich wieder aus</span></p></div>
+    <div class="cell p"><p class="field">Politik</p><p class="poem">Es ist Ruhe und Ordnung,
+
+es ist Ruhe und Ordnung,
+
+
+es ist Ruhe und Ordnung,
+
+
+
+es ist Ruhe und Ordnung,
+
+
+
+
+und so bleibt es.</p></div>
+    <div class="cell a"><p class="field">Architektur</p><p class="poem">Sechs.
+
+Säulen.
+
+Vorn.
+
+Eine. Zwei. Drei. Vier. Fünf. Sechs.
+
+Zehn.
+
+Zur Seite.
+
+Eine. Zwei. Drei. Vier. Fünf.
+Sechs. Sieben. Acht. Neun. Zehn.
+
+Und ein Dach darüber.
+
+Das hat vier Jahre gedauert.</p></div>
+  </div>
+</section>
+
+<section class="pos">
+  <div class="pos-head"><span class="pos-nr">XXII</span><h2>Einschleusung</h2></div>
+  <p class="pos-brief">Fremdes Material wird ins Gerüst gezwungen und nicht angepasst. Bei Beethoven zitiert diese Variation Leporellos Klage über die Arbeit. Derselbe Eindringling in allen drei Sätzen. <b>Grad B · Politik: Grad C</b></p>
+  <div class="trio">
+    <div class="cell l"><p class="field">Literatur</p><p class="poem">Fremd bin ich eingezogen,
+<span class="fremd">Tag und Nacht mich plagen,</span>
+fremd zieh ich wieder aus.</p></div>
+    <div class="cell p"><p class="field">Politik</p><p class="poem">Es ist Ruhe und Ordnung,
+<span class="fremd">und Tag und Nacht mich plagen,</span>
+und so bleibt es.
+
+Es ist Ruhe und Ordnung,
+es ist Ruhe und Ordnung,
+und so bleibt es.</p></div>
+    <div class="cell a"><p class="field">Architektur</p><p class="poem">Sechs Säulen vorn,
+<span class="fremd">Tag und Nacht mich plagen,</span>
+zehn zur Seite, und ein Dach darüber.</p></div>
+  </div>
+</section>
+
+<section class="pos">
+  <div class="pos-head"><span class="pos-nr">XXXIII</span><h2>Rückzug</h2></div>
+  <p class="pos-brief">Der Satz zum ersten und einzigen Mal ganz einfach gesagt, leiser werdend. Kein Triumph, kein Fazit. <b>Das Ich spricht, kurz</b> — und was übrig bleibt, bedeutet das Gegenteil von dem, womit es anfing.</p>
+  <div class="trio">
+    <div class="cell l"><p class="field">Literatur</p><p class="poem">Ich ziehe wieder aus.
+Fremd — das war ich beim Einzug auch.
+
+Gute Nacht.</p></div>
+    <div class="cell p"><p class="field">Politik</p><p class="poem">Ich habe es oft gesagt.
+
+Es ist Ruhe.</p></div>
+    <div class="cell a"><p class="field">Architektur</p><p class="poem">Ich habe die Säulen nicht gezählt.
+
+Ein Dach darüber.</p></div>
+  </div>
+</section>
+
+<div class="note">
+  <p style="margin:0"><b>Belegstatus.</b> Ein gesichertes Zitat (Müller, <i>Urania</i> 1823), zwei aus belegten Vorlagen konstruierte Sätze. Müllers Folgezeile „Der Mai war mir gewogen" in XIII ist gegen den Erstdruck von 1823 zu prüfen — die Schubert-Fassung weicht an anderen Stellen ab. Der Eindringling in XXII ist die deutsche Entsprechung zu Leporellos „Notte e giorno faticar"; ob er in dieser Wendung stehen bleibt, ist offen.</p>
+</div>
+
+<footer>
+  Fünfzehn Stücke aus 99. Erste Probe auf die Vollmatrix, Stand 22.09.2026. Die fünf Positionen sind die tragenden: Eröffnungskorrektur, Leerstelle, Dehnung, Einbruch, Rückzug.
+</footer>
+
+</div>

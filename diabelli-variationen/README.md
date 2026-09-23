@@ -43,6 +43,8 @@ Ausdrücklich nicht beabsichtigt — jeder dieser Punkte hat die verworfene erst
 
 **Offene Variante — „Ruhe und Ordnung".** Betrifft nur Kernsatz und Zeitbezug: der Kernsatz wäre die Leitformel der Restauration statt eines beliebigen dürftigen Satzes. Grundlage ist eine belegbare Gleichzeitigkeit — 1819 verschickt Diabelli seinen Walzer, im August/September desselben Jahres werden die Karlsbader Beschlüsse gefasst. **Nicht entschieden.** Siehe [`varianten/ruhe-und-ordnung/`](varianten/ruhe-und-ordnung/).
 
+**Offene Variante — „Matrix, drei Felder".** Weiter reichend: mehrere Kernsätze statt eines, dieselben Operationen an Material aus Literatur, Politik und Architektur. Der Erkenntniswert liegt im Zeilenvergleich. Ein Proof of Concept über fünf Positionen liegt vor und trägt. **Nicht entschieden.** Siehe [`varianten/matrix-drei-felder/`](varianten/matrix-drei-felder/).
+
 ## Aktueller Stand
 
 - Bauplan vollständig, alle Formparameter festgelegt.
