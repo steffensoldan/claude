@@ -36,7 +36,42 @@ Sprecherwechsel passieren geräteintern; nach außen kommt eine Spur. Konsequenz
 *Herstellerangaben zur Reichweite je Owl-Modell nicht geprüft — für die
 Diagnose unerheblich, für die Raumaufstellung relevant.*
 
-## Gehostetes Whisper (Scaleway o. ä.): der Weg ohne Parameterzugriff
+## Gehostetes Whisper, OpenAI-kompatibel (Scaleway Generative APIs)
+
+Fertiger Client: `openai_compatible.py`. Schneidet, fragt stückweise an,
+eskaliert die Temperatur bei Kollaps und fügt zusammen.
+
+```powershell
+$env:SCW_SECRET_KEY = "<dein-key>"
+python openai_compatible.py sitzung.wav `
+    --base-url https://api.scaleway.ai/v1 `
+    --model whisper-large-v3 `
+    --out sitzung.txt --debug-log verworfen.log
+```
+
+Die drei Hebel, die eine gehostete API noch lässt:
+
+| Hebel | Umsetzung |
+|---|---|
+| stückweise, kontextfreie Anfragen | 20-s-Stücke aus `chunker.py`, jede Anfrage einzeln |
+| Temperatur-Fallback | bei Kollaps dasselbe Stück erneut mit 0.2, 0.4, 0.6 - das macht Whisper intern, über die API muss der Client es tun |
+| Segment-Metriken | `response_format=verbose_json`: Segmente mit `compression_ratio > 2.4`, `avg_logprob < -1.0` oder `no_speech_prob > 0.6` fallen raus - genau Whispers eigene Schwellwerte |
+
+Reihenfolge ist wesentlich: **erst neu anfragen, dann retten.** Umgekehrt
+schließt die Faltung den Fallback kurz - `entscheidendendend` wird zu
+`entscheidend` geglättet und sieht sauber aus, obwohl die restlichen 18
+Sekunden des Stücks nie transkribiert wurden.
+
+**`prompt` ist kein Ort für den Text des Vorgängerstücks.** Das Feld
+konditioniert den Decoder und schleppt genau den Loop weiter, den die
+Stückelung unterbricht. Nur für feste Fachbegriffe verwenden
+(`--prompt "Promotionsordnung, Gleichstellungsbeauftragte, Drittmittel"`).
+
+*Modellname und Endpunktpfad des Dienstes hier nicht verifiziert - die
+Scaleway-Doku ist aus der Entwicklungsumgebung gesperrt. `--base-url` und
+`--model` entsprechend der eigenen Konsole setzen.*
+
+## Wenn kein fertiger Client passt: das Verfahren
 
 Läuft Whisper als Dienst, sind `condition_on_previous_text`, VAD und
 `repetition_penalty` nicht erreichbar. Dann muss die Segmentierung **vor** der
@@ -73,6 +108,7 @@ Wiederholung am Überlapp (Vergleich der letzten und ersten bis zu 12 Wörter).
 
 | Datei | Zweck |
 |---|---|
+| `openai_compatible.py` | Client für gehostetes Whisper (Scaleway Generative APIs): Chunking, Temperatur-Fallback, Metrik-Filter, Zusammenfügen |
 | `chunker.py` | Schneidet Aufnahmen an der leisesten Stelle, auch ohne Sprechpause; `stitch()` fügt die Texte zusammen |
 | `loop_guard.py` | Erkennt degenerierte Segmente (n-Gram-Abdeckung, Type-Token-Ratio, **wortinterne** Wiederholung) und faltet sie; CLI als Nachfilter |
 | `live_transcribe.py` | Live-Transkription mit lokalem faster-whisper: Segmentierung, Anti-Loop-Parameter, Loop-Guard |

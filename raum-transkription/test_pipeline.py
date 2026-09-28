@@ -175,8 +175,96 @@ def test_chunker() -> list[str]:
     return errors
 
 
+def test_openai_compatible() -> list[str]:
+    """Client für die gehostete API: Fallback, Metrik-Filter, Multipart."""
+    from openai_compatible import build_multipart, transcribe_chunk, usable_text
+
+    errors = []
+
+    # a) Temperatur-Fallback: T=0 kollabiert, T=0.2 liefert brauchbaren Text
+    aufrufe: list[float] = []
+
+    def sender(wav: bytes, temperature: float) -> dict:
+        aufrufe.append(temperature)
+        if temperature == 0.0:
+            return {"text": "und das ist ja ganz entscheidend" + "end" * 40}
+        return {"text": "Und das ist ja ganz entscheidend für die Promotion."}
+
+    text, suspect, raw, temp = transcribe_chunk(sender, b"", 20.0)
+    if suspect or "Promotion" not in text:
+        errors.append(f"Fallback: {text!r} (suspect={suspect})")
+    elif aufrufe != [0.0, 0.2]:
+        errors.append(f"Fallback: Temperaturen {aufrufe}, erwartet [0.0, 0.2]")
+    else:
+        print(f"ok  Temperatur-Fallback greift bei T={temp}")
+
+    # b) Alle Temperaturen kollabieren -> markiert, Rohtext fürs Debug-Log
+    def immer_kaputt(wav: bytes, temperature: float) -> dict:
+        return {"text": "...und dann kam es dann... " * 25}
+
+    versuche: list[float] = []
+
+    def immer_kaputt_gezaehlt(wav: bytes, temperature: float) -> dict:
+        versuche.append(temperature)
+        return immer_kaputt(wav, temperature)
+
+    text_b, suspect_b, raw_b, _ = transcribe_chunk(immer_kaputt_gezaehlt, b"", 20.0)
+    if len(versuche) != 4:
+        errors.append(f"Dauerkollaps: {len(versuche)} Versuche, erwartet 4 (ganze Leiter)")
+    if not raw_b:
+        errors.append("Dauerkollaps: kein Rohtext fürs Debug-Log")
+    # Faltung rettet hier den Kern - das ist gewollt; entscheidend ist, dass
+    # kein Loop im Protokoll landet.
+    if analyse_degenerate(text_b):
+        errors.append(f"Dauerkollaps: Loop im Protokoll: {text_b[:40]!r}")
+    else:
+        print(f"ok  Dauerkollaps -> {text_b[:48]}")
+
+    # c) Segment-Metriken: schlechte Segmente fallen raus
+    payload = {"text": "alles", "segments": [
+        {"text": "Das ist der gute Teil.", "compression_ratio": 1.4,
+         "avg_logprob": -0.3, "no_speech_prob": 0.1},
+        {"text": "loop loop loop loop", "compression_ratio": 3.1,
+         "avg_logprob": -0.4, "no_speech_prob": 0.1},
+        {"text": "unsicher", "compression_ratio": 1.2,
+         "avg_logprob": -1.8, "no_speech_prob": 0.2},
+        {"text": "Rauschen", "compression_ratio": 1.1,
+         "avg_logprob": -0.5, "no_speech_prob": 0.9},
+    ]}
+    text_c, gruende = usable_text(payload)
+    if text_c != "Das ist der gute Teil.":
+        errors.append(f"Metrik-Filter: {text_c!r}")
+    elif len(gruende) != 3:
+        errors.append(f"Metrik-Filter: {len(gruende)} Gründe, erwartet 3")
+    else:
+        print(f"ok  Metrik-Filter verwirft 3 Segmente ({gruende[0]})")
+
+    # d) Ohne Segment-Metriken bleibt der Text erhalten
+    if usable_text({"text": "nur Text"})[0] != "nur Text":
+        errors.append("Metrik-Filter: Antwort ohne segments wird verschluckt")
+
+    # e) Multipart: Felder und Datei müssen im Body stehen
+    ctype, body = build_multipart({"model": "whisper-large-v3", "language": "de"},
+                                  b"RIFFdummy")
+    boundary = ctype.split("boundary=")[1]
+    fehlt = [s for s in (b'name="model"', b'name="language"', b'name="file"',
+                         b"RIFFdummy", boundary.encode())
+             if s not in body]
+    if fehlt or not body.endswith(f"--{boundary}--\r\n".encode()):
+        errors.append(f"Multipart: fehlt {fehlt}")
+    else:
+        print("ok  Multipart-Body vollständig")
+    return errors
+
+
+def analyse_degenerate(text: str) -> bool:
+    from loop_guard import analyse
+    return analyse(text).degenerate
+
+
 def main() -> int:
-    errors = test_segmenter() + test_classify() + test_options() + test_chunker()
+    errors = (test_segmenter() + test_classify() + test_options()
+              + test_chunker() + test_openai_compatible())
     print()
     if errors:
         for e in errors:
