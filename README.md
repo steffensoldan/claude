@@ -8,7 +8,6 @@ Alle Projekte mit Claude
 |---|---|---|
 | [github-trend-monitor](./github-trend-monitor/) | `C:\AI-Tools\claude\github-trend-monitor\` | ✅ produktiv |
 | [aos](./aos/) | `C:\AI-Tools\claude\aos\` | 🔧 Struktur-Überarbeitung |
-| [raum-transkription](./raum-transkription/) | `C:\AI-Tools\claude\raum-transkription\` | 🔧 neu |
 
 ## Skills
 
