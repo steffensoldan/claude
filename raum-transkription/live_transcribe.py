@@ -35,7 +35,7 @@ import numpy as np
 import sounddevice as sd
 from faster_whisper import WhisperModel
 
-from loop_guard import analyse, collapse
+from loop_guard import analyse, collapse, tokenize
 
 SAMPLE_RATE = 16_000
 FRAME_MS = 30
@@ -64,6 +64,22 @@ def transcribe_options(language: str, aggressive: bool) -> dict:
     )
 
 
+def classify_segment(text: str, seconds: float) -> tuple[str, bool, str]:
+    """Entscheidet, was aus einem erkannten Segment im Protokoll landet.
+
+    Rückgabe: (Ausgabetext, verdächtig, Rohtext für das Debug-Log).
+    Modulebene und modellfrei, damit die Entscheidung testbar ist - hier lag
+    der Fehler, der die Faltung unvollständig ließ.
+    """
+    verdict = analyse(text)
+    if not verdict.degenerate:
+        return text, False, ""
+    gefaltet = collapse(text)
+    if not analyse(gefaltet).degenerate and len(tokenize(gefaltet)) >= 2:
+        return gefaltet, False, ""          # war nur vervielfacht
+    return f"[unverständlich, {seconds:.1f}s - {verdict.reason}]", True, text
+
+
 class Segmenter:
     """Energie-VAD mit adaptivem Grundrauschpegel und Hysterese.
 
@@ -75,7 +91,7 @@ class Segmenter:
         self.silence_frames = max(1, silence_ms // FRAME_MS)
         self.max_frames = int(max_segment_s * 1000 // FRAME_MS)
         self.factor = factor
-        self.noise = deque(maxlen=100)     # ~3 s Historie
+        self.floor: float | None = None    # Rauschpegel-Schätzung
         self.preroll: deque[np.ndarray] = deque(maxlen=PREROLL_FRAMES)
         self.buffer: list[np.ndarray] = []
         self.silent_run = 0
@@ -83,9 +99,21 @@ class Segmenter:
         self.speech_run = 0
 
     def _is_speech(self, rms: float) -> bool:
-        self.noise.append(rms)
-        floor = float(np.percentile(self.noise, 20)) if len(self.noise) > 20 else rms
-        return rms > max(floor * self.factor, 1e-4)
+        """Minimum-Tracker statt Perzentil über die letzten Sekunden.
+
+        Ein Perzentil über ein gleitendes Fenster füllt sich bei Dauergerede mit
+        lauten Werten, der Schwellwert wandert mit nach oben und die Erkennung
+        wird taub - genau im kritischen Fall. Der Tracker fällt schnell auf
+        neue Minima und steigt nur langsam (rund 1,7 %/s), folgt damit der AGC
+        des Konferenzmikros, aber nicht der Sprache.
+        """
+        if self.floor is None:
+            self.floor = rms
+        elif rms < self.floor:
+            self.floor = 0.9 * self.floor + 0.1 * rms
+        else:
+            self.floor *= 1.0005
+        return rms > max(self.floor * self.factor, 1e-4)
 
     def feed(self, frame: np.ndarray) -> np.ndarray | None:
         """Nimmt einen Frame, gibt ein fertiges Segment zurück oder None."""
@@ -108,10 +136,16 @@ class Segmenter:
         too_long = len(self.buffer) >= self.max_frames
         if ends or too_long:
             segment = np.concatenate(self.buffer)
-            self.in_speech = False
-            self.speech_run = 0
-            self.buffer = []
-            self.preroll.clear()
+            if ends:
+                self.in_speech = False        # Pause: auf neuen Anlauf warten
+                self.speech_run = 0
+                self.preroll.clear()
+                self.buffer = []
+            else:
+                # Zwangsschnitt mitten im Redefluss: in Sprache bleiben und die
+                # letzten Frames als Überlapp behalten, sonst fehlt der Anschluss.
+                self.buffer = segment[-PREROLL_FRAMES * FRAME:].reshape(-1, FRAME)
+                self.buffer = [row for row in self.buffer]
             return segment
         return None
 
@@ -213,19 +247,12 @@ def main(argv: list[str] | None = None) -> int:
         if not text:
             return
 
-        verdict = analyse(text)
-        if verdict.degenerate:
-            gefaltet = collapse(text)
-            if not analyse(gefaltet).degenerate and len(gefaltet) > 3:
-                kept += 1
-                emit(gefaltet, suspect=False)      # war nur vervielfacht
-            else:
-                dropped += 1
-                emit(f"[unverständlich, {len(segment)/SAMPLE_RATE:.1f}s - "
-                     f"{verdict.reason}]", suspect=True, raw=text)
-            return
-        kept += 1
-        emit(text, suspect=False)
+        line, suspect, raw = classify_segment(text, len(segment) / SAMPLE_RATE)
+        if suspect:
+            dropped += 1
+        else:
+            kept += 1
+        emit(line, suspect=suspect, raw=raw)
 
     try:
         with sd.InputStream(samplerate=SAMPLE_RATE, channels=1, dtype="float32",

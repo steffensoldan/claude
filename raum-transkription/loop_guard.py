@@ -38,6 +38,38 @@ def tokenize(text: str) -> list[str]:
     return [t.lower() for t in _WORD.findall(text)]
 
 
+def word_period(word: str, max_period: int = 8, min_repeats: int = 3) -> tuple[int, int]:
+    """Wortinterne Wiederholung: kleinste Periode am Wortende und ihre Anzahl.
+
+    Whisper kollabiert auch *innerhalb* eines Wortes
+    ("entscheidendendendend..."). Auf Wortebene ist das unsichtbar - ein
+    einziges, formal unbekanntes Token. Rückgabe (0, 0), wenn nichts vorliegt.
+
+    min_repeats=3, damit legitime Doppelungen ("Kaffee", "Zoo") nicht greifen.
+    """
+    w = word.lower()
+    for p in range(1, min(max_period, len(w) // 2) + 1):
+        suffix = w[-p:]
+        reps, i = 0, len(w)
+        while i >= p and w[i - p : i] == suffix:
+            reps += 1
+            i -= p
+        if reps >= min_repeats:
+            return p, reps          # kleinste Periode ist der Generator
+    return 0, 0
+
+
+def repair_word(word: str) -> str:
+    """Kürzt eine wortinterne Wiederholung auf ein Vorkommen.
+
+    "entscheidendendend..." -> "entscheidend"
+    """
+    p, reps = word_period(word)
+    if not p:
+        return word
+    return word[: len(word) - p * (reps - 1)]
+
+
 @dataclass
 class LoopVerdict:
     """Urteil über ein Segment."""
@@ -68,6 +100,17 @@ def analyse(
         return LoopVerdict(False, "leer", 0.0, 1.0, "", 0)
 
     ttr = len(set(toks)) / n_toks
+
+    # Wortinterner Kollaps zuerst: ein einziges Token genügt als Beweis, und
+    # die n-Gram-Statistik sieht davon nichts.
+    for tok in toks:
+        p, reps = word_period(tok)
+        if p:
+            return LoopVerdict(
+                True,
+                f"wortintern: '{tok[-p:]}' {reps}x in '{tok[:20]}…'",
+                1.0, ttr, tok[-p:], n_toks,
+            )
 
     best_cov, best_pattern = 0.0, ""
     for n in range(1, min(max_n, n_toks) + 1):
@@ -110,7 +153,7 @@ def collapse(text: str, max_n: int = 8) -> str:
     Nebenwirkung: arbeitet auf Wort-Tokens, Satzzeichen gehen verloren. Für den
     Rettungspfad hinnehmbar, für unauffällige Segmente nicht aufrufen.
     """
-    words = _WORD.findall(text)
+    words = [repair_word(w) for w in _WORD.findall(text)]
     if not words:
         return text.strip()
 
@@ -179,6 +222,9 @@ def _selftest() -> int:
         + "dann kam es dann... dann... dann kam es dann..."
     )
     teil_loop = "Also, ich glaube, die Doktoranden, " + "die Doktoranden, " * 43 + "die"
+    wort_loop = "und das ist ja ganz entscheidend" + "end" * 40
+    zahl_loop = "mit der du " + "50/" * 70 + "50"
+    fragment_loop = "und das ist ja auch so, " + "und das ist ja ganz entscheid, " * 9
     echt = (
         "Wir sollten die Förderlinie zuerst prüfen, bevor wir den Antrag "
         "aufsetzen. Und dann kam es dann doch zu einer Verschiebung des "
@@ -187,7 +233,10 @@ def _selftest() -> int:
     kurz_loop = "ja ja ja ja ja"
     leise = "Vielen Dank."
 
-    cases = [(loop, True), (teil_loop, True), (echt, False), (kurz_loop, True), (leise, False)]
+    cases = [
+        (loop, True), (teil_loop, True), (wort_loop, True), (zahl_loop, True),
+        (fragment_loop, True), (echt, False), (kurz_loop, True), (leise, False),
+    ]
     failed = 0
     for text, expected in cases:
         v = analyse(text)
@@ -203,6 +252,7 @@ def _selftest() -> int:
     # nichts zurücklassen, was erneut als Loop gilt.
     folds = [
         (teil_loop, "also ich glaube die doktoranden"),
+        (wort_loop, "und das ist ja ganz entscheidend"),
         (echt, None),          # unverändert im Sinne der Wortfolge
     ]
     for text, expected in folds:

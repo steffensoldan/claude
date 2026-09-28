@@ -36,12 +36,58 @@ Sprecherwechsel passieren geräteintern; nach außen kommt eine Spur. Konsequenz
 *Herstellerangaben zur Reichweite je Owl-Modell nicht geprüft — für die
 Diagnose unerheblich, für die Raumaufstellung relevant.*
 
+## Gehostetes Whisper (Scaleway o. ä.): der Weg ohne Parameterzugriff
+
+Läuft Whisper als Dienst, sind `condition_on_previous_text`, VAD und
+`repetition_penalty` nicht erreichbar. Dann muss die Segmentierung **vor** der
+Anfrage passieren — und pausenbasiert schneiden hilft nicht, wenn niemand eine
+Pause macht. `chunker.py` schneidet deshalb an der *relativ leisesten* Stelle
+im Zielbereich: die gibt es immer.
+
+```bash
+# 1. Aufnahme in Stücke schneiden (Ziel 20 s, Suchfenster ±5 s, 0,5 s Überlapp)
+python chunker.py sitzung.wav --out-dir chunks --target 20
+python chunker.py sitzung.wav --plan-only      # nur den Schnittplan ansehen
+
+# 2. jedes Stück als EIGENE Anfrage an den Dienst schicken
+#    - kein Kontext, kein Prompt aus dem Vorgängerstück
+#    - Sprache explizit setzen (de), nie Autodetect
+# 3. Antworten prüfen und zusammenfügen
+python loop_guard.py rohtext.txt > sitzung_bereinigt.txt
+```
+
+Warum das den Loop bricht:
+
+| Maßnahme | Wirkung |
+|---|---|
+| Stücke von ~20 s | der Decoder kann sich nicht über Minuten verlaufen |
+| Schnitt an der leisesten Stelle | es entsteht eine Kante, auch ohne Sprechpause |
+| jede Anfrage einzeln, ohne Kontext | ein Loop kann nicht über Stückgrenzen wandern |
+| 0,5 s Überlapp + `stitch()` | keine abgeschnittenen Wortanfänge, Doppelung am Nahtpunkt wird entfernt |
+| `loop_guard` auf jede Antwort | was trotzdem kollabiert, wird gefaltet oder markiert |
+
+`stitch(texts)` aus `chunker.py` fügt die Stücktexte zusammen und entfernt die
+Wiederholung am Überlapp (Vergleich der letzten und ersten bis zu 12 Wörter).
+
 ## Dateien
 
 | Datei | Zweck |
 |---|---|
-| `live_transcribe.py` | Live-Transkription: Pausensegmentierung, Anti-Loop-Parameter, Loop-Guard |
-| `loop_guard.py` | Erkennung degenerierter Segmente (n-Gram-Abdeckung, Type-Token-Ratio) + Faltung |
+| `chunker.py` | Schneidet Aufnahmen an der leisesten Stelle, auch ohne Sprechpause; `stitch()` fügt die Texte zusammen |
+| `loop_guard.py` | Erkennt degenerierte Segmente (n-Gram-Abdeckung, Type-Token-Ratio, **wortinterne** Wiederholung) und faltet sie; CLI als Nachfilter |
+| `live_transcribe.py` | Live-Transkription mit lokalem faster-whisper: Segmentierung, Anti-Loop-Parameter, Loop-Guard |
+| `test_pipeline.py` | Smoke-Test ohne Mikrofon, Modell oder GPU: Segmentierung, Zwangsschnitt, Entscheidungslogik, Chunker |
+
+Erkannte Fehlerbilder (alle aus echten Ausgaben, alle im Selbsttest abgedeckt):
+
+| Muster | Erkennung |
+|---|---|
+| `...und dann kam es dann...` ×25 | n-Gram-Abdeckung |
+| `die Doktoranden, die Doktoranden, …` mit echtem Vorspann | Abdeckung + Faltung rettet `Also ich glaube die Doktoranden` |
+| `50/50/50/50/…` | n-Gram-Abdeckung |
+| `entscheidendendendend…` | **wortinterne** Periode (auf Wortebene unsichtbar), Reparatur zu `entscheidend` |
+| `und das ist ja ganz entscheid, …` ×9 | Abdeckung 90 % |
+| `Ähm. Ähm. Ähm. …` | Abdeckung, wird als unverständlich markiert |
 
 ```powershell
 pip install faster-whisper sounddevice numpy
