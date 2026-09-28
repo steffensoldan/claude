@@ -128,9 +128,12 @@ def main(argv: list[str] | None = None) -> int:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--list-devices", action="store_true", help="Eingabegeräte zeigen")
     ap.add_argument("--device", type=int, default=None, help="Index des Eingabegeräts")
-    ap.add_argument("--model", default="large-v3", help="Whisper-Modell (default large-v3)")
-    ap.add_argument("--compute-type", default="float16",
-                    help="float16 (GPU), int8_float16, int8 (CPU)")
+    ap.add_argument("--model", default=None,
+                    help="Whisper-Modell (default: large-v3 mit GPU, small ohne)")
+    ap.add_argument("--compute-type", default="auto",
+                    help="auto (default), float16 (GPU), int8 (CPU)")
+    ap.add_argument("--compute-device", default="auto",
+                    choices=["auto", "cuda", "cpu"], help="Rechengerät (default auto)")
     ap.add_argument("--language", default="de")
     ap.add_argument("--out", default=None, help="Transkript-Datei (append)")
     ap.add_argument("--debug-log", default=None, help="verworfene Segmente mitschreiben")
@@ -157,8 +160,23 @@ def main(argv: list[str] | None = None) -> int:
                   "möglich. Für 'wer sagt was' braucht es Mikrofone pro Sprecher.",
                   file=sys.stderr)
 
-    print(f"Lade Modell {args.model} ...", file=sys.stderr)
-    model = WhisperModel(args.model, compute_type=args.compute_type)
+    # Ohne GPU ist large-v3 nicht echtzeitfähig: kleineres Modell wählen,
+    # sonst läuft die Transkription der Aufnahme hinterher und reißt Lücken.
+    has_cuda = args.compute_device == "cuda"
+    if args.compute_device == "auto":
+        try:
+            import ctranslate2
+            has_cuda = ctranslate2.get_cuda_device_count() > 0
+        except Exception:
+            has_cuda = False
+    model_name = args.model or ("large-v3" if has_cuda else "small")
+    if not has_cuda:
+        print(f"Keine CUDA-GPU erkannt -> Modell {model_name} auf CPU. Bei "
+              f"Aussetzern kleineres Modell (--model base) verwenden.", file=sys.stderr)
+
+    print(f"Lade Modell {model_name} ...", file=sys.stderr)
+    model = WhisperModel(model_name, device=args.compute_device,
+                         compute_type=args.compute_type)
     options = transcribe_options(args.language, args.aggressive)
 
     frames: queue.Queue[np.ndarray] = queue.Queue()

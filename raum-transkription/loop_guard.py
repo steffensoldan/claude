@@ -118,8 +118,10 @@ def collapse(text: str, max_n: int = 8) -> str:
     i = 0
     while i < len(words):
         folded = False
-        # Große n zuerst: sonst frisst n=1 Teile längerer Muster.
-        for n in range(min(max_n, (len(words) - i) // 2), 0, -1):
+        # Kleinste Periode zuerst: sie ist der Generator der Wiederholung.
+        # Mit großem n zuerst faltet ein Vielfaches des Musters (8 Wörter =
+        # 4x "die Doktoranden") und lässt den Rest stehen.
+        for n in range(1, min(max_n, (len(words) - i) // 2) + 1):
             block = [w.lower() for w in words[i : i + n]]
             j = i + n
             repeats = 0
@@ -127,8 +129,15 @@ def collapse(text: str, max_n: int = 8) -> str:
                 repeats += 1
                 j += n
             if repeats:
+                # Angebrochene Wiederholung am Ende mitnehmen: Whisper bricht
+                # mitten im Muster ab ("... die Doktoranden, die").
+                rest = 0
+                while (rest < n - 1
+                       and j + rest < len(words)
+                       and words[j + rest].lower() == block[rest]):
+                    rest += 1
                 out.extend(words[i : i + n])
-                i = j
+                i = j + rest
                 folded = True
                 break
         if not folded:
@@ -137,11 +146,39 @@ def collapse(text: str, max_n: int = 8) -> str:
     return " ".join(out)
 
 
+def filter_transcript(lines, *, marker: str = "[unverständlich") -> tuple[list[str], int, int]:
+    """Bereinigt ein fertiges Transkript Zeile für Zeile.
+
+    Für Pipelines, die nicht live_transcribe.py nutzen: die Ausgabe eines
+    beliebigen Whisper-Frontends durchschleifen und degenerierte Zeilen
+    ersetzen. Ein führender Zeitstempel "[hh:mm:ss] " bleibt erhalten.
+    """
+    stamp_re = re.compile(r"^\s*(\[[0-9:.,\s-]+\]\s*)?(.*)$", re.DOTALL)
+    out: list[str] = []
+    salvaged = flagged = 0
+    for line in lines:
+        stamp, text = stamp_re.match(line.rstrip("\n")).groups()
+        stamp = stamp or ""
+        verdict = analyse(text)
+        if not verdict.degenerate:
+            out.append(stamp + text)
+            continue
+        gefaltet = collapse(text)
+        if not analyse(gefaltet).degenerate and len(tokenize(gefaltet)) >= 2:
+            salvaged += 1
+            out.append(f"{stamp}{gefaltet}")
+        else:
+            flagged += 1
+            out.append(f"{stamp}{marker}: {verdict.reason}]")
+    return out, salvaged, flagged
+
+
 def _selftest() -> int:
     loop = (
         "...und dann kam es dann... " * 20
         + "dann kam es dann... dann... dann kam es dann..."
     )
+    teil_loop = "Also, ich glaube, die Doktoranden, " + "die Doktoranden, " * 43 + "die"
     echt = (
         "Wir sollten die Förderlinie zuerst prüfen, bevor wir den Antrag "
         "aufsetzen. Und dann kam es dann doch zu einer Verschiebung des "
@@ -150,7 +187,7 @@ def _selftest() -> int:
     kurz_loop = "ja ja ja ja ja"
     leise = "Vielen Dank."
 
-    cases = [(loop, True), (echt, False), (kurz_loop, True), (leise, False)]
+    cases = [(loop, True), (teil_loop, True), (echt, False), (kurz_loop, True), (leise, False)]
     failed = 0
     for text, expected in cases:
         v = analyse(text)
@@ -161,10 +198,45 @@ def _selftest() -> int:
             f"{mark} degenerate={v.degenerate!s:5} cov={v.coverage:.2f} "
             f"ttr={v.type_token_ratio:.2f} tokens={v.tokens:3} | {v.reason}"
         )
-    print("\ncollapse(loop) ->", collapse(loop)[:90])
-    print("collapse(echt) ->", collapse(echt)[:90])
+
+    # Faltung: der Rettungspfad muss den echten Vorspann behalten und darf
+    # nichts zurücklassen, was erneut als Loop gilt.
+    folds = [
+        (teil_loop, "also ich glaube die doktoranden"),
+        (echt, None),          # unverändert im Sinne der Wortfolge
+    ]
+    for text, expected in folds:
+        got = collapse(text)
+        ok = (got.lower() == expected) if expected else not analyse(got).degenerate
+        if not ok:
+            failed += 1
+        print(f"{'ok ' if ok else 'FEHL'} collapse -> {got[:70]}")
     return failed
 
 
+def main(argv: list[str] | None = None) -> int:
+    import argparse
+    import sys
+
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    ap.add_argument("datei", nargs="?", help="Transkript bereinigen (ohne Angabe: Selbsttest)")
+    ap.add_argument("--stdin", action="store_true", help="Transkript von stdin lesen")
+    args = ap.parse_args(argv)
+
+    if not args.datei and not args.stdin:
+        return _selftest()
+
+    src = sys.stdin if args.stdin else open(args.datei, encoding="utf-8")
+    try:
+        lines, salvaged, flagged = filter_transcript(src)
+    finally:
+        if src is not sys.stdin:
+            src.close()
+    print("\n".join(lines))
+    print(f"[loop_guard] {salvaged} Zeilen gefaltet, {flagged} als unverständlich markiert",
+          file=sys.stderr)
+    return 0
+
+
 if __name__ == "__main__":
-    raise SystemExit(_selftest())
+    raise SystemExit(main())

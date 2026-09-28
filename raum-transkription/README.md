@@ -43,18 +43,47 @@ Diagnose unerheblich, für die Raumaufstellung relevant.*
 | `live_transcribe.py` | Live-Transkription: Pausensegmentierung, Anti-Loop-Parameter, Loop-Guard |
 | `loop_guard.py` | Erkennung degenerierter Segmente (n-Gram-Abdeckung, Type-Token-Ratio) + Faltung |
 
-```bash
+```powershell
 pip install faster-whisper sounddevice numpy
 
+# 1. Eingabegeraet finden (Index der Owl notieren)
 python live_transcribe.py --list-devices
-python live_transcribe.py --device <owl-index> --model large-v3 \
-    --out sitzung.txt --debug-log verworfen.log
+
+# 2. Starten. Index einsetzen, keine spitzen Klammern -
+#    "<" ist in PowerShell ein reservierter Operator.
+python live_transcribe.py --device 3 --out sitzung.txt --debug-log verworfen.log
+
 python loop_guard.py        # Selbsttest der Erkennung
 ```
+
+Modell und Rechengeraet werden automatisch gewaehlt: mit CUDA-GPU `large-v3`,
+ohne GPU `small` auf der CPU (`--model`, `--compute-device`, `--compute-type`
+ueberschreiben das). Ohne GPU ist `large-v3` nicht echtzeitfaehig - die
+Transkription laeuft der Aufnahme hinterher und reisst Luecken.
 
 Verworfene Segmente erscheinen im Transkript als
 `[unverständlich, 4.2s - Muster 'und dann kam es dann' deckt 94% des Segments]`
 und im Debug-Log im Rohtext. Fehler sichtbar statt plausibel falsch.
+
+### Nachfilter für eine bestehende Pipeline
+
+Läuft die Live-Transkription über ein anderes Frontend, ist der Loop-Guard auch
+allein verwendbar — Zeitstempel am Zeilenanfang bleiben erhalten:
+
+```bash
+python loop_guard.py sitzung.txt > sitzung_bereinigt.txt
+<irgendein-live-tool> | python loop_guard.py --stdin
+```
+
+```
+[00:01:09] Also, ich glaube, die Doktoranden, die Doktoranden, die Doktoranden, ...
+   ->      Also ich glaube die Doktoranden
+```
+
+Zeilen mit echtem Vorspann werden auf den Inhalt gefaltet, vollständig
+halluzinierte Zeilen als `[unverständlich: …]` markiert. Die Faltung greift nur
+bei Zeilen, die zuvor als degeneriert erkannt wurden — Sätze mit legitimer
+Doppelung („sehr sehr wichtig") passieren den Filter unverändert.
 
 ## Die wirksamen Parameter (faster-whisper)
 
