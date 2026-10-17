@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="de">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Chorspur</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: eine Spalte, Transport oben, Zeitleiste mit vier Spuren, darunter je Spur ein Bedienfeld. */
+:root{
+  --bg:#EDF0F3; --panel:#FFFFFF; --ink:#13202B; --mute:#566673; --line:#D3DAE0;
+  --accent:#0F766E; --accent-ink:#FFFFFF; --rec:#C62828;
+  --t1:#2563EB; --t2:#15803D; --t3:#BE185D; --t4:#B45309;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E151B; --panel:#16212A; --ink:#E6EDF2; --mute:#93A3B0; --line:#26343F;
+    --accent:#2DD4BF; --accent-ink:#06201C; --rec:#F87171;
+    --t1:#60A5FA; --t2:#4ADE80; --t3:#F472B6; --t4:#FBBF24; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E151B; --panel:#16212A; --ink:#E6EDF2; --mute:#93A3B0; --line:#26343F;
+  --accent:#2DD4BF; --accent-ink:#06201C; --rec:#F87171;
+  --t1:#60A5FA; --t2:#4ADE80; --t3:#F472B6; --t4:#FBBF24; color-scheme:dark;
+}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;
+  padding-block:16px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+h1{font:700 26px/1.1 var(--f-display);margin:0;letter-spacing:-.01em}
+h3{font:700 16px/1.2 var(--f-display);margin:0}
+.top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.sub{color:var(--mute);font-size:13px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0}
+button{font:500 15px var(--f-body);min-height:44px;padding:0 14px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:disabled{opacity:.45;cursor:default}
+.go{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:500;flex:1;min-width:130px;font-size:16px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;border-radius:0;min-height:40px;padding:0 12px}
+.seg button+button{border-left:1px solid var(--line)}
+.lab{display:grid;grid-template-columns:minmax(84px,30%) 1fr 64px;align-items:center;gap:8px;font-size:14px}
+.lab span{color:var(--mute)}
+output{font:400 13px var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;min-width:0;accent-color:var(--c,var(--accent));height:32px}
+.beat{display:flex;align-items:center;gap:10px;font:400 13px var(--f-mono);color:var(--mute);font-variant-numeric:tabular-nums;min-width:0}
+.dots{display:flex;gap:6px}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--accent)}
+.meter{height:8px;border-radius:4px;background:var(--line);overflow:hidden;flex:1;min-width:60px}
+.meter b{display:block;height:100%;width:0;background:var(--accent);transition:width .06s linear}
+.meter b.hot{background:var(--rec)}
+canvas{display:block;width:100%;border-radius:6px}
+.trk{border-left:4px solid var(--c)}
+.trk header{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.len{font:400 13px var(--f-mono);color:var(--mute)}
+.btns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.btns button{padding:0 6px}
+.btns .rec{color:var(--rec);border-color:var(--rec)}
+.btns .rec.live{background:var(--rec);color:var(--bg)}
+details{border-top:1px solid var(--line);padding-top:8px}
+summary{cursor:pointer;color:var(--mute);min-height:32px;display:flex;align-items:center}
+details .stack{display:flex;flex-direction:column;gap:6px;padding-top:6px}
+#note{display:none;border:1px solid var(--rec);border-radius:10px;padding:12px;background:var(--panel);gap:10px;flex-direction:column}
+#note.show{display:flex}
+#hp{display:none;border:1px solid var(--rec);border-radius:8px;padding:8px 10px;font-size:14px}
+#hp.show{display:block}
+#hp.hot{background:var(--rec);color:var(--bg)}
+.hint{color:var(--mute);font-size:13px}
+</style>
+
+<div class="wrap">
+  <div class="top"><h1>Chorspur</h1><span class="sub">4 Stimmen, Rhythmus, Mix</span></div>
+
+  <div id="note" role="status"></div>
+
+  <section class="card" aria-label="Wiedergabe">
+    <div class="row">
+      <button class="go" id="play">▶ Abspielen</button>
+      <button id="export">Mix speichern</button>
+    </div>
+    <label class="lab"><span>Tempo</span><input type="range" id="bpm" min="50" max="160" step="1" value="90"><output id="bpmOut">90 BPM</output></label>
+    <div class="row"><span class="hint">Rhythmus</span>
+      <div class="seg" id="rhythm"><button data-r="off">Aus</button><button data-r="click">Klick</button><button data-r="beat" aria-pressed="true">Beat</button></div>
+    </div>
+    <div id="hp" role="alert"><strong>Kopfhörer verwenden.</strong> <span id="hpTxt">Sonst nimmt das Mikrofon Rhythmus und andere Spuren mit auf.</span></div>
+    <div class="beat"><div class="dots" id="dots"><i></i><i></i><i></i><i></i></div><span id="pos">Bereit</span><div class="meter" title="Pegel"><b id="lvl"></b></div></div>
+  </section>
+
+  <section class="card" aria-label="Zeitleiste"><canvas id="cv" aria-label="Wellenformen der vier Spuren mit Taktraster"></canvas></section>
+
+  <div id="tracks" class="wrap" style="gap:14px"></div>
+
+  <section class="card" aria-label="Aufnahme-Einstellungen">
+    <h3>Aufnahme</h3>
+    <label class="lab"><span>Latenz (ms)</span><input type="range" id="lat" min="0" max="400" step="1" value="0"><output id="latOut">0 ms</output></label>
+    <div class="row"><button id="cal">Latenz messen</button><span class="hint" id="calMsg"></span></div>
+    <p class="hint" id="pk" style="margin:0"></p>
+    <p class="hint" style="margin:0">Die Latenz verschiebt jede neue Aufnahme um diese Zeit nach vorn, damit sie auf dem Takt liegt. Sie gilt für Aufnahmen ab jetzt, nicht rückwirkend. Zum Messen: Kopfhörer abnehmen, Lautstärke hoch, Handy ruhig hinlegen. Bei Bluetooth-Kopfhörern ist die Latenz größer als bei Kabel; dann besser per Gehör nachstellen.</p>
+  </section>
+
+  <p class="hint">Mit Kopfhörern aufnehmen, sonst nimmt das Mikrofon Rhythmus und andere Spuren mit auf. Tempo und Tonhöhe einer Spur hängen zusammen: schneller klingt höher. Eine automatische Tonkorrektur gibt es nicht; mit „Tonhöhe“ schiebst du eine ganze Spur um Bruchteile eines Halbtons. Alles bleibt im Browser; es werden keine Audiodaten hochgeladen.</p>
+  <input type="file" id="file" accept="audio/*" hidden>
+</div>
+
+<script>
+(function(){
+const $=(s,r=document)=>r.querySelector(s);
+const root=document.documentElement;
+const N=4, LANE=56, RUL=22, CLIP=.98;
+const tracks=Array.from({length:N},(_,i)=>({buf:null,peaks:null,vol:.9,pan:0,mute:false,off:0,speed:100,semi:0}));
+let bpm=90, rhythm='beat', latency=0;
+try{const v=parseInt(localStorage.getItem('chorspur.lat'),10);if(v>=0&&v<=400)latency=v}catch(e){}
+const T={playing:false,T0:0,nodes:[],sched:null,n:0,rec:-1,recorder:null,cap:null,busy:false};
+let ctx,master,an,noiseBuf,wkReady=false,wl=null;
+
+/* ---------- Audio ---------- */
+function ensure(){
+  if(ctx) return;
+  ctx=new (window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});
+  master=ctx.createGain(); an=ctx.createAnalyser(); an.fftSize=512;
+  master.connect(an); an.connect(ctx.destination);
+  noiseBuf=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate);
+  const d=noiseBuf.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+}
+const rate=t=>t.speed/100*Math.pow(2,t.semi/12);
+const dur=t=>t.buf?t.buf.duration/rate(t):0;
+const endT=()=>Math.max(0,...tracks.map(t=>t.buf?Math.max(0,t.off)+dur(t):0));
+
+async function keepAwake(on){
+  try{
+    if(on){if(!wl&&navigator.wakeLock){wl=await navigator.wakeLock.request('screen');wl.addEventListener('release',()=>{wl=null})}}
+    else if(wl){const w=wl;wl=null;await w.release()}
+  }catch(e){}
+}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&(T.playing||T.busy))keepAwake(true)});
+
+function click(t,acc){const o=ctx.createOscillator(),g=ctx.createGain();o.frequency.value=acc?1500:1000;g.gain.setValueAtTime(.35,t);g.gain.exponentialRampToValueAtTime(.001,t+.05);o.connect(g);g.connect(master);o.start(t);o.stop(t+.06)}
+function kick(t){const o=ctx.createOscillator(),g=ctx.createGain();o.frequency.setValueAtTime(140,t);o.frequency.exponentialRampToValueAtTime(45,t+.12);g.gain.setValueAtTime(.8,t);g.gain.exponentialRampToValueAtTime(.001,t+.28);o.connect(g);g.connect(master);o.start(t);o.stop(t+.3)}
+function noise(t,len,hp,vol){const s=ctx.createBufferSource(),f=ctx.createBiquadFilter(),g=ctx.createGain();s.buffer=noiseBuf;f.type='highpass';f.frequency.value=hp;g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+len);s.connect(f);f.connect(g);g.connect(master);s.start(t,Math.random()*.5);s.stop(t+len+.02)}
+function tick(){
+  const spb=60/bpm, lim=ctx.currentTime+.2;
+  while(T.T0+T.n*spb<lim){
+    const n=T.n,t=T.T0+n*spb,b=((n%4)+4)%4;
+    if(n<0) click(t,b===0);
+    else{
+      if(rhythm==='click') click(t,b===0);
+      else if(rhythm==='beat'){
+        if(b===0||b===2) kick(t); else noise(t,.16,1500,.35);
+        noise(t,.04,7000,.12); noise(t+spb/2,.04,7000,.06);
+      }
+    }
+    T.n++;
+  }
+}
+function makeNode(i){
+  const tr=tracks[i]; if(!tr.buf) return;
+  const s=ctx.createBufferSource(),g=ctx.createGain(),p=ctx.createStereoPanner();
+  const r=rate(tr);
+  s.buffer=tr.buf; s.playbackRate.value=r; g.gain.value=tr.mute?0:tr.vol; p.pan.value=tr.pan;
+  s.connect(g);g.connect(p);p.connect(master);
+  let when=T.T0+tr.off, boff=0;
+  if(tr.off<0){when=T.T0;boff=-tr.off*r}
+  if(boff>=tr.buf.duration) return;
+  s.start(when,boff);
+  T.nodes[i]={src:s,g,p};
+}
+function begin(T0,n0,skip){
+  T.T0=T0; T.nodes=[];
+  for(let i=0;i<N;i++) if(i!==skip) makeNode(i);
+  T.n=n0; clearInterval(T.sched); T.sched=setInterval(tick,25); tick();
+  T.playing=true; keepAwake(true); ui(); loop();
+}
+async function play(){
+  ensure(); await ctx.resume(); if(T.playing) return;
+  begin(ctx.currentTime+.12,0,-1);
+}
+function stop(){
+  clearInterval(T.sched); T.sched=null;
+  T.nodes.forEach(n=>{try{n&&n.src.stop()}catch(e){}}); T.nodes=[];
+  T.playing=false;
+  if(T.recorder){const r=T.recorder;T.recorder=null;T.rec=-1;T.cap=null;r.finish()}
+  keepAwake(false);
+  ui(); draw();
+}
+
+/* ---------- Mikrofon: Rohdaten (PCM) mit Kontext-Zeitstempel ---------- */
+/* Statt MediaRecorder (komprimiert, Startzeit unklar) liest ein AudioWorklet die Samples samt Frame-Nummer der Audio-Uhr.
+   Damit liegt der Schnitt auf T0 sampleGenau fest; nur die Gerätelatenz bleibt, die über "Latenz (ms)" korrigiert wird. */
+const WK='class R extends AudioWorkletProcessor{constructor(){super();this.b=new Float32Array(1024);this.n=0;this.f=0}'+
+ 'process(i){const c=i[0]&&i[0][0];if(!c)return true;for(let k=0;k<c.length;k++){if(this.n===0)this.f=currentFrame+k;this.b[this.n++]=c[k];'+
+ 'if(this.n===1024){this.port.postMessage({f:this.f,d:this.b});this.b=new Float32Array(1024);this.n=0}}return true}}registerProcessor("rec",R);';
+function micMsg(e){
+  const n=e&&e.name;
+  if(n==='NotAllowedError'||n==='SecurityError') return 'Der Zugriff auf das Mikrofon wurde verweigert. Erlaube das Mikrofon in den Einstellungen des Browsers für diese Seite und versuche es erneut.';
+  if(n==='NotFoundError'||n==='DevicesNotFoundError'||n==='OverconstrainedError') return 'Es wurde kein Mikrofon gefunden. Schließe ein Mikrofon an oder prüfe die Geräteeinstellungen.';
+  if(n==='NotReadableError'||n==='AbortError'||n==='TrackStartError') return 'Das Mikrofon lässt sich nicht öffnen. Vielleicht nutzt es gerade eine andere App.';
+  return 'Das Mikrofon ist nicht verfügbar'+(n?' ('+n+')':'')+'.';
+}
+async function openCapture(){
+  ensure(); await ctx.resume();
+  if(!window.isSecureContext||!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)
+    throw {msg:'Das Mikrofon funktioniert nur in einem sicheren Kontext: über https:// oder über http://localhost. Öffne die Seite über eine solche Adresse.'};
+  let stream;
+  try{stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false,channelCount:1}})}
+  catch(e){throw {msg:micMsg(e)}}
+  await ctx.resume();
+  const cap={chunks:[],peak:0,blk:0,sink:ctx.createGain(),src:ctx.createMediaStreamSource(stream),node:null};
+  const onData=(f,d)=>{let p=0;for(let k=0;k<d.length;k++){const v=d[k]<0?-d[k]:d[k];if(v>p)p=v}
+    if(p>cap.blk)cap.blk=p; if(p>cap.peak)cap.peak=p; cap.chunks.push({f,d})};
+  try{
+    if(ctx.audioWorklet&&window.AudioWorkletNode){
+      if(!wkReady){const u=URL.createObjectURL(new Blob([WK],{type:'text/javascript'}));await ctx.audioWorklet.addModule(u);URL.revokeObjectURL(u);wkReady=true}
+      cap.node=new AudioWorkletNode(ctx,'rec',{numberOfInputs:1,numberOfOutputs:1,channelCount:1,channelCountMode:'explicit'});
+      cap.node.port.onmessage=e=>onData(e.data.f,e.data.d);
+    }else{
+      cap.node=ctx.createScriptProcessor(2048,1,1);
+      cap.node.onaudioprocess=e=>onData(Math.round(e.playbackTime*ctx.sampleRate),new Float32Array(e.inputBuffer.getChannelData(0)));
+    }
+  }catch(e){stream.getTracks().forEach(t=>t.stop());throw {msg:'Die Aufnahme-Engine ließ sich nicht starten ('+(e&&e.name||'Fehler')+'). Probiere „Datei“ mit einer Aufnahme vom Sprachrekorder.'}}
+  cap.sink.gain.value=0; cap.sink.connect(ctx.destination);
+  cap.src.connect(cap.node); cap.node.connect(cap.sink);
+  cap.close=()=>{
+    stream.getTracks().forEach(t=>t.stop());
+    try{cap.src.disconnect();cap.node.disconnect();cap.sink.disconnect()}catch(e){}
+    if(cap.node.port)cap.node.port.onmessage=null; cap.node.onaudioprocess=null;
+  };
+  return cap;
+}
+function assemble(chunks,start,end){
+  const out=new Float32Array(Math.max(0,end-start));
+  for(const c of chunks){const a=Math.max(c.f,start),b=Math.min(c.f+c.d.length,end);if(b>a)out.set(c.d.subarray(a-c.f,b-c.f),a-start)}
+  return out;
+}
+const dB=p=>p>0?Math.round(20*Math.log10(p)):-99;
+
+/* ---------- Aufnehmen ---------- */
+async function record(i){
+  if(T.playing||T.busy) return;
+  T.busy=true; note(''); ui();
+  let cap;
+  try{cap=await openCapture()}catch(e){T.busy=false;ui();micHelp(i,e.msg||'Das Mikrofon ist nicht verfügbar.');return}
+  T.busy=false;
+  const T0=ctx.currentTime+.25+4*(60/bpm), lat=latency;
+  T.cap=cap; T.rec=i;
+  T.recorder={finish:()=>finishTake(i,cap,T0,lat)};
+  begin(T0,-4,i);
+}
+function finishTake(i,cap,T0,lat){
+  cap.close();
+  const sr=ctx.sampleRate, start=Math.round((T0+lat/1000)*sr);
+  let last=0; for(const c of cap.chunks) last=Math.max(last,c.f+c.d.length);
+  const data=assemble(cap.chunks,start,last);
+  $('#pk').textContent='Letzte Aufnahme: Spitzenpegel '+dB(cap.peak)+' dBFS.';
+  if(data.length<sr*.2){note('Die Aufnahme war zu kurz.');return}
+  const buf=ctx.createBuffer(1,data.length,sr); buf.copyToChannel(data,0);
+  setBuf(i,buf);
+  note(cap.peak>=CLIP?'Die Aufnahme ist übersteuert (Spitze '+dB(cap.peak)+' dBFS). Geh weiter vom Mikrofon weg oder sing leiser und nimm die Spur neu auf.':'');
+}
+function micHelp(i,msg){
+  const el=$('#note');
+  el.innerHTML='<strong></strong><span class="hint">Alternative: Nimm die Stimme mit dem Sprachrekorder deines Handys auf (Rhythmus dabei über Kopfhörer laufen lassen) und lade die Datei hier in Stimme '+(i+1)+' hoch.</span><div class="row"><button data-n="cap" data-i="'+i+'">Sprachrekorder öffnen</button><button data-n="file" data-i="'+i+'">Datei wählen</button></div>';
+  $('strong',el).textContent=msg;
+  el.className='show';
+}
+function note(t){const el=$('#note');el.textContent=t;el.className=t?'show':''}
+
+/* ---------- Latenz messen: Klicks abspielen, per Mikrofon aufnehmen, Kreuzkorrelation ---------- */
+function clickTpl(sr){const n=Math.round(.03*sr),d=new Float32Array(n);for(let k=0;k<n;k++){const t=k/sr;d[k]=Math.sin(2*Math.PI*1500*t)*Math.exp(-t/.006)}return d}
+/* Lag (in Samples) mit größter |Korrelation| von tpl in sig, Suchbereich 0..maxLag. */
+function xcorr(sig,tpl,maxLag){
+  const dot=(lag,st)=>{let s=0;for(let k=0;k<tpl.length;k+=st){const j=lag+k;if(j>=sig.length)break;s+=sig[j]*tpl[k]}return s};
+  let best=0,bl=0,sum=0,cnt=0;
+  for(let lag=0;lag<=maxLag;lag+=4){const v=Math.abs(dot(lag,4));sum+=v;cnt++;if(v>best){best=v;bl=lag}}
+  const ratio=best/Math.max(1e-12,sum/cnt);
+  best=0;let rl=bl;
+  for(let lag=Math.max(0,bl-6);lag<=bl+6;lag++){const v=Math.abs(dot(lag,1));if(v>best){best=v;rl=lag}}
+  return {lag:rl,ratio};
+}
+/* Aus einer Aufnahme (Frames) und den geplanten Klickzeiten die Latenz in ms schätzen. */
+function estimateLatency(chunks,times,sr){
+  const tpl=clickTpl(sr),maxLag=Math.round(.4*sr);
+  let last=0;for(const c of chunks)last=Math.max(last,c.f+c.d.length);
+  const lags=[];
+  for(const t of times){
+    const s=Math.round(t*sr),seg=assemble(chunks,s,Math.min(last,s+maxLag+tpl.length));
+    if(seg.length<tpl.length*2)continue;
+    const r=xcorr(seg,tpl,Math.min(maxLag,seg.length-tpl.length));
+    if(r.ratio>=6)lags.push(r.lag/sr*1000);
+  }
+  if(lags.length<3)return null;
+  lags.sort((a,b)=>a-b);
+  return {ms:lags[lags.length>>1],spread:lags[lags.length-1]-lags[0],n:lags.length};
+}
+async function calibrate(){
+  if(T.playing||T.busy) return;
+  const msg=$('#calMsg');
+  T.busy=true; keepAwake(true); ui(); msg.textContent='Messung läuft (ca. 5 s). Bitte ruhig halten …';
+  let cap;
+  try{cap=await openCapture()}catch(e){T.busy=false;keepAwake(false);ui();msg.textContent='';micHelp(0,e.msg||'Das Mikrofon ist nicht verfügbar.');return}
+  const sr=ctx.sampleRate,tpl=clickTpl(sr),b=ctx.createBuffer(1,tpl.length,sr);b.copyToChannel(tpl,0);
+  const t0=ctx.currentTime+.6,times=[];
+  for(let k=0;k<5;k++){const s=ctx.createBufferSource(),g=ctx.createGain();s.buffer=b;g.gain.value=.8;s.connect(g);g.connect(master);s.start(t0+k*.7);times.push(t0+k*.7)}
+  await new Promise(r=>setTimeout(r,(.6+5*.7+.7)*1000));
+  cap.close();
+  const res=estimateLatency(cap.chunks,times,sr);
+  T.busy=false; keepAwake(false); ui();
+  if(!res){msg.textContent='Keine Klicks erkannt. Lautstärke hoch, Kopfhörer ab, Mikrofon nahe am Lautsprecher, Umgebung ruhig.';return}
+  const ms=Math.round(res.ms);setLatency(ms);
+  msg.textContent='Gemessen: '+ms+' ms (Streuung '+res.spread.toFixed(1).replace('.',',')+' ms, '+res.n+' von 5 Klicks)'+(res.spread>10?'. Streuung hoch, Messung wiederholen.':'. Eingetragen.');
+}
+function setLatency(ms){
+  latency=Math.max(0,Math.min(400,Math.round(ms)));
+  $('#lat').value=latency;$('#latOut').textContent=latency+' ms';
+  try{localStorage.setItem('chorspur.lat',String(latency))}catch(e){}
+}
+
+/* ---------- Dateien & Spitzenwerte ---------- */
+let pending=0;
+function pick(i,cap){pending=i;const f=$('#file');if(cap)f.setAttribute('capture','');else f.removeAttribute('capture');f.value='';f.click()}
+$('#file').addEventListener('change',async e=>{
+  const f=e.target.files[0]; if(!f) return;
+  try{ensure();const buf=await ctx.decodeAudioData(await f.arrayBuffer());setBuf(pending,buf);note('')}
+  catch(err){note('Diese Datei ließ sich nicht lesen. Probiere ein anderes Audioformat.')}
+});
+function setBuf(i,buf){
+  const tr=tracks[i],ch=buf.getChannelData(0),P=700,step=Math.max(1,Math.floor(ch.length/P)),pk=new Float32Array(P);
+  for(let k=0;k<P;k++){let m=0;const a=k*step,b=Math.min(ch.length,a+step);for(let j=a;j<b;j+=4){const v=Math.abs(ch[j]);if(v>m)m=v}pk[k]=m}
+  const mx=Math.max(.05,...pk);for(let k=0;k<P;k++)pk[k]/=mx;
+  tr.buf=buf;tr.peaks=pk;ui();draw();
+}
+
+/* ---------- Mix speichern: WAV 16 Bit Stereo, Offline-Rendering ---------- */
+function wavBlob(buf){
+  const nc=2,len=buf.length,sr=buf.sampleRate,bytes=len*nc*2,ab=new ArrayBuffer(44+bytes),v=new DataView(ab);
+  const S=(o,s)=>{for(let k=0;k<s.length;k++)v.setUint8(o+k,s.charCodeAt(k))};
+  S(0,'RIFF');v.setUint32(4,36+bytes,true);S(8,'WAVE');S(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,nc,true);
+  v.setUint32(24,sr,true);v.setUint32(28,sr*nc*2,true);v.setUint16(32,nc*2,true);v.setUint16(34,16,true);S(36,'data');v.setUint32(40,bytes,true);
+  const L=buf.getChannelData(0),R=buf.getChannelData(1);let o=44;
+  for(let k=0;k<len;k++){
+    for(const x of [L[k],R[k]]){const s=Math.max(-1,Math.min(1,x));v.setInt16(o,s<0?s*32768:s*32767,true);o+=2}
+  }
+  return new Blob([ab],{type:'audio/wav'});
+}
+async function renderMix(){
+  const sr=ctx.sampleRate,oc=new OfflineAudioContext(2,Math.ceil((endT()+.3)*sr),sr);
+  tracks.forEach(tr=>{
+    if(!tr.buf||tr.mute) return;
+    const s=oc.createBufferSource(),g=oc.createGain(),p=oc.createStereoPanner(),r=rate(tr);
+    s.buffer=tr.buf;s.playbackRate.value=r;g.gain.value=tr.vol;p.pan.value=tr.pan;
+    s.connect(g);g.connect(p);p.connect(oc.destination);
+    let when=Math.max(0,tr.off),boff=0;
+    if(tr.off<0)boff=-tr.off*r;
+    if(boff>=tr.buf.duration) return;
+    s.start(when,boff);
+  });
+  return oc.startRendering();
+}
+async function exportMix(){
+  if(!tracks.some(t=>t.buf)){note('Es ist noch keine Spur aufgenommen.');return}
+  if(T.playing) stop();
+  if(T.busy) return;
+  ensure(); T.busy=true; ui(); note('Der Mix wird berechnet …');
+  try{
+    const out=await renderMix();
+    let pk=0;for(let c=0;c<2;c++){const d=out.getChannelData(c);for(let k=0;k<d.length;k++){const a=Math.abs(d[k]);if(a>pk)pk=a}}
+    let msg='';
+    if(pk>1){const g=.98/pk;for(let c=0;c<2;c++){const d=out.getChannelData(c);for(let k=0;k<d.length;k++)d[k]*=g}msg='Der Mix war zu laut und wurde automatisch leiser gestellt (um '+(-dB(g))+' dB).'}
+    const url=URL.createObjectURL(wavBlob(out)),a=document.createElement('a');
+    a.href=url;a.download='Chorspur-Mix.wav';document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),60000);
+    note(msg);
+  }catch(e){note('Der Mix ließ sich nicht erzeugen ('+(e&&e.name||'Fehler')+').')}
+  T.busy=false; ui();
+}
+
+/* ---------- Zeichnen ---------- */
+const cv=$('#cv'),g2=cv.getContext('2d');
+function span(pos){
+  const spb=60/bpm,bar=4*spb;
+  let L=Math.max(8*spb,endT()*1.03);
+  if(T.rec>=0) L=Math.max(L,Math.ceil((Math.max(pos,0)+4*spb)/(4*bar))*4*bar);
+  return Math.ceil(L/bar)*bar;
+}
+function curPos(){return T.playing?ctx.currentTime-T.T0:null}
+function draw(){
+  const dpr=window.devicePixelRatio||1,w=cv.clientWidth,h=RUL+N*LANE;
+  if(!w) return;
+  if(cv.width!==Math.round(w*dpr)||cv.height!==Math.round(h*dpr)){cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr)}
+  cv.style.height=h+'px';
+  const g=g2,cs=getComputedStyle(root),C=n=>cs.getPropertyValue(n).trim();
+  g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,w,h);
+  const pos=curPos(),L=span(pos||0),spb=60/bpm,X=t=>t/L*w;
+  g.font='11px '+C('--f-mono');g.textBaseline='middle';
+  for(let i=0;i<N;i++){
+    const y=RUL+i*LANE,cy=y+LANE/2,col=C('--t'+(i+1)),tr=tracks[i];
+    g.fillStyle=C('--line');g.globalAlpha=i%2?.18:.32;g.fillRect(0,y,w,LANE);g.globalAlpha=1;
+    if(T.rec===i){g.fillStyle=C('--rec');g.globalAlpha=.12;g.fillRect(0,y,w,LANE);g.globalAlpha=1}
+    if(tr.buf){
+      const d=dur(tr),P=tr.peaks.length,bw=Math.max(1,X(d/P));
+      g.fillStyle=col;g.globalAlpha=tr.mute?.3:.95;
+      for(let k=0;k<P;k++){const t=tr.off+k/P*d;if(t<0)continue;const a=Math.max(1,tr.peaks[k]*LANE*.42);g.fillRect(X(t),cy-a,bw,2*a)}
+      g.globalAlpha=1;
+    }else{g.fillStyle=C('--mute');g.fillText(T.rec===i?'Aufnahme läuft':'leer',30,cy)}
+    g.fillStyle=col;g.fillText(String(i+1),8,y+10);
+  }
+  g.strokeStyle=C('--mute');g.fillStyle=C('--mute');g.lineWidth=1;
+  const nb=Math.floor(L/spb);
+  for(let b=0;b<=nb;b++){
+    const x=Math.round(X(b*spb))+.5,bar=b%4===0;
+    g.globalAlpha=bar?.55:.22;g.beginPath();g.moveTo(x,bar?0:RUL-6);g.lineTo(x,h);g.stroke();
+    g.globalAlpha=1;
+    if(bar&&x+22<w){g.textBaseline='top';g.fillText(String(b/4+1),x+4,3);g.textBaseline='middle'}
+  }
+  if(pos!==null&&pos>=0){const x=Math.round(X(pos))+.5;g.strokeStyle=C('--accent');g.lineWidth=2;g.beginPath();g.moveTo(x,0);g.lineTo(x,h);g.stroke()}
+}
+let raf=0;
+function loop(){
+  cancelAnimationFrame(raf);
+  const step=()=>{
+    draw();
+    const pos=curPos(),spb=60/bpm,dots=$('#dots').children;
+    if(pos===null){$('#pos').textContent='Bereit';for(const d of dots)d.className='';}
+    else if(pos<0){$('#pos').textContent='Einzählen '+Math.ceil(-pos/spb);const b=Math.ceil(-pos/spb);for(let k=0;k<4;k++)dots[k].className=(4-b)===k?'on':''}
+    else{const b=Math.floor(pos/spb);$('#pos').textContent='Takt '+(Math.floor(b/4)+1)+' · Schlag '+(b%4+1);for(let k=0;k<4;k++)dots[k].className=(b%4)===k?'on':''}
+    let lv=0;
+    if(T.playing){
+      if(T.cap){lv=T.cap.blk;T.cap.blk=0}
+      else if(an){const a=new Uint8Array(an.fftSize);an.getByteTimeDomainData(a);let m=0;for(const v of a)m=Math.max(m,Math.abs(v-128));lv=m/128}
+    }
+    $('#lvl').style.width=Math.min(100,lv*100)+'%';
+    $('#lvl').classList.toggle('hot',lv>=CLIP);
+    const hp=$('#hp'),hot=!!T.cap&&T.cap.peak>=CLIP;
+    hp.classList.toggle('show',T.rec>=0);hp.classList.toggle('hot',hot);
+    $('#hpTxt').textContent=hot?'Übersteuert! Weiter vom Mikrofon weg oder leiser singen.':'Sonst nimmt das Mikrofon Rhythmus und andere Spuren mit auf.';
+    if(T.playing&&T.rec<0&&pos!==null&&tracks.some(t=>t.buf)&&pos>endT()+.4){stop();return}
+    if(T.playing) raf=requestAnimationFrame(step);
+    else{$('#lvl').style.width='0';hp.classList.remove('show')}
+  };
+  raf=requestAnimationFrame(step);
+}
+
+/* ---------- Oberfläche ---------- */
+const fmt={vol:v=>Math.round(v*100)+' %',pan:v=>v==0?'Mitte':(v<0?'L ':'R ')+Math.round(Math.abs(v)*100),
+  off:v=>(v>=0?'+':'')+v.toFixed(2).replace('.',',')+' s',speed:v=>v+' %',semi:v=>(v>0?'+':'')+v.toFixed(2).replace('.',',')+' HT'};
+function lab(i,k,name,min,max,step){return '<label class="lab"><span>'+name+'</span><input type="range" data-i="'+i+'" data-k="'+k+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+tracks[i][k]+'"><output data-o="'+k+'"></output></label>'}
+$('#tracks').innerHTML=tracks.map((t,i)=>
+ '<section class="card trk" data-i="'+i+'" style="--c:var(--t'+(i+1)+')"><header><h3>Stimme '+(i+1)+'</h3><span class="len"></span></header>'+
+ '<div class="btns"><button class="rec" data-a="rec">● Aufnahme</button><button data-a="file">Datei</button><button data-a="mute" aria-pressed="false">Stumm</button><button data-a="clear">Leeren</button></div>'+
+ lab(i,'vol','Lautstärke',0,1,.01)+lab(i,'pan','Pan',-1,1,.05)+
+ '<details><summary>Feinabstimmung</summary><div class="stack">'+lab(i,'off','Start',-1,8,.01)+lab(i,'speed','Tempo',70,130,1)+lab(i,'semi','Tonhöhe',-12,12,.05)+'</div></details></section>').join('');
+function ui(){
+  document.querySelectorAll('.trk').forEach(el=>{
+    const i=+el.dataset.i,t=tracks[i];
+    $('.len',el).textContent=t.buf?(dur(t).toFixed(1).replace('.',',')+' s'):'leer';
+    const r=$('.rec',el);r.classList.toggle('live',T.rec===i);r.textContent=T.rec===i?'■ Stopp':'● Aufnahme';
+    r.disabled=T.busy||(T.playing&&T.rec!==i);
+    $('[data-a=mute]',el).setAttribute('aria-pressed',t.mute);
+    $('[data-a=clear]',el).disabled=!t.buf;
+    el.querySelectorAll('[data-o]').forEach(o=>{o.textContent=fmt[o.dataset.o](t[o.dataset.o])});
+  });
+  $('#play').textContent=T.playing?'■ Stopp':'▶ Abspielen';
+  $('#play').disabled=T.busy;
+  $('#bpm').disabled=T.playing;$('#export').disabled=T.playing||T.busy;$('#cal').disabled=T.playing||T.busy;
+}
+$('#tracks').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-a]');if(!b)return;
+  const i=+b.closest('.trk').dataset.i,t=tracks[i],a=b.dataset.a;
+  if(a==='rec'){T.rec===i?stop():record(i)}
+  else if(a==='file')pick(i,false);
+  else if(a==='mute'){t.mute=!t.mute;if(T.nodes[i])T.nodes[i].g.gain.value=t.mute?0:t.vol;ui();draw()}
+  else if(a==='clear'){if(T.playing)stop();t.buf=null;t.peaks=null;ui();draw()}
+});
+$('#tracks').addEventListener('input',e=>{
+  const r=e.target;if(r.type!=='range')return;
+  const i=+r.dataset.i,k=r.dataset.k,t=tracks[i];t[k]=parseFloat(r.value);
+  r.parentElement.querySelector('output').textContent=fmt[k](t[k]);
+  const nd=T.nodes[i];
+  if(nd){
+    if(k==='vol'&&!t.mute)nd.g.gain.value=t.vol;
+    if(k==='pan')nd.p.pan.value=t.pan;
+    if(k==='speed'||k==='semi')nd.src.playbackRate.value=rate(t);
+  }
+  if(k==='speed'||k==='semi')$('.len',r.closest('.trk')).textContent=t.buf?(dur(t).toFixed(1).replace('.',',')+' s'):'leer';
+  draw();
+});
+$('#note').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-n]');if(!b)return;
+  pick(+b.dataset.i,b.dataset.n==='cap');
+});
+$('#play').addEventListener('click',()=>T.playing?stop():play());
+$('#export').addEventListener('click',exportMix);
+$('#cal').addEventListener('click',calibrate);
+$('#lat').addEventListener('input',e=>setLatency(+e.target.value));
+$('#bpm').addEventListener('input',e=>{bpm=+e.target.value;$('#bpmOut').textContent=bpm+' BPM';draw()});
+$('#rhythm').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-r]');if(!b)return;rhythm=b.dataset.r;
+  document.querySelectorAll('#rhythm button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+});
+new ResizeObserver(draw).observe(cv);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
+new MutationObserver(draw).observe(root,{attributes:true,attributeFilter:['data-theme']});
+setLatency(latency);ui();draw();
+/* Prüf-Zugang nur mit ?test in der Adresse (für automatische Tests). */
+if(/[?&]test\b/.test(location.search)) window.__chorspur={tracks,T,ensure,ctx:()=>ctx,master:()=>master,latency:()=>latency};
+})();
+</script>
