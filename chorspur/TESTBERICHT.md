@@ -69,6 +69,11 @@ Nur mit `ffprobe` geprüft, nicht in Audacity.
 - **Regression** (`test/test.mjs`, simulierte Schleife 80 ms): Aufnahme 3,24 s ohne Einzählen; Spur 1 und 2 liegen je **+102 ms hinter dem Raster** (keine Korrektur mehr), zueinander −0,3 ms; WAV 16 Bit Stereo, Dauer = Erwartung (5,742517 s).
 - **Folge der entfernten Latenzkorrektur (nicht real gemessen):** Jede Aufnahme liegt um die Geräte-Rundlaufzeit zu spät. Folgen alle Sänger dem *Bildsignal*, sind alle Spuren gleich verschoben und laufen zueinander synchron. Folgt jemand den *vorher aufgenommenen Spuren*, addiert sich die Verzögerung pro Schicht. Abhilfe: „Feinabstimmung → Start“ ins Minus.
 
+## Erweiterung 4: Projekt speichern / öffnen
+- „Projekt speichern“ lädt eine ZIP-Datei herunter: `projekt.json` (Tempo, Rhythmus, Einzählen, Noten-Start, je Spur Lautstärke/Stumm/Start/Tempo/Tonhöhe/Notenzuordnung), `spur1.wav` … (nur belegte Spuren, mono 16 Bit) und die Notendatei. „Projekt öffnen“ stellt alles wieder her; danach kann normal weiter aufgenommen werden. Die Spuren sind auch einzeln in anderen Programmen nutzbar.
+- **Gemessen** (`test/proj-test.mjs`): 2 Spuren + 8-stimmige Noten + geänderte Einstellungen gespeichert; `unzip -l` zeigt 4 Dateien; `spur1.wav` laut ffprobe pcm_s16le, mono, 44100 Hz, 3,04 s. Nach Neuladen der Seite und Öffnen: alle 8 Spuren mit gleicher Länge, Lautstärke, Stumm, Start und Notenzuordnung wie vorher (inkl. abgewählter Spur 6), Tempo 100 wiederhergestellt; Audio weicht nur durch 16-Bit-Rundung ab (0,05 % der Summe). Danach Spur 3 aufgenommen (3,04 s) und Mix exportiert (Stereo, 3,34 s = Erwartung). Keine Seitenfehler. Regression (`test/test.mjs`) bestanden.
+- **Nicht geprüft:** iPhone (Download und Auswahl der .zip in „Dateien“). Wird die ZIP in „Dateien“ entpackt, bitte die ursprüngliche .zip wählen, nicht den Ordner. Neu gepackte ZIPs (Deflate) werden gelesen, wenn der Browser `DecompressionStream` kann (nicht geprüft).
+
 ## Offene Punkte / Risiken (nicht gemessen)
 - iOS Safari: Samplerate-Wechsel und Ausgabepegel nach Mikrofon-Freigabe sind bekannte Fallstricke; Verhalten unbekannt. AudioContext wird im Klick gestartet, danach nach der Freigabe erneut `resume()`.
 - Bluetooth-Kopfhörer: Latenz hoch und schwankend; Kalibrierung über Lautsprecher bildet diesen Pfad nicht ab. Dann Wert per Gehör nachstellen.

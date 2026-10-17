@@ -103,6 +103,10 @@ body.playing{padding-bottom:110px}
       <button class="go" id="play">▶ Abspielen</button>
       <button id="export">Mix speichern</button>
     </div>
+    <div class="row">
+      <button id="projSave" style="flex:1">Projekt speichern</button>
+      <button id="projOpen" style="flex:1">Projekt öffnen</button>
+    </div>
     <label class="lab"><span>Tempo</span><input type="range" id="bpm" min="50" max="160" step="1" value="90"><output id="bpmOut">90 BPM</output></label>
     <div class="row"><span class="hint">Rhythmus</span>
       <div class="seg" id="rhythm"><button data-r="off">Aus</button><button data-r="click">Klick</button></div>
@@ -128,6 +132,7 @@ body.playing{padding-bottom:110px}
 
   <p class="hint">Mit Kopfhörern aufnehmen, sonst nimmt das Mikrofon Rhythmus und andere Spuren mit auf. Tempo und Tonhöhe einer Spur hängen zusammen: schneller klingt höher. Eine automatische Tonkorrektur gibt es nicht; mit „Tonhöhe“ schiebst du eine ganze Spur um Bruchteile eines Halbtons. Liegt eine Aufnahme hörbar zu spät, schieb sie unter „Feinabstimmung → Start“ leicht ins Minus (typisch −0,05 bis −0,20 s, bei Bluetooth mehr). Alles bleibt im Browser; es werden keine Audiodaten hochgeladen.</p>
   <input type="file" id="file" accept="audio/*" hidden>
+  <input type="file" id="projFile" hidden>
 </div>
 <div id="frame" aria-hidden="true"></div>
 <div id="bar"><div class="dots" id="bdots" aria-hidden="true"><i>1</i><i>2</i><i>3</i><i>4</i></div><span id="bpos"></span><button id="bstop">■ Stopp</button></div>
@@ -302,16 +307,21 @@ function setBuf(i,buf){
 }
 
 /* ---------- Mix speichern: WAV 16 Bit Stereo, Offline-Rendering ---------- */
-function wavBlob(buf){
-  const nc=2,len=buf.length,sr=buf.sampleRate,bytes=len*nc*2,ab=new ArrayBuffer(44+bytes),v=new DataView(ab);
+function wavBlob(buf){return new Blob([wavBytes([buf.getChannelData(0),buf.getChannelData(1)],buf.sampleRate)],{type:'audio/wav'})}
+/* WAV 16 Bit aus 1..n Kanälen (Float32Arrays gleicher Länge). */
+function wavBytes(chs,sr){
+  const nc=chs.length,len=chs[0].length,bytes=len*nc*2,ab=new ArrayBuffer(44+bytes),v=new DataView(ab);
   const S=(o,s)=>{for(let k=0;k<s.length;k++)v.setUint8(o+k,s.charCodeAt(k))};
   S(0,'RIFF');v.setUint32(4,36+bytes,true);S(8,'WAVE');S(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,nc,true);
   v.setUint32(24,sr,true);v.setUint32(28,sr*nc*2,true);v.setUint16(32,nc*2,true);v.setUint16(34,16,true);S(36,'data');v.setUint32(40,bytes,true);
-  const L=buf.getChannelData(0),R=buf.getChannelData(1);let o=44;
-  for(let k=0;k<len;k++){
-    for(const x of [L[k],R[k]]){const s=Math.max(-1,Math.min(1,x));v.setInt16(o,s<0?s*32768:s*32767,true);o+=2}
-  }
-  return new Blob([ab],{type:'audio/wav'});
+  let o=44;
+  for(let k=0;k<len;k++)for(let c=0;c<nc;c++){const s=Math.max(-1,Math.min(1,chs[c][k]));v.setInt16(o,s<0?s*32768:s*32767,true);o+=2}
+  return new Uint8Array(ab);
+}
+function download(blob,name){
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),60000);
 }
 async function renderMix(){
   const sr=ctx.sampleRate,oc=new OfflineAudioContext(2,Math.ceil((endT()+.3)*sr),sr);
@@ -337,9 +347,7 @@ async function exportMix(){
     let pk=0;for(let c=0;c<2;c++){const d=out.getChannelData(c);for(let k=0;k<d.length;k++){const a=Math.abs(d[k]);if(a>pk)pk=a}}
     let msg='';
     if(pk>1){const g=.98/pk;for(let c=0;c<2;c++){const d=out.getChannelData(c);for(let k=0;k<d.length;k++)d[k]*=g}msg='Der Mix war zu laut und wurde automatisch leiser gestellt (um '+(-dB(g))+' dB).'}
-    const url=URL.createObjectURL(wavBlob(out)),a=document.createElement('a');
-    a.href=url;a.download='Chorspur-Mix.wav';document.body.appendChild(a);a.click();a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url),60000);
+    download(wavBlob(out),'Chorspur-Mix.wav');
     note(msg);
   }catch(e){note('Der Mix ließ sich nicht erzeugen ('+(e&&e.name||'Fehler')+').')}
   T.busy=false; ui();
@@ -447,7 +455,7 @@ function ui(){
   });
   $('#play').textContent=T.playing?'■ Stopp':'▶ Abspielen';
   $('#play').disabled=T.busy;
-  $('#bpm').disabled=T.playing;$('#export').disabled=T.playing||T.busy;
+  $('#bpm').disabled=T.playing;$('#export').disabled=T.playing||T.busy;$('#projSave').disabled=T.busy;$('#projOpen').disabled=T.playing||T.busy;
 }
 $('#tracks').addEventListener('click',e=>{
   const b=e.target.closest('button[data-a]');if(!b)return;
@@ -558,26 +566,114 @@ $('#scoreFile').addEventListener('change',async e=>{
   const f=e.target.files[0];if(!f)return;
   const msg=$('#scoreMsg');msg.textContent='Noten werden geladen …';
   try{await loadOSMD()}catch(err){msg.textContent='Die Notenanzeige ließ sich nicht laden. Sie braucht beim ersten Mal eine Verbindung zu cdn.jsdelivr.net.';return}
+  const data=/\.mxl$/i.test(f.name)
+    ?await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsBinaryString(f)})
+    :await f.text();
+  await loadScore(data,f.name,null);
+});
+/* parts: gespeicherte Zuordnung Spur→Notenstimme (Projekt) oder null für Standard (Spur k = Notenstimme k). */
+async function loadScore(data,name,parts){
+  const msg=$('#scoreMsg');
   try{
-    S.data=/\.mxl$/i.test(f.name)
-      ?await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsBinaryString(f)})
-      :await f.text();
+    S.data=data;
     // Erste Spur zuerst: liefert Stimmennamen und Zeitpunkte, dann Stimme k auf Spur k (höchstens so viele wie Notenstimmen).
     tracks.forEach(t=>{t.part=-1});tracks[0].part=0;S.views=[];
     for(let i=1;i<N;i++){const c=$('.trk[data-i="'+i+'"]');$('.sheet',c).innerHTML='';$('.sheetBox',c).hidden=true}
     const v=await makeView(0);
     const ins=v.o.Sheet.Instruments;S.parts=ins.map((x,k)=>x.Name||('Notenstimme '+(k+1)));
     for(let i=1;i<Math.min(N,S.parts.length);i++)tracks[i].part=i;
+    if(parts){tracks.forEach((t,i)=>{const p=parts[i];t.part=Number.isInteger(p)&&p<S.parts.length?p:-1});if(tracks[0].part!==0)await makeView(0)}
     partUI();
     for(let i=1;i<N;i++) if(tracks[i].part>=0) await makeView(i);
     $('#scoreOffLab').hidden=false;
-    const title=v.o.Sheet.TitleString||f.name;
+    const title=v.o.Sheet.TitleString||name;
     msg.textContent=title+': '+S.parts.length+' Notenstimme(n), verteilt auf Stimme 1–'+Math.min(N,S.parts.length)+'. Zuordnung pro Spur unter „Noten“ änderbar. Taktart wird nicht übernommen; das Raster bleibt 4/4.';
   }catch(err){S.data=null;S.parts=[];partUI();$('#scoreOffLab').hidden=true;
     document.querySelectorAll('.sheetBox').forEach(b=>{b.hidden=true});
     msg.textContent='Diese Notendatei ließ sich nicht lesen. Erwartet wird MusicXML (.musicxml, .xml oder .mxl).'}
-});
+}
 $('#scoreOff').addEventListener('input',e=>{S.shift=+e.target.value;$('#scoreOffOut').textContent=(S.shift>0?'+':'')+S.shift});
+/* ---------- Projekt: ZIP (ohne Kompression) mit projekt.json, spurN.wav und den Noten ---------- */
+const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crc32(b){let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRC[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0}
+function zipStore(files){
+  const enc=new TextEncoder(),parts=[],cd=[];let off=0;
+  for(const f of files){
+    const nm=enc.encode(f.name),crc=crc32(f.data),h=new DataView(new ArrayBuffer(30));
+    h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint16(10,0,true);h.setUint16(12,0x21,true);
+    h.setUint32(14,crc,true);h.setUint32(18,f.data.length,true);h.setUint32(22,f.data.length,true);h.setUint16(26,nm.length,true);
+    const c=new DataView(new ArrayBuffer(46));
+    c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x0800,true);c.setUint16(14,0x21,true);
+    c.setUint32(16,crc,true);c.setUint32(20,f.data.length,true);c.setUint32(24,f.data.length,true);c.setUint16(28,nm.length,true);c.setUint32(42,off,true);
+    parts.push(new Uint8Array(h.buffer),nm,f.data);cd.push(new Uint8Array(c.buffer),nm);off+=30+nm.length+f.data.length;
+  }
+  const cdLen=cd.reduce((a,b)=>a+b.length,0),e=new DataView(new ArrayBuffer(22));
+  e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cdLen,true);e.setUint32(16,off,true);
+  return new Blob([...parts,...cd,new Uint8Array(e.buffer)],{type:'application/zip'});
+}
+/* Liest ZIP-Einträge; ungepackt oder Deflate (falls ein Programm das Archiv neu gepackt hat und der Browser es kann). */
+async function unzip(ab){
+  const u=new Uint8Array(ab),v=new DataView(ab),dec=new TextDecoder(),out={};
+  let e=-1;for(let i=u.length-22;i>=Math.max(0,u.length-65558);i--)if(v.getUint32(i,true)===0x06054b50){e=i;break}
+  if(e<0)throw new Error('kein ZIP');
+  let p=v.getUint32(e+16,true);const n=v.getUint16(e+10,true);
+  for(let k=0;k<n;k++){
+    const m=v.getUint16(p+10,true),cs=v.getUint32(p+20,true),nl=v.getUint16(p+28,true),xl=v.getUint16(p+30,true),cl=v.getUint16(p+32,true),lo=v.getUint32(p+42,true);
+    const name=dec.decode(u.subarray(p+46,p+46+nl)),ds=lo+30+v.getUint16(lo+26,true)+v.getUint16(lo+28,true),raw=u.subarray(ds,ds+cs);
+    if(m===0)out[name.split('/').pop()]=raw;
+    else if(m===8&&window.DecompressionStream)out[name.split('/').pop()]=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer());
+    p+=46+nl+xl+cl;
+  }
+  return out;
+}
+async function saveProject(){
+  if(T.playing)stop();
+  if(!tracks.some(t=>t.buf)&&!S.data){note('Es gibt noch nichts zu speichern.');return}
+  const files=[],enc=new TextEncoder();
+  const meta={format:'chorspur-projekt',version:1,bpm,rhythm,countIn,scoreShift:S.shift,score:null,
+    tracks:tracks.map((t,i)=>({file:t.buf?'spur'+(i+1)+'.wav':null,vol:t.vol,mute:t.mute,off:t.off,speed:t.speed,semi:t.semi,part:t.part}))};
+  tracks.forEach((t,i)=>{if(t.buf)files.push({name:'spur'+(i+1)+'.wav',data:wavBytes([t.buf.getChannelData(0)],t.buf.sampleRate)})});
+  if(S.data){
+    const bin=S.data.startsWith('PK');meta.score=bin?'noten.mxl':'noten.musicxml';
+    files.push({name:meta.score,data:bin?Uint8Array.from(S.data,ch=>ch.charCodeAt(0)&255):enc.encode(S.data)});
+  }
+  files.unshift({name:'projekt.json',data:enc.encode(JSON.stringify(meta,null,1))});
+  const d=new Date(),z=x=>String(x).padStart(2,'0');
+  download(zipStore(files),'Chorspur-Projekt-'+d.getFullYear()+z(d.getMonth()+1)+z(d.getDate())+'-'+z(d.getHours())+z(d.getMinutes())+'.zip');
+  note('');
+}
+async function openProject(f){
+  if(T.playing)stop();
+  ensure();T.busy=true;ui();note('Projekt wird geladen …');
+  try{
+    const fs=await unzip(await f.arrayBuffer()),js=fs['projekt.json'];
+    if(!js)throw new Error('kein projekt.json');
+    const m=JSON.parse(new TextDecoder().decode(js));
+    if(m.format!=='chorspur-projekt')throw new Error('falsches Format');
+    const num=(x,lo,hi,d)=>typeof x==='number'&&isFinite(x)?Math.max(lo,Math.min(hi,x)):d;
+    bpm=num(m.bpm,50,160,90);$('#bpm').value=bpm;$('#bpmOut').textContent=bpm+' BPM';
+    if(/^(off|click)$/.test(m.rhythm))rhythm=m.rhythm;if(/^(click|still)$/.test(m.countIn))countIn=m.countIn;segUI();
+    S.shift=num(m.scoreShift,-8,16,0);$('#scoreOff').value=S.shift;$('#scoreOffOut').textContent=(S.shift>0?'+':'')+S.shift;
+    let missing=0;
+    for(let i=0;i<N;i++){
+      const t=tracks[i],q=(m.tracks||[])[i]||{};
+      t.vol=num(q.vol,0,1,.9);t.mute=q.mute===true;t.off=num(q.off,-1,8,0);t.speed=num(q.speed,70,130,100);t.semi=num(q.semi,-12,12,0);
+      t.buf=null;t.peaks=null;
+      if(q.file){const b=fs[q.file];if(b)setBuf(i,await ctx.decodeAudioData(b.slice().buffer));else missing++}
+      document.querySelectorAll('.trk[data-i="'+i+'"] input[data-k]').forEach(r=>{r.value=t[r.dataset.k]});
+    }
+    if(m.score&&fs[m.score]){
+      const b=fs[m.score];
+      const data=/\.mxl$/.test(m.score)?Array.from(b,x=>String.fromCharCode(x)).join(''):new TextDecoder().decode(b);
+      try{await loadOSMD();await loadScore(data,m.score,(m.tracks||[]).map(q=>q&&q.part))}catch(err){$('#scoreMsg').textContent='Die Notenanzeige ließ sich nicht laden (cdn.jsdelivr.net nicht erreichbar). Die Aufnahmen sind geladen.'}
+    }
+    note(missing?missing+' Spur(en) fehlten in der Projektdatei.':'');
+  }catch(e){note('Diese Datei ist kein lesbares Chorspur-Projekt. Erwartet wird eine mit „Projekt speichern“ erzeugte .zip-Datei.')}
+  T.busy=false;ui();draw();
+}
+$('#projSave').addEventListener('click',saveProject);
+$('#projOpen').addEventListener('click',()=>{const f=$('#projFile');f.value='';f.click()});
+$('#projFile').addEventListener('change',e=>{const f=e.target.files[0];if(f)openProject(f)});
 const sheetRO=new ResizeObserver(()=>{for(const v of S.views)if(v){const w=v.box.clientWidth;if(w&&Math.abs(w-v.w)>20)renderView(v)}});
 document.querySelectorAll('.sheetBox').forEach(b=>sheetRO.observe(b));
 new ResizeObserver(draw).observe(cv);
