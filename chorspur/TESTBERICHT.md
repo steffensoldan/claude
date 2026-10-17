@@ -50,6 +50,13 @@ Nur mit `ffprobe` geprüft, nicht in Audacity.
 ### 5. Hörprobe (blind, zwei Spuren auf Gleichlauf)
 **Nicht durchgeführt.**
 
+## Erweiterung 2026-10-17: visueller Taktgeber und Notenanzeige
+- **Taktgeber:** vier große Felder (Schlag 1 umrandet), Einzählen rot. Neue Option „Einzählen: Klick / Nur sichtbar“; mit Rhythmus „Aus“ läuft die Aufnahme komplett ohne Ton. Auswahl wird im Browser gemerkt.
+- Anzeige, Playhead und Noten folgen der *hörbaren* Zeit (`getOutputTimestamp`, Fallback `outputLatency`), damit Bild und Kopfhörer zusammenpassen und die Latenzkorrektur gültig bleibt.
+- **Noten:** MusicXML (.musicxml/.xml/.mxl) über OpenSheetMusicDisplay 1.9.9 (jsDelivr, feste Version, erst beim Laden einer Notendatei nachgeladen). Cursor läuft im eingestellten Tempo (Viertel = Schlag), Stimmen per Häkchen ein-/ausblendbar, „Noten-Start (Schläge)“ für Auftakt/Versatz.
+- **Gemessen** (`test/score-test.mjs`, headless Chromium, Testsatz 2 Stimmen × 2 Takte): 8 Cursorschritte erkannt; Ausblenden einer Stimme wirkt; bei 90 BPM stimmt der Cursorindex in 11 von 12 Stichproben mit dem Schlag aus der Audio-Uhr überein, die Abweichung (0,70 s ≈ Schlag 1,05) liegt in der Ausgabelatenz, um die die Anzeige bewusst verzögert ist. Keine Seitenfehler. Regressionstest (`test/test.mjs`) erneut bestanden: Werte wie oben.
+- **Grenzen:** Taktart der Noten wird nicht übernommen (Raster immer 4/4; bei 3/4 o. ä. laufen Noten korrekt im Viertel-Tempo, nur die Taktstriche der Zeitleiste passen nicht). Tempoangaben und Tempowechsel in der Partitur werden ignoriert; es gilt der Tempo-Regler. Wiederholungen folgt der Cursor so, wie OSMD sie auflöst (nicht geprüft). Am iPhone nicht geprüft; ob .musicxml-Dateien in der iOS-Dateiauswahl wählbar sind, ist offen.
+
 ## Offene Punkte / Risiken (nicht gemessen)
 - iOS Safari: Samplerate-Wechsel und Ausgabepegel nach Mikrofon-Freigabe sind bekannte Fallstricke; Verhalten unbekannt. AudioContext wird im Klick gestartet, danach nach der Freigabe erneut `resume()`.
 - Bluetooth-Kopfhörer: Latenz hoch und schwankend; Kalibrierung über Lautsprecher bildet diesen Pfad nicht ab. Dann Wert per Gehör nachstellen.
