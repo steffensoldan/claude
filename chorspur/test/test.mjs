@@ -35,7 +35,6 @@ const exe=process.env.CHROME||undefined;
   const errs=[];p.on('pageerror',e=>errs.push(String(e)));
   await p.goto(url);
   await p.evaluate(sim=>{navigator.mediaDevices.getUserMedia=async()=>{const x=__chorspur.ctx(),m=__chorspur.master(),d=x.createDelay(1);d.delayTime.value=sim/1000;const o=x.createMediaStreamDestination();m.connect(d);d.connect(o);return o.stream}},SIM);
-  await p.click('#rhythm [data-r="click"]');
   // Messfunktion im Browser: Abweichung der Klicks einer Aufnahme von der Taktposition
   await p.evaluate(()=>{window.dev=(i,beats)=>{
     const buf=__chorspur.tracks[i].buf,d=buf.getChannelData(0),sr=buf.sampleRate,spb=60/90,out=[];
@@ -49,6 +48,9 @@ const exe=process.env.CHROME||undefined;
   const rec=async(i,secAfter)=>{
     await p.click(`.trk[data-i="${i}"] [data-a="rec"]`);
     await p.waitForFunction(k=>__chorspur.T.rec===k,i);
+    // „Gesang“ = Klicks genau auf den Schlägen ab Takt 1, über den eigenen Ausgang (simulierte Schleife) aufgenommen
+    await p.evaluate(()=>{const x=__chorspur.ctx(),m=__chorspur.master(),T0=__chorspur.T.T0,spb=60/90;
+      for(let k=0;k<9;k++){const t=T0+k*spb,o=x.createOscillator(),g=x.createGain();o.frequency.value=k%4===0?1500:1000;g.gain.setValueAtTime(.35,t);g.gain.exponentialRampToValueAtTime(.001,t+.05);o.connect(g);g.connect(m);o.start(t);o.stop(t+.06)}});
     await p.waitForFunction(s=>__chorspur.ctx().currentTime>__chorspur.T.T0+s,secAfter);
     await p.click(`.trk[data-i="${i}"] [data-a="rec"]`);
     await p.waitForFunction(k=>__chorspur.tracks[k].buf,i);

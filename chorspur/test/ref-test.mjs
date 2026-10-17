@@ -5,7 +5,6 @@ const b=await chromium.launch({executablePath:process.env.CHROME,args:['--autopl
 const p=await b.newPage();const errs=[];p.on('pageerror',e=>errs.push(String(e)));
 await p.goto(url+'?test');
 await p.evaluate(()=>{navigator.mediaDevices.getUserMedia=async()=>{const x=__chorspur.ctx(),m=__chorspur.master(),d=x.createDelay(1);d.delayTime.value=.08;const o=x.createMediaStreamDestination();m.connect(d);d.connect(o);return o.stream}});
-await p.click('#rhythm [data-r="off"]');await p.click('#count [data-c="still"]');
 const R={options:await p.$$eval('#ref option',a=>a.map(o=>o.textContent))};
 await p.selectOption('#ref','9'); // A4 = 440 Hz
 await p.click('.trk[data-i="0"] [data-a="rec"]');await p.waitForFunction(()=>__chorspur.T.rec===0);

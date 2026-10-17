@@ -84,6 +84,14 @@ Nur mit `ffprobe` geprüft, nicht in Audacity.
 - **Gemessen** (`test/ref-test.mjs`): 13 Optionen; mit „A“ liegt die stärkste Frequenz am Ausgang während des Einzählens bei 431 Hz (Analyser-Auflösung 86 Hz, also passend zu 440 Hz); in der Aufnahme (simulierte Schleife, Rhythmus aus) Spitzenpegel 0, der Ton gelangt also nicht in die Spur. Regression (`test/test.mjs`) bestanden.
 - **Nicht geprüft:** Lautstärke und Klang am iPhone-Kopfhörer.
 
+## Umbau 7 (nach Rückfragen): ohne Rhythmus/Klick, Rahmen nur beim Einzählen, Loop pro Spur
+- Entfernt: Rhythmus-Auswahl und alle Klicks. Eine Zeile „Einzählen: 4 Schläge / aus“ + „Ton –/C…H“ + „♪“. Einzählen ist rein sichtbar; „aus“ startet die Aufnahme sofort (0,25 s Vorlauf), dann ohne Anfangston.
+- Bildschirmrahmen blinkt nur noch beim Einzählen; untere Leiste bleibt bei Wiedergabe und Aufnahme.
+- Loop pro Spur: „aus / 1 / 2 / 4 / 8 Takte“. Wiederholt Takt 1 bis x der Spur (inkl. „Start“-Verschiebung) endlos bis Stopp; Rest der Aufnahme wird ignoriert. Zeitleiste zeigt die Wiederholungen blasser. Mix speichern fragt bei Loops nach der Länge in Takten (Vorgabe: längste Nicht-Loop-Spur, sonst 4 × längster Loop). Loop wird im Projekt gespeichert.
+- **Gemessen** (`test/loop-test.mjs`): 1-Takt-Datei mit Klick am Taktanfang und Störimpuls nach dem Takt, Loop 1 → Wiedergabe läuft nach 5 s weiter; Rahmen während Wiedergabe immer aus, beim Einzählen „on cnt“, danach aus; Export 3 Takte = 8,000 s (90 BPM), Klicks bei 0 / 2,667 / 5,333 s, Störimpuls nicht im Mix. `proj-test`: Loop 2 wird gespeichert und wiederhergestellt, Export-Vorgabe 2 Takte → 4,8 s bei 100 BPM. Regression `test.mjs` (Klicks jetzt vom Test eingespeist), `score-test`, `ref-test` bestanden.
+- **Gefundener und behobener Fehler:** Die Notenzuordnung füllte nach Einbau des Loop-Felds das falsche Auswahlfeld; behoben, durch `score-test`/`proj-test` aufgedeckt.
+- **Grenzen:** Tempo/Tonhöhe einer Loop-Spur während der Wiedergabe zu ändern, wirkt erst beim nächsten Start sauber. Loop-Länge in Takten richtet sich nach dem eingestellten Tempo; wurde die Spur in einem anderen Tempo aufgenommen, passt der Ausschnitt nicht.
+
 ## Offene Punkte / Risiken (nicht gemessen)
 - iOS Safari: Samplerate-Wechsel und Ausgabepegel nach Mikrofon-Freigabe sind bekannte Fallstricke; Verhalten unbekannt. AudioContext wird im Klick gestartet, danach nach der Freigabe erneut `resume()`.
 - Bluetooth-Kopfhörer: Latenz hoch und schwankend; Kalibrierung über Lautsprecher bildet diesen Pfad nicht ab. Dann Wert per Gehör nachstellen.

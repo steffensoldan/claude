@@ -13,14 +13,14 @@ async function page(){
   await p.evaluate(()=>{navigator.mediaDevices.getUserMedia=async()=>{const x=__chorspur.ctx(),m=__chorspur.master(),d=x.createDelay(1);d.delayTime.value=.08;const o=x.createMediaStreamDestination();m.connect(d);d.connect(o);return o.stream}});
   return p;
 }
-const snap=p=>p.evaluate(()=>({tracks:__chorspur.tracks.map(t=>({len:t.buf?t.buf.length:0,vol:t.vol,mute:t.mute,off:t.off,speed:t.speed,semi:t.semi,part:t.part,
+const snap=p=>p.evaluate(()=>({tracks:__chorspur.tracks.map(t=>({len:t.buf?t.buf.length:0,loop:t.loop,vol:t.vol,mute:t.mute,off:t.off,speed:t.speed,semi:t.semi,part:t.part,
   sum:t.buf?Array.from(t.buf.getChannelData(0)).reduce((a,x)=>a+Math.abs(x),0):0})),bpm:document.querySelector('#bpm').value,
   parts:__chorspur.S.parts,views:__chorspur.S.views.map(v=>v?v.o.Sheet.Instruments.map(i=>i.Visible?1:0).join(''):null)}));
 const p1=await page();
 const [fc]=await Promise.all([p1.waitForEvent('filechooser'),p1.click('#scoreLoad')]);
 await fc.setFiles(path.resolve('../noten/alle-meine-entchen-8stimmen.musicxml'));
 await p1.waitForFunction(()=>__chorspur.S.views.filter(Boolean).length===8,null,{timeout:30000});
-await p1.selectOption('.trk[data-i="5"] select','-1');
+await p1.selectOption('.trk[data-i="5"] select[data-i]','-1');
 await p1.$eval('#bpm',el=>{el.value=100;el.dispatchEvent(new Event('input',{bubbles:true}))});
 for(const i of [0,1]){
   await p1.click(`.trk[data-i="${i}"] [data-a="rec"]`);await p1.waitForFunction(k=>__chorspur.T.rec===k,i);
@@ -30,6 +30,7 @@ for(const i of [0,1]){
 await p1.$eval('.trk[data-i="1"] input[data-k="vol"]',el=>{el.value=.5;el.dispatchEvent(new Event('input',{bubbles:true}))});
 await p1.$eval('.trk[data-i="1"] input[data-k="off"]',el=>{el.value=-.1;el.dispatchEvent(new Event('input',{bubbles:true}))});
 await p1.click('.trk[data-i="1"] [data-a="mute"]');
+await p1.selectOption('.trk[data-i="1"] [data-loop]','2');
 R.before=await snap(p1);
 const [dl]=await Promise.all([p1.waitForEvent('download'),p1.click('#projSave')]);
 const zip=path.join(outDir,dl.suggestedFilename());await dl.saveAs(zip);R.zipName=dl.suggestedFilename();
@@ -49,10 +50,11 @@ await p2.click('.trk[data-i="2"] [data-a="rec"]');await p2.waitForFunction(()=>_
 await p2.waitForFunction(()=>__chorspur.ctx().currentTime>__chorspur.T.T0+3);
 await p2.click('.trk[data-i="2"] [data-a="rec"]');await p2.waitForFunction(()=>__chorspur.tracks[2].buf);
 R.track3=await p2.evaluate(()=>__chorspur.tracks[2].buf.duration);
+p2.on('dialog',d=>{R.dialog=d.defaultValue();d.accept(d.defaultValue())});
 const [dl2]=await Promise.all([p2.waitForEvent('download'),p2.click('#export')]);
 const mix=path.join(outDir,'mix-nach-projekt.wav');await dl2.saveAs(mix);
 R.mix=JSON.parse(execFileSync('ffprobe',['-v','error','-show_entries','stream=channels:format=duration','-of','json',mix]).toString());
 R.errors=errs;
-const cmp=R.before.tracks.map((t,i)=>{const a=R.after.tracks[i];return {len:t.len===a.len,vol:t.vol===a.vol,mute:t.mute===a.mute,off:t.off===a.off,part:t.part===a.part,sumRel:t.sum?Math.abs(t.sum-a.sum)/t.sum:0}});
-console.log(JSON.stringify({zip:R.zipName,unzip:R.unzip,spur1:R.spur1,bpm:[R.before.bpm,R.after.bpm],views:[R.before.views,R.after.views],cmp,afterTracks:R.after.tracks.map(t=>[t.len,t.vol,t.mute,t.off,t.part]),note:R.note,track3:R.track3,mix:R.mix,errors:R.errors},null,1));
+const cmp=R.before.tracks.map((t,i)=>{const a=R.after.tracks[i];return {len:t.len===a.len,loop:t.loop===a.loop,vol:t.vol===a.vol,mute:t.mute===a.mute,off:t.off===a.off,part:t.part===a.part,sumRel:t.sum?Math.abs(t.sum-a.sum)/t.sum:0}});
+console.log(JSON.stringify({zip:R.zipName,unzip:R.unzip,spur1:R.spur1,bpm:[R.before.bpm,R.after.bpm],views:[R.before.views,R.after.views],cmp,afterTracks:R.after.tracks.map(t=>[t.len,t.loop,t.vol,t.mute,t.off,t.part]),dialog:R.dialog,note:R.note,track3:R.track3,mix:R.mix,errors:R.errors},null,1));
 await b.close();
