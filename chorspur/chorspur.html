@@ -115,6 +115,10 @@ body.playing{padding-bottom:110px}
     <div class="row"><span class="hint">Einzählen</span>
       <div class="seg" id="count"><button data-c="click" aria-pressed="true">Klick</button><button data-c="still">Nur sichtbar</button></div>
     </div>
+    <div class="row"><span class="hint">Anfangston</span>
+      <select id="ref" style="width:auto;min-width:96px" aria-label="Ton beim Einzählen"></select>
+      <button id="refPlay" aria-label="Anfangston anhören">♪ Anhören</button>
+    </div>
     <div id="hp" role="alert"><strong>Kopfhörer verwenden.</strong> <span id="hpTxt">Sonst nimmt das Mikrofon Rhythmus und andere Spuren mit auf.</span></div>
     <div class="dots" id="dots" aria-hidden="true"><i>1</i><i>2</i><i>3</i><i>4</i></div>
     <div class="beat"><span id="pos">Bereit</span><div class="meter" title="Pegel"><b id="lvl"></b></div></div>
@@ -145,6 +149,8 @@ const root=document.documentElement;
 const N=8, LANE=36, RUL=22, CLIP=.98;
 const tracks=Array.from({length:N},(_,i)=>({buf:null,peaks:null,vol:.9,mute:false,off:0,speed:100,semi:0,part:-1}));
 let bpm=90, rhythm='click', countIn='click';
+let refTone=-1; /* -1 = aus, 0..11 = C4..H4 */
+try{const v=parseInt(localStorage.getItem('chorspur.ref'),10);if(v>=-1&&v<=11)refTone=v}catch(e){}
 try{const r=localStorage.getItem('chorspur.rhythm'),c=localStorage.getItem('chorspur.count');if(/^(off|click)$/.test(r))rhythm=r;if(/^(click|still)$/.test(c))countIn=c}catch(e){}
 const T={playing:false,T0:0,nodes:[],sched:null,n:0,rec:-1,recorder:null,cap:null,busy:false};
 let ctx,master,an,wkReady=false,wl=null;
@@ -168,6 +174,15 @@ async function keepAwake(on){
 }
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&(T.playing||T.busy))keepAwake(true)});
 
+const NOTE=['C','Cis/Des','D','Es','E','F','Fis/Ges','G','As','A','B','H'];
+/* Anfangston: weicher Orgelton (Grundton + Oktave + Quinte), C4..H4. */
+function refNote(t0,t1){
+  const f=440*Math.pow(2,(60+refTone-69)/12),g=ctx.createGain(),os=[];
+  g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(.22,t0+.04);g.gain.setValueAtTime(.22,t1-.1);g.gain.linearRampToValueAtTime(0,t1);
+  g.connect(master);
+  [[1,1],[2,.35],[3,.12]].forEach(([m,a])=>{const o=ctx.createOscillator(),og=ctx.createGain();o.frequency.value=f*m;og.gain.value=a;o.connect(og);og.connect(g);o.start(t0);o.stop(t1+.02);os.push(o)});
+  return {stop(){os.forEach(o=>{try{o.stop()}catch(e){}})}};
+}
 function click(t,acc){const o=ctx.createOscillator(),g=ctx.createGain();o.frequency.value=acc?1500:1000;g.gain.setValueAtTime(.35,t);g.gain.exponentialRampToValueAtTime(.001,t+.05);o.connect(g);g.connect(master);o.start(t);o.stop(t+.06)}
 function tick(){
   const spb=60/bpm, lim=ctx.currentTime+.2;
@@ -202,6 +217,7 @@ async function play(){
 }
 function stop(){
   clearInterval(T.sched); T.sched=null;
+  if(T.ref){T.ref.stop();T.ref=null}
   T.nodes.forEach(n=>{try{n&&n.src.stop()}catch(e){}}); T.nodes=[];
   T.playing=false;
   if(T.recorder){const r=T.recorder;T.recorder=null;T.rec=-1;T.cap=null;r.finish()}
@@ -306,6 +322,8 @@ async function record(i){
   T.cap=cap; T.rec=i;
   T.recorder={finish:()=>finishTake(i,cap,T0)};
   begin(T0,-4,i);
+  /* Ton über das Einzählen, endet einen knappen halben Schlag vor Schlag 1, damit er nicht in der Aufnahme landet. */
+  if(refTone>=0){const spb=60/bpm;T.ref=refNote(T0-4*spb,T0-.45*spb)}
   const card=$('.trk[data-i="'+i+'"]');if(card&&card.scrollIntoView)card.scrollIntoView({block:'start',behavior:'smooth'});
 }
 function finishTake(i,cap,T0){
@@ -522,6 +540,7 @@ $('#bstop').addEventListener('click',()=>{if(T.playing)stop()});
 $('#export').addEventListener('click',exportMix);
 $('#bpm').addEventListener('input',e=>{bpm=+e.target.value;$('#bpmOut').textContent=bpm+' BPM';draw()});
 function segUI(){
+  $('#ref').value=String(refTone);$('#refPlay').disabled=refTone<0;
   document.querySelectorAll('#rhythm button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.r===rhythm));
   document.querySelectorAll('#count button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.c===countIn));
 }
@@ -666,7 +685,7 @@ async function saveProject(){
   if(T.playing)stop();
   if(!tracks.some(t=>t.buf)&&!S.data){note('Es gibt noch nichts zu speichern.');return}
   const files=[],enc=new TextEncoder();
-  const meta={format:'chorspur-projekt',version:1,bpm,rhythm,countIn,scoreShift:S.shift,score:null,
+  const meta={format:'chorspur-projekt',version:1,bpm,rhythm,countIn,refTone,scoreShift:S.shift,score:null,
     tracks:tracks.map((t,i)=>({file:t.buf?'spur'+(i+1)+'.wav':null,vol:t.vol,mute:t.mute,off:t.off,speed:t.speed,semi:t.semi,part:t.part}))};
   tracks.forEach((t,i)=>{if(t.buf)files.push({name:'spur'+(i+1)+'.wav',data:wavBytes([t.buf.getChannelData(0)],t.buf.sampleRate)})});
   if(S.data){
@@ -688,7 +707,7 @@ async function openProject(f){
     if(m.format!=='chorspur-projekt')throw new Error('falsches Format');
     const num=(x,lo,hi,d)=>typeof x==='number'&&isFinite(x)?Math.max(lo,Math.min(hi,x)):d;
     bpm=num(m.bpm,50,160,90);$('#bpm').value=bpm;$('#bpmOut').textContent=bpm+' BPM';
-    if(/^(off|click)$/.test(m.rhythm))rhythm=m.rhythm;if(/^(click|still)$/.test(m.countIn))countIn=m.countIn;segUI();
+    if(/^(off|click)$/.test(m.rhythm))rhythm=m.rhythm;if(/^(click|still)$/.test(m.countIn))countIn=m.countIn;if(Number.isInteger(m.refTone)&&m.refTone>=-1&&m.refTone<=11)refTone=m.refTone;segUI();
     S.shift=num(m.scoreShift,-8,16,0);$('#scoreOff').value=S.shift;$('#scoreOffOut').textContent=(S.shift>0?'+':'')+S.shift;
     let missing=0;
     for(let i=0;i<N;i++){
@@ -716,8 +735,11 @@ document.querySelectorAll('.sheetBox').forEach(b=>sheetRO.observe(b));
 new ResizeObserver(draw).observe(cv);
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
 new MutationObserver(draw).observe(root,{attributes:true,attributeFilter:['data-theme']});
+$('#ref').innerHTML='<option value="-1">aus</option>'+NOTE.map((n,k)=>'<option value="'+k+'">'+n+'</option>').join('');
+$('#ref').addEventListener('change',e=>{refTone=+e.target.value;segUI();try{localStorage.setItem('chorspur.ref',String(refTone))}catch(err){}});
+$('#refPlay').addEventListener('click',async()=>{if(refTone<0)return;ensure();await ctx.resume();const t=ctx.currentTime+.05;refNote(t,t+1.2)});
 segUI();ui();draw();
 /* Prüf-Zugang nur mit ?test in der Adresse (für automatische Tests). */
-if(/[?&]test\b/.test(location.search)) window.__chorspur={tracks,T,S,ensure,ctx:()=>ctx,master:()=>master};
+if(/[?&]test\b/.test(location.search)) window.__chorspur={tracks,T,S,ensure,ctx:()=>ctx,master:()=>master,an:()=>an};
 })();
 </script>

@@ -79,6 +79,11 @@ Nur mit `ffprobe` geprüft, nicht in Audacity.
 - **Gemessen** (`test/test.mjs`): zwei Spuren in der simulierten Schleife, je +101,6 ms zu spät → nach „Alle ausrichten“ −0,05 ms auf allen 7 Schlägen. Stimmähnlicher Ton mit 60 ms weichem Anstieg, Einsatz bei 0,95 s → auf Schlag 2 (0,667 s) gelegt, Restfehler −3,4 ms.
 - **Grenzen (nicht real gemessen):** Ausgerichtet wird nur der *erste* Einsatz; Tempoabweichungen innerhalb der Spur bleiben. Atemgeräusch, Räuspern oder Übersprechen vor dem Einsatz können als Einsatz erkannt werden. Bei sehr weichen Einsätzen (summen, „m“) kann der erkannte Punkt einige zehn Millisekunden später liegen. Ein Auftakt auf „und“ landet auf dem nächsten ganzen Schlag; dann per „Start“ nachstellen.
 
+## Erweiterung 6: Anfangston beim Einzählen
+- Auswahl „Anfangston“ (aus, C … H, eine Oktave C4–H4, deutsche Tonnamen, B = B♭, H = B♮), Knopf „♪ Anhören“. Der Ton (Orgelklang: Grundton + Oktave + Duodezime) klingt während des Einzählens und endet 0,45 Schlag vor Schlag 1. Gespeichert im Browser und in der Projektdatei.
+- **Gemessen** (`test/ref-test.mjs`): 13 Optionen; mit „A“ liegt die stärkste Frequenz am Ausgang während des Einzählens bei 431 Hz (Analyser-Auflösung 86 Hz, also passend zu 440 Hz); in der Aufnahme (simulierte Schleife, Rhythmus aus) Spitzenpegel 0, der Ton gelangt also nicht in die Spur. Regression (`test/test.mjs`) bestanden.
+- **Nicht geprüft:** Lautstärke und Klang am iPhone-Kopfhörer.
+
 ## Offene Punkte / Risiken (nicht gemessen)
 - iOS Safari: Samplerate-Wechsel und Ausgabepegel nach Mikrofon-Freigabe sind bekannte Fallstricke; Verhalten unbekannt. AudioContext wird im Klick gestartet, danach nach der Freigabe erneut `resume()`.
 - Bluetooth-Kopfhörer: Latenz hoch und schwankend; Kalibrierung über Lautsprecher bildet diesen Pfad nicht ab. Dann Wert per Gehör nachstellen.
