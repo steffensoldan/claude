@@ -53,19 +53,13 @@ const exe=process.env.CHROME||undefined;
     await p.click(`.trk[data-i="${i}"] [data-a="rec"]`);
     await p.waitForFunction(k=>__chorspur.tracks[k].buf,i);
   };
-  // A: ohne Korrektur
+  // Spur 1, dann Spur 2 als Overdub (keine Latenzkorrektur mehr in der Seite)
   await rec(0,5.4);
-  R.devNoCorr=await p.evaluate(()=>dev(0,7));
-  await p.click('.trk[data-i="0"] [data-a="clear"]');
-  // B: Kalibrierung, Wert übernehmen
-  await p.click('#cal');
-  await p.waitForFunction(()=>/Gemessen|Keine Klicks/.test(document.querySelector('#calMsg').textContent),null,{timeout:20000});
-  R.calMsg=await p.textContent('#calMsg'); R.latency=await p.evaluate(()=>__chorspur.latency());
-  // C: Spur 1 mit Korrektur, Spur 2 darüber
-  await rec(0,5.4);
-  R.devCorr1=await p.evaluate(()=>dev(0,7));
+  R.dev1=await p.evaluate(()=>dev(0,7));
   await rec(1,5.4);
-  R.devCorr2=await p.evaluate(()=>dev(1,7));
+  R.dev2=await p.evaluate(()=>dev(1,7));
+  // Spur 2 per „Start“ um die gemessene Verzögerung nach vorn: Gleichlauf zu Spur 1 prüfen
+  R.dev1vs2=R.dev2.map((x,k)=>x-R.dev1[k]);
   R.errors=errs;
   // Export
   R.expectedDur=await p.evaluate(()=>{const t=__chorspur.tracks;return Math.max(...t.map(x=>x.buf?x.buf.duration:0))+.3});

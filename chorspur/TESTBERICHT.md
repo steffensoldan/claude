@@ -62,6 +62,13 @@ Nur mit `ffprobe` geprüft, nicht in Audacity.
 - **Beispielsatz** `noten/alle-meine-entchen.musicxml`: Volkslied, F-Dur, 4/4, 10 Takte, Sopran mit Text, Alt/Tenor/Bass als einfacher eigener Satz (I–IV–V7, ganze Noten). Gemessen: 4 Stimmen erkannt und alle sichtbar, 27 Cursorschritte, Cursor folgt dem Schlag. Notenhöhenumfang S F4–D5, A C4–F4, T A3–C4, B F2–F3. Satz nicht von einer Chorleitung geprüft.
 - Regressionstest erneut bestanden (Aufnahme 3,24 s; Kalibrierung 102 ms; Abweichung ≤ 0,5 ms; WAV-Dauer = Erwartung).
 
+## Umbau 3 (Wunsch Steffen): 8 Spuren, Noten pro Spur, ohne Beat/Pan/Latenz
+- 8 Aufnahmespuren (eigene Farben 5–8). Rhythmus nur noch „Aus/Klick“, Pan entfernt (Mix mittig), **Latenz-Einstellung und -Messung entfernt**.
+- Noten pro Spur: Nach dem Laden einer MusicXML-Datei bekommt Spur k automatisch Notenstimme k (bis zur Zahl der Notenstimmen), Spuren darüber hinaus „keine Noten“ (Percussion/Impro). Zuordnung je Spur per Auswahlfeld änderbar. Beim Start einer Aufnahme scrollt die Seite zur Spur.
+- **Gemessen** (`test/score-test.mjs`, Entchen-Satz, 390 px): 8 Spuren; keine Pan-Regler, keine Latenz-Bedienung; Stimmen Sopran/Alt/Tenor/Bass auf Spur 1–4, jede Ansicht zeigt genau ihre Stimme; Spur 5 umstellbar; Cursor pro Ansicht synchron zum Schlag (Sopran in Vierteln, Unterstimmen in Ganzen). Fehler gefunden und behoben: Cursor der Unterstimmen sprang zu weit, weil OSMD Stellen ohne neue Note in der sichtbaren Stimme überspringt; jetzt eigene Zeitliste je Ansicht.
+- **Regression** (`test/test.mjs`, simulierte Schleife 80 ms): Aufnahme 3,24 s ohne Einzählen; Spur 1 und 2 liegen je **+102 ms hinter dem Raster** (keine Korrektur mehr), zueinander −0,3 ms; WAV 16 Bit Stereo, Dauer = Erwartung (5,742517 s).
+- **Folge der entfernten Latenzkorrektur (nicht real gemessen):** Jede Aufnahme liegt um die Geräte-Rundlaufzeit zu spät. Folgen alle Sänger dem *Bildsignal*, sind alle Spuren gleich verschoben und laufen zueinander synchron. Folgt jemand den *vorher aufgenommenen Spuren*, addiert sich die Verzögerung pro Schicht. Abhilfe: „Feinabstimmung → Start“ ins Minus.
+
 ## Offene Punkte / Risiken (nicht gemessen)
 - iOS Safari: Samplerate-Wechsel und Ausgabepegel nach Mikrofon-Freigabe sind bekannte Fallstricke; Verhalten unbekannt. AudioContext wird im Klick gestartet, danach nach der Freigabe erneut `resume()`.
 - Bluetooth-Kopfhörer: Latenz hoch und schwankend; Kalibrierung über Lautsprecher bildet diesen Pfad nicht ab. Dann Wert per Gehör nachstellen.

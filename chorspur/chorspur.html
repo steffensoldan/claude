@@ -9,7 +9,7 @@
 :root{
   --bg:#EDF0F3; --panel:#FFFFFF; --ink:#13202B; --mute:#566673; --line:#D3DAE0;
   --accent:#0F766E; --accent-ink:#FFFFFF; --rec:#C62828;
-  --t1:#2563EB; --t2:#15803D; --t3:#BE185D; --t4:#B45309;
+  --t1:#2563EB; --t2:#15803D; --t3:#BE185D; --t4:#B45309; --t5:#7C3AED; --t6:#0E7490; --t7:#4D7C0F; --t8:#475569;
   --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
   --f-body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
@@ -18,13 +18,13 @@
   :root:not([data-theme="light"]){
     --bg:#0E151B; --panel:#16212A; --ink:#E6EDF2; --mute:#93A3B0; --line:#26343F;
     --accent:#2DD4BF; --accent-ink:#06201C; --rec:#F87171;
-    --t1:#60A5FA; --t2:#4ADE80; --t3:#F472B6; --t4:#FBBF24; color-scheme:dark;
+    --t1:#60A5FA; --t2:#4ADE80; --t3:#F472B6; --t4:#FBBF24; --t5:#A78BFA; --t6:#22D3EE; --t7:#A3E635; --t8:#CBD5E1; color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --bg:#0E151B; --panel:#16212A; --ink:#E6EDF2; --mute:#93A3B0; --line:#26343F;
   --accent:#2DD4BF; --accent-ink:#06201C; --rec:#F87171;
-  --t1:#60A5FA; --t2:#4ADE80; --t3:#F472B6; --t4:#FBBF24; color-scheme:dark;
+  --t1:#60A5FA; --t2:#4ADE80; --t3:#F472B6; --t4:#FBBF24; --t5:#A78BFA; --t6:#22D3EE; --t7:#A3E635; --t8:#CBD5E1; color-scheme:dark;
 }
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;
   padding-block:16px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
@@ -73,11 +73,12 @@ details .stack{display:flex;flex-direction:column;gap:6px;padding-top:6px}
 #hp.show{display:block}
 #hp.hot{background:var(--rec);color:var(--bg)}
 .hint{color:var(--mute);font-size:13px}
-#sheetBox{max-height:55vh;overflow:auto;background:#fff;border-radius:6px;-webkit-overflow-scrolling:touch}
-#sheet{position:relative}
-#parts{gap:4px 14px}
-#parts label{display:flex;gap:6px;align-items:center;min-height:36px;font-size:14px}
-#parts input{width:20px;height:20px;accent-color:var(--accent)}
+[hidden]{display:none!important}
+.sheetBox{max-height:45vh;overflow:auto;background:#fff;border-radius:6px;-webkit-overflow-scrolling:touch;border:1px solid var(--line)}
+.sheet{position:relative}
+select{font:400 14px var(--f-body);min-height:36px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:0 8px;min-width:0;width:100%}
+.trk .lab.part{grid-template-columns:minmax(84px,30%) 1fr}
+.pname{color:var(--mute);font:400 14px var(--f-body);margin-left:6px}
 /* Taktsignal über den ganzen Bildschirm: Rahmen blinkt auf jedem Schlag, Leiste unten bleibt beim Scrollen sichtbar. */
 #frame{position:fixed;inset:0;pointer-events:none;z-index:20;border:0 solid transparent;opacity:0}
 #frame.on{border-width:14px;border-color:var(--accent);opacity:1}
@@ -93,7 +94,7 @@ body.playing{padding-bottom:110px}
 </style>
 
 <div class="wrap">
-  <div class="top"><h1>Chorspur</h1><span class="sub">4 Stimmen, Rhythmus, Mix</span></div>
+  <div class="top"><h1>Chorspur</h1><span class="sub">8 Stimmen, Noten, Mix</span></div>
 
   <div id="note" role="status"></div>
 
@@ -104,7 +105,7 @@ body.playing{padding-bottom:110px}
     </div>
     <label class="lab"><span>Tempo</span><input type="range" id="bpm" min="50" max="160" step="1" value="90"><output id="bpmOut">90 BPM</output></label>
     <div class="row"><span class="hint">Rhythmus</span>
-      <div class="seg" id="rhythm"><button data-r="off">Aus</button><button data-r="click">Klick</button><button data-r="beat" aria-pressed="true">Beat</button></div>
+      <div class="seg" id="rhythm"><button data-r="off">Aus</button><button data-r="click">Klick</button></div>
     </div>
     <div class="row"><span class="hint">Einzählen</span>
       <div class="seg" id="count"><button data-c="click" aria-pressed="true">Klick</button><button data-c="still">Nur sichtbar</button></div>
@@ -114,28 +115,18 @@ body.playing{padding-bottom:110px}
     <div class="beat"><span id="pos">Bereit</span><div class="meter" title="Pegel"><b id="lvl"></b></div></div>
   </section>
 
-  <section class="card" aria-label="Zeitleiste"><canvas id="cv" aria-label="Wellenformen der vier Spuren mit Taktraster"></canvas></section>
+  <section class="card" aria-label="Zeitleiste"><canvas id="cv" aria-label="Wellenformen der acht Spuren mit Taktraster"></canvas></section>
 
   <section class="card" aria-label="Noten">
     <div class="row" style="justify-content:space-between"><h3>Noten</h3><button id="scoreLoad">MusicXML laden</button></div>
-    <div class="row" id="parts"></div>
-    <div id="sheetBox" hidden><div id="sheet"></div></div>
     <label class="lab" id="scoreOffLab" hidden><span>Noten-Start (Schläge)</span><input type="range" id="scoreOff" min="-8" max="16" step="1" value="0"><output id="scoreOffOut">0</output></label>
-    <p class="hint" id="scoreMsg" style="margin:0">MusicXML-Datei laden (.musicxml, .xml oder .mxl, z. B. aus MuseScore oder von CPDL). Ein Cursor läuft im eingestellten Tempo mit: eine Viertelnote = ein Schlag. Stimmen lassen sich einzeln ein- und ausblenden.</p>
+    <p class="hint" id="scoreMsg" style="margin:0">MusicXML-Datei laden (.musicxml, .xml oder .mxl, z. B. aus MuseScore oder von CPDL). Jede Stimme zeigt ihre eigene Notenzeile direkt bei der Aufnahme (Stimme 1 = erste Notenstimme usw., änderbar). Ein Cursor läuft im eingestellten Tempo mit: eine Viertelnote = ein Schlag.</p>
     <input type="file" id="scoreFile" hidden>
   </section>
 
   <div id="tracks" class="wrap" style="gap:14px"></div>
 
-  <section class="card" aria-label="Aufnahme-Einstellungen">
-    <h3>Aufnahme</h3>
-    <label class="lab"><span>Latenz (ms)</span><input type="range" id="lat" min="0" max="400" step="1" value="0"><output id="latOut">0 ms</output></label>
-    <div class="row"><button id="cal">Latenz messen</button><span class="hint" id="calMsg"></span></div>
-    <p class="hint" id="pk" style="margin:0"></p>
-    <p class="hint" style="margin:0">Die Latenz verschiebt jede neue Aufnahme um diese Zeit nach vorn, damit sie auf dem Takt liegt. Sie gilt für Aufnahmen ab jetzt, nicht rückwirkend. Zum Messen: Kopfhörer abnehmen, Lautstärke hoch, Handy ruhig hinlegen. Bei Bluetooth-Kopfhörern ist die Latenz größer als bei Kabel; dann besser per Gehör nachstellen.</p>
-  </section>
-
-  <p class="hint">Mit Kopfhörern aufnehmen, sonst nimmt das Mikrofon Rhythmus und andere Spuren mit auf. Tempo und Tonhöhe einer Spur hängen zusammen: schneller klingt höher. Eine automatische Tonkorrektur gibt es nicht; mit „Tonhöhe“ schiebst du eine ganze Spur um Bruchteile eines Halbtons. Alles bleibt im Browser; es werden keine Audiodaten hochgeladen.</p>
+  <p class="hint">Mit Kopfhörern aufnehmen, sonst nimmt das Mikrofon Rhythmus und andere Spuren mit auf. Tempo und Tonhöhe einer Spur hängen zusammen: schneller klingt höher. Eine automatische Tonkorrektur gibt es nicht; mit „Tonhöhe“ schiebst du eine ganze Spur um Bruchteile eines Halbtons. Liegt eine Aufnahme hörbar zu spät, schieb sie unter „Feinabstimmung → Start“ leicht ins Minus (typisch −0,05 bis −0,20 s, bei Bluetooth mehr). Alles bleibt im Browser; es werden keine Audiodaten hochgeladen.</p>
   <input type="file" id="file" accept="audio/*" hidden>
 </div>
 <div id="frame" aria-hidden="true"></div>
@@ -145,13 +136,12 @@ body.playing{padding-bottom:110px}
 (function(){
 const $=(s,r=document)=>r.querySelector(s);
 const root=document.documentElement;
-const N=4, LANE=56, RUL=22, CLIP=.98;
-const tracks=Array.from({length:N},(_,i)=>({buf:null,peaks:null,vol:.9,pan:0,mute:false,off:0,speed:100,semi:0}));
-let bpm=90, rhythm='beat', countIn='click', latency=0;
-try{const v=parseInt(localStorage.getItem('chorspur.lat'),10);if(v>=0&&v<=400)latency=v}catch(e){}
-try{const r=localStorage.getItem('chorspur.rhythm'),c=localStorage.getItem('chorspur.count');if(/^(off|click|beat)$/.test(r))rhythm=r;if(/^(click|still)$/.test(c))countIn=c}catch(e){}
+const N=8, LANE=36, RUL=22, CLIP=.98;
+const tracks=Array.from({length:N},(_,i)=>({buf:null,peaks:null,vol:.9,mute:false,off:0,speed:100,semi:0,part:-1}));
+let bpm=90, rhythm='click', countIn='click';
+try{const r=localStorage.getItem('chorspur.rhythm'),c=localStorage.getItem('chorspur.count');if(/^(off|click)$/.test(r))rhythm=r;if(/^(click|still)$/.test(c))countIn=c}catch(e){}
 const T={playing:false,T0:0,nodes:[],sched:null,n:0,rec:-1,recorder:null,cap:null,busy:false};
-let ctx,master,an,noiseBuf,wkReady=false,wl=null;
+let ctx,master,an,wkReady=false,wl=null;
 
 /* ---------- Audio ---------- */
 function ensure(){
@@ -159,8 +149,6 @@ function ensure(){
   ctx=new (window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});
   master=ctx.createGain(); an=ctx.createAnalyser(); an.fftSize=512;
   master.connect(an); an.connect(ctx.destination);
-  noiseBuf=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate);
-  const d=noiseBuf.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
 }
 const rate=t=>t.speed/100*Math.pow(2,t.semi/12);
 const dur=t=>t.buf?t.buf.duration/rate(t):0;
@@ -175,34 +163,26 @@ async function keepAwake(on){
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&(T.playing||T.busy))keepAwake(true)});
 
 function click(t,acc){const o=ctx.createOscillator(),g=ctx.createGain();o.frequency.value=acc?1500:1000;g.gain.setValueAtTime(.35,t);g.gain.exponentialRampToValueAtTime(.001,t+.05);o.connect(g);g.connect(master);o.start(t);o.stop(t+.06)}
-function kick(t){const o=ctx.createOscillator(),g=ctx.createGain();o.frequency.setValueAtTime(140,t);o.frequency.exponentialRampToValueAtTime(45,t+.12);g.gain.setValueAtTime(.8,t);g.gain.exponentialRampToValueAtTime(.001,t+.28);o.connect(g);g.connect(master);o.start(t);o.stop(t+.3)}
-function noise(t,len,hp,vol){const s=ctx.createBufferSource(),f=ctx.createBiquadFilter(),g=ctx.createGain();s.buffer=noiseBuf;f.type='highpass';f.frequency.value=hp;g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+len);s.connect(f);f.connect(g);g.connect(master);s.start(t,Math.random()*.5);s.stop(t+len+.02)}
 function tick(){
   const spb=60/bpm, lim=ctx.currentTime+.2;
   while(T.T0+T.n*spb<lim){
     const n=T.n,t=T.T0+n*spb,b=((n%4)+4)%4;
     if(n<0){if(countIn==='click') click(t,b===0)}
-    else{
-      if(rhythm==='click') click(t,b===0);
-      else if(rhythm==='beat'){
-        if(b===0||b===2) kick(t); else noise(t,.16,1500,.35);
-        noise(t,.04,7000,.12); noise(t+spb/2,.04,7000,.06);
-      }
-    }
+    else if(rhythm==='click') click(t,b===0);
     T.n++;
   }
 }
 function makeNode(i){
   const tr=tracks[i]; if(!tr.buf) return;
-  const s=ctx.createBufferSource(),g=ctx.createGain(),p=ctx.createStereoPanner();
+  const s=ctx.createBufferSource(),g=ctx.createGain();
   const r=rate(tr);
-  s.buffer=tr.buf; s.playbackRate.value=r; g.gain.value=tr.mute?0:tr.vol; p.pan.value=tr.pan;
-  s.connect(g);g.connect(p);p.connect(master);
+  s.buffer=tr.buf; s.playbackRate.value=r; g.gain.value=tr.mute?0:tr.vol;
+  s.connect(g);g.connect(master);
   let when=T.T0+tr.off, boff=0;
   if(tr.off<0){when=T.T0;boff=-tr.off*r}
   if(boff>=tr.buf.duration) return;
   s.start(when,boff);
-  T.nodes[i]={src:s,g,p};
+  T.nodes[i]={src:s,g};
 }
 function begin(T0,n0,skip){
   T.T0=T0; T.nodes=[];
@@ -226,7 +206,8 @@ function stop(){
 
 /* ---------- Mikrofon: Rohdaten (PCM) mit Kontext-Zeitstempel ---------- */
 /* Statt MediaRecorder (komprimiert, Startzeit unklar) liest ein AudioWorklet die Samples samt Frame-Nummer der Audio-Uhr.
-   Damit liegt der Schnitt auf T0 sampleGenau fest; nur die Gerätelatenz bleibt, die über "Latenz (ms)" korrigiert wird. */
+   Damit liegt der Schnitt auf T0 samplegenau fest. Die Gerätelatenz (Kopfhörer + Mikrofon) wird nicht korrigiert;
+   bei Bedarf eine Spur über „Start“ in der Feinabstimmung nach vorn schieben. */
 const WK='class R extends AudioWorkletProcessor{constructor(){super();this.b=new Float32Array(1024);this.n=0;this.f=0}'+
  'process(i){const c=i[0]&&i[0][0];if(!c)return true;for(let k=0;k<c.length;k++){if(this.n===0)this.f=currentFrame+k;this.b[this.n++]=c[k];'+
  'if(this.n===1024){this.port.postMessage({f:this.f,d:this.b});this.b=new Float32Array(1024);this.n=0}}return true}}registerProcessor("rec",R);';
@@ -281,17 +262,17 @@ async function record(i){
   let cap;
   try{cap=await openCapture()}catch(e){T.busy=false;ui();micHelp(i,e.msg||'Das Mikrofon ist nicht verfügbar.');return}
   T.busy=false;
-  const T0=ctx.currentTime+.25+4*(60/bpm), lat=latency;
+  const T0=ctx.currentTime+.25+4*(60/bpm);
   T.cap=cap; T.rec=i;
-  T.recorder={finish:()=>finishTake(i,cap,T0,lat)};
+  T.recorder={finish:()=>finishTake(i,cap,T0)};
   begin(T0,-4,i);
+  const card=$('.trk[data-i="'+i+'"]');if(card&&card.scrollIntoView)card.scrollIntoView({block:'start',behavior:'smooth'});
 }
-function finishTake(i,cap,T0,lat){
+function finishTake(i,cap,T0){
   cap.close();
-  const sr=ctx.sampleRate, start=Math.round((T0+lat/1000)*sr);
+  const sr=ctx.sampleRate, start=Math.round(T0*sr);
   let last=0; for(const c of cap.chunks) last=Math.max(last,c.f+c.d.length);
   const data=assemble(cap.chunks,start,last);
-  $('#pk').textContent='Letzte Aufnahme: Spitzenpegel '+dB(cap.peak)+' dBFS.';
   if(data.length<sr*.2){note('Die Aufnahme war zu kurz.');return}
   const buf=ctx.createBuffer(1,data.length,sr); buf.copyToChannel(data,0);
   setBuf(i,buf);
@@ -304,56 +285,6 @@ function micHelp(i,msg){
   el.className='show';
 }
 function note(t){const el=$('#note');el.textContent=t;el.className=t?'show':''}
-
-/* ---------- Latenz messen: Klicks abspielen, per Mikrofon aufnehmen, Kreuzkorrelation ---------- */
-function clickTpl(sr){const n=Math.round(.03*sr),d=new Float32Array(n);for(let k=0;k<n;k++){const t=k/sr;d[k]=Math.sin(2*Math.PI*1500*t)*Math.exp(-t/.006)}return d}
-/* Lag (in Samples) mit größter |Korrelation| von tpl in sig, Suchbereich 0..maxLag. */
-function xcorr(sig,tpl,maxLag){
-  const dot=(lag,st)=>{let s=0;for(let k=0;k<tpl.length;k+=st){const j=lag+k;if(j>=sig.length)break;s+=sig[j]*tpl[k]}return s};
-  let best=0,bl=0,sum=0,cnt=0;
-  for(let lag=0;lag<=maxLag;lag+=4){const v=Math.abs(dot(lag,4));sum+=v;cnt++;if(v>best){best=v;bl=lag}}
-  const ratio=best/Math.max(1e-12,sum/cnt);
-  best=0;let rl=bl;
-  for(let lag=Math.max(0,bl-6);lag<=bl+6;lag++){const v=Math.abs(dot(lag,1));if(v>best){best=v;rl=lag}}
-  return {lag:rl,ratio};
-}
-/* Aus einer Aufnahme (Frames) und den geplanten Klickzeiten die Latenz in ms schätzen. */
-function estimateLatency(chunks,times,sr){
-  const tpl=clickTpl(sr),maxLag=Math.round(.4*sr);
-  let last=0;for(const c of chunks)last=Math.max(last,c.f+c.d.length);
-  const lags=[];
-  for(const t of times){
-    const s=Math.round(t*sr),seg=assemble(chunks,s,Math.min(last,s+maxLag+tpl.length));
-    if(seg.length<tpl.length*2)continue;
-    const r=xcorr(seg,tpl,Math.min(maxLag,seg.length-tpl.length));
-    if(r.ratio>=6)lags.push(r.lag/sr*1000);
-  }
-  if(lags.length<3)return null;
-  lags.sort((a,b)=>a-b);
-  return {ms:lags[lags.length>>1],spread:lags[lags.length-1]-lags[0],n:lags.length};
-}
-async function calibrate(){
-  if(T.playing||T.busy) return;
-  const msg=$('#calMsg');
-  T.busy=true; keepAwake(true); ui(); msg.textContent='Messung läuft (ca. 5 s). Bitte ruhig halten …';
-  let cap;
-  try{cap=await openCapture()}catch(e){T.busy=false;keepAwake(false);ui();msg.textContent='';micHelp(0,e.msg||'Das Mikrofon ist nicht verfügbar.');return}
-  const sr=ctx.sampleRate,tpl=clickTpl(sr),b=ctx.createBuffer(1,tpl.length,sr);b.copyToChannel(tpl,0);
-  const t0=ctx.currentTime+.6,times=[];
-  for(let k=0;k<5;k++){const s=ctx.createBufferSource(),g=ctx.createGain();s.buffer=b;g.gain.value=.8;s.connect(g);g.connect(master);s.start(t0+k*.7);times.push(t0+k*.7)}
-  await new Promise(r=>setTimeout(r,(.6+5*.7+.7)*1000));
-  cap.close();
-  const res=estimateLatency(cap.chunks,times,sr);
-  T.busy=false; keepAwake(false); ui();
-  if(!res){msg.textContent='Keine Klicks erkannt. Lautstärke hoch, Kopfhörer ab, Mikrofon nahe am Lautsprecher, Umgebung ruhig.';return}
-  const ms=Math.round(res.ms);setLatency(ms);
-  msg.textContent='Gemessen: '+ms+' ms (Streuung '+res.spread.toFixed(1).replace('.',',')+' ms, '+res.n+' von 5 Klicks)'+(res.spread>10?'. Streuung hoch, Messung wiederholen.':'. Eingetragen.');
-}
-function setLatency(ms){
-  latency=Math.max(0,Math.min(400,Math.round(ms)));
-  $('#lat').value=latency;$('#latOut').textContent=latency+' ms';
-  try{localStorage.setItem('chorspur.lat',String(latency))}catch(e){}
-}
 
 /* ---------- Dateien & Spitzenwerte ---------- */
 let pending=0;
@@ -386,9 +317,9 @@ async function renderMix(){
   const sr=ctx.sampleRate,oc=new OfflineAudioContext(2,Math.ceil((endT()+.3)*sr),sr);
   tracks.forEach(tr=>{
     if(!tr.buf||tr.mute) return;
-    const s=oc.createBufferSource(),g=oc.createGain(),p=oc.createStereoPanner(),r=rate(tr);
-    s.buffer=tr.buf;s.playbackRate.value=r;g.gain.value=tr.vol;p.pan.value=tr.pan;
-    s.connect(g);g.connect(p);p.connect(oc.destination);
+    const s=oc.createBufferSource(),g=oc.createGain(),r=rate(tr);
+    s.buffer=tr.buf;s.playbackRate.value=r;g.gain.value=tr.vol;
+    s.connect(g);g.connect(oc.destination);
     let when=Math.max(0,tr.off),boff=0;
     if(tr.off<0)boff=-tr.off*r;
     if(boff>=tr.buf.duration) return;
@@ -495,13 +426,14 @@ function loop(){
 }
 
 /* ---------- Oberfläche ---------- */
-const fmt={vol:v=>Math.round(v*100)+' %',pan:v=>v==0?'Mitte':(v<0?'L ':'R ')+Math.round(Math.abs(v)*100),
+const fmt={vol:v=>Math.round(v*100)+' %',
   off:v=>(v>=0?'+':'')+v.toFixed(2).replace('.',',')+' s',speed:v=>v+' %',semi:v=>(v>0?'+':'')+v.toFixed(2).replace('.',',')+' HT'};
 function lab(i,k,name,min,max,step){return '<label class="lab"><span>'+name+'</span><input type="range" data-i="'+i+'" data-k="'+k+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+tracks[i][k]+'"><output data-o="'+k+'"></output></label>'}
 $('#tracks').innerHTML=tracks.map((t,i)=>
- '<section class="card trk" data-i="'+i+'" style="--c:var(--t'+(i+1)+')"><header><h3>Stimme '+(i+1)+'</h3><span class="len"></span></header>'+
+ '<section class="card trk" data-i="'+i+'" style="--c:var(--t'+(i+1)+')"><header><h3>Stimme '+(i+1)+'<span class="pname"></span></h3><span class="len"></span></header>'+
  '<div class="btns"><button class="rec" data-a="rec">● Aufnahme</button><button data-a="file">Datei</button><button data-a="mute" aria-pressed="false">Stumm</button><button data-a="clear">Leeren</button></div>'+
- lab(i,'vol','Lautstärke',0,1,.01)+lab(i,'pan','Pan',-1,1,.05)+
+ '<label class="lab part" hidden><span>Noten</span><select data-i="'+i+'"></select></label><div class="sheetBox" hidden><div class="sheet"></div></div>'+
+ lab(i,'vol','Lautstärke',0,1,.01)+
  '<details><summary>Feinabstimmung</summary><div class="stack">'+lab(i,'off','Start',-1,8,.01)+lab(i,'speed','Tempo',70,130,1)+lab(i,'semi','Tonhöhe',-12,12,.05)+'</div></details></section>').join('');
 function ui(){
   document.querySelectorAll('.trk').forEach(el=>{
@@ -515,7 +447,7 @@ function ui(){
   });
   $('#play').textContent=T.playing?'■ Stopp':'▶ Abspielen';
   $('#play').disabled=T.busy;
-  $('#bpm').disabled=T.playing;$('#export').disabled=T.playing||T.busy;$('#cal').disabled=T.playing||T.busy;
+  $('#bpm').disabled=T.playing;$('#export').disabled=T.playing||T.busy;
 }
 $('#tracks').addEventListener('click',e=>{
   const b=e.target.closest('button[data-a]');if(!b)return;
@@ -532,7 +464,6 @@ $('#tracks').addEventListener('input',e=>{
   const nd=T.nodes[i];
   if(nd){
     if(k==='vol'&&!t.mute)nd.g.gain.value=t.vol;
-    if(k==='pan')nd.p.pan.value=t.pan;
     if(k==='speed'||k==='semi')nd.src.playbackRate.value=rate(t);
   }
   if(k==='speed'||k==='semi')$('.len',r.closest('.trk')).textContent=t.buf?(dur(t).toFixed(1).replace('.',',')+' s'):'leer';
@@ -545,8 +476,6 @@ $('#note').addEventListener('click',e=>{
 $('#play').addEventListener('click',()=>T.playing?stop():play());
 $('#bstop').addEventListener('click',()=>{if(T.playing)stop()});
 $('#export').addEventListener('click',exportMix);
-$('#cal').addEventListener('click',calibrate);
-$('#lat').addEventListener('input',e=>setLatency(+e.target.value));
 $('#bpm').addEventListener('input',e=>{bpm=+e.target.value;$('#bpmOut').textContent=bpm+' BPM';draw()});
 function segUI(){
   document.querySelectorAll('#rhythm button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.r===rhythm));
@@ -561,55 +490,68 @@ $('#count').addEventListener('click',e=>{
   try{localStorage.setItem('chorspur.count',countIn)}catch(err){}
 });
 
-/* ---------- Noten: MusicXML über OpenSheetMusicDisplay, Skript erst bei Bedarf geladen ---------- */
+/* ---------- Noten: MusicXML über OpenSheetMusicDisplay, Skript erst bei Bedarf geladen.
+   Jede Spur hat eine eigene Notenansicht, die nur die ihr zugeordnete Notenstimme zeigt. ---------- */
 const OSMD_URL='https://cdn.jsdelivr.net/npm/opensheetmusicdisplay@1.9.9/build/opensheetmusicdisplay.min.js';
-const S={osmd:null,steps:[],idx:0,shift:0,w:0};
+const S={data:null,parts:[],shift:0,views:[],tok:[]};
 function loadOSMD(){
   if(window.opensheetmusicdisplay) return Promise.resolve();
   return new Promise((res,rej)=>{const s=document.createElement('script');s.src=OSMD_URL;s.onload=res;s.onerror=()=>rej(new Error('cdn'));document.head.appendChild(s)});
 }
-function renderScore(){
-  const box=$('#sheetBox'),k=S.idx;S.w=box.clientWidth;
-  S.osmd.zoom=S.w<500?.55:.75;
-  S.osmd.render();
-  const c=S.osmd.cursor;c.reset();S.idx=0;c.show();setCursor(k);
+async function makeView(i){
+  const card=$('.trk[data-i="'+i+'"]'),box=$('.sheetBox',card),el=$('.sheet',card),part=tracks[i].part,tok={};
+  S.tok[i]=tok;S.views[i]=null;el.innerHTML='';
+  if(part<0||!S.data){box.hidden=true;return null}
+  box.hidden=false;
+  const o=new opensheetmusicdisplay.OpenSheetMusicDisplay(el,{autoResize:false,backend:'svg',drawTitle:false,drawSubtitle:false,drawComposer:false,drawLyricist:false,drawCredits:false,drawPartNames:false,followCursor:false});
+  await o.load(S.data);
+  if(S.tok[i]!==tok) return null;
+  o.Sheet.Instruments.forEach((x,k)=>{x.Visible=k===part});
+  const v={o,idx:0,w:0,box,steps:[]};S.views[i]=v;
+  renderView(v);
+  /* Zeitpunkte pro Ansicht: der Cursor überspringt Stellen, an denen die sichtbare Stimme keine neue Note hat. */
+  const c=o.cursor;c.reset();
+  for(let g=0;!c.Iterator.EndReached&&g<20000;g++){v.steps.push(c.Iterator.currentTimeStamp.RealValue);c.next()}
+  c.reset();v.idx=0;c.show();
+  return v;
 }
-function buildSteps(){
-  const c=S.osmd.cursor;c.reset();S.steps=[];
-  for(let g=0;!c.Iterator.EndReached&&g<20000;g++){S.steps.push(c.Iterator.currentTimeStamp.RealValue);c.next()}
-  c.reset();S.idx=0;c.show();
+function renderView(v){
+  const k=v.idx;v.w=v.box.clientWidth;
+  v.o.zoom=v.w<500?.6:.8;v.o.render();
+  const c=v.o.cursor;c.reset();v.idx=0;c.show();setCursor(v,k);
 }
-function setCursor(k){
-  const c=S.osmd.cursor;
-  if(k<S.idx){c.reset();S.idx=0}
-  while(S.idx<k&&!c.Iterator.EndReached){c.next();S.idx++}
-  const el=c.cursorElement,box=$('#sheetBox');
-  if(el&&box){const y=el.offsetTop,h=el.offsetHeight||40;
+function setCursor(v,k){
+  const c=v.o.cursor;
+  if(k<v.idx){c.reset();v.idx=0}
+  while(v.idx<k&&!c.Iterator.EndReached){c.next();v.idx++}
+  const el=c.cursorElement,box=v.box;
+  if(el){const y=el.offsetTop,h=el.offsetHeight||40;
     if(y<box.scrollTop+10||y+h>box.scrollTop+box.clientHeight-10)box.scrollTop=Math.max(0,y-20)}
 }
 /* pos in Sekunden ab Taktbeginn 1 (null = gestoppt). Eine Viertel = ein Schlag, also Ganze = Schläge/4. */
 function scoreSync(pos){
-  if(!S.osmd||!S.steps.length) return;
-  let k=0;
-  if(pos!==null){const w=(pos/(60/bpm)-S.shift)/4;let lo=0,hi=S.steps.length-1;
-    if(w>=S.steps[0]){while(lo<hi){const m=(lo+hi+1)>>1;if(S.steps[m]<=w+1e-9)lo=m;else hi=m-1}k=lo}}
-  if(k!==S.idx) setCursor(k);
+  const w=pos===null?-1:(pos/(60/bpm)-S.shift)/4;
+  for(const v of S.views){
+    if(!v||!v.steps.length) continue;
+    let k=0,lo=0,hi=v.steps.length-1;
+    if(w>=v.steps[0]){while(lo<hi){const m=(lo+hi+1)>>1;if(v.steps[m]<=w+1e-9)lo=m;else hi=m-1}k=lo}
+    if(k!==v.idx) setCursor(v,k);
+  }
 }
-function partsUI(){
-  const el=$('#parts');el.innerHTML='';
-  const ins=S.osmd.Sheet.Instruments;
-  if(ins.length<2) return;
-  ins.forEach((inst,i)=>{
-    const l=document.createElement('label'),cb=document.createElement('input'),t=document.createElement('span');
-    cb.type='checkbox';cb.checked=inst.Visible;cb.dataset.i=i;t.textContent=inst.Name||('Stimme '+(i+1));
-    l.append(cb,t);el.append(l);
+function partUI(){
+  document.querySelectorAll('.trk').forEach(el=>{
+    const i=+el.dataset.i,sel=$('select',el),p=tracks[i].part;
+    $('.lab.part',el).hidden=!S.data;
+    sel.innerHTML='';
+    [['-1','keine Noten']].concat(S.parts.map((n,k)=>[String(k),n])).forEach(([v,n])=>{const o=document.createElement('option');o.value=v;o.textContent=n;sel.append(o)});
+    sel.value=String(p);
+    $('.pname',el).textContent=p>=0&&S.parts[p]?'· '+S.parts[p]:'';
   });
 }
-$('#parts').addEventListener('change',e=>{
-  const cb=e.target;if(cb.type!=='checkbox')return;
-  const ins=S.osmd.Sheet.Instruments;
-  if(!cb.checked&&ins.filter(x=>x.Visible).length<=1){cb.checked=true;return}
-  ins[+cb.dataset.i].Visible=cb.checked;renderScore();
+$('#tracks').addEventListener('change',async e=>{
+  const sel=e.target;if(sel.tagName!=='SELECT')return;
+  const i=+sel.dataset.i;tracks[i].part=+sel.value;partUI();
+  await makeView(i);scoreSync(curPos());
 });
 $('#scoreLoad').addEventListener('click',()=>{const f=$('#scoreFile');f.value='';f.click()});
 $('#scoreFile').addEventListener('change',async e=>{
@@ -617,24 +559,32 @@ $('#scoreFile').addEventListener('change',async e=>{
   const msg=$('#scoreMsg');msg.textContent='Noten werden geladen …';
   try{await loadOSMD()}catch(err){msg.textContent='Die Notenanzeige ließ sich nicht laden. Sie braucht beim ersten Mal eine Verbindung zu cdn.jsdelivr.net.';return}
   try{
-    const data=/\.mxl$/i.test(f.name)
+    S.data=/\.mxl$/i.test(f.name)
       ?await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsBinaryString(f)})
       :await f.text();
-    $('#sheetBox').hidden=false;$('#scoreOffLab').hidden=false;
-    if(!S.osmd)S.osmd=new opensheetmusicdisplay.OpenSheetMusicDisplay($('#sheet'),{autoResize:false,backend:'svg',drawTitle:true,drawSubtitle:false,drawComposer:false,drawLyricist:false,drawCredits:false,drawPartNames:true,followCursor:false});
-    await S.osmd.load(data);
-    S.idx=0;renderScore();buildSteps();partsUI();
-    const title=S.osmd.Sheet.TitleString||f.name;
-    msg.textContent=title+': '+S.osmd.Sheet.Instruments.length+' Stimme(n). Läuft mit bei Abspielen und Aufnahme. Taktart der Noten wird nicht übernommen; das Raster bleibt 4/4.';
-  }catch(err){$('#sheetBox').hidden=true;$('#scoreOffLab').hidden=true;S.steps=[];msg.textContent='Diese Notendatei ließ sich nicht lesen. Erwartet wird MusicXML (.musicxml, .xml oder .mxl).'}
+    // Erste Spur zuerst: liefert Stimmennamen und Zeitpunkte, dann Stimme k auf Spur k (höchstens so viele wie Notenstimmen).
+    tracks.forEach(t=>{t.part=-1});tracks[0].part=0;S.views=[];
+    for(let i=1;i<N;i++){const c=$('.trk[data-i="'+i+'"]');$('.sheet',c).innerHTML='';$('.sheetBox',c).hidden=true}
+    const v=await makeView(0);
+    const ins=v.o.Sheet.Instruments;S.parts=ins.map((x,k)=>x.Name||('Notenstimme '+(k+1)));
+    for(let i=1;i<Math.min(N,S.parts.length);i++)tracks[i].part=i;
+    partUI();
+    for(let i=1;i<N;i++) if(tracks[i].part>=0) await makeView(i);
+    $('#scoreOffLab').hidden=false;
+    const title=v.o.Sheet.TitleString||f.name;
+    msg.textContent=title+': '+S.parts.length+' Notenstimme(n), verteilt auf Stimme 1–'+Math.min(N,S.parts.length)+'. Zuordnung pro Spur unter „Noten“ änderbar. Taktart wird nicht übernommen; das Raster bleibt 4/4.';
+  }catch(err){S.data=null;S.parts=[];partUI();$('#scoreOffLab').hidden=true;
+    document.querySelectorAll('.sheetBox').forEach(b=>{b.hidden=true});
+    msg.textContent='Diese Notendatei ließ sich nicht lesen. Erwartet wird MusicXML (.musicxml, .xml oder .mxl).'}
 });
 $('#scoreOff').addEventListener('input',e=>{S.shift=+e.target.value;$('#scoreOffOut').textContent=(S.shift>0?'+':'')+S.shift});
-new ResizeObserver(()=>{const w=$('#sheetBox').clientWidth;if(S.osmd&&S.steps.length&&w&&Math.abs(w-S.w)>20)renderScore()}).observe($('#sheetBox'));
+const sheetRO=new ResizeObserver(()=>{for(const v of S.views)if(v){const w=v.box.clientWidth;if(w&&Math.abs(w-v.w)>20)renderView(v)}});
+document.querySelectorAll('.sheetBox').forEach(b=>sheetRO.observe(b));
 new ResizeObserver(draw).observe(cv);
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
 new MutationObserver(draw).observe(root,{attributes:true,attributeFilter:['data-theme']});
-setLatency(latency);segUI();ui();draw();
+segUI();ui();draw();
 /* Prüf-Zugang nur mit ?test in der Adresse (für automatische Tests). */
-if(/[?&]test\b/.test(location.search)) window.__chorspur={tracks,T,S,ensure,ctx:()=>ctx,master:()=>master,latency:()=>latency};
+if(/[?&]test\b/.test(location.search)) window.__chorspur={tracks,T,S,ensure,ctx:()=>ctx,master:()=>master};
 })();
 </script>
