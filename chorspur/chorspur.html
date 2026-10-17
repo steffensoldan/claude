@@ -107,6 +107,7 @@ body.playing{padding-bottom:110px}
       <button id="projSave" style="flex:1">Projekt speichern</button>
       <button id="projOpen" style="flex:1">Projekt öffnen</button>
     </div>
+    <button id="alignAll">Alle Einsätze auf den Schlag ausrichten</button>
     <label class="lab"><span>Tempo</span><input type="range" id="bpm" min="50" max="160" step="1" value="90"><output id="bpmOut">90 BPM</output></label>
     <div class="row"><span class="hint">Rhythmus</span>
       <div class="seg" id="rhythm"><button data-r="off">Aus</button><button data-r="click">Klick</button></div>
@@ -259,6 +260,40 @@ function assemble(chunks,start,end){
   return out;
 }
 const dB=p=>p>0?Math.round(20*Math.log10(p)):-99;
+
+/* ---------- Einsatz auf den Schlag ausrichten ---------- */
+/* Erster Einsatz = erstes 10-ms-Fenster, dessen Pegel 15 % des lautesten Fensters erreicht, zurückverfolgt bis zum Anstieg.
+   Ziel ist der nächste Schlag; da Aufnahmen durch die Gerätelatenz eher zu spät liegen, zählt ein Einsatz
+   bis 3/4 Schlag nach einem Schlag noch zu diesem Schlag. */
+function onsetSec(buf){
+  const d=buf.getChannelData(0),sr=buf.sampleRate,w=Math.max(1,Math.round(sr*.01)),n=Math.floor(d.length/w),env=new Float32Array(n);
+  let mx=0;
+  for(let k=0;k<n;k++){let s=0;for(let j=k*w;j<(k+1)*w;j++)s+=d[j]*d[j];env[k]=Math.sqrt(s/w);if(env[k]>mx)mx=env[k]}
+  if(mx<1e-4) return null;
+  const thr=.15*mx;let k=0;while(k<n&&env[k]<thr)k++;
+  while(k>0&&env[k-1]>=thr*.4)k--;
+  /* innerhalb des Fensters auf das erste Sample über dem halben Fensterpegel genau gehen */
+  let j=k*w;const lim=env[k]*.5;while(j<(k+1)*w&&Math.abs(d[j])<lim)j++;
+  return j/sr;
+}
+function alignTrack(i){
+  const t=tracks[i];if(!t.buf) return null;
+  const o=onsetSec(t.buf);if(o===null) return null;
+  const spb=60/bpm,at=t.off+o/rate(t),beat=Math.max(0,Math.round(at/spb-.25)),before=t.off;
+  t.off=Math.max(-1,Math.min(8,t.off+beat*spb-at));
+  const r=$('.trk[data-i="'+i+'"] input[data-k="off"]');if(r)r.value=t.off;
+  return {beat,shift:t.off-before};
+}
+function alignMsg(res){
+  const f=x=>(x>=0?'+':'−')+Math.abs(x).toFixed(2).replace('.',',')+' s';
+  return res.map(([i,r])=>'Stimme '+(i+1)+': '+(r?'Takt '+(Math.floor(r.beat/4)+1)+' Schlag '+(r.beat%4+1)+' ('+f(r.shift)+')':'kein Einsatz erkannt')).join(' · ');
+}
+function align(list){
+  if(T.playing) stop();
+  const res=list.filter(i=>tracks[i].buf).map(i=>[i,alignTrack(i)]);
+  if(!res.length){note('Es ist noch keine Spur aufgenommen.');return}
+  ui();draw();note('Ausgerichtet. '+alignMsg(res));
+}
 
 /* ---------- Aufnehmen ---------- */
 async function record(i){
@@ -442,7 +477,7 @@ $('#tracks').innerHTML=tracks.map((t,i)=>
  '<div class="btns"><button class="rec" data-a="rec">● Aufnahme</button><button data-a="file">Datei</button><button data-a="mute" aria-pressed="false">Stumm</button><button data-a="clear">Leeren</button></div>'+
  '<label class="lab part" hidden><span>Noten</span><select data-i="'+i+'"></select></label><div class="sheetBox" hidden><div class="sheet"></div></div>'+
  lab(i,'vol','Lautstärke',0,1,.01)+
- '<details><summary>Feinabstimmung</summary><div class="stack">'+lab(i,'off','Start',-1,8,.01)+lab(i,'speed','Tempo',70,130,1)+lab(i,'semi','Tonhöhe',-12,12,.05)+'</div></details></section>').join('');
+ '<details><summary>Feinabstimmung</summary><div class="stack">'+lab(i,'off','Start',-1,8,.01)+'<button data-a="align">Einsatz auf den Schlag ausrichten</button>'+lab(i,'speed','Tempo',70,130,1)+lab(i,'semi','Tonhöhe',-12,12,.05)+'</div></details></section>').join('');
 function ui(){
   document.querySelectorAll('.trk').forEach(el=>{
     const i=+el.dataset.i,t=tracks[i];
@@ -455,13 +490,14 @@ function ui(){
   });
   $('#play').textContent=T.playing?'■ Stopp':'▶ Abspielen';
   $('#play').disabled=T.busy;
-  $('#bpm').disabled=T.playing;$('#export').disabled=T.playing||T.busy;$('#projSave').disabled=T.busy;$('#projOpen').disabled=T.playing||T.busy;
+  $('#bpm').disabled=T.playing;$('#export').disabled=T.playing||T.busy;$('#alignAll').disabled=T.busy||!tracks.some(t=>t.buf);$('#projSave').disabled=T.busy;$('#projOpen').disabled=T.playing||T.busy;
 }
 $('#tracks').addEventListener('click',e=>{
   const b=e.target.closest('button[data-a]');if(!b)return;
   const i=+b.closest('.trk').dataset.i,t=tracks[i],a=b.dataset.a;
   if(a==='rec'){T.rec===i?stop():record(i)}
   else if(a==='file')pick(i,false);
+  else if(a==='align')align([i]);
   else if(a==='mute'){t.mute=!t.mute;if(T.nodes[i])T.nodes[i].g.gain.value=t.mute?0:t.vol;ui();draw()}
   else if(a==='clear'){if(T.playing)stop();t.buf=null;t.peaks=null;ui();draw()}
 });
@@ -672,6 +708,7 @@ async function openProject(f){
   T.busy=false;ui();draw();
 }
 $('#projSave').addEventListener('click',saveProject);
+$('#alignAll').addEventListener('click',()=>align(tracks.map((_,i)=>i)));
 $('#projOpen').addEventListener('click',()=>{const f=$('#projFile');f.value='';f.click()});
 $('#projFile').addEventListener('change',e=>{const f=e.target.files[0];if(f)openProject(f)});
 const sheetRO=new ResizeObserver(()=>{for(const v of S.views)if(v){const w=v.box.clientWidth;if(w&&Math.abs(w-v.w)>20)renderView(v)}});

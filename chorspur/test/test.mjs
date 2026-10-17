@@ -60,6 +60,22 @@ const exe=process.env.CHROME||undefined;
   R.dev2=await p.evaluate(()=>dev(1,7));
   // Spur 2 per „Start“ um die gemessene Verzögerung nach vorn: Gleichlauf zu Spur 1 prüfen
   R.dev1vs2=R.dev2.map((x,k)=>x-R.dev1[k]);
+  // Einsätze auf den Schlag ausrichten, dann Abweichung zum Raster unter Berücksichtigung von „Start“
+  await p.click('#alignAll');
+  R.alignNote=await p.textContent('#note');
+  R.alignDev=await p.evaluate(()=>[0,1].map(i=>{const off=__chorspur.tracks[i].off;return dev(i,7).map(x=>x/1000+off)}).map(a=>a.map(x=>+(x*1000).toFixed(2))));
+  // Stimmähnlicher Ton mit weichem Einsatz (60 ms Anstieg) bei 0,95 s, per „Datei“ in Spur 3
+  const sr=44100,len=sr*3,pcm=new Int16Array(len);
+  for(let k=0;k<len;k++){const t=k/sr-.95;if(t<0)continue;const a=Math.min(1,t/.06)*.5;pcm[k]=Math.round(32767*a*(Math.sin(2*Math.PI*220*t)+.4*Math.sin(2*Math.PI*440*t)+.2*Math.sin(2*Math.PI*660*t))/1.6)}
+  const hdr=Buffer.alloc(44);hdr.write('RIFF',0);hdr.writeUInt32LE(36+len*2,4);hdr.write('WAVEfmt ',8);hdr.writeUInt32LE(16,16);hdr.writeUInt16LE(1,20);hdr.writeUInt16LE(1,22);
+  hdr.writeUInt32LE(sr,24);hdr.writeUInt32LE(sr*2,28);hdr.writeUInt16LE(2,32);hdr.writeUInt16LE(16,34);hdr.write('data',36);hdr.writeUInt32LE(len*2,40);
+  const wavIn=outDir+'/weicher-einsatz.wav';fs.writeFileSync(wavIn,Buffer.concat([hdr,Buffer.from(pcm.buffer)]));
+  const [fc]=await Promise.all([p.waitForEvent('filechooser'),p.click('.trk[data-i="2"] [data-a="file"]')]);await fc.setFiles(wavIn);
+  await p.waitForFunction(()=>__chorspur.tracks[2].buf);
+  await p.click('.trk[data-i="2"] summary');await p.click('.trk[data-i="2"] [data-a="align"]');
+  R.softOff=await p.evaluate(()=>__chorspur.tracks[2].off);
+  R.softErrMs=+((R.softOff+.95-60/90)*1000).toFixed(1);
+  R.softNote=await p.textContent('#note');
   R.errors=errs;
   // Export
   R.expectedDur=await p.evaluate(()=>{const t=__chorspur.tracks;return Math.max(...t.map(x=>x.buf?x.buf.duration:0))+.3});
