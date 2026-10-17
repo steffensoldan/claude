@@ -57,6 +57,11 @@ Nur mit `ffprobe` geprüft, nicht in Audacity.
 - **Gemessen** (`test/score-test.mjs`, headless Chromium, Testsatz 2 Stimmen × 2 Takte): 8 Cursorschritte erkannt; Ausblenden einer Stimme wirkt; bei 90 BPM stimmt der Cursorindex in 11 von 12 Stichproben mit dem Schlag aus der Audio-Uhr überein, die Abweichung (0,70 s ≈ Schlag 1,05) liegt in der Ausgabelatenz, um die die Anzeige bewusst verzögert ist. Keine Seitenfehler. Regressionstest (`test/test.mjs`) erneut bestanden: Werte wie oben.
 - **Grenzen:** Taktart der Noten wird nicht übernommen (Raster immer 4/4; bei 3/4 o. ä. laufen Noten korrekt im Viertel-Tempo, nur die Taktstriche der Zeitleiste passen nicht). Tempoangaben und Tempowechsel in der Partitur werden ignoriert; es gilt der Tempo-Regler. Wiederholungen folgt der Cursor so, wie OSMD sie auflöst (nicht geprüft). Am iPhone nicht geprüft; ob .musicxml-Dateien in der iOS-Dateiauswahl wählbar sind, ist offen.
 
+## Erweiterung 2: Ganzbild-Taktsignal, Beispielsatz
+- **Taktsignal über den ganzen Bildschirm:** Rahmen um den Bildschirm blinkt auf jedem Schlag (Schlag 1 breiter, Einzählen rot), dazu eine feste Leiste unten mit den vier Schlagfeldern, Takt/Schlag und „Stopp“; bleibt beim Scrollen zu den Noten sichtbar. Gemessen: Rahmen-Status „on“ und Leiste sichtbar während der Wiedergabe (Screenshot, Chromium 390 px breit).
+- **Beispielsatz** `noten/alle-meine-entchen.musicxml`: Volkslied, F-Dur, 4/4, 10 Takte, Sopran mit Text, Alt/Tenor/Bass als einfacher eigener Satz (I–IV–V7, ganze Noten). Gemessen: 4 Stimmen erkannt und alle sichtbar, 27 Cursorschritte, Cursor folgt dem Schlag. Notenhöhenumfang S F4–D5, A C4–F4, T A3–C4, B F2–F3. Satz nicht von einer Chorleitung geprüft.
+- Regressionstest erneut bestanden (Aufnahme 3,24 s; Kalibrierung 102 ms; Abweichung ≤ 0,5 ms; WAV-Dauer = Erwartung).
+
 ## Offene Punkte / Risiken (nicht gemessen)
 - iOS Safari: Samplerate-Wechsel und Ausgabepegel nach Mikrofon-Freigabe sind bekannte Fallstricke; Verhalten unbekannt. AudioContext wird im Klick gestartet, danach nach der Freigabe erneut `resume()`.
 - Bluetooth-Kopfhörer: Latenz hoch und schwankend; Kalibrierung über Lautsprecher bildet diesen Pfad nicht ab. Dann Wert per Gehör nachstellen.

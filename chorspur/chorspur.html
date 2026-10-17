@@ -73,11 +73,23 @@ details .stack{display:flex;flex-direction:column;gap:6px;padding-top:6px}
 #hp.show{display:block}
 #hp.hot{background:var(--rec);color:var(--bg)}
 .hint{color:var(--mute);font-size:13px}
-#sheetBox{max-height:320px;overflow:auto;background:#fff;border-radius:6px;-webkit-overflow-scrolling:touch}
+#sheetBox{max-height:55vh;overflow:auto;background:#fff;border-radius:6px;-webkit-overflow-scrolling:touch}
 #sheet{position:relative}
 #parts{gap:4px 14px}
 #parts label{display:flex;gap:6px;align-items:center;min-height:36px;font-size:14px}
 #parts input{width:20px;height:20px;accent-color:var(--accent)}
+/* Taktsignal über den ganzen Bildschirm: Rahmen blinkt auf jedem Schlag, Leiste unten bleibt beim Scrollen sichtbar. */
+#frame{position:fixed;inset:0;pointer-events:none;z-index:20;border:0 solid transparent;opacity:0}
+#frame.on{border-width:14px;border-color:var(--accent);opacity:1}
+#frame.on.one{border-width:22px}
+#frame.on.cnt{border-color:var(--rec)}
+#bar{position:fixed;left:0;right:0;bottom:0;z-index:21;display:none;gap:8px;align-items:center;background:var(--panel);border-top:1px solid var(--line);
+  padding:8px max(12px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+body.playing #bar{display:flex}
+body.playing{padding-bottom:110px}
+#bar .dots{flex:1}
+#bar .dots i{height:40px;font-size:18px}
+#bpos{font:400 12px var(--f-mono);color:var(--mute);min-width:64px;text-align:center;font-variant-numeric:tabular-nums;white-space:pre-line;line-height:1.3}
 </style>
 
 <div class="wrap">
@@ -126,6 +138,8 @@ details .stack{display:flex;flex-direction:column;gap:6px;padding-top:6px}
   <p class="hint">Mit Kopfhörern aufnehmen, sonst nimmt das Mikrofon Rhythmus und andere Spuren mit auf. Tempo und Tonhöhe einer Spur hängen zusammen: schneller klingt höher. Eine automatische Tonkorrektur gibt es nicht; mit „Tonhöhe“ schiebst du eine ganze Spur um Bruchteile eines Halbtons. Alles bleibt im Browser; es werden keine Audiodaten hochgeladen.</p>
   <input type="file" id="file" accept="audio/*" hidden>
 </div>
+<div id="frame" aria-hidden="true"></div>
+<div id="bar"><div class="dots" id="bdots" aria-hidden="true"><i>1</i><i>2</i><i>3</i><i>4</i></div><span id="bpos"></span><button id="bstop">■ Stopp</button></div>
 
 <script>
 (function(){
@@ -206,7 +220,7 @@ function stop(){
   T.playing=false;
   if(T.recorder){const r=T.recorder;T.recorder=null;T.rec=-1;T.cap=null;r.finish()}
   keepAwake(false);
-  scoreSync(null);
+  scoreSync(null); clearBeat();
   ui(); draw();
 }
 
@@ -446,14 +460,22 @@ function draw(){
   if(pos!==null&&pos>=0){const x=Math.round(X(pos))+.5;g.strokeStyle=C('--accent');g.lineWidth=2;g.beginPath();g.moveTo(x,0);g.lineTo(x,h);g.stroke()}
 }
 let raf=0;
+function clearBeat(){$('#lvl').style.width='0';$('#hp').classList.remove('show');$('#frame').className='';document.body.classList.remove('playing');$('#pos').textContent='Bereit';for(const id of ['#dots','#bdots'])for(const d of $(id).children)d.className=''}
 function loop(){
   cancelAnimationFrame(raf);
   const step=()=>{
     draw();
-    const pos=curPos(),spb=60/bpm,dots=$('#dots').children;
-    if(pos===null){$('#pos').textContent='Bereit';for(const d of dots)d.className='';}
-    else if(pos<0){const b=Math.ceil(-pos/spb);$('#pos').textContent='Einzählen '+b;for(let k=0;k<4;k++)dots[k].className=(4-b)===k?'cnt':''}
-    else{const b=Math.floor(pos/spb);$('#pos').textContent='Takt '+(Math.floor(b/4)+1)+' · Schlag '+(b%4+1);for(let k=0;k<4;k++)dots[k].className=(b%4)===k?(k===0?'on one':'on'):''}
+    const pos=curPos(),spb=60/bpm;
+    let cls=['','','',''],txt='Bereit',fr='';
+    if(pos!==null){
+      const bf=pos/spb,b=Math.floor(bf),k=((b%4)+4)%4,flash=bf-b<.3;
+      if(pos<0){cls[k]='cnt';txt='Einzählen '+(4-k);if(flash)fr='on cnt'}
+      else{cls[k]=k===0?'on one':'on';txt='Takt '+(Math.floor(b/4)+1)+' · Schlag '+(k+1);if(flash)fr=k===0?'on one':'on'}
+    }
+    for(const id of ['#dots','#bdots']){const d=$(id).children;for(let k=0;k<4;k++)if(d[k].className!==cls[k])d[k].className=cls[k]}
+    $('#pos').textContent=txt;$('#bpos').textContent=txt.replace(' · ','\n');
+    const fe=$('#frame');if(fe.className!==fr)fe.className=fr;
+    document.body.classList.toggle('playing',T.playing);
     scoreSync(pos);
     let lv=0;
     if(T.playing){
@@ -467,7 +489,7 @@ function loop(){
     $('#hpTxt').textContent=hot?'Übersteuert! Weiter vom Mikrofon weg oder leiser singen.':'Sonst nimmt das Mikrofon Rhythmus und andere Spuren mit auf.';
     if(T.playing&&T.rec<0&&pos!==null&&tracks.some(t=>t.buf)&&pos>endT()+.4){stop();return}
     if(T.playing) raf=requestAnimationFrame(step);
-    else{$('#lvl').style.width='0';hp.classList.remove('show');for(const d of dots)d.className=''}
+    else clearBeat();
   };
   raf=requestAnimationFrame(step);
 }
@@ -521,6 +543,7 @@ $('#note').addEventListener('click',e=>{
   pick(+b.dataset.i,b.dataset.n==='cap');
 });
 $('#play').addEventListener('click',()=>T.playing?stop():play());
+$('#bstop').addEventListener('click',()=>{if(T.playing)stop()});
 $('#export').addEventListener('click',exportMix);
 $('#cal').addEventListener('click',calibrate);
 $('#lat').addEventListener('input',e=>setLatency(+e.target.value));
